@@ -1,7 +1,6 @@
-
 var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate']);
 
-var dhisUrl = window.location.href.split('api/apps/')[0] + '/';;
+var dhisUrl = "http://localhost:8000";
 var ApiUrl = dhisUrl + '/api';
 
 TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){

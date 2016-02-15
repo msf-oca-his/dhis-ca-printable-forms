@@ -1,7 +1,7 @@
 TallySheets.directive('datasetForm', function(){
     return{
         restrict: 'E',
-        templateUrl: 'directives/datasetForm/datasetFormView.html',
+        templateUrl: 'directives/datasetForm/datasetFormView2.html',
         scope: {
             dataset: '=',
             selectorId: '@'
@@ -9,10 +9,14 @@ TallySheets.directive('datasetForm', function(){
     };
 });
 
-TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', function($scope, DataSetEntryForm){
+TallySheets.controller('datasetFormCtrl',['$scope','DataSetEntryForm', 'DataSetService', function($scope, DataSetEntryForm, DataSetService){
 
     $scope.$watch(function(){ return $scope.dataset.id}, function(newVal, oldVal, scope){
-        updateForm(scope.dataset.id, scope.dataset.name);
+        //updateForm(scope.dataset.id, scope.dataset.name);
+        DataSetService.getDataSet($scope.dataset.id)
+            .then(function(dataset){
+                $scope.dataSetz = dataset
+            });
     });
 
     var updateForm = function(datasetId, datasetName){

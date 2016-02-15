@@ -1,4 +1,6 @@
 .project
 .settings
 .tern-project
+.idea
+bower_components
 *.zip
