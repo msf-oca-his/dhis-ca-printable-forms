@@ -3,19 +3,11 @@ var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.tra
 var dhisUrl = "http://localhost:8000";
 var ApiUrl = dhisUrl + '/api';
 
-TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", function($scope, DataSetsUID, DataSetEntryForm){
+TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "DataElementService", "DataEntrySectionService", function($scope, DataSetsUID, DataSetEntryForm, DataSetService, DataElementService, DataEntrySectionService){
 
 	var dsSelectorLastId = -1;
 	$scope.dsSelectorList = [];
-
-	$scope.addDatasetSelector = function(){
-		dsSelectorLastId++;
-		$scope.dsSelectorList.push({id: dsSelectorLastId, dataset:{}});
-	}
-
-	$scope.deleteDatesetSelector = function(selectPosition){
-		$scope.dsSelectorList.splice(selectPosition, 1);
-	}
+	$scope.pages = [];
 
 	$scope.exportToTable = function(tableId) {
 		var uri = 'data:application/vnd.ms-excel;base64,'
@@ -70,6 +62,106 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 	};
 
 	// Initialize the app with one dataset selector
+
+
+
+	var Page = function(){
+		var page = {};
+		page.heightLeft = 272;
+		page.width = 189;
+		page.dataElements = [];
+		page.hasNoSpace = function(){return true;}
+		return page;
+	};
+
+	var fitSection = function(section, index, sections){
+		var dataElement = section.dataElements[0];
+		if(dataElement.categoryCombo){
+
+			var totalLengthOfTableHeaders = 0;
+			var numberOfFittingColumns = 0;
+			_.forEach(dataElement.categoryCombo.categoryOptionCombos, function (categoryOption, index) {
+				totalLengthOfTableHeaders = totalLengthOfTableHeaders + categoryOption.name.length;
+				if(totalLengthOfTableHeaders * 2.37 + 2 * (index + 1) +60 < $scope.currentPage.width) {
+					numberOfFittingColumns++;
+				}
+			});
+			if(numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
+				//alert(numberOfFittingColumns)
+				var newDataElements = [];
+				_.map(section.dataElements, function (dataElement) {
+					var data = _.cloneDeep(dataElement);
+					data.categoryCombo.categoryOptionCombos.splice(0, numberOfFittingColumns);
+					console.log(DataElementService.getDataElementFromData(data), data);
+					newDataElements.push(DataElementService.getDataElementFromData(data));
+					dataElement.categoryCombo.categoryOptionCombos.splice(numberOfFittingColumns);
+				});
+				var sectionData = _.cloneDeep(section)
+				sectionData.isDuplicate = true;
+				sectionData.dataElements = newDataElements;
+				sections.splice(index + 1, 0, DataEntrySectionService.getSectionFromData(sectionData))
+			}
+		}
+
+	};
+	var fitDataElement = function () {
+
+	};
+	var fitSections = function(sections){
+		var sectionsLength = 0;
+		while(sections.length !=sectionsLength){
+			sectionsLength = sections.length
+			_.map(sections, function (section, index) {
+				if(section.dataElements[0].categoryCombo)
+					fitSection(section, index, sections);
+				else
+					_.map(section.dataElements, fitDataElement)
+			})
+		}
+	};
+	var fitOrphanDataElements = function(dataElements){
+
+	};
+	var renderDataSet = function(dataSet){
+		if(!$scope.currentPage || $scope.currentPage.hasNoSpace() ){
+			var page = new Page();
+			$scope.currentPage = page;
+			$scope.pages.push(page);
+			fitSections(dataSet.sections);
+			fitOrphanDataElements(dataSet.orphanDataElements);
+			dataSet.isPrintFriendlyProcessed = true;
+			page.dataSets = [dataSet]
+			console.log(page);
+		}
+	};
+
+	var renderDataSets = function(){
+		$scope.pages = [];
+		_.map($scope.dsSelectorList, function(dsSelector){
+			if(dsSelector.dataset.id){
+				DataSetService.getDataSet(dsSelector.dataset.id)
+					.then(function(dataset){
+						dataset.isResolved.then(function(){
+							renderDataSet(dataset);
+						})
+					})
+			}
+		});
+
+	};
+
+
+	$scope.addDatasetSelector = function(){
+		dsSelectorLastId++;
+		$scope.dsSelectorList.push({id: dsSelectorLastId, dataset:{}});
+		renderDataSets();
+	};
+
+	$scope.deleteDatesetSelector = function(selectPosition){
+		$scope.dsSelectorList.splice(selectPosition, 1);
+		renderDataSets();
+	};
+
 	$scope.addDatasetSelector();
 
 }]);

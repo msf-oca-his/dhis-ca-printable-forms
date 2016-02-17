@@ -8,14 +8,24 @@ TallySheets.service("DataEntrySectionService", ['$http','DataElementService', fu
         section.name = data.name;
         section.id = data.id;
         section.dataElements = [];
+        section.isCatComb = false;
         var promises =_.map(data.dataElements, function(incompleteDataElement) {
             return DataElementService.getDataElement(incompleteDataElement).then(function (dataElement) {
                 section.dataElements.push(dataElement)
             })
         });
-        section.isResolved = Promise.all(promises).then(function(){return true;})
+        section.isResolved = Promise.all(promises)
+                                .then(function(){
+                                    var promises = _.map(section.dataElements, "isResolved")
+                                    return Promise.all(promises).then(function(){
+                                        section.isCatComb = !!section.dataElements[0].categoryCombo;
+                                        return true;
+                                    })
+                                });
+
         return section;
     };
+
 
     this.getSection = function(section){
         var successPromise = function(response){
@@ -24,4 +34,14 @@ TallySheets.service("DataEntrySectionService", ['$http','DataElementService', fu
         return $http.get(ApiUrl + "/sections/" + section + ".json")
             .then(successPromise, failurePromise)
     };
+
+    this.getSectionFromData = function(data){
+        var section = {};
+        section.name = data.name;
+        section.id = data.id;
+        section.dataElements = data.dataElements;
+        section.isCatComb = data.isCatComb;
+        section.isDuplicate = data.isDuplicate;
+        return section;
+    }
 }]);

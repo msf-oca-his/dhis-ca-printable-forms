@@ -1,0 +1,34 @@
+<div class="subpage" ng-controller="pageCtrl">
+    <div ng-repeat="dataSet in page.dataSets">
+        <span class="datasetName">{{dataSet.name}}</span>
+        <div id="section" ng-repeat="section in dataSet.sections">
+            <div class="panel panel-default">
+                <h4 class="sectionName" ng-if="!section.isDuplicate">{{section.name}}</h4>
+                <table clsass="table table-bordered" border="1">
+                    <thead ng-if="section.dataElements[0].categoryCombo">
+                    <tr>
+                        <td></td>
+                        <td ng-repeat="catComb in section.dataElements[0].categoryCombo.categoryOptionCombos">
+                            {{catComb.name}}
+                        </td>
+                    </tr>
+                    </thead>
+                    <tr ng-repeat="dataElement in section.dataElements">
+
+                        <td class="deLabel">
+                            {{dataElement.name}}
+                        </td>
+                        <td ng-if="section.dataElements[0].categoryCombo" class="deField"
+                            ng-repeat="catComb in section.dataElements[0].categoryCombo.categoryOptionCombos">
+
+                        </td>
+                        <td ng-if="!section.dataElements[0].categoryCombo" class="deField">
+
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

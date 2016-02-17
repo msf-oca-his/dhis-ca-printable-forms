@@ -1,0 +1,68 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 3mm;
+}
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+.section{
+    border: 0.5mm solid black;
+}
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 5mm;
+    margin: 0mm auto;
+    /*border: 0.5px #D3D3D3  solid;*/
+    /*border-radius: 5px;*/
+    background: white;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+}
+.subpage {
+    padding: 1mm;
+    width: 200mm;
+    border: 0.7mm red solid;
+    height: 285mm;
+}
+
+.deField{
+    min-width: 3cm;
+}
+
+.deLabel{
+    width: 6cm;
+}
+
+.datasetName {
+    font-size: 6mm;
+}
+
+.sectionName {
+    font-size: 4mm;
+}
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    html, body {
+        height: 297mm;
+        width: 210mm;
+    }
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+
+}

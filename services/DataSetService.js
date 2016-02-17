@@ -1,4 +1,5 @@
 TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataElementService', function ($http, DataEntrySectionService, DataElementService) {
+    var datasets = [];
     this.getDataSet = function(dataSetId){
 
         var DataSet = function(data){
@@ -7,6 +8,8 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
             dataSet.id = data.id;
             dataSet.sections = [];
             dataSet.orphanDataElements =[];
+            dataSet.isPrintFriendlyProcessed = false;
+
             var getSections = function(){
                 return Promise.all(_.map(data.sections, (function(section){
                     return DataEntrySectionService.getSection(section.id).then(function(section){
@@ -19,7 +22,7 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
 
                 var getDataElementsInSections = function(){
                     return Promise.all(_.map(dataSet.sections,"isResolved"))
-                        .then(function(){
+                        .then(function(results){
                             return _.flatten(_.map(dataSet.sections,"dataElements"));
                         })
                 };
@@ -45,24 +48,28 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
 
             };
 
-            getSections()
-                .then(getOrphanDataElements)
+            dataSet.isResolved = getSections().then(getOrphanDataElements);
 
             return dataSet;
 
         };
         var successPromise = function(response){
-            return new DataSet(response.data);
+            var dataset = new DataSet(response.data);
+            if(!_.includes(_.map(datasets,"id"), response.data.id))
+                datasets.push(dataset);
+            return dataset;
         };
 
         var failurePromise = function(response){
             return {isError: true, status: response.status, statusText: response.statusText}
         };
 
-        return $http.get(ApiUrl + "/dataSets/"+dataSetId+".json")
-            .then(successPromise, failurePromise);
-
-
+        var indexOfDataSet = _.indexOf(_.map(datasets,"id"), dataSetId);
+        if(indexOfDataSet == -1)
+            return $http.get(ApiUrl + "/dataSets/"+dataSetId+".json")
+                .then(successPromise, failurePromise);
+        else
+            return Promise.resolve(datasets[indexOfDataSet]);alert('cached ds');
     }
 
 }]);

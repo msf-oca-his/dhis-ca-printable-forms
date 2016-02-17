@@ -25,10 +25,12 @@ TallySheets.service("DataElementService", ['$http', function ($http) {
         dataElement.id = data.id;
         dataElement.type = data.valueType;
         if(data.categoryCombo.name != "default")
-            getCategoryCombo(data.categoryCombo)
+            dataElement.isResolved = getCategoryCombo(data.categoryCombo)
                 .then(function(categoryCombo){
-                    dataElement.categoryCombo = categoryCombo;
+                    return dataElement.categoryCombo = categoryCombo;
                 });
+        else
+            dataElement.isResolved = Promise.resolve(true);
         return dataElement;
 
     };
@@ -41,6 +43,15 @@ TallySheets.service("DataElementService", ['$http', function ($http) {
             .then(successPromise, failurePromise)
 
     };
+
+    this.getDataElementFromData = function(data){
+        var dataElement = {};
+        dataElement.name = data.name;
+        dataElement.id = data.id;
+        dataElement.type = data.type;
+        dataElement.categoryCombo = data.categoryCombo;
+        return dataElement;
+    }
 
 
 }]);

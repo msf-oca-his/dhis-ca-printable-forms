@@ -1,4 +1,5 @@
-<html ng-app="TallySheets">
+<!DOCTYPE html>
+<html ng-app="TallySheets" lang="en">
 	<head>
 		<script src="include/angular-1.4.0/angular.min.js" type="text/javascript"> </script>
 		<script src="include/angular-1.4.0/angular-route.min.js" type="text/javascript"> </script>
@@ -10,21 +11,22 @@
 		<script src="include/jquery-ui-1.11.4/jquery-ui.js" type="text/javascript"> </script>
 		<script src="include/bootstrap-3.3.4/js/bootstrap.min.js" type="text/javascript"></script>
 		<script src="include/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-		<script src="bower_components/lodash/dist/lodash.min.js"></script>
-		<link rel="stylesheet" href="include/jquery-ui-1.11.4/jquery-ui.css">
-		<link rel="stylesheet" href="include/bootstrap-3.3.4/css/bootstrap.min.css">
-		<link rel="stylesheet" href="include/bootstrap-select/css/bootstrap-select.min.css">
+		<script src="bower_components/lodash/dist/lodash.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="include/jquery-ui-1.11.4/jquery-ui.css">
+		<link rel="stylesheet" type="text/css" href="include/bootstrap-3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="include/bootstrap-select/css/bootstrap-select.min.css">
 		
 		<script src="app.js" type="text/javascript"> </script>
-		<link href="app.css" rel="stylesheet">
+		<!--<link href="app.css" type=rel="stylesheet">-->
+		<link href="page.css" rel="stylesheet" type="text/css">
 
 		<!-- Load directives and modules -->
 		<script src="services/DataSetService.js" type="text/javascript"></script>
 		<script src="services/DataEntrySectionService.js" type="text/javascript"></script>
 		<script src="services/DataElementService.js" type="text/javascript"></script>
 		<script src="directives/datasetSelector/datasetSelectorCtrl.js" type="text/javascript"></script>
-		<script src="directives/datasetForm/datasetFormCtrl.js" type="text/javascript"></script>
-		
+		<script src="directives/page/pageCtrl.js" type="text/javascript"></script>
+
 	</head>
 	<body ng-controller="TallySheetsController">
 
@@ -58,12 +60,7 @@
 
 		<br>
 
-		<span id="tallysheetForm">
-			<span ng-repeat="(index,selector) in dsSelectorList">
-				<dataset-form  dataset="selector.dataset"
-						selector-id="{{selector.id}}"></dataset-form>
-			</span>
-		</span>
+	<page class="page" ng-repeat="page in pages" page="page"></page>
 	</body>
+
 </html>
-	
