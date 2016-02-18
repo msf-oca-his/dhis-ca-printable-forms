@@ -76,18 +76,9 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 
 	var fitSection = function(section, index, sections){
 		var dataElement = section.dataElements[0];
-		if(dataElement.categoryCombo){
-
-			var totalLengthOfTableHeaders = 0;
-			var numberOfFittingColumns = 0;
-			_.forEach(dataElement.categoryCombo.categoryOptionCombos, function (categoryOption, index) {
-				totalLengthOfTableHeaders = totalLengthOfTableHeaders + categoryOption.name.length;
-				if(totalLengthOfTableHeaders * 2.37 + 2 * (index + 1) +60 < $scope.currentPage.width) {
-					numberOfFittingColumns++;
-				}
-			});
+		if(section.isCatComb){
+			var numberOfFittingColumns = 5;
 			if(numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
-				//alert(numberOfFittingColumns)
 				var newDataElements = [];
 				_.map(section.dataElements, function (dataElement) {
 					var data = _.cloneDeep(dataElement);
@@ -102,6 +93,17 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 				sections.splice(index + 1, 0, DataEntrySectionService.getSectionFromData(sectionData))
 			}
 		}
+		else{
+			section.leftSideElements = [];
+			section.rightSideElements = [];
+
+			_.forEach(section.dataElements, function(dataElement, index, dataElements){
+				if(index < dataElements.length / 2  )
+					section.leftSideElements.push(dataElement);
+				else
+					section.rightSideElements.push(dataElement);
+			});
+		}
 
 	};
 	var fitDataElement = function () {
@@ -110,12 +112,9 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 	var fitSections = function(sections){
 		var sectionsLength = 0;
 		while(sections.length !=sectionsLength){
-			sectionsLength = sections.length
+			sectionsLength = sections.length;
 			_.map(sections, function (section, index) {
-				if(section.dataElements[0].categoryCombo)
-					fitSection(section, index, sections);
-				else
-					_.map(section.dataElements, fitDataElement)
+				fitSection(section, index, sections);
 			})
 		}
 	};
@@ -179,6 +178,29 @@ TallySheets.factory("DataSetEntryForm",['$resource', function ($resource) {
 			return {codeHtml: response};}
 		}
 	});
+
+TallySheets.factory("OptionsFactory", ['$http', function ($http) {
+
+	var OptionSetFactory = {};
+	var successPromise = function(data){
+		OptionSetFactory.options = data;
+		return OptionSetFactory.options;
+	}
+	var failurePromise = function(err){
+		OptionSetFactory.options = [];
+		return OptionSetFactory.options;
+	}
+
+	OptionSetFactory.get = function () {
+		if(OptionSetFactory.options)
+			return Promise.resolve(OptionSetFactory.options);
+		else
+			$http.get(ApiUrl + "/options.json?fields=id,displayName&paging=false")
+				.then(successPromise, failurePromise)
+	}
+
+}]);
+
 }]);
 
 TallySheets.directive('onFinishRender', function ($timeout) {

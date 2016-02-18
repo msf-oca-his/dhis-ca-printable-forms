@@ -11,19 +11,19 @@ body {
     -moz-box-sizing: border-box;
 }
 .section{
-    border: 0.5mm solid black;
+    margin-bottom: 5mm;
 }
 .page {
     width: 210mm;
     min-height: 297mm;
     padding: 5mm;
-    margin: 0mm auto;
     /*border: 0.5px #D3D3D3  solid;*/
     /*border-radius: 5px;*/
     background: white;
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
 }
 .subpage {
+    margin: 2mm auto;
     padding: 1mm;
     width: 200mm;
     border: 0.7mm red solid;
@@ -31,15 +31,24 @@ body {
 }
 
 .deField{
-    min-width: 3cm;
+    width: 2cm;
+    border-bottom: 1px solid black;
 }
 
 .deLabel{
-    width: 6cm;
+    width: 3cm;
 }
 
 .datasetName {
     font-size: 6mm;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding-top: 3mm;
 }
 
 .sectionName {

@@ -1,11 +1,12 @@
 <div class="subpage" ng-controller="pageCtrl">
     <div ng-repeat="dataSet in page.dataSets">
         <span class="datasetName">{{dataSet.name}}</span>
-        <div id="section" ng-repeat="section in dataSet.sections">
-            <div class="panel panel-default">
+        <div ng-repeat="section in dataSet.sections" ng-if="section.isCatComb" class="section">
                 <h4 class="sectionName" ng-if="!section.isDuplicate">{{section.name}}</h4>
-                <table clsass="table table-bordered" border="1">
-                    <thead ng-if="section.dataElements[0].categoryCombo">
+                <table border="1" style="width:{{getTableWidth(section)
+
+                }}">
+                    <thead>
                     <tr>
                         <td></td>
                         <td ng-repeat="catComb in section.dataElements[0].categoryCombo.categoryOptionCombos">
@@ -18,17 +19,33 @@
                         <td class="deLabel">
                             {{dataElement.name}}
                         </td>
-                        <td ng-if="section.dataElements[0].categoryCombo" class="deField"
+                        <td class="deField"
                             ng-repeat="catComb in section.dataElements[0].categoryCombo.categoryOptionCombos">
 
                         </td>
-                        <td ng-if="!section.dataElements[0].categoryCombo" class="deField">
-
-                        </td>
-
                     </tr>
                 </table>
-            </div>
         </div>
+
+        <div class="section" ng-repeat="section in dataSet.sections" ng-if="!section.isCatComb">
+                <h4 class="sectionName">{{section.name}}</h4>
+                <table style="width:18.3cm">
+                    <!--#TODO: remove the hardcoding width-->
+
+                    <tr ng-repeat="dataElement in section.leftSideElements">
+
+                        <td class="deLabel">
+                            {{section.leftSideElements[$index].name}}
+                        </td>
+                        <td class="deField"></td>
+                        <td style="width:1cm"></td>
+                        <td class="deLabel" ng-if="section.rightSideElements[$index]">
+                            {{section.rightSideElements[$index].name}}
+                        </td>
+                        <td class="deField" ng-if="section.rightSideElements[$index]"></td>
+                    </tr>
+                </table>
+        </div>
+
     </div>
 </div>
