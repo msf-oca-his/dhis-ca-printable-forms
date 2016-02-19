@@ -37,8 +37,17 @@ body {
 
 .deLabel{
     width: 3cm;
+    text-align: right;
+    padding-right: 5mm;
 }
-
+.deLabel.catComb{
+    width: 3cm;
+    text-align: left;
+    padding-right: 0mm;
+}
+.table-heading{
+    text-align: center;
+}
 .datasetName {
     font-size: 6mm;
 }

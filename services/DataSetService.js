@@ -6,14 +6,14 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
             var dataSet = {};
             dataSet.name = data.name;
             dataSet.id = data.id;
-            dataSet.sections = [];
+            dataSet.sections = new Array(data.sections.length);
             dataSet.orphanDataElements =[];
             dataSet.isPrintFriendlyProcessed = false;
 
             var getSections = function(){
-                return Promise.all(_.map(data.sections, (function(section){
+                return Promise.all(_.map(data.sections, (function(section, index){
                     return DataEntrySectionService.getSection(section.id).then(function(section){
-                        dataSet.sections.push(section)
+                        dataSet.sections[index] =section
                     })
                 })));
             };

@@ -69,21 +69,18 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 		var page = {};
 		page.heightLeft = 272;
 		page.width = 189;
-		page.dataElements = [];
-		page.hasNoSpace = function(){return true;}
+		page.contents = [];
 		return page;
 	};
 
 	var fitSection = function(section, index, sections){
 		var dataElement = section.dataElements[0];
-		if(section.isCatComb){
 			var numberOfFittingColumns = 5;
 			if(numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
 				var newDataElements = [];
 				_.map(section.dataElements, function (dataElement) {
 					var data = _.cloneDeep(dataElement);
 					data.categoryCombo.categoryOptionCombos.splice(0, numberOfFittingColumns);
-					console.log(DataElementService.getDataElementFromData(data), data);
 					newDataElements.push(DataElementService.getDataElementFromData(data));
 					dataElement.categoryCombo.categoryOptionCombos.splice(numberOfFittingColumns);
 				});
@@ -92,8 +89,24 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 				sectionData.dataElements = newDataElements;
 				sections.splice(index + 1, 0, DataEntrySectionService.getSectionFromData(sectionData))
 			}
+
+	};
+
+	var divideCatCombsIfNecessary = function(sections){
+		var sectionsLength = 0;
+		while(sections.length !=sectionsLength){
+			sectionsLength = sections.length;
+			_.map(sections, function (section, index) {
+				if(section.isCatComb)
+					fitSection(section, index, sections);
+			})
 		}
-		else{
+	};
+
+	var splitLeftAndRightElementsIfNecessary = function(sections){
+		_.map(sections, function(section){
+			if(section.isCatComb)
+				return;
 			section.leftSideElements = [];
 			section.rightSideElements = [];
 
@@ -103,45 +116,73 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 				else
 					section.rightSideElements.push(dataElement);
 			});
+		})
+
+	};
+
+	var renderDataSet = function(dataSet, currentPageIndex){
+		var page;
+		if(!$scope.pages[currentPageIndex]) {
+			page = new Page();
+			$scope.pages[currentPageIndex] = page;
 		}
+		else
+			page = $scope.pages[currentPageIndex];
 
-	};
-	var fitDataElement = function () {
+		_.map(dataSet.sections, function (section, index) {
+			var sectionHeight;
+			var heightOfDataSetTitle = 8;
+			var getHeightForSection = function(section){
+				var heightOfDataElementInCatCombTable = 12;
+				var heightOfDataElmentInGeneralDataElement = 9;
+				var heightOfSectionTitle = 6;
+				if(section.isCatComb)
+					return heightOfDataElementInCatCombTable * (section.dataElements.length + 1) + heightOfSectionTitle;
+				else {
+					//#TODO: check if dataElement is of type option combo;
+					return heightOfDataElmentInGeneralDataElement * (Math.ceil(section.dataElements.length/2)) + 6;
+				}
 
-	};
-	var fitSections = function(sections){
-		var sectionsLength = 0;
-		while(sections.length !=sectionsLength){
-			sectionsLength = sections.length;
-			_.map(sections, function (section, index) {
-				fitSection(section, index, sections);
-			})
-		}
-	};
-	var fitOrphanDataElements = function(dataElements){
+			};
+			var addSectionToPage = function(section){
+				if(index == 0) page.contents.push({type: 'dataSetName', name: dataSet.name});
+				page.contents.push({type: 'section', section: section});
+				page.heightLeft = page.heightLeft - sectionHeight;
+			};
 
-	};
-	var renderDataSet = function(dataSet){
-		if(!$scope.currentPage || $scope.currentPage.hasNoSpace() ){
-			var page = new Page();
-			$scope.currentPage = page;
-			$scope.pages.push(page);
-			fitSections(dataSet.sections);
-			fitOrphanDataElements(dataSet.orphanDataElements);
-			dataSet.isPrintFriendlyProcessed = true;
-			page.dataSets = [dataSet]
-			console.log(page);
-		}
+			if(index == 0)
+				sectionHeight = getHeightForSection(section) + heightOfDataSetTitle;
+			else
+				sectionHeight = getHeightForSection(section);
+			console.log(section, sectionHeight);
+			if(page.heightLeft > sectionHeight){
+				addSectionToPage(section);
+			}
+			else{
+				page = new Page();
+				$scope.pages[++currentPageIndex] = page;
+				addSectionToPage(section);
+			}
+
+		});
+		dataSet.isPrintFriendlyProcessed = true;
+		console.log($scope.pages);
 	};
 
+	var prettifySections = function(sections){
+		divideCatCombsIfNecessary(sections);
+		splitLeftAndRightElementsIfNecessary(sections);
+	};
 	var renderDataSets = function(){
 		$scope.pages = [];
+		var currentPageIndex = 0;
 		_.map($scope.dsSelectorList, function(dsSelector){
 			if(dsSelector.dataset.id){
 				DataSetService.getDataSet(dsSelector.dataset.id)
 					.then(function(dataset){
 						dataset.isResolved.then(function(){
-							renderDataSet(dataset);
+							prettifySections(dataset.sections);
+							renderDataSet(dataset, currentPageIndex);
 						})
 					})
 			}

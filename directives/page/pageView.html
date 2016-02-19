@@ -1,48 +1,50 @@
 <div class="subpage" ng-controller="pageCtrl">
-    <div ng-repeat="dataSet in page.dataSets">
-        <span class="datasetName">{{dataSet.name}}</span>
-        <div ng-repeat="section in dataSet.sections" ng-if="section.isCatComb" class="section">
-                <h4 class="sectionName" ng-if="!section.isDuplicate">{{section.name}}</h4>
-                <table border="1" style="width:{{getTableWidth(section)
+
+    <div ng-repeat="content in page.contents">
+        <span class="datasetName" ng-if="content.type=='dataSetName'">{{content.name}}</span>
+
+        <div ng-if="content.type == 'section' && content.section.isCatComb " class="section">
+                <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
+                <table border="1" style="width:{{getTableWidth(content.section)
 
                 }}">
                     <thead>
                     <tr>
                         <td></td>
-                        <td ng-repeat="catComb in section.dataElements[0].categoryCombo.categoryOptionCombos">
+                        <td class="table-heading" ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
                             {{catComb.name}}
                         </td>
                     </tr>
                     </thead>
-                    <tr ng-repeat="dataElement in section.dataElements">
+                    <tr ng-repeat="dataElement in content.section.dataElements">
 
-                        <td class="deLabel">
+                        <td class="deLabel catComb">
                             {{dataElement.name}}
                         </td>
                         <td class="deField"
-                            ng-repeat="catComb in section.dataElements[0].categoryCombo.categoryOptionCombos">
+                            ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
 
                         </td>
                     </tr>
                 </table>
         </div>
 
-        <div class="section" ng-repeat="section in dataSet.sections" ng-if="!section.isCatComb">
-                <h4 class="sectionName">{{section.name}}</h4>
+        <div class="section" ng-if="content.type=='section' && !content.section.isCatComb">
+                <h4 class="sectionName">{{content.section.name}}</h4>
                 <table style="width:18.3cm">
                     <!--#TODO: remove the hardcoding width-->
 
-                    <tr ng-repeat="dataElement in section.leftSideElements">
+                    <tr ng-repeat="dataElement in content.section.leftSideElements">
 
                         <td class="deLabel">
-                            {{section.leftSideElements[$index].name}}
+                            {{content.section.leftSideElements[$index].name}}
                         </td>
                         <td class="deField"></td>
-                        <td style="width:1cm"></td>
-                        <td class="deLabel" ng-if="section.rightSideElements[$index]">
-                            {{section.rightSideElements[$index].name}}
+                        <td class="seperator" style="width:1cm"></td>
+                        <td class="deLabel" ng-if="content.section.rightSideElements[$index]">
+                            {{content.section.rightSideElements[$index].name}}
                         </td>
-                        <td class="deField" ng-if="section.rightSideElements[$index]"></td>
+                        <td class="deField" ng-if="content.section.rightSideElements[$index]"></td>
                     </tr>
                 </table>
         </div>

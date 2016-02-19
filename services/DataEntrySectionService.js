@@ -7,11 +7,11 @@ TallySheets.service("DataEntrySectionService", ['$http','DataElementService', fu
         var section = {};
         section.name = data.name;
         section.id = data.id;
-        section.dataElements = [];
+        section.dataElements = new Array(data.dataElements.length);
         section.isCatComb = false;
-        var promises =_.map(data.dataElements, function(incompleteDataElement) {
+        var promises =_.map(data.dataElements, function(incompleteDataElement, index) {
             return DataElementService.getDataElement(incompleteDataElement).then(function (dataElement) {
-                section.dataElements.push(dataElement)
+                section.dataElements[index] = dataElement;
             })
         });
         section.isResolved = Promise.all(promises)
