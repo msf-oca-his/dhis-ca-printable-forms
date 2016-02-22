@@ -69,7 +69,7 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
             return $http.get(ApiUrl + "/dataSets/"+dataSetId+".json")
                 .then(successPromise, failurePromise);
         else
-            return Promise.resolve(datasets[indexOfDataSet]);alert('cached ds');
+            return Promise.resolve(datasets[indexOfDataSet]);
     }
 
 }]);

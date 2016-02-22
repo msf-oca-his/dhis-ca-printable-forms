@@ -67,8 +67,8 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 
 	var Page = function(){
 		var page = {};
-		page.heightLeft = 272;
-		page.width = 189;
+		page.heightLeft = 260;
+		page.width = 183;
 		page.contents = [];
 		return page;
 	};
@@ -122,6 +122,10 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 
 	var renderDataSet = function(dataSet, currentPageIndex){
 		var page;
+		var heightOfTableHeader = 12;
+		var heightOfDataElementInCatCombTable = 12;
+		var heightOfDataElementInGeneralDataElement = 9;
+		var heightOfSectionTitle = 6;
 		if(!$scope.pages[currentPageIndex]) {
 			page = new Page();
 			$scope.pages[currentPageIndex] = page;
@@ -129,39 +133,68 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
 		else
 			page = $scope.pages[currentPageIndex];
 
-		_.map(dataSet.sections, function (section, index) {
+		_.map(dataSet.sections, function (section, sectionIndex) {
 			var sectionHeight;
 			var heightOfDataSetTitle = 8;
 			var getHeightForSection = function(section){
-				var heightOfDataElementInCatCombTable = 12;
-				var heightOfDataElmentInGeneralDataElement = 9;
-				var heightOfSectionTitle = 6;
 				if(section.isCatComb)
-					return heightOfDataElementInCatCombTable * (section.dataElements.length + 1) + heightOfSectionTitle;
+					if(section.isDuplicate)
+						return heightOfDataElementInCatCombTable * (section.dataElements.length ) + heightOfTableHeader;
+					else
+						return heightOfDataElementInCatCombTable * (section.dataElements.length ) + heightOfTableHeader + heightOfSectionTitle;
 				else {
 					//#TODO: check if dataElement is of type option combo;
-					return heightOfDataElmentInGeneralDataElement * (Math.ceil(section.dataElements.length/2)) + 6;
+					return heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length/2)) + 6;
 				}
 
 			};
-			var addSectionToPage = function(section){
-				if(index == 0) page.contents.push({type: 'dataSetName', name: dataSet.name});
+			var addSectionToPage = function(section, height){
+				if(sectionIndex == 0) page.contents.push({type: 'dataSetName', name: dataSet.name});
 				page.contents.push({type: 'section', section: section});
-				page.heightLeft = page.heightLeft - sectionHeight;
+				page.heightLeft = page.heightLeft - height;
+			};
+			var addSectionToNewPage = function(section, height){
+				page = new Page();
+				$scope.pages[++currentPageIndex] = page;
+				addSectionToPage(section, height);
 			};
 
-			if(index == 0)
+			var getNumberOfElementsThatCanFit = function(section){
+				var overFlow = sectionHeight - page.heightLeft;
+				if(section.isCatComb)
+					return section.dataElements.length - Math.floor(overFlow / heightOfDataElementInCatCombTable);
+				else
+					return section.dataElements.length - Math.floor(overFlow / (heightOfDataElementInGeneralDataElement));
+			};
+
+			if(sectionIndex == 0)
 				sectionHeight = getHeightForSection(section) + heightOfDataSetTitle;
 			else
 				sectionHeight = getHeightForSection(section);
-			console.log(section, sectionHeight);
-			if(page.heightLeft > sectionHeight){
-				addSectionToPage(section);
-			}
+
+			if(page.heightLeft >= sectionHeight)
+				addSectionToPage(section, sectionHeight);
 			else{
-				page = new Page();
-				$scope.pages[++currentPageIndex] = page;
-				addSectionToPage(section);
+				var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)
+
+				if(numberOfElementsThatCanFit > 1)
+					if(section.isCatComb) {
+						var newSection = _.cloneDeep(section)
+						newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
+						newSection.isDuplicate = true;
+						addSectionToPage(section, 1000);
+						addSectionToNewPage(newSection, getHeightForSection(newSection));
+					}
+					else{
+						var newSection = _.cloneDeep(section)
+						newSection.leftSideElements = section.leftSideElements.splice(numberOfElementsThatCanFit);
+						newSection.rightSideElements = section.rightSideElements.splice(numberOfElementsThatCanFit);
+						newSection.isDuplicate = true;
+						addSectionToPage(section, 1000);
+						addSectionToNewPage(newSection, getHeightForSection(newSection));
+					}
+				else
+					addSectionToNewPage(section)
 			}
 
 		});

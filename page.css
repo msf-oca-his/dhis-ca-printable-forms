@@ -27,7 +27,8 @@ body {
     padding: 1mm;
     width: 200mm;
     border: 0.7mm red solid;
-    height: 285mm;
+    height: 278mm;
+    page-break-after: always;
 }
 
 .deField{
@@ -43,6 +44,7 @@ body {
 .deLabel.catComb{
     width: 3cm;
     text-align: left;
+    height:12mm;
     padding-right: 0mm;
 }
 .table-heading{
