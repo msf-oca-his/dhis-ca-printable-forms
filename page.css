@@ -47,6 +47,10 @@ body {
     height:12mm;
     padding-right: 0mm;
 }
+.deLabel.general{
+    width: 3cm;
+    height:9mm;
+}
 .table-heading{
     text-align: center;
 }

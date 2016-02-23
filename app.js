@@ -152,7 +152,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
 
             };
             var addSectionToPage = function (section, height) {
-                if (sectionIndex == 0) page.contents.push({type: 'dataSetName', name: dataSet.name});
+                if (sectionIndex == 0 && !section.isDuplicate) page.contents.push({type: 'dataSetName', name: dataSet.name});
                 page.contents.push({type: 'section', section: section});
                 page.heightLeft = page.heightLeft - height;
             };
@@ -165,9 +165,9 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
             var getNumberOfElementsThatCanFit = function (section) {
                 var overFlow = sectionHeight - page.heightLeft;
                 if (section.isCatComb)
-                    return section.dataElements.length - Math.ceil(overFlow / heightOfDataElementInCatCombTable);
+                    return section.dataElements.length - Math.round(overFlow / heightOfDataElementInCatCombTable);
                 else
-                    return section.dataElements.length - Math.ceil(overFlow / (heightOfDataElementInGeneralDataElement));
+                    return section.dataElements.length - Math.round(overFlow / (heightOfDataElementInGeneralDataElement));
             };
 
             if (sectionIndex == 0)
@@ -195,8 +195,8 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
                     }
                     else {
                         var newSection = _.cloneDeep(section)
-                        newSection.leftSideElements = section.leftSideElements.splice(numberOfElementsThatCanFit);
-                        newSection.rightSideElements = section.rightSideElements.splice(numberOfElementsThatCanFit);
+                        newSection.leftSideElements = section.leftSideElements.splice(numberOfElementsThatCanFit / 2);
+                        newSection.rightSideElements = section.rightSideElements.splice(numberOfElementsThatCanFit / 2);
                         newSection.isDuplicate = true;
                         addSectionToPage(section, 1000);
                         addSectionToNewPage(newSection, getHeightForSection(newSection));
@@ -225,7 +225,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
                     .then(function (dataset) {
                         return dataset.isResolved
                             .then(function () {
-                                return datasets[index] = dataset;
+                                return datasets[index] = _.cloneDeep(dataset);
                             });
                     });
             else return Promise.resolve(0)
@@ -233,12 +233,10 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
         Promise.all(promises).then(function () {
             _.map(datasets, function (dataset) {
                 prettifySections(dataset.sections);
-                console.log('rendering ', dataset)
                 renderDataSet(dataset);
-                console.log('rendering done', dataset)
-                $scope.pages = pages;
-                console.log($scope.pages, "here u are ");
             })
+            $scope.pages = pages;
+            console.log($scope.pages);
             $scope.$apply();
         });
     };
