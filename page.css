@@ -24,7 +24,7 @@ body {
 }
 .subpage {
     margin: 2mm auto;
-    padding: 1mm;
+    padding: 2mm;
     width: 200mm;
     border: 0.7mm red solid;
     height: 278mm;
@@ -38,7 +38,6 @@ body {
 
 .deLabel{
     width: 3cm;
-    text-align: right;
     padding-right: 5mm;
 }
 .deLabel.catComb{
@@ -46,13 +45,22 @@ body {
     text-align: left;
     height:12mm;
     padding-right: 0mm;
+    padding-left: 1mm;
 }
 .deLabel.general{
     width: 3cm;
-    height:9mm;
+    text-align: right;
+    height: 9mm;
 }
 .table-heading{
     text-align: center;
+    height: 15mm;
+}
+.header{
+    font-weight: 600;
+    font-size: 4mm;
+    width: 90%;
+    margin-bottom: 8mm
 }
 .datasetName {
     font-size: 6mm;

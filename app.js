@@ -3,6 +3,11 @@ var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.tra
 var dhisUrl = "http://localhost:8000";
 var ApiUrl = dhisUrl + '/api';
 
+TallySheets.filter('to_trusted', ['$sce', function($sce) {
+    return function (text) {
+        return $sce.trustAsHtml(text);
+    };
+}]);
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor) {
 
     var dsSelectorLastId = -1;

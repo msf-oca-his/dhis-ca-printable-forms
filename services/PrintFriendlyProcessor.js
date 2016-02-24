@@ -2,7 +2,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     var pages = [];
     var currentPageIndex;
     var page;
-    var heightOfTableHeader = 12;
+    var heightOfTableHeader = 15;
     var heightOfDataElementInCatCombTable = 12;
     var heightOfDataElementInGeneralDataElement = 9;
     var heightOfSectionTitle = 7;
@@ -12,13 +12,17 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
     var Page = function () {
         var page = {};
-        page.heightLeft = 260;
+        page.heightLeft = 237;
         page.width = 183;
         page.contents = [];
         return page;
     };
 
-
+    var processTableHeader = function(section){
+        _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo){
+            categoryOptionCombo.name = categoryOptionCombo.name.replace(/,/g, "<br>");
+        })
+    };
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];
         var numberOfFittingColumns = 5;
@@ -83,6 +87,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     var newSection = _.cloneDeep(section);
                     newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
                     newSection.isDuplicate = true;
+                    processTableHeader(newSection);
                     addSectionToPage(section, 1000);
                     addSectionToNewPage(newSection, getHeightForSection(newSection));
                 }
@@ -134,8 +139,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         currentPageIndex = 0;
         _.map(datasets, function (dataset) {
             for(var i = 0; i < dataset.sections.length; i++){
-                if(dataset.sections[i].isCatComb)
+                if(dataset.sections[i].isCatComb) {
                     divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);
+                    processTableHeader(dataset.sections[i]);
+                }
                 else
                     splitLeftAndRightElements(dataset.sections[i]);
             }

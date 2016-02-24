@@ -1,4 +1,33 @@
 <div class="subpage" ng-controller="pageCtrl">
+    <table class="header" >
+        <tr>
+            <td class="deLabel">
+                Name
+            </td>
+
+            <td class="deField" ></td>
+            <td class="seperator" style="width:2cm"></td>
+            <td class="deLabel">
+                Org Unit
+            </td>
+
+            <td class="deField" ></td>
+        </tr>
+        <tr>
+            <td class="deLabel">
+                Location
+            </td>
+
+            <td class="deField" ></td>
+            <td class="seperator" style="width:2cm"></td>
+            <td class="deLabel">
+                Date
+            </td>
+
+            <td class="deField" ></td>
+        </tr>
+    </table>
+
 
     <div ng-repeat="content in page.contents">
         <span class="datasetName" ng-if="content.type=='dataSetName'">{{content.name}}</span>
@@ -9,8 +38,7 @@
                     <thead>
                     <tr>
                         <td></td>
-                        <td class="table-heading" ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
-                            {{catComb.name}}
+                        <td class="table-heading" ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos" ng-bind-html="catComb.name | to_trusted">
                         </td>
                     </tr>
                     </thead>
