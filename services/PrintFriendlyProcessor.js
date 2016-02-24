@@ -1,6 +1,15 @@
 TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntrySectionService', function(DataElementService, DataEntrySectionService){
     var pages = [];
     var currentPageIndex;
+    var page;
+    var heightOfTableHeader = 12;
+    var heightOfDataElementInCatCombTable = 12;
+    var heightOfDataElementInGeneralDataElement = 9;
+    var heightOfSectionTitle = 7;
+    var heightOfDataSetTitle = 10;
+    var gapBetweenSections = 5;
+    var graceHeight = 15;
+
     var Page = function () {
         var page = {};
         page.heightLeft = 260;
@@ -8,6 +17,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         page.contents = [];
         return page;
     };
+
 
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];
@@ -28,31 +38,18 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
     };
 
-    var splitLeftAndRightElementsIfNecessary = function (section) {
+    var splitLeftAndRightElements = function (section) {
         section.leftSideElements = _.slice(section.dataElements, 0, Math.ceil(section.dataElements.length / 2));
         section.rightSideElements = _.slice(section.dataElements, Math.ceil(section.dataElements.length / 2));
     };
 
-    var processDataSet = function (dataSet) {
-        var page;
-        var heightOfTableHeader = 12;
-        var heightOfDataElementInCatCombTable = 12;
-        var heightOfDataElementInGeneralDataElement = 9;
-        var heightOfSectionTitle = 7;
-        if (!pages[currentPageIndex]) {
-            page = new Page();
-            pages[currentPageIndex] = page;
-        }
-        else {
-            page = pages[currentPageIndex];
-        }
 
-        _.map(dataSet.sections, function (section, sectionIndex) {
-            var sectionHeight;
-            var heightOfDataSetTitle = 10;
-            var gapBetweenSections = 5;
-            var height;
+    var processDataSet = function (dataSet) {
+
+        var processSection = function(section, sectionIndex){
+
             var getHeightForSection = function (section) {
+                var height;
                 if (section.isCatComb)
                     height = heightOfDataElementInCatCombTable * (section.dataElements.length ) + heightOfTableHeader + gapBetweenSections;
                 else {
@@ -61,11 +58,13 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 }
                 return section.isDuplicate ? height : height + heightOfSectionTitle;
             };
+
             var addSectionToPage = function (section, height) {
                 if (sectionIndex == 0 && !section.isDuplicate) page.contents.push({type: 'dataSetName', name: dataSet.name});
                 page.contents.push({type: 'section', section: section});
                 page.heightLeft = page.heightLeft - height;
             };
+
             var addSectionToNewPage = function (section, height) {
                 page = new Page();
                 pages[++currentPageIndex] = page;
@@ -79,47 +78,54 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 else
                     return section.dataElements.length - Math.round(overFlow * 2 / (heightOfDataElementInGeneralDataElement));
             };
+            var breakAndAddSection = function(section){
+                if (section.isCatComb) {
+                    var newSection = _.cloneDeep(section);
+                    newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
+                    newSection.isDuplicate = true;
+                    addSectionToPage(section, 1000);
+                    addSectionToNewPage(newSection, getHeightForSection(newSection));
+                }
+                else {
+                    var newSection = _.cloneDeep(section);
+                    (numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
+                    newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
+                    splitLeftAndRightElements(section);
+                    splitLeftAndRightElements(newSection);
+                    newSection.isDuplicate = true;
+                    addSectionToPage(section, 1000);
+                    addSectionToNewPage(newSection, getHeightForSection(newSection));
+                }
+            };
 
-            if (sectionIndex == 0)
-                sectionHeight = getHeightForSection(section) + heightOfDataSetTitle;
-            else
-                sectionHeight = getHeightForSection(section);
-
-            if (page.heightLeft >= sectionHeight)
+            var sectionHeight = (sectionIndex == 0) ? getHeightForSection(section) + heightOfDataSetTitle : getHeightForSection(section);
+            var overflow = sectionHeight - page.heightLeft;
+            if (overflow < 0)
                 addSectionToPage(section, sectionHeight);
-            else if ((sectionHeight - page.heightLeft < 15))
+            else if (overflow < graceHeight)
                 addSectionToPage(section, sectionHeight);
             else {
-
                 var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)
-                if (numberOfElementsThatCanFit == section.dataElements.length){
-                    addSectionToPage(section, sectionHeight);
-                }
-                else if(numberOfElementsThatCanFit > 1) {
 
-                    if (section.isCatComb) {
-                        var newSection = _.cloneDeep(section);
-                        newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
-                        newSection.isDuplicate = true;
-                        addSectionToPage(section, 1000);
-                        addSectionToNewPage(newSection, getHeightForSection(newSection));
-                    }
-                    else {
-                        var newSection = _.cloneDeep(section);
-                        (numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
-                        newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
-                        splitLeftAndRightElementsIfNecessary(section);
-                        splitLeftAndRightElementsIfNecessary(newSection);
-                        newSection.isDuplicate = true;
-                        addSectionToPage(section, 1000);
-                        addSectionToNewPage(newSection, getHeightForSection(newSection));
-                    }
-                }
+                if (numberOfElementsThatCanFit == section.dataElements.length)
+                    addSectionToPage(section, sectionHeight);
+                else if(numberOfElementsThatCanFit > 1)
+                    breakAndAddSection(section);
                 else
                     addSectionToNewPage(section, sectionHeight)
             }
+        };
 
-        });
+        if (!pages[currentPageIndex]) {
+            page = new Page();
+            pages[currentPageIndex] = page;
+        }
+        else {
+            page = pages[currentPageIndex];
+        }
+
+        _.map(dataSet.sections, processSection);
+
         dataSet.isPrintFriendlyProcessed = true;
     };
 
@@ -131,7 +137,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 if(dataset.sections[i].isCatComb)
                     divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);
                 else
-                    splitLeftAndRightElementsIfNecessary(dataset.sections[i]);
+                    splitLeftAndRightElements(dataset.sections[i]);
             }
             processDataSet(dataset)
         });
