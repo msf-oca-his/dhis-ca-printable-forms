@@ -10,19 +10,18 @@ TallySheets.service("DataEntrySectionService", ['$http','DataElementService', fu
         section.dataElements = new Array(data.dataElements.length);
         section.isCatComb = false;
         var promises =_.map(data.dataElements, function(incompleteDataElement, index) {
-            return DataElementService.getDataElement(incompleteDataElement).then(function (dataElement) {
-                section.dataElements[index] = dataElement;
+            return DataElementService.getDataElement(incompleteDataElement)
+                .then(function (dataElement) {
+                    return dataElement.isResolved.then(function(){
+                        return section.dataElements[index] = dataElement;
+                    });
             })
         });
         section.isResolved = Promise.all(promises)
                                 .then(function(){
-                                    var promises = _.map(section.dataElements, "isResolved")
-                                    return Promise.all(promises).then(function(){
                                         section.isCatComb = !!section.dataElements[0].categoryCombo;
                                         return true;
-                                    })
-                                });
-
+                                    });
         return section;
     };
 

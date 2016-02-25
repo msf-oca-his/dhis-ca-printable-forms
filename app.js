@@ -130,26 +130,27 @@ TallySheets.factory("DataSetEntryForm", ['$resource', function ($resource) {
         });
 }]);
 
-TallySheets.factory("OptionsFactory", ['$http', function ($http) {
-
-    var OptionSetFactory = {};
-    var successPromise = function (data) {
-        OptionSetFactory.options = data;
-        return OptionSetFactory.options;
-    }
+TallySheets.factory("OptionSetFactory", ['$http', function ($http) {
+    var optionSets = {};
+    var successPromise = function (response) {
+        var successPromise = function(response){
+            return optionSets[response.data.id] = response.data;
+        };
+        var promises = _.map(response.data.optionSets, function(optionSet){
+            return $http.get(ApiUrl + "/optionSets/"+ optionSet.id + ".json?paging=false")
+                .then(successPromise, failurePromise);
+        });
+        return Promise.all(promises)
+            .then(function(){
+                    return optionSets;
+            });
+    };
     var failurePromise = function (err) {
-        OptionSetFactory.options = [];
-        return OptionSetFactory.options;
-    }
+        return Promise.resolve(optionSets);
+    };
 
-    OptionSetFactory.get = function () {
-        if (OptionSetFactory.options)
-            return Promise.resolve(OptionSetFactory.options);
-        else
-            $http.get(ApiUrl + "/options.json?fields=id,displayName&paging=false")
-                .then(successPromise, failurePromise)
-    }
-
+    return $http.get(ApiUrl + "/optionSets.json?paging=false")
+        .then(successPromise, failurePromise);
 }]);
 
 

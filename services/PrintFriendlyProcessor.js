@@ -23,6 +23,51 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             categoryOptionCombo.name = categoryOptionCombo.name.replace(/,/g, "<br>");
         })
     };
+
+    var divideOptionSetsIntoNewSection = function(section, index, sections){
+        console.log(sections);
+        var indexOfDEWithOptions = [];
+        var currentIndex = 0;
+        var pushIndex = 0;
+        var newSection;
+        _.map(section.dataElements, function(dataElement, index){
+              if(dataElement.type == 'OPTIONSET')
+                  indexOfDEWithOptions.push(index)
+        });
+
+        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)) return;
+
+        var pushSection = function(section){
+            console.log(sections);
+            if(section.dataElements.length > 0) sections.splice(index + (++pushIndex), 0, section);
+            console.log(sections);
+
+        };
+
+        var cloneSection = function (section, dataElements) {
+            var newSection = _.cloneDeep(section);
+            newSection.isDuplicate = true;
+            newSection.dataElements = dataElements;
+            return newSection;
+        };
+
+        _.map(indexOfDEWithOptions, function(indexOfDE){
+            newSection = cloneSection(section, _.slice(section.dataElements, currentIndex, indexOfDE));
+            pushSection(newSection);
+            newSection = cloneSection(section, [section.dataElements[indexOfDE]]);
+            newSection.isOptionSet = true;
+            pushSection(newSection);
+            currentIndex = indexOfDE + 1;
+        });
+
+        if(indexOfDEWithOptions.length > 0){
+            newSection = cloneSection(section, _.slice(section.dataElements, currentIndex, section.dataElements.length));
+            pushSection(newSection);
+            sections.splice(index, 1);
+            sections[index].isDuplicate = false;
+        }
+        console.log(sections);
+    };
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];
         var numberOfFittingColumns = 5;
@@ -143,8 +188,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);
                     processTableHeader(dataset.sections[i]);
                 }
-                else
+                else {
+                    divideOptionSetsIntoNewSection(dataset.sections[i], i, dataset.sections);
                     splitLeftAndRightElements(dataset.sections[i]);
+                }
             }
             processDataSet(dataset)
         });

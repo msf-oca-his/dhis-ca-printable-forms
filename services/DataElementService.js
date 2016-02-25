@@ -1,4 +1,4 @@
-TallySheets.service("DataElementService", ['$http', function ($http) {
+TallySheets.service("DataElementService", ['$http', "OptionSetFactory", function ($http, OptionSetFactory) {
     var failurePromise = function(response){
         return {isError: true, status: response.status, statusText: response.statusText}
     };
@@ -21,16 +21,28 @@ TallySheets.service("DataElementService", ['$http', function ($http) {
     };
     var DataElement = function (data) {
         var dataElement = {};
+        var promises = [];
         dataElement.name = data.name;
         dataElement.id = data.id;
-        dataElement.type = data.valueType;
+        if(data.optionSetValue){
+            promises.push(OptionSetFactory.then(function(optionSets){
+                dataElement.options = optionSets[data.optionSet.id].options;
+                dataElement.type = 'OPTIONSET';
+            }));
+        }
+        else if(data.valueType == 'BOOLEAN')
+            dataElement.type = data.valueType;
+
+        else
+            dataElement.type = 'TEXT';
+
+
         if(data.categoryCombo.name != "default")
-            dataElement.isResolved = getCategoryCombo(data.categoryCombo)
+            promises.push(getCategoryCombo(data.categoryCombo)
                 .then(function(categoryCombo){
                     return dataElement.categoryCombo = categoryCombo;
-                });
-        else
-            dataElement.isResolved = Promise.resolve(true);
+                }));
+        dataElement.isResolved = Promise.all(promises);
         return dataElement;
 
     };
