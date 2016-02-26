@@ -7,7 +7,7 @@ TallySheets.service("DataElementService", ['$http', "OptionSetFactory", function
         var categoryCombo ={};
         categoryCombo.id = data.id;
         categoryCombo.name = data.name;
-        categoryCombo.categoryOptionCombos = data.categoryOptionCombos;
+        categoryCombo.categoryOptionCombos = _.sortBy(data.categoryOptionCombos, ['name']);
         return categoryCombo;
     };
     var getCategoryCombo = function(incompleteCategoryCombo){
