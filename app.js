@@ -89,9 +89,11 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
             else return Promise.resolve(0)
         });
         Promise.all(promises).then(function () {
+            datasets = _.filter(datasets, function (dataset) {
+                return !!dataset;
+            });
             pages = PrintFriendlyProcessor.process(datasets);
             $scope.pages = pages;
-            console.log($scope.pages);
             $scope.$apply();
         });
     };

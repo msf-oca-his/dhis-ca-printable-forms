@@ -57,9 +57,9 @@
         <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
             <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
             <div>
-                {{content.section.dataElements[0].name}}
-                <span ng-repeat="option in content.section.dataElements[0].options">
-                    <input type="checkbox">{{option.name}}</input>
+                {{content.section.dataElements[0].name}} :
+                <span ng-repeat="option in content.section.dataElements[0].options" class="checkboxcontainer">
+                    <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
                 </span>
 
             </div>
@@ -74,9 +74,9 @@
                             {{content.section.leftSideElements[$index].name}}
                         </td>
                         <td class="yesno" ng-if="content.section.leftSideElements[$index].type=='BOOLEAN'">
-                            <input type="checkbox" class="clean customcheckbox"><span style="padding-right:3mm;padding-left:3mm;">Yes</span>
-
-                            <input type="checkbox" class="clean customcheckbox">No
+                            <input type="checkbox" class="pffcheckbox">Yes
+                            <span style="margin-right: 5mm"></span>
+                            <input type="checkbox" class="pffcheckbox">No
                         </td>
                         <td class="deField" ng-if="content.section.leftSideElements[$index].type=='TEXT'"></td>
 

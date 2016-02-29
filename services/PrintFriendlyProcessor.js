@@ -8,7 +8,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     var heightOfSectionTitle = 7;
     var heightOfDataSetTitle = 10;
     var gapBetweenSections = 5;
-    var graceHeight = 15;
+    var graceHeight = 10;
 
     var Page = function () {
         var page = {};
@@ -25,7 +25,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     };
 
     var divideOptionSetsIntoNewSection = function(section, index, sections){
-        console.log(sections);
         var indexOfDEWithOptions = [];
         var currentIndex = 0;
         var pushIndex = 0;
@@ -38,10 +37,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)) return;
 
         var pushSection = function(section){
-            console.log(sections);
             if(section.dataElements.length > 0) sections.splice(index + (++pushIndex), 0, section);
-            console.log(sections);
-
         };
 
         var cloneSection = function (section, dataElements) {
@@ -66,7 +62,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             sections.splice(index, 1);
             sections[index].isDuplicate = false;
         }
-        console.log(sections);
     };
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];

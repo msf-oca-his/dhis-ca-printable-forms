@@ -45,9 +45,11 @@ input.clean {
     -o-transition: none;
     transition: none;
 }
-.customcheckbox{
-    margin-right: 1mm;
-    margin-left: 1mm;
+.pffcheckbox{
+    margin-right: 2mm !important;
+}
+.checkboxcontainer{
+    margin-left: 5mm;
 }
 .deField{
     width: 2cm;
