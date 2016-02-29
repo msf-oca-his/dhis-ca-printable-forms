@@ -29,6 +29,7 @@ body {
     border: 0.7mm red solid;
     height: 278mm;
     page-break-after: always;
+    position: relative;
 }
 
 input.clean {
@@ -101,6 +102,19 @@ td {
     size: A4;
     margin: 0;
 }
+
+.page-footer {
+    display: table-footer-group;
+}
+
+.page-footer:after {
+    counter-increment: page;
+    content:"Page " counter(page);
+    position: absolute;
+    right: 30px;
+    bottom: 10px;
+}
+
 @media print {
     html, body {
         height: 297mm;
@@ -117,4 +131,15 @@ td {
         page-break-after: always;
     }
 
+    .page-footer {
+        display: table-footer-group;
+    }
+
+    .page-footer:after {
+        counter-increment: page;
+        content:"Page " counter(page);
+        position: absolute;
+        right: 30px;
+        bottom: 10px;
+    }
 }
