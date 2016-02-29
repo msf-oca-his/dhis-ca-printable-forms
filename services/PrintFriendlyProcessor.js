@@ -30,8 +30,12 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var pushIndex = 0;
         var newSection;
         _.map(section.dataElements, function(dataElement, index){
-              if(dataElement.type == 'OPTIONSET')
-                  indexOfDEWithOptions.push(index)
+
+              if(dataElement.type == 'OPTIONSET') {
+                  if(dataElement.options.length < 10) indexOfDEWithOptions.push(index);
+                  else dataElement.type = "TEXT";
+              }
+
         });
 
         if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)) return;
@@ -112,6 +116,8 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var addSectionToNewPage = function (section, height) {
                 page = new Page();
                 pages[++currentPageIndex] = page;
+                section.isDuplicate = false;
+                height = height + heightOfSectionTitle;
                 addSectionToPage(section, height);
             };
 
@@ -190,7 +196,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             }
             processDataSet(dataset)
         });
-        console.log(pages);
         return pages;
 
     }
