@@ -117,8 +117,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 page = new Page();
                 pages[++currentPageIndex] = page;
                 section.isDuplicate = false;
-                height = height + heightOfSectionTitle;
-                addSectionToPage(section, height);
+                processSection(section, 2);
             };
 
             var getNumberOfElementsThatCanFit = function (section) {
