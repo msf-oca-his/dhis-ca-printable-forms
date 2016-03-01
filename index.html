@@ -62,7 +62,7 @@
 		<br>
 
 	<div style="margin:0 auto;">
-		<page class="page" ng-repeat="page in pages" page="page"></page>
+		<page class="page" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length"></page>
 	</div>
 	</body>
 

@@ -102,18 +102,13 @@ td {
     size: A4;
     margin: 0;
 }
-
-.page-footer {
-    display: table-footer-group;
-}
-
-.page-footer:after {
-    counter-increment: page;
-    content:"Page " counter(page);
+.page-number {
+    text-align: right;
     position: absolute;
-    right: 30px;
-    bottom: 10px;
+    bottom: 5px;
+    width: 95%;
 }
+
 
 @media print {
     html, body {
@@ -129,17 +124,5 @@ td {
         box-shadow: initial;
         background: initial;
         page-break-after: always;
-    }
-
-    .page-footer {
-        display: table-footer-group;
-    }
-
-    .page-footer:after {
-        counter-increment: page;
-        content:"Page " counter(page);
-        position: absolute;
-        right: 30px;
-        bottom: 10px;
     }
 }
