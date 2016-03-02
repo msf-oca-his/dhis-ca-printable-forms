@@ -60,11 +60,16 @@
         <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
             <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
             <div>
-                {{content.section.dataElements[0].name}} :
-                <span ng-repeat="option in content.section.dataElements[0].options" class="checkboxcontainer">
-                    <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
-                </span>
-
+                <table>
+                <td class="deLabel optionLabel">
+                    {{content.section.dataElements[0].name}}
+                </td>
+                    <td>
+                        <span ng-repeat="option in content.section.dataElements[0].options" class="checkboxcontainer">
+                        <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
+                        </span>
+                    </td>
+                </table>
             </div>
         </div>
         <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
@@ -107,5 +112,7 @@
 
         Page {{pageNumber}} of {{totalPages}}
     </div>
+
+
 
 </div>

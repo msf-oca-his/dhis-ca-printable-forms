@@ -73,6 +73,11 @@ input.clean {
     text-align: right;
     height: 9mm;
 }
+.deLabel.optionLabel{
+    width: 4.8cm;
+    text-align: right;
+    height: 9mm;
+}
 .table-heading{
     text-align: center;
     height: 15mm;
