@@ -28,11 +28,25 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var indexOfDEWithOptions = [];
         var currentIndex = 0;
         var pushIndex = 0;
+        var maxDataElementWidth = 185;
         var newSection;
+
+        var getLengthOfOptions = function(dataelement) {
+            var dataElementPadding = 11;
+            var dataElementLength = (dataelement.name.length) * 2 + dataElementPadding;
+            var optionsPadding = 12;
+            var optionsLength = 0;
+
+            _.map(dataelement.options, function(option) {
+                optionsLength = optionsLength + optionsPadding + (option.name.length) * 1.8;
+            });
+            return dataElementLength + optionsLength;
+        }
+
         _.map(section.dataElements, function(dataElement, index){
 
               if(dataElement.type == 'OPTIONSET') {
-                  if(dataElement.options.length < 10) indexOfDEWithOptions.push(index);
+                  if(getLengthOfOptions(dataElement) < maxDataElementWidth) indexOfDEWithOptions.push(index);
                   else dataElement.type = "TEXT";
               }
 
