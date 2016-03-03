@@ -121,16 +121,17 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             };
 
             var addSectionToPage = function (section, height) {
-                if (sectionIndex == 0 && !section.isDuplicate) page.contents.push({type: 'dataSetName', name: dataSet.name});
+                var isFirstSection = Number.isInteger(sectionIndex) ? ( sectionIndex == 0 ) : sectionIndex;
+                if (isFirstSection == true && !section.isDuplicate) page.contents.push({type: 'dataSetName', name: dataSet.name});
                 page.contents.push({type: 'section', section: section});
                 page.heightLeft = page.heightLeft - height;
             };
 
-            var addSectionToNewPage = function (section, height) {
+            var addSectionToNewPage = function (section, height, isFirstSectionInDataSet) {
                 page = new Page();
                 pages[++currentPageIndex] = page;
                 section.isDuplicate = false;
-                processSection(section, 2);
+                processSection(section, isFirstSectionInDataSet);
             };
 
             var getNumberOfElementsThatCanFit = function (section) {
@@ -143,11 +144,13 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var breakAndAddSection = function(section){
                 if (section.isCatComb) {
                     var newSection = _.cloneDeep(section);
+                    var pageHeightLeft = 1000;
                     newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
                     newSection.isDuplicate = true;
                     processTableHeader(newSection);
-                    addSectionToPage(section, 1000);
-                    addSectionToNewPage(newSection, getHeightForSection(newSection));
+                    addSectionToPage(section, pageHeightLeft );
+                    var isFirstSectionInDataSet = false;
+                    addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInDataSet);
                 }
                 else {
                     var newSection = _.cloneDeep(section);
@@ -157,7 +160,8 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     splitLeftAndRightElements(newSection);
                     newSection.isDuplicate = true;
                     addSectionToPage(section, 1000);
-                    addSectionToNewPage(newSection, getHeightForSection(newSection));
+                    var isFirstSectionInDataSet = false;
+                    addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInDataSet);
                 }
             };
 
@@ -174,8 +178,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     addSectionToPage(section, sectionHeight);
                 else if(numberOfElementsThatCanFit > 1)
                     breakAndAddSection(section);
-                else
-                    addSectionToNewPage(section, sectionHeight)
+                else{
+                    var isFirstSectionInDataSet = sectionIndex == 0;
+                    addSectionToNewPage(section, sectionHeight, isFirstSectionInDataSet)
+                }
             }
         };
 
