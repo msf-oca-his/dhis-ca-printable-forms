@@ -63,9 +63,9 @@ input.clean {
 }
 .deLabel.catComb{
     width: 3cm;
-    text-align: left;
+    text-align: right;
     height:12mm;
-    padding-right: 0mm;
+    padding-right: 2mm;
     padding-left: 1mm;
 }
 .deLabel.general{
