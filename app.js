@@ -8,7 +8,7 @@ TallySheets.filter('to_trusted', ['$sce', function($sce) {
         return $sce.trustAsHtml(text);
     };
 }]);
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor) {
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService) {
 
     var dsSelectorLastId = -1;
     $scope.dsSelectorList = [];
@@ -77,15 +77,27 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
         pages = [];
         currentPageIndex = 0;
         var datasets = new Array($scope.dsSelectorList.length - 1);
+
         var promises = _.map($scope.dsSelectorList, function (dsSelector, index) {
-            if (dsSelector.dataset.id)
-                return DataSetService.getDataSet(dsSelector.dataset.id)
-                    .then(function (dataset) {
-                        return dataset.isResolved
-                            .then(function () {
-                                return datasets[index] = _.cloneDeep(dataset);
-                            });
+            if (dsSelector.dataset.id) {
+                if(dsSelector.dataset.type == "dataSet") {
+                    return DataSetService.getDataSet(dsSelector.dataset.id)
+                        .then(function (dataset) {
+                            return dataset.isResolved
+                                .then(function () {
+                                    return datasets[index] = _.cloneDeep(dataset);
+                                });
+                        });
+                }
+                else if (dsSelector.dataset.type == "program") {
+                    return ProgramService.getProgram(dsSelector.dataset.id).then(function(program){
+                        return program.isResolved.then(function () {
+                            return datasets[index] = program;
+                        })
+
                     });
+                }
+            }
             else return Promise.resolve(0)
         });
         Promise.all(promises).then(function () {
@@ -101,8 +113,9 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
 
     $scope.addDatasetSelector = function () {
         dsSelectorLastId++;
-        $scope.dsSelectorList.push({id: dsSelectorLastId, dataset: {}});
+        $scope.dsSelectorList.push({id: dsSelectorLastId, type:"", dataset: {}});
         renderDataSets();
+
     };
 
     $scope.deleteDatesetSelector = function (selectPosition) {
@@ -116,6 +129,12 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
 
 TallySheets.factory("DataSetsUID", ['$resource', function ($resource) {
     return $resource(ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true",
+        {},
+        {get: {method: "GET"}});
+}]);
+
+TallySheets.factory("ProgramsUID", ['$resource', function ($resource) {
+    return $resource(ApiUrl + "/programStages.json?fields=id,displayName&paging=false&translate=true",
         {},
         {get: {method: "GET"}});
 }]);
