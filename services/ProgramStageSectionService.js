@@ -11,16 +11,17 @@ TallySheets.service("ProgramStageSectionService", ['$http', 'DataElementService'
         programSection.id = data.id;
         programSection.dataElements = new Array(data.programStageDataElements.length);
 
-        _.map(data.programStageDataElements, function(stageDataElement, index) {
-            getDataElement(stageDataElement.id).then(function(dataElement) {
-                DataElementService.getDataElement(dataElement)
+        var promises =_.map(data.programStageDataElements, function(stageDataElement, index) {
+            return getDataElement(stageDataElement.id).then(function(dataElement) {
+                return DataElementService.getDataElement(dataElement)
                         .then(function (dataElement) {
-                            return dataElement.isResolved.then(function(){
+                        return dataElement.isResolved.then(function(){
                                 return programSection.dataElements[index] = dataElement;
                             });
                         })
             });
         });
+        programSection.isResolved = Promise.all(promises)
         return  programSection;
     };
 

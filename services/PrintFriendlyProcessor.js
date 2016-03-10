@@ -105,7 +105,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     };
 
 
-    var processDataSet = function (dataSet) {
+    var processDataSet = function (dataSet, sections) {
 
         var processSection = function(section, sectionIndex){
 
@@ -193,28 +193,33 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             page = pages[currentPageIndex];
         }
 
-        _.map(dataSet.sections, processSection);
+        _.map(sections, processSection);
 
         dataSet.isPrintFriendlyProcessed = true;
     };
+    var processData = function(dataset, sections) {
+        for(var i = 0; i < sections.length; i++){
+            if(sections[i].isCatComb) {
+                divideCatCombsIfNecessary(sections[i], i, sections);
+                processTableHeader(sections[i]);
+            }
+            else {
+                divideOptionSetsIntoNewSection(sections[i], i, sections);
+                splitLeftAndRightElements(sections[i]);
+            }
+        }
+        processDataSet(dataset, sections)
+    }
 
     this.process = function(datasets) {
         pages = [];
         currentPageIndex = 0;
         _.map(datasets, function (dataset) {
-            for(var i = 0; i < dataset.sections.length; i++){
-                if(dataset.sections[i].isCatComb) {
-                    divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);
-                    processTableHeader(dataset.sections[i]);
-                }
-                else {
-                    divideOptionSetsIntoNewSection(dataset.sections[i], i, dataset.sections);
-                    splitLeftAndRightElements(dataset.sections[i]);
-                }
-            }
-            processDataSet(dataset)
+            if(dataset.type=='program')
+                processData(dataset, dataset.stageSections)
+            else
+                processData(dataset, dataset.sections)
         });
         return pages;
-
     }
 }]);
