@@ -5,11 +5,10 @@ TallySheets.directive('datasetSelector', function(){
         scope: {
             selectorId: '=',
             bindToDataset: '=',
-            selectorType: "="
+            selectDataset: '&'
         }
     };
 });
-
 TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', 'ProgramsUID', function($scope, $rootScope, DataSetsUID, ProgramsUID){
 
     $scope.id = "dsSelector" + $scope.selectorId;
@@ -18,7 +17,7 @@ TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSets
 
     DataSetsUID.get().$promise.then(function(result){
         _.map(result.dataSets, function(dataset){
-              dataset.type = "dataSet"
+              dataset.type = "dataset"
         });
         $scope.dataSetList = result.dataSets;
 
@@ -43,13 +42,14 @@ TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSets
         var dsId = $("option:selected", this).val();
         var dsName = $("option:selected", this).html().trim();
         var dsType = $("option:selected", this)[0].dataset.type;
-
+        $scope.selectorId = dsId;
         $scope.bindToDataset.id = dsId;
         $scope.bindToDataset.name = dsName;
         $scope.bindToDataset.type = dsType;
 
-
-
+        if(dsId) {
+          $scope.selectDataset()
+        }
         $rootScope.$apply();
     });
 

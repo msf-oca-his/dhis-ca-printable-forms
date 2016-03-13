@@ -5,13 +5,16 @@ TallySheets.service("ProgramService", ['$http', 'ProgramStageSectionService', fu
             var program = {};
             program.name = data.name;
             program.id = data.id;
+            program.type = "program";
             program.stageSections = new Array(data.programStageSections.length);
             program.isPrintFriendlyProcessed = false;
 
             var getProgramStageSections = function(){
                 return Promise.all(_.map(data.programStageSections, (function(stageSection, index){
                     return ProgramStageSectionService.getStageSection(stageSection.id).then(function(stageSection){
-                       program.stageSections[index] = stageSection
+                        return stageSection.isResolved.then(function() {
+                          program.stageSections[index] = stageSection
+                      })
                     })
                 })));
             };

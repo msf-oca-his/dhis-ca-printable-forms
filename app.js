@@ -8,10 +8,9 @@ TallySheets.filter('to_trusted', ['$sce', function($sce) {
         return $sce.trustAsHtml(text);
     };
 }]);
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService) {
-
-    var dsSelectorLastId = -1;
-    $scope.dsSelectorList = [];
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService","ProgramProcessor", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
+    $scope.dsId  = 1;
+    $scope.dataset = {};
     $scope.pages = [];
     var pages = [];
     var currentPageIndex = 0;
@@ -70,61 +69,40 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
 
     // Initialize the app with one dataset selector
 
-
-
-    var renderDataSets = function () {
-        $scope.pages = [];
+    $scope.renderDataSets = function (  ) {
+       $scope.pages = [];
         pages = [];
         currentPageIndex = 0;
-        var datasets = new Array($scope.dsSelectorList.length - 1);
-
-        var promises = _.map($scope.dsSelectorList, function (dsSelector, index) {
-            if (dsSelector.dataset.id) {
-                if(dsSelector.dataset.type == "dataSet") {
-                    return DataSetService.getDataSet(dsSelector.dataset.id)
-                        .then(function (dataset) {
-                            return dataset.isResolved
-                                .then(function () {
-                                    return datasets[index] = _.cloneDeep(dataset);
-                                });
+        var currentDataset = {};
+        var promises = _.map([$scope.dataset], function (dataset) {
+            if (dataset.id) {
+                    if(dataset.type == "dataset") {
+                        return DataSetService.getDataSet(dataset.id)
+                            .then(function (dataset) {
+                                return dataset.isResolved
+                                    .then(function () {
+                                        return currentDataset = _.cloneDeep(dataset);
+                                    });
+                            });
+                    }
+                    else if (dataset.type == "program") {
+                        return ProgramService.getProgram(dataset.id).then(function(program){
+                            return program.isResolved.then(function () {
+                                return currentDataset = program;
+                            })
                         });
+                    }
                 }
-                else if (dsSelector.dataset.type == "program") {
-                    return ProgramService.getProgram(dsSelector.dataset.id).then(function(program){
-                        return program.isResolved.then(function () {
-                            return datasets[index] = program;
-                        })
-
-                    });
-                }
-            }
-            else return Promise.resolve(0)
-        });
-        Promise.all(promises).then(function () {
-            datasets = _.filter(datasets, function (dataset) {
-                return !!dataset;
+                else return Promise.resolve(0)
             });
-            pages = PrintFriendlyProcessor.process(datasets);
+        Promise.all(promises).then(function () {
+            _.map([currentDataset], function(dataset){
+                pages = (dataset.type=='dataset')?PrintFriendlyProcessor.process(dataset):ProgramProcessor.process(dataset);
+            })
             $scope.pages = pages;
             $scope.$apply();
         });
     };
-
-
-    $scope.addDatasetSelector = function () {
-        dsSelectorLastId++;
-        $scope.dsSelectorList.push({id: dsSelectorLastId, type:"", dataset: {}});
-        renderDataSets();
-
-    };
-
-    $scope.deleteDatesetSelector = function (selectPosition) {
-        $scope.dsSelectorList.splice(selectPosition, 1);
-        renderDataSets();
-    };
-
-    $scope.addDatasetSelector();
-
 }]);
 
 TallySheets.factory("DataSetsUID", ['$resource', function ($resource) {

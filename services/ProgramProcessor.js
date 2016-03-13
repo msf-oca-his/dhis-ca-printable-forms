@@ -1,4 +1,4 @@
-TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntrySectionService', function(DataElementService, DataEntrySectionService){
+TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectionService', function(DataElementService, DataEntrySectionService){
     var pages = [];
     var currentPageIndex;
     var page;
@@ -12,12 +12,11 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
     var Page = function () {
         var page = {};
-        page.heightLeft = 237;
-        page.width = 183;
+        page.heightLeft = 183;
+        page.width = 237;
         page.contents = [];
         return page;
     };
-
     var processTableHeader = function(section){
         _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo){
             categoryOptionCombo.name = categoryOptionCombo.name.replace(/,/g, "<br>");
@@ -44,10 +43,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
         _.map(section.dataElements, function(dataElement, index){
 
-              if(dataElement.type == 'OPTIONSET') {
-                  if(getLengthOfOptions(dataElement) < maxDataElementWidth) indexOfDEWithOptions.push(index);
-                  else dataElement.type = "TEXT";
-              }
+            if(dataElement.type == 'OPTIONSET') {
+                if(getLengthOfOptions(dataElement) < maxDataElementWidth) indexOfDEWithOptions.push(index);
+                else dataElement.type = "TEXT";
+            }
 
         });
 
@@ -193,7 +192,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             page = pages[currentPageIndex];
         }
 
-        _.map(dataSet.sections, processSection);
+        _.map(dataSet.stageSections, processSection);
 
         dataSet.isPrintFriendlyProcessed = true;
     };
@@ -202,14 +201,14 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         pages = [];
         currentPageIndex = 0;
         _.map([dataset], function (dataset) {
-            for(var i = 0; i < dataset.sections.length; i++){
-                if(dataset.sections[i].isCatComb) {
-                    divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);
-                    processTableHeader(dataset.sections[i]);
+            for(var i = 0; i < dataset.stageSections.length; i++){
+                if(dataset.stageSections[i].isCatComb) {
+                    divideCatCombsIfNecessary(dataset.stageSections[i], i, dataset.stageSections);
+                    processTableHeader(dataset.stageSections[i]);
                 }
                 else {
-                    divideOptionSetsIntoNewSection(dataset.sections[i], i, dataset.sections);
-                    splitLeftAndRightElements(dataset.sections[i]);
+                    divideOptionSetsIntoNewSection(dataset.stageSections[i], i, dataset.stageSections);
+                    splitLeftAndRightElements(dataset.stageSections[i]);
                 }
             }
             processDataSet(dataset)

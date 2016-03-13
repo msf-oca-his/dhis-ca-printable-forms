@@ -6,6 +6,7 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
             var dataSet = {};
             dataSet.name = data.name;
             dataSet.id = data.id;
+            dataSet.type="dataset";
             dataSet.sections = new Array(data.sections.length);
             dataSet.orphanDataElements =[];
             dataSet.isPrintFriendlyProcessed = false;
