@@ -50,8 +50,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
               }
 
         });
-
-        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)) return;
+        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)){}
 
         var pushSection = function(section){
             if(section.dataElements.length > 0) sections.splice(index + (++pushIndex), 0, section);
@@ -215,6 +214,5 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             processDataSet(dataset)
         });
         return pages;
-
     }
 }]);
