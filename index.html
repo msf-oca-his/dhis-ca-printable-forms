@@ -37,9 +37,6 @@
 		<div id="mainMenu" class="panel panel-default hidden-print">
 			<div class="panel-body">
 				<span class="row">
-					<button onclick="window.print()" class="btn btn-primary hidden-print pull-right" aria-label="Right Align">{{ 'PRINT' | translate }}</button>
-					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print" style="display:none">
-						{{ 'EXPORT_EXCEL' | translate}}</button>
 					<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
 						<span class="glyphicon glyphicon-home"></span>
 						{{ 'HOME' | translate}}
@@ -50,6 +47,9 @@
 
 				<span class="row">
 					<dataset-selector selector-id="dsId" select-dataset= "renderDataSets()" bind-to-dataset="dataset"></dataset-selector>
+					<button onclick="window.print()" class="btn btn-primary hidden-print pull-right">{{ 'PRINT' | translate }}</button>
+					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print" style="display:none">
+						{{ 'EXPORT_EXCEL' | translate}}</button>
 					<div ng-if="dataset.type=='program'" ng-init="programMode.mode='coverSheet'">
 						<br>
 						<br>
@@ -60,6 +60,8 @@
 							<input name="mode" ng-model="programMode.mode"  value="register"  type="radio"> Register
 						</label>
 					</div>
+
+
 				</span>
 			</div>
 
