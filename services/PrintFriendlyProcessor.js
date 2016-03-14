@@ -50,7 +50,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
               }
 
         });
-        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)){}
+        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)){
+            section.isOptionSet = true;
+            return ;
+        }
 
         var pushSection = function(section){
             if(section.dataElements.length > 0) sections.splice(index + (++pushIndex), 0, section);
