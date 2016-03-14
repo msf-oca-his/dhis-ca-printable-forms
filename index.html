@@ -37,8 +37,8 @@
 		<div id="mainMenu" class="panel panel-default hidden-print">
 			<div class="panel-body">
 				<span class="row">
-					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">
+					<button onclick="window.print()" class="btn btn-primary hidden-print pull-right" aria-label="Right Align">{{ 'PRINT' | translate }}</button>
+					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print" style="display:none">
 						{{ 'EXPORT_EXCEL' | translate}}</button>
 					<button id="homeBtn" ng-click="goHome()" class="btn btn-danger hidden-print">
 						<span class="glyphicon glyphicon-home"></span>
@@ -50,12 +50,21 @@
 
 				<span class="row">
 					<dataset-selector selector-id="dsId" select-dataset= "renderDataSets()" bind-to-dataset="dataset"></dataset-selector>
+					<div ng-if="dataset.type=='program'" ng-init="programMode.mode='coverSheet'">
+						<br>
+						<br>
+						<label class="radio-inline">
+							<input name="mode" ng-model="programMode.mode" value="coverSheet" checked="checked" type="radio"> CoverSheet
+						</label>
+						<label class="radio-inline">
+							<input name="mode" ng-model="programMode.mode"  value="register"  type="radio"> Register
+						</label>
+					</div>
 				</span>
 			</div>
+
 		</div>
 		<br>
-
-		<page class="page" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length" dataset="dataset"></page>
-
+		<page class="page" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length" dataset="dataset" program-mode="programMode.mode"></page>
 	</body>
 </html>

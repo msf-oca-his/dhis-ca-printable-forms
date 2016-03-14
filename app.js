@@ -11,6 +11,7 @@ TallySheets.filter('to_trusted', ['$sce', function($sce) {
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService","ProgramProcessor", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
     $scope.dsId  = 1;
     $scope.dataset = {};
+    $scope.programMode = {mode:""};
     $scope.pages = [];
     var pages = [];
     var currentPageIndex = 0;

@@ -115,8 +115,13 @@
 
     </div>
 
-    <div class="programpage" ng-if="dataset.type=='program'">
-
+    <div ng-if="dataset.type=='program'">
+        <div ng-if="programMode=='coverSheet'" class="coverSheet">
+            {{programMode}}
+        </div>
+        <div ng-if="programMode=='register'" class="register">
+            {{programMode}}
+        </div>
     </div>
 
 </div>

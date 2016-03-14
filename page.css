@@ -23,12 +23,21 @@ body {
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
 }
 
-.programpage{
+.register{
     margin: 2mm auto;
     padding: 2mm;
     width: 278mm;
     border: 0.7mm red solid;
     height: 200mm;
+    page-break-after: always;
+    position: relative;
+}
+.coverSheet {
+    margin: 2mm auto;
+    padding: 2mm;
+    width: 200mm;
+    border: 0.7mm red solid;
+    height: 278mm;
     page-break-after: always;
     position: relative;
 }
@@ -123,7 +132,6 @@ td {
     bottom: 5px;
     width: 95%;
 }
-
 
 @media print {
     html, body {

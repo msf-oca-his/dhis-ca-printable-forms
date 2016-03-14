@@ -8,7 +8,8 @@ TallySheets.directive('page', function(){
             page: '=',
             pageNumber: '=',
             totalPages: '=',
-            dataset:'='
+            dataset:'=',
+            programMode: '='
         }
     };
 });
