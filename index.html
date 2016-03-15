@@ -20,6 +20,7 @@
 		<!--<link href="app.css" type=rel="stylesheet">-->
 		<link href="page.css" rel="stylesheet" type="text/css">
 
+
 		<!-- Load directives and modules -->
 		<script src="services/DataSetService.js" type="text/javascript"></script>
 		<script src="services/DataEntrySectionService.js" type="text/javascript"></script>
@@ -47,19 +48,19 @@
 
 				<span class="row">
 					<dataset-selector selector-id="dsId" select-dataset= "renderDataSets()" bind-to-dataset="dataset"></dataset-selector>
-					<button onclick="window.print()" class="btn btn-primary hidden-print pull-right">{{ 'PRINT' | translate }}</button>
-					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print" style="display:none">
-						{{ 'EXPORT_EXCEL' | translate}}</button>
-					<div ng-if="dataset.type=='program'" ng-init="programMode.mode='coverSheet'">
-						<br>
-						<br>
+					<span>&nbsp;&nbsp;</span>
+					<span class="pull-right">
+					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
+					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+					</span>
+					<span ng-if="dataset.type=='program'" ng-init="programMode.mode='coverSheet'">
 						<label class="radio-inline">
-							<input name="mode" ng-model="programMode.mode" value="coverSheet" checked="checked" type="radio"> CoverSheet
+							<input name="mode" ng-model="programMode.mode" value="coverSheet" checked="checked" type="radio" > CoverSheet
 						</label>
 						<label class="radio-inline">
-							<input name="mode" ng-model="programMode.mode"  value="register"  type="radio"> Register
+							<input name="mode" ng-model="programMode.mode"  value="register" type="radio"> Register
 						</label>
-					</div>
+					</span>
 
 
 				</span>
