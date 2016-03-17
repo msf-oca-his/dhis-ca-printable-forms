@@ -13,6 +13,9 @@ body {
 .section{
     margin-bottom: 5mm;
 }
+#mainMenu{
+    margin-top:45px;
+}
 .page {
     width: 210mm;
     min-height: 297mm;
