@@ -1,0 +1,103 @@
+.section{
+    margin-bottom: 5mm;
+}
+
+.page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 5mm;
+    /*border: 0.5px #D3D3D3  solid;*/
+    /*border-radius: 5px;*/
+    background: white;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+    font-family: inherit;
+}
+
+.subpage {
+    margin: 2mm auto;
+    padding: 2mm;
+    width: 200mm;
+    border: 0.7mm red solid;
+    height: 278mm;
+    page-break-after: always;
+    position: relative;
+}
+
+.deField{
+    width: 2cm;
+    border-bottom: 1px solid black;
+}
+
+.deLabel{
+    width: 3cm;
+    padding-right: 5mm;
+}
+.deLabel.catComb{
+    width: 3cm;
+    text-align: right;
+    height:12mm;
+    padding-right: 2mm;
+    padding-left: 1mm;
+}
+.deLabel.general{
+    width: 3cm;
+    text-align: right;
+    height: 9mm;
+}
+.deLabel.optionLabel{
+    width: 4.8cm;
+    text-align: right;
+    height: 9mm;
+}
+.table-heading{
+    text-align: center;
+    height: 15mm;
+}
+.header{
+    font-weight: 600;
+    font-size: 4mm;
+    width: 90%;
+    margin-bottom: 8mm
+}
+.datasetName {
+    font-size: 6mm;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding-top: 3mm;
+}
+
+.sectionName {
+    font-size: 4mm;
+}
+@page {
+    size: A4;
+    margin: 0;
+}
+.page-number {
+    text-align: right;
+    position: absolute;
+    bottom: 5px;
+    width: 95%;
+}
+
+@media print {
+    html, body {
+        height: 297mm;
+        width: 210mm;
+    }
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
+    }
+}

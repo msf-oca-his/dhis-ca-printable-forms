@@ -1,0 +1,134 @@
+<link ng-if="mode=='coversheet'" href="coversheet.css" rel="stylesheet" type="text/css">
+<!--<link ng-if="mode=='register'" href="register.css" rel="stylesheet" type="text/css">-->
+<link  href="register.css" rel="stylesheet" type="text/css">
+<span ng-controller="programCtrl">
+<table class="header">
+    <tr>
+        <td class="deLabel">
+            Name
+        </td>
+
+        <td class="deField"></td>
+        <td class="seperator" style="width:2cm"></td>
+        <td class="deLabel">
+            Org Unit
+        </td>
+
+        <td class="deField"></td>
+    </tr>
+    <tr>
+        <td class="deLabel">
+            Location
+        </td>
+
+        <td class="deField"></td>
+        <td class="seperator" style="width:2cm"></td>
+        <td class="deLabel">
+            Date
+        </td>
+
+        <td class="deField"></td>
+    </tr>
+</table>
+<span ng-if="mode=='coversheet'">
+<div ng-repeat="content in contents">
+    <span class="datasetName" ng-if="content.type=='dataSetName'">{{content.name}}</span>
+
+    <div ng-if="content.type == 'section' && content.section.isCatComb " class="section">
+        <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
+        <table border="1" style="width:{{getTableWidth(content.section)}}">
+            <thead>
+            <tr>
+                <td></td>
+                <td class="table-heading"
+                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos"
+                    ng-bind-html="catComb.name | to_trusted">
+                </td>
+            </tr>
+            </thead>
+            <tr ng-repeat="dataElement in content.section.dataElements">
+
+                <td class="deLabel catComb">
+                    {{dataElement.name}}
+                </td>
+                <td class="deField"
+                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
+
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
+        <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
+        <div>
+            <table>
+                <td class="deLabel optionLabel">
+                    {{content.section.dataElements[0].name}}
+                </td>
+                <td>
+                            <span ng-repeat="option in content.section.dataElements[0].options"
+                                  class="checkboxcontainer">
+                            <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
+                            </span>
+                </td>
+            </table>
+        </div>
+    </div>
+    <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
+        <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
+        <table style="width:90%">
+
+            <tr ng-repeat="dataElement in content.section.leftSideElements">
+
+                <td class="deLabel general">
+                    {{content.section.leftSideElements[$index].name}}
+                </td>
+                <td class="yesno" ng-if="content.section.leftSideElements[$index].type=='BOOLEAN'">
+                    <input type="checkbox" class="pffcheckbox">Yes
+                    <span style="margin-right: 5mm"></span>
+                    <input type="checkbox" class="pffcheckbox">No
+                </td>
+                <td class="deField" ng-if="content.section.leftSideElements[$index].type=='TEXT'"></td>
+
+
+                <td class="seperator" style="width:1cm"></td>
+
+
+                <td class="deLabel general" ng-if="content.section.rightSideElements[$index]">
+                    {{content.section.rightSideElements[$index].name}}
+                </td>
+                            <span ng-if="content.section.rightSideElements[$index]">
+                                <td class="yesno" ng-if="content.section.rightSideElements[$index].type=='BOOLEAN'">
+                                    <input type="checkbox">Yes</input>
+                                    <input type="checkbox">No</input>
+                                </td>
+                                <td class="deField" ng-if="content.section.rightSideElements[$index].type=='TEXT'"></td>
+                            </span>
+            </tr>
+        </table>
+    </div>
+</div>
+    </span>
+    <span ng-if="mode=='register'">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>
+                        S.NO
+                    </th>
+                     <th ng-repeat="dataElement in contents">
+                        {{dataElement.name}}
+                     </th>
+                </tr>
+                </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+            </table>
+
+        </table>
+        </span>
+    </span>

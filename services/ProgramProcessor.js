@@ -197,23 +197,29 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         dataSet.isPrintFriendlyProcessed = true;
     };
 
-    this.process = function(dataset) {
+    this.process = function(program, mode) {
         pages = [];
         currentPageIndex = 0;
-        _.map([dataset], function (dataset) {
-            for(var i = 0; i < dataset.stageSections.length; i++){
-                if(dataset.stageSections[i].isCatComb) {
-                    divideCatCombsIfNecessary(dataset.stageSections[i], i, dataset.stageSections);
-                    processTableHeader(dataset.stageSections[i]);
+        if (mode == 'coversheet')
+            _.map([program], function (program) {
+                for (var i = 0; i < program.stageSections.length; i++) {
+                    if (program.stageSections[i].isCatComb) {
+                        divideCatCombsIfNecessary(program.stageSections[i], i, program.stageSections);
+                        processTableHeader(program.stageSections[i]);
+                    }
+                    else {
+                        divideOptionSetsIntoNewSection(program.stageSections[i], i, program.stageSections);
+                        splitLeftAndRightElements(program.stageSections[i]);
+                    }
                 }
-                else {
-                    divideOptionSetsIntoNewSection(dataset.stageSections[i], i, dataset.stageSections);
-                    splitLeftAndRightElements(dataset.stageSections[i]);
-                }
-            }
-            processDataSet(dataset)
-        });
+                processDataSet(program)
+            });
+        else {
+            page = new Page();
+            page.contents = _.flatten(_.map(program.stageSections, 'dataElements'));
+            console.log(page.contents);
+            pages = [page];
+        }
         return pages;
-
     }
 }]);

@@ -13,12 +13,9 @@ TallySheets.filter('to_trusted', ['$sce', function($sce) {
 }]);
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService","ProgramProcessor", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
     $scope.dsId  = 1;
-    $scope.dataset = {};
-    $scope.programMode = {mode:""};
+    $scope.form = {};
     $scope.pages = [];
-    var pages = [];
-    var currentPageIndex = 0;
-
+    $scope.programMode ={};
     $scope.exportToTable = function (tableId) {
         var uri = 'data:application/vnd.ms-excel;base64,'
             , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
@@ -73,39 +70,30 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
 
     // Initialize the app with one dataset selector
 
-    $scope.renderDataSets = function (  ) {
+    $scope.renderDataSets = function () {
        $scope.pages = [];
-        pages = [];
-        currentPageIndex = 0;
-        var currentDataset = {};
-        var promises = _.map([$scope.dataset], function (dataset) {
-            if (dataset.id) {
-                    if(dataset.type == "dataset") {
-                        return DataSetService.getDataSet(dataset.id)
-                            .then(function (dataset) {
-                                return dataset.isResolved
-                                    .then(function () {
-                                        return currentDataset = _.cloneDeep(dataset);
-                                    });
-                            });
-                    }
-                    else if (dataset.type == "program") {
-                        return ProgramService.getProgram(dataset.id).then(function(program){
-                            return program.isResolved.then(function () {
-                                return currentDataset = program;
-                            })
+        if ($scope.form.id) {
+                if($scope.form.type == "dataset") {
+                    return DataSetService.getDataSet($scope.form.id)
+                        .then(function (dataset) {
+                            return dataset.isResolved
+                                .then(function () {
+                                    $scope.pages = PrintFriendlyProcessor.process(_.cloneDeep(dataset));
+                                    $scope.$apply();
+                                });
                         });
-                    }
                 }
-                else return Promise.resolve(0)
-            });
-        Promise.all(promises).then(function () {
-            _.map([currentDataset], function(dataset){
-                pages = (dataset.type=='dataset')?PrintFriendlyProcessor.process(dataset):ProgramProcessor.process(dataset);
-            })
-            $scope.pages = pages;
-            $scope.$apply();
-        });
+                else if ($scope.form.type == "program") {
+                    return ProgramService.getProgram($scope.form.id).then(function(program){
+                        return program.isResolved.then(function () {
+                            $scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);
+                            $scope.$apply();
+
+                        })
+                    });
+                }
+            }
+            else return Promise.resolve(0)
     };
 }]);
 
