@@ -9,11 +9,14 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
     var heightOfDataSetTitle = 10;
     var gapBetweenSections = 5;
     var graceHeight = 10;
+    var registerPage = 'register';
+    var coverSheetPage = 'coversheet';
 
-    var Page = function () {
+
+    var Page = function (type) {
         var page = {};
-        page.heightLeft = 183;
-        page.width = 237;
+        page.heightLeft = (type == coverSheetPage) ? 183 : 150;
+        page.widthLeft = (type == coverSheetPage) ? 237 : 270;
         page.contents = [];
         return page;
     };
@@ -197,9 +200,31 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         dataSet.isPrintFriendlyProcessed = true;
     };
 
+    var processRegisterProgram = function (program) {
+        var getNewPage = function(){
+            page = new Page(registerPage);
+            pages[++currentPageIndex] = page;
+            return page;
+        };
+
+        var getWidthOfDataElement = function(dataElement){
+            return (dataElement.type == 'TEXT') ? 50 : 30;
+        };
+
+        page = getNewPage();
+        var allDataElements = _.flatten(_.map(program.stageSections, 'dataElements'));
+        _.map(allDataElements ,function(dataElement){
+            page.widthLeft = page.widthLeft -  getWidthOfDataElement(dataElement);
+            if(page.widthLeft  > 0)
+               page.contents.push(dataElement);
+            else
+               getNewPage().contents.push(dataElement);
+        });
+        program.isPrintFriendlyProcessed = true;
+    };
     this.process = function(program, mode) {
         pages = [];
-        currentPageIndex = 0;
+        currentPageIndex = -1;
         if (mode == 'coversheet')
             _.map([program], function (program) {
                 for (var i = 0; i < program.stageSections.length; i++) {
@@ -215,10 +240,8 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
                 processDataSet(program)
             });
         else {
-            page = new Page();
-            page.contents = _.flatten(_.map(program.stageSections, 'dataElements'));
-            console.log(page.contents);
-            pages = [page];
+
+            processRegisterProgram(program);
         }
         return pages;
     }

@@ -1,6 +1,6 @@
 <div ng-controller="pageCtrl">
     <div class="subpage">
-        <dataset ng-if="form.type=='dataset'" contents="page.contents"></dataset>
+        <dataset ng-if="form.type=='dataset'" contents="page.contents" dataset-name="page.datasetName"></dataset>
         <program ng-if="form.type=='program'" contents="page.contents" mode="programMode"></program>
         <div class="page-number">
             Page {{pageNumber}} of {{totalPages}}

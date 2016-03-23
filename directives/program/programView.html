@@ -1,29 +1,28 @@
 <link ng-if="mode=='coversheet'" href="coversheet.css" rel="stylesheet" type="text/css">
-<!--<link ng-if="mode=='register'" href="register.css" rel="stylesheet" type="text/css">-->
-<link  href="register.css" rel="stylesheet" type="text/css">
+<link ng-if="mode=='register'" href="register.css" rel="stylesheet" type="text/css">
 <span ng-controller="programCtrl">
 <table class="header">
     <tr>
-        <td class="deLabel">
+        <td class="">
             Name
         </td>
 
-        <td class="deField"></td>
+        <td class=""></td>
         <td class="seperator" style="width:2cm"></td>
-        <td class="deLabel">
+        <td class="">
             Org Unit
         </td>
 
-        <td class="deField"></td>
+        <td class=""></td>
     </tr>
     <tr>
-        <td class="deLabel">
+        <td class="">
             Location
         </td>
 
-        <td class="deField"></td>
+        <td class=""></td>
         <td class="seperator" style="width:2cm"></td>
-        <td class="deLabel">
+        <td class="">
             Date
         </td>
 
@@ -111,22 +110,19 @@
     </span>
     <span ng-if="mode=='register'">
         <table border="1">
-            <thead>
                 <tr>
-                    <th>
+                    <td class="deLabel" style="width: 1cm">
                         S.NO
-                    </th>
-                     <th ng-repeat="dataElement in contents">
+                    </td>
+                     <td class="deLabel" ng-repeat="dataElement in contents">
                         {{dataElement.name}}
-                     </th>
+                     </td>
                 </tr>
-                </thead>
-            <tbody>
-            <tr>
-                <td></td>
-                <td></td>
+            <tr ng-repeat="row in rows track by $index">
+                <td style="height:1cm;text-align:center">{{$index + 1}}</td>
+                <td ng-repeat="dataElement in contents" ng-class="getClass(dataElement)">
+                </td>
             </tr>
-            </tbody>
             </table>
 
         </table>

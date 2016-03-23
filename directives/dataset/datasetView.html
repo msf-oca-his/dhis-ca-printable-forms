@@ -1,33 +1,22 @@
 <link href="dataset.css" rel="stylesheet" type="text/css">
 <span ng-controller="datasetCtrl">
-<table class="header">
+<span class="header">Hyderabad - {{datasetName}}</span><br>
+    <table class="header">
     <tr>
         <td class="deLabel">
-            Name
+            Supervisor
         </td>
 
         <td class="deField"></td>
         <td class="seperator" style="width:2cm"></td>
         <td class="deLabel">
-            Org Unit
-        </td>
-
-        <td class="deField"></td>
-    </tr>
-    <tr>
-        <td class="deLabel">
-            Location
-        </td>
-
-        <td class="deField"></td>
-        <td class="seperator" style="width:2cm"></td>
-        <td class="deLabel">
-            Date
+            Period
         </td>
 
         <td class="deField"></td>
     </tr>
 </table>
+    <hr/>
 
 <div ng-repeat="content in contents">
     <span class="datasetName" ng-if="content.type=='dataSetName'">{{content.name}}</span>

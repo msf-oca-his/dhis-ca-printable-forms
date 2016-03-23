@@ -100,4 +100,7 @@ td {
         background: initial;
         page-break-after: always;
     }
+    .subpage{
+        border: none;
+    }
 }

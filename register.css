@@ -21,13 +21,15 @@
 
 .deLabel{
     width: 3cm;
-    padding-right: 5mm;
+    text-align: center;
+    height: 2cm;
 }
 
-.deLabel.general{
+.deField.text{
+    width: 5cm;
+}
+.deField.general{
     width: 3cm;
-    text-align: right;
-    height: 9mm;
 }
 
 .table-heading{
@@ -47,11 +49,9 @@
 
 table {
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
-td {
-    padding-top: 3mm;
-}
 
 .sectionName {
     font-size: 4mm;

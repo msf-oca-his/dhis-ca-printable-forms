@@ -131,6 +131,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
             var addSectionToNewPage = function (section, height, isFirstSectionInDataSet) {
                 page = new Page();
+                page.datasetName = dataSet.name;
                 pages[++currentPageIndex] = page;
                 section.isDuplicate = false;
                 processSection(section, isFirstSectionInDataSet);
@@ -189,12 +190,12 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
         if (!pages[currentPageIndex]) {
             page = new Page();
+            page.datasetName = dataSet.name;
             pages[currentPageIndex] = page;
         }
         else {
             page = pages[currentPageIndex];
         }
-
         _.map(dataSet.sections, processSection);
 
         dataSet.isPrintFriendlyProcessed = true;

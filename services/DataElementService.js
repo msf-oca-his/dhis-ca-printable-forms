@@ -32,10 +32,11 @@ TallySheets.service("DataElementService", ['$http', "OptionSetFactory", function
         }
         else if(data.valueType == 'BOOLEAN')
             dataElement.type = data.valueType;
-
+        else if(data.valueType == 'NUMBER' || data.valueType == 'INTEGER')
+            dataElement.type = data.valueType;
         else
             dataElement.type = 'TEXT';
-
+        console.log(dataElement.type);
 
         if(data.categoryCombo.name != "default")
             promises.push(getCategoryCombo(data.categoryCombo)

@@ -3,7 +3,8 @@ TallySheets.directive('dataset', function(){
         restrict: 'E',
         templateUrl: 'directives/dataset/datasetView.html',
         scope: {
-            contents: '='
+            contents: '=',
+            datasetName: '='
         }
     };
 });
