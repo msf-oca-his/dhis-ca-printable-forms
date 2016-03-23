@@ -6,6 +6,23 @@ TallySheets.factory("Config", [function () {
             labelHeight: 20,            //table header
             headerHeight: 10,           //page header
             dataEntryRowHeight: 10
+        },
+        DataSet:{
+            heightOfTableHeader : 15,
+            heightOfDataElementInCatCombTable: 12,
+            heightOfDataElementInGeneralDataElement: 9,
+            heightOfSectionTitle: 7,
+            heightOfDataSetTitle: 10,
+            gapBetweenSections: 5,
+            graceHeight: 10,
+            availableHeight: 237,
+            availableWidth: 183,
+            numberOfCOCColumns: 5
+        },
+        OptionSet:{
+            labelPadding: 4,
+            dataElementLabel: 48 ,
+            optionsPadding:12
         }
     }
 }]);

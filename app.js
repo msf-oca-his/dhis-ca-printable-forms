@@ -15,7 +15,6 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
     $scope.dsId  = 1;
     $scope.form = {};
     $scope.pages = [];
-    $scope.programMode ={};
     $scope.exportToTable = function (tableId) {
         var uri = 'data:application/vnd.ms-excel;base64,'
             , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
@@ -83,7 +82,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
                                 });
                         });
                 }
-                else if ($scope.form.type == "program") {
+                else if ($scope.form.type == "program" && $scope.programMode) {
                     return ProgramService.getProgram($scope.form.id).then(function(program){
                         return program.isResolved.then(function () {
                             $scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);

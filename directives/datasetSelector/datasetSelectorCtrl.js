@@ -46,7 +46,7 @@ TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSets
         $scope.bindToDataset.id = dsId;
         $scope.bindToDataset.name = dsName;
         $scope.bindToDataset.type = dsType;
-        if(dsId && dsType == 'dataset') {
+        if(dsId) {
           $scope.selectDataset()
         }
         $rootScope.$apply();

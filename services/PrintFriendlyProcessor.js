@@ -1,19 +1,19 @@
-TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntrySectionService', function(DataElementService, DataEntrySectionService){
+TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntrySectionService', 'Config', function(DataElementService, DataEntrySectionService, config){
     var pages = [];
     var currentPageIndex;
     var page;
-    var heightOfTableHeader = 15;
-    var heightOfDataElementInCatCombTable = 12;
-    var heightOfDataElementInGeneralDataElement = 9;
-    var heightOfSectionTitle = 7;
-    var heightOfDataSetTitle = 10;
-    var gapBetweenSections = 5;
-    var graceHeight = 10;
+    var heightOfTableHeader = config.DataSet.heightOfTableHeader;
+    var heightOfDataElementInCatCombTable = config.DataSet.heightOfDataElementInCatCombTable;
+    var heightOfDataElementInGeneralDataElement = config.DataSet.heightOfDataElementInGeneralDataElement;
+    var heightOfSectionTitle = config.DataSet.heightOfSectionTitle;
+    var heightOfDataSetTitle = config.DataSet.heightOfDataSetTitle;
+    var gapBetweenSections = config.DataSet.gapBetweenSections;
+    var graceHeight = config.DataSet.graceHeight;
 
     var Page = function () {
         var page = {};
-        page.heightLeft = 237;
-        page.width = 183;
+        page.heightLeft = config.DataSet.availableHeight;
+        page.width = config.DataSet.availableWidth;
         page.contents = [];
         return page;
     };
@@ -28,19 +28,20 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var indexOfDEWithOptions = [];
         var currentIndex = 0;
         var pushIndex = 0;
-        var maxDataElementWidth = 185;
+        var maxDataElementWidth = config.DataSet.availableWidth;
         var newSection;
 
         var getLengthOfOptions = function(dataelement) {
-            var optionSetLabelPadding = 4;
-            var optionSetLabelLength = 48 + optionSetLabelPadding;
-            var optionsPadding = 12;
+            var optionSetLabelPadding = config.OptionSet.labelPadding;
+            var optionSetLabelLength = config.OptionSet.dataElementLabel + optionSetLabelPadding;
+            var optionsPadding = config.OptionSet.optionsPadding;
+
             var optionsLength = 0;
             _.map(dataelement.options, function(option) {
                 optionsLength = optionsLength + optionsPadding + (option.name.length) * 1.8;
             });
             return optionSetLabelLength + optionsLength;
-        }
+        };
 
         _.map(section.dataElements, function(dataElement, index){
 
@@ -84,7 +85,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     };
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];
-        var numberOfFittingColumns = 5;
+        var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
         if (numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
             var newDataElements = [];
             _.map(section.dataElements, function (dataElement) {
@@ -147,11 +148,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var breakAndAddSection = function(section){
                 if (section.isCatComb) {
                     var newSection = _.cloneDeep(section);
-                    var pageHeightLeft = 1000;
                     newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
                     newSection.isDuplicate = true;
                     processTableHeader(newSection);
-                    addSectionToPage(section, pageHeightLeft );
+                    addSectionToPage(section, page.heightLeft );
                     var isFirstSectionInDataSet = false;
                     addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInDataSet);
                 }
@@ -162,7 +162,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     splitLeftAndRightElements(section);
                     splitLeftAndRightElements(newSection);
                     newSection.isDuplicate = true;
-                    addSectionToPage(section, 1000);
+                    addSectionToPage(section, page.heightLeft);
                     var isFirstSectionInDataSet = false;
                     addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInDataSet);
                 }
