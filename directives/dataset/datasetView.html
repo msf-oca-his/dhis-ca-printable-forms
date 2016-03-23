@@ -52,11 +52,14 @@
                 <td class="deLabel optionLabel">
                     {{content.section.dataElements[0].name}}
                 </td>
+
                 <td>
-                            <span ng-repeat="option in content.section.dataElements[0].options"
-                                  class="checkboxcontainer">
+                    <span ng-repeat="optionRow in content.section.dataElements[0].rows">
+                        <span ng-repeat="option in optionRow" class="checkboxcontainer">
                             <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
-                            </span>
+                        </span>
+                        <br>
+                    </span>
                 </td>
             </table>
         </div>

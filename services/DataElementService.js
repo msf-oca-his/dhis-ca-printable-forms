@@ -36,7 +36,6 @@ TallySheets.service("DataElementService", ['$http', "OptionSetFactory", function
             dataElement.type = data.valueType;
         else
             dataElement.type = 'TEXT';
-        console.log(dataElement.type);
 
         if(data.categoryCombo.name != "default")
             promises.push(getCategoryCombo(data.categoryCombo)

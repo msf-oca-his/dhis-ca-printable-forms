@@ -31,25 +31,37 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var maxDataElementWidth = config.DataSet.availableWidth;
         var newSection;
 
-        var getLengthOfOptions = function(dataelement) {
+        var simplifySection = function(section) {
             var optionSetLabelPadding = config.OptionSet.labelPadding;
             var optionSetLabelLength = config.OptionSet.dataElementLabel + optionSetLabelPadding;
             var optionsPadding = config.OptionSet.optionsPadding;
 
-            var optionsLength = 0;
-            _.map(dataelement.options, function(option) {
-                optionsLength = optionsLength + optionsPadding + (option.name.length) * 1.8;
-            });
-            return optionSetLabelLength + optionsLength;
-        };
+
+            var optionsLength = optionSetLabelLength;
+            var dataElement = section.dataElements[0];
+            dataElement.rows = [];
+            var rowIndex = 0;
+            dataElement.rows[rowIndex] = [];
+            for(var i=0;i<dataElement.options.length;i++){
+                optionsLength = optionsLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                if(optionsLength < maxDataElementWidth){
+                    dataElement.rows[rowIndex].push(dataElement.options[i])
+                }
+                else{
+                    optionsLength = optionSetLabelLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                    dataElement.rows.push([dataElement.options[i]]);
+                    rowIndex++;
+                }
+            }
+            console.log(section)
+            return section;
+        }
 
         _.map(section.dataElements, function(dataElement, index){
 
               if(dataElement.type == 'OPTIONSET') {
-                  if(getLengthOfOptions(dataElement) < maxDataElementWidth) indexOfDEWithOptions.push(index);
-                  else dataElement.type = "TEXT";
+                  indexOfDEWithOptions.push(index);
               }
-
         });
         if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)){
             section.isOptionSet = true;
@@ -59,6 +71,8 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var pushSection = function(section){
             if(section.dataElements.length > 0) sections.splice(index + (++pushIndex), 0, section);
         };
+
+
 
         var cloneSection = function (section, dataElements) {
             var newSection = _.cloneDeep(section);
@@ -71,6 +85,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             newSection = cloneSection(section, _.slice(section.dataElements, currentIndex, indexOfDE));
             pushSection(newSection);
             newSection = cloneSection(section, [section.dataElements[indexOfDE]]);
+            newSection = simplifySection(newSection);
             newSection.isOptionSet = true;
             pushSection(newSection);
             currentIndex = indexOfDE + 1;

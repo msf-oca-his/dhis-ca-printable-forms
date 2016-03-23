@@ -64,7 +64,7 @@
 					</span>
 					<span ng-if="form.type=='program'">
 						<label class="radio-inline">
-							<input  ng-model="$parent.programMode" value="coverSheet" type="radio" > CoverSheet
+							<input  ng-model="$parent.programMode" value="coversheet" type="radio" ng-click="renderDataSets()"> CoverSheet
 						</label>
 						<label class="radio-inline">
 							<input ng-model="$parent.programMode"  value="register" type="radio" ng-click="renderDataSets()"> Register
