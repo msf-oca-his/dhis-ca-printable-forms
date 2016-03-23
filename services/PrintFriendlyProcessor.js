@@ -53,7 +53,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     rowIndex++;
                 }
             }
-            console.log(section)
             return section;
         }
 
@@ -64,6 +63,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
               }
         });
         if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)){
+            section = simplifySection(section)
             section.isOptionSet = true;
             return ;
         }
