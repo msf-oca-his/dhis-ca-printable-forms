@@ -130,7 +130,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
             };
 
             var addSectionToNewPage = function (section, height, isFirstSectionInDataSet) {
-                page = new Page();
+                page = new Page(coverSheetPage);
                 pages[++currentPageIndex] = page;
                 section.isDuplicate = false;
                 processSection(section, isFirstSectionInDataSet);
@@ -188,8 +188,8 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         };
 
         if (!pages[currentPageIndex]) {
-            page = new Page();
-            pages[currentPageIndex] = page;
+            page = new Page(coverSheetPage);
+            pages[++currentPageIndex] = page;
         }
         else {
             page = pages[currentPageIndex];
@@ -213,6 +213,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
         page = getNewPage();
         var allDataElements = _.flatten(_.map(program.stageSections, 'dataElements'));
+        allDataElements.push(DataElementService.getDataElementFromData({name: 'Comments', type: 'TEXT'}))
         _.map(allDataElements ,function(dataElement){
             page.widthLeft = page.widthLeft -  getWidthOfDataElement(dataElement);
             if(page.widthLeft  > 0)

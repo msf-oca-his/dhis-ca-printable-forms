@@ -78,7 +78,7 @@
                     <span style="margin-right: 5mm"></span>
                     <input type="checkbox" class="pffcheckbox">No
                 </td>
-                <td class="deField" ng-if="content.section.leftSideElements[$index].type=='TEXT'"></td>
+                <td class="deField" ng-if="content.section.leftSideElements[$index].type!='BOOLEAN'"></td>
 
 
                 <td class="seperator" style="width:1cm"></td>
@@ -92,7 +92,7 @@
                                     <input type="checkbox">Yes</input>
                                     <input type="checkbox">No</input>
                                 </td>
-                                <td class="deField" ng-if="content.section.rightSideElements[$index].type=='TEXT'"></td>
+                                <td class="deField" ng-if="content.section.rightSideElements[$index].type!='BOOLEAN'"></td>
                             </span>
             </tr>
         </table>
