@@ -28,6 +28,10 @@
     border-bottom: 1px solid black;
 }
 
+.headerField{
+    width: 30mm;
+    border-bottom: 1px solid black;
+}
 .deLabel{
     width: 3cm;
     padding-right: 5mm;
@@ -60,9 +64,9 @@ table {
     border-collapse: collapse;
 }
 
-td {
-    padding-top: 3mm;
-}
+/*td {*/
+    /*padding-top: 3mm;*/
+/*}*/
 
 .sectionName {
     font-size: 4mm;
@@ -81,8 +85,8 @@ td {
 
 @media print {
     html, body {
-        height: 210mm;
-        width: 297mm;
+        height: 297mm;
+        width: 210mm;
     }
 
     .page {

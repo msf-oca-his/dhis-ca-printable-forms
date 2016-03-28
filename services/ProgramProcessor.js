@@ -15,8 +15,8 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
     var Page = function (type) {
         var page = {};
-        page.heightLeft = (type == coverSheetPage) ? 183 : 150;
-        page.widthLeft = (type == coverSheetPage) ? 237 : 270;
+        page.heightLeft = (type == coverSheetPage) ? 237 : 150;
+        page.widthLeft = (type == coverSheetPage) ?  183 : 270;
         page.contents = [];
         return page;
     };
@@ -131,6 +131,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
             var addSectionToNewPage = function (section, height, isFirstSectionInDataSet) {
                 page = new Page(coverSheetPage);
+                page.programName = dataSet.name;
                 pages[++currentPageIndex] = page;
                 section.isDuplicate = false;
                 processSection(section, isFirstSectionInDataSet);
@@ -189,6 +190,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
         if (!pages[currentPageIndex]) {
             page = new Page(coverSheetPage);
+            page.programName = dataSet.name;
             pages[++currentPageIndex] = page;
         }
         else {
@@ -203,6 +205,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
     var processRegisterProgram = function (program) {
         var getNewPage = function(){
             page = new Page(registerPage);
+            page.programName = program.name;
             pages[++currentPageIndex] = page;
             return page;
         };

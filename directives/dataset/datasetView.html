@@ -1,25 +1,29 @@
 <link href="dataset.css" rel="stylesheet" type="text/css">
 <span ng-controller="datasetCtrl">
-<span class="header">Hyderabad - {{datasetName}}</span><br>
+<div style="text-align:center;border:none;margin: 0;" class="datasetName">{{datasetName}}</div>
     <table class="header">
     <tr>
-        <td class="deLabel">
+        <td >
+            Org Structure
+        </td>
+
+        <td class="deField"></td>
+        <td  style="width:1cm"></td>
+        <td >
             Supervisor
         </td>
 
         <td class="deField"></td>
-        <td class="seperator" style="width:2cm"></td>
-        <td class="deLabel">
+        <td class="seperator" style="width:1cm"></td>
+        <td >
             Period
         </td>
 
         <td class="deField"></td>
     </tr>
 </table>
-    <hr/>
 
 <div ng-repeat="content in contents">
-    <span class="datasetName" ng-if="content.type=='dataSetName'">{{content.name}}</span>
 
     <div ng-if="content.type == 'section' && content.section.isCatComb " class="section">
         <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
@@ -97,4 +101,5 @@
         </table>
     </div>
 </div>
+
     </span>

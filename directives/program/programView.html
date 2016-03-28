@@ -1,35 +1,33 @@
 <link ng-if="mode=='coversheet'" href="coversheet.css" rel="stylesheet" type="text/css">
 <link ng-if="mode=='register'" href="register.css" rel="stylesheet" type="text/css">
 <span ng-controller="programCtrl">
-<table class="header">
-    <tr>
-        <td class="">
-            Name
-        </td>
+<div style="text-align:center;border:none;margin: 0 0 2mm;" class="programName">{{programName}}</div>
+    <table width="95%" style="margin-bottom: 8mm">
+        <tr>
+            <td >
+                Org Structure
+            </td>
 
-        <td class=""></td>
-        <td class="seperator" style="width:2cm"></td>
-        <td class="">
-            Org Unit
-        </td>
+            <td class="headerField"></td>
+            <td class="seperator" style="width:15mm"></td>
+            <td >
+                sSupervsisor
+            </td>
 
-        <td class=""></td>
-    </tr>
-    <tr>
-        <td class="">
-            Location
-        </td>
+            <td class="headerField"></td>
+            <td class="seperator" style="width:15mm"></td>
+            <td >
+                Period
+            </td>
 
-        <td class=""></td>
-        <td class="seperator" style="width:2cm"></td>
-        <td class="">
-            Date
-        </td>
-    </tr>
-</table>
+            <td class="headerField"></td>
+        </tr>
+    </table>
+
+
 <span ng-if="mode=='coversheet'">
 <div ng-repeat="content in contents">
-    <span class="datasetName" ng-if="content.type=='dataSetName'">{{content.name}}</span>
+
 
     <div ng-if="content.type == 'section' && content.section.isCatComb " class="section">
         <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
@@ -105,10 +103,15 @@
         </table>
     </div>
 </div>
-    <table>
-        <td class="deLabel">Comments:</td>
-    </table>
+    <div ng-if="isLastPage == true">
+       Comments: <hr style="margin-top:8mm;margin-bottom: 8mm;width:90%;border-color:black;"><hr style="border-color:black;;width:90%;"/>
+    </div>
 </span>
+
+
+
+
+
     <span ng-if="mode=='register'">
         <table border="1">
                 <tr>

@@ -4,7 +4,9 @@ TallySheets.directive('program', function(){
         templateUrl: 'directives/program/programView.html',
         scope: {
             contents: '=',
-            mode: '='
+            mode: '=',
+            programName: '=',
+            isLastPage: '='
         }
     };
 });

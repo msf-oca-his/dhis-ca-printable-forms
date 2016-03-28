@@ -16,10 +16,6 @@ body {
     margin-top:45px;/*#TODO: Not a good thing to do, should find a better way to do this */
 }
 
-#mainMenu .panel-body {
-    font-family: "Lucida Console", Monaco, monospace !important;
-}
-
 input.clean {
     border: none;
     -webkit-border-radius: 0;
