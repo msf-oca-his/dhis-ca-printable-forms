@@ -1,4 +1,4 @@
-TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectionService', function(DataElementService, DataEntrySectionService){
+TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectionService','Config', function(DataElementService, DataEntrySectionService, config){
     var pages = [];
     var currentPageIndex;
     var page;
@@ -30,34 +30,51 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         var indexOfDEWithOptions = [];
         var currentIndex = 0;
         var pushIndex = 0;
-        var maxDataElementWidth = 185;
+        var maxDataElementWidth = config.DataSet.availableWidth;
         var newSection;
 
-        var getLengthOfOptions = function(dataelement) {
-            var optionSetLabelPadding = 4;
-            var optionSetLabelLength = 48 + optionSetLabelPadding;
-            var optionsPadding = 12;
-            var optionsLength = 0;
-            _.map(dataelement.options, function(option) {
-                optionsLength = optionsLength + optionsPadding + (option.name.length) * 1.8;
-            });
-            return optionSetLabelLength + optionsLength;
-        }
+        var simplifySection = function(section) {
+            var optionSetLabelPadding = config.OptionSet.labelPadding;
+            var optionSetLabelLength = config.OptionSet.dataElementLabel + optionSetLabelPadding;
+            var optionsPadding = config.OptionSet.optionsPadding;
+
+
+            var optionsLength = optionSetLabelLength;
+            var dataElement = section.dataElements[0];
+            dataElement.rows = [];
+            var rowIndex = 0;
+            dataElement.rows[rowIndex] = [];
+            for(var i=0;i<dataElement.options.length;i++){
+                optionsLength = optionsLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                if(optionsLength < maxDataElementWidth){
+                    dataElement.rows[rowIndex].push(dataElement.options[i])
+                }
+                else{
+                    optionsLength = optionSetLabelLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                    dataElement.rows.push([dataElement.options[i]]);
+                    rowIndex++;
+                }
+            }
+            return section;
+        };
 
         _.map(section.dataElements, function(dataElement, index){
 
             if(dataElement.type == 'OPTIONSET') {
-                if(getLengthOfOptions(dataElement) < maxDataElementWidth) indexOfDEWithOptions.push(index);
-                else dataElement.type = "TEXT";
+                indexOfDEWithOptions.push(index);
             }
-
         });
-
-        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)) return;
+        if((indexOfDEWithOptions.length == 1)  && (section.dataElements.length == 1)){
+            section = simplifySection(section)
+            section.isOptionSet = true;
+            return ;
+        }
 
         var pushSection = function(section){
             if(section.dataElements.length > 0) sections.splice(index + (++pushIndex), 0, section);
         };
+
+
 
         var cloneSection = function (section, dataElements) {
             var newSection = _.cloneDeep(section);
@@ -70,6 +87,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
             newSection = cloneSection(section, _.slice(section.dataElements, currentIndex, indexOfDE));
             pushSection(newSection);
             newSection = cloneSection(section, [section.dataElements[indexOfDE]]);
+            newSection = simplifySection(newSection);
             newSection.isOptionSet = true;
             pushSection(newSection);
             currentIndex = indexOfDE + 1;
@@ -84,7 +102,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
     };
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];
-        var numberOfFittingColumns = 5;
+        var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
         if (numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
             var newDataElements = [];
             _.map(section.dataElements, function (dataElement) {
