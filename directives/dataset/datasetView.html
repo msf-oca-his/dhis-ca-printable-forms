@@ -67,7 +67,6 @@
     <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
         <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
         <table style="width:90%">
-
             <tr ng-repeat="dataElement in content.section.leftSideElements">
 
                 <td class="deLabel general">
@@ -92,7 +91,7 @@
                                     <input type="checkbox">Yes</input>
                                     <input type="checkbox">No</input>
                                 </td>
-                                <td class="deField" ng-if="content.section.rightSideElements[$index].type!='BOOLEAN'"></td>
+                                <td class="deField" ng-if="content.section.rightSideElements[$index].type!='BOOLEAN' && content.section.rightSideElements[$index]"></td>
                             </span>
             </tr>
         </table>
