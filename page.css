@@ -36,6 +36,9 @@ input.clean {
 .checkboxcontainer{
     margin-left: 5mm;
 }
+.optionsetTable td{
+        padding-right: 10mm;
+}
 @media print {
     .noprint{
         display:none;

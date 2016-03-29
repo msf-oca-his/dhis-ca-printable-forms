@@ -24,27 +24,20 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var newSection;
 
         var simplifySection = function(section) {
-            var optionSetLabelLength = config.OptionSet.dataElementLabel + config.OptionSet.labelPadding;
-
-
-            var optionsLength = optionSetLabelLength;
             var dataElement = section.dataElements[0];
             dataElement.rows = [];
-            var rowIndex = 0;
-            dataElement.rows[rowIndex] = [];
+            var rowIndex = -1;
             for(var i=0;i<dataElement.options.length;i++){
-                optionsLength = optionsLength + config.OptionSet.optionsPadding + (dataElement.options[i].name.length) * 1.8;
-                if(optionsLength < config.DataSet.availableWidth){
+                if(i % 3 != 0){
                     dataElement.rows[rowIndex].push(dataElement.options[i])
                 }
                 else{
-                    optionsLength = optionSetLabelLength + config.OptionSet.optionsPadding + (dataElement.options[i].name.length) * 1.8;
                     dataElement.rows.push([dataElement.options[i]]);
                     rowIndex++;
                 }
             }
             return section;
-        }
+        };
 
         _.map(section.dataElements, function(dataElement, index){
 
