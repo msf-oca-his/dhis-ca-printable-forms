@@ -2,7 +2,7 @@
     <div class="subpage">
         <dataset ng-if="form.type=='dataset'" contents="page.contents" dataset-name="page.datasetName"></dataset>
         <program ng-if="form.type=='program'" contents="page.contents" mode="programMode" program-name="page.programName" is-last-page="totalPages==pageNumber"></program>
-        <div class="page-number" ng-if="programMode!='register'">
+        <div class="page-number">
             Page {{pageNumber}} of {{totalPages}}
         </div>
     </div>

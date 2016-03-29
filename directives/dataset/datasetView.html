@@ -57,9 +57,9 @@
                     {{content.section.dataElements[0].name}}
                 </td>
 
-                <td><table class="optionsetTable">
+                <td valign=top><table class="optionsetTable">
                     <tr ng-repeat="optionRow in content.section.dataElements[0].rows">
-                        <td ng-repeat="option in optionRow" class="checkboxcontainer">
+                        <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer">
                             <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
                         </td>
                     </tr>
