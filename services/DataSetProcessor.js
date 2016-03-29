@@ -12,9 +12,9 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     };
 
     var processTableHeader = function(section){
-        _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo){
-            categoryOptionCombo.name = categoryOptionCombo.name.replace(/,/g, "<br>");
-        })
+        _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr){
+            arr[index] = categoryOptionCombo.replace(/,/g, "<br>");
+        });
     };
 
     var divideOptionSetsIntoNewSection = function(section, index, sections){
@@ -114,10 +114,11 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 var height;
                 if (section.isCatComb)
                     height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
-                else {
-                    //#TODO: check if dataElement is of type option combo;
+                else if (section.isOptionSet)
+                    height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements[0].options.length / 3)) + config.DataSet.gapBetweenSections;
+                else
                     height =  config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
-                }
+
                 return section.isDuplicate ? height : height + config.DataSet.heightOfSectionTitle;
             };
 
@@ -140,6 +141,8 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 var overFlow = sectionHeight - page.heightLeft;
                 if (section.isCatComb)
                     return section.dataElements.length - Math.round(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
+                else if(section.isOptionSet)
+                    return section.dataElements[0].options.length - Math.round(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
                 else
                     return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.heightOfDataElementInGeneralDataElement));
             };
@@ -152,6 +155,17 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                     addSectionToPage(section, page.heightLeft );
                     var isFirstSectionInDataSet = false;
                     addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInDataSet);
+                }
+                else if(section.isOptionSet){
+                    var newSection = _.cloneDeep(section);
+                    if(numberOfElementsThatCanFit % 3 > 0)
+                        numberOfElementsThatCanFit = numberOfElementsThatCanFit + (3 - numberOfElementsThatCanFit % 3);
+                    newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfElementsThatCanFit);
+                    divideOptionSetsIntoNewSection(section);
+                    divideOptionSetsIntoNewSection(newSection);
+                    newSection.isDuplicate = true;
+                    addSectionToPage(section, page.heightLeft);
+                    addSectionToNewPage(newSection, getHeightForSection(newSection), false);
                 }
                 else {
                     var newSection = _.cloneDeep(section);

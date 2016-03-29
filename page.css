@@ -33,6 +33,10 @@ input.clean {
 .pffcheckbox{
     margin-right: 2mm !important;
 }
+.option{
+    width: 5cm;
+    height: 9mm;
+}
 .checkboxcontainer{
     margin-left: 5mm;
 }

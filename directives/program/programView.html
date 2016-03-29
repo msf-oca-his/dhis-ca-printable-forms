@@ -63,7 +63,7 @@
 
                     <td valign=top><table class="optionsetTable">
                     <tr ng-repeat="optionRow in content.section.dataElements[0].rows">
-                        <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer">
+                        <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer option">
                          <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
                         </td>
                         </tr>
@@ -105,10 +105,10 @@
             </tr>
         </table>
     </div>
+    <span ng-if="content.type=='comments'">
+        Comments: <hr style="margin-top:8mm;margin-bottom: 8mm;width:90%;border-color:black;"><hr style="border-color:black;;width:90%;"/>
+    </span>
 </div>
-    <div ng-if="isLastPage == true">
-       Comments: <hr style="margin-top:8mm;margin-bottom: 8mm;width:90%;border-color:black;"><hr style="border-color:black;;width:90%;"/>
-    </div>
 </span>
 
 

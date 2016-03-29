@@ -33,7 +33,7 @@
                 <td></td>
                 <td class="table-heading"
                     ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos"
-                    ng-bind-html="catComb.name | to_trusted">
+                    ng-bind-html="catComb | to_trusted">
                 </td>
             </tr>
             </thead>
@@ -59,7 +59,7 @@
 
                 <td valign=top><table class="optionsetTable">
                     <tr ng-repeat="optionRow in content.section.dataElements[0].rows">
-                        <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer">
+                        <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer option">
                             <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
                         </td>
                     </tr>
