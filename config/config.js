@@ -4,8 +4,11 @@ TallySheets.factory("Config", [function () {
             availableHeight: 175,
             availableWidth: 270,
             labelHeight: 20,            //table header
-            headerHeight: 10,           //page header
-            dataEntryRowHeight: 10
+            tableHeaderHeight: 10,           //page header
+            dataEntryRowHeight: 10,
+            headerHeight: 25,
+            textElementWidth: 50,
+            otherElementWidth: 30
         },
         DataSet:{
             heightOfTableHeader : 15,

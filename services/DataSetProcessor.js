@@ -2,13 +2,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     var pages = [];
     var currentPageIndex;
     var page;
-    var heightOfTableHeader = config.DataSet.heightOfTableHeader;
-    var heightOfDataElementInCatCombTable = config.DataSet.heightOfDataElementInCatCombTable;
-    var heightOfDataElementInGeneralDataElement = config.DataSet.heightOfDataElementInGeneralDataElement;
-    var heightOfSectionTitle = config.DataSet.heightOfSectionTitle;
-    var heightOfDataSetTitle = config.DataSet.heightOfDataSetTitle;
-    var gapBetweenSections = config.DataSet.gapBetweenSections;
-    var graceHeight = config.DataSet.graceHeight;
 
     var Page = function () {
         var page = {};
@@ -28,13 +21,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var indexOfDEWithOptions = [];
         var currentIndex = 0;
         var pushIndex = 0;
-        var maxDataElementWidth = config.DataSet.availableWidth;
         var newSection;
 
         var simplifySection = function(section) {
-            var optionSetLabelPadding = config.OptionSet.labelPadding;
-            var optionSetLabelLength = config.OptionSet.dataElementLabel + optionSetLabelPadding;
-            var optionsPadding = config.OptionSet.optionsPadding;
+            var optionSetLabelLength = config.OptionSet.dataElementLabel + config.OptionSet.labelPadding;
 
 
             var optionsLength = optionSetLabelLength;
@@ -43,12 +33,12 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var rowIndex = 0;
             dataElement.rows[rowIndex] = [];
             for(var i=0;i<dataElement.options.length;i++){
-                optionsLength = optionsLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
-                if(optionsLength < maxDataElementWidth){
+                optionsLength = optionsLength + config.OptionSet.optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                if(optionsLength < config.DataSet.availableWidth){
                     dataElement.rows[rowIndex].push(dataElement.options[i])
                 }
                 else{
-                    optionsLength = optionSetLabelLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                    optionsLength = optionSetLabelLength + config.OptionSet.optionsPadding + (dataElement.options[i].name.length) * 1.8;
                     dataElement.rows.push([dataElement.options[i]]);
                     rowIndex++;
                 }
@@ -130,12 +120,12 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var getHeightForSection = function (section) {
                 var height;
                 if (section.isCatComb)
-                    height = heightOfDataElementInCatCombTable * (section.dataElements.length ) + heightOfTableHeader + gapBetweenSections;
+                    height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
                 else {
                     //#TODO: check if dataElement is of type option combo;
-                    height =  heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / 2)) + gapBetweenSections;
+                    height =  config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
                 }
-                return section.isDuplicate ? height : height + heightOfSectionTitle;
+                return section.isDuplicate ? height : height + config.DataSet.heightOfSectionTitle;
             };
 
             var addSectionToPage = function (section, height) {
@@ -156,9 +146,9 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var getNumberOfElementsThatCanFit = function (section) {
                 var overFlow = sectionHeight - page.heightLeft;
                 if (section.isCatComb)
-                    return section.dataElements.length - Math.round(overFlow / heightOfDataElementInCatCombTable);
+                    return section.dataElements.length - Math.round(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
                 else
-                    return section.dataElements.length - Math.round(overFlow * 2 / (heightOfDataElementInGeneralDataElement));
+                    return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.heightOfDataElementInGeneralDataElement));
             };
             var breakAndAddSection = function(section){
                 if (section.isCatComb) {
@@ -183,11 +173,11 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
                 }
             };
 
-            var sectionHeight = (sectionIndex == 0) ? getHeightForSection(section) + heightOfDataSetTitle : getHeightForSection(section);
+            var sectionHeight = (sectionIndex == 0) ? getHeightForSection(section) + config.DataSet.heightOfDataSetTitle : getHeightForSection(section);
             var overflow = sectionHeight - page.heightLeft;
             if (overflow < 0)
                 addSectionToPage(section, sectionHeight);
-            else if (overflow < graceHeight)
+            else if (overflow < config.DataSet.graceHeight)
                 addSectionToPage(section, sectionHeight);
             else {
                 var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)

@@ -15,8 +15,8 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
     var Page = function (type) {
         var page = {};
-        page.heightLeft = (type == coverSheetPage) ? 237 : 150;
-        page.widthLeft = (type == coverSheetPage) ?  183 : 270;
+        page.heightLeft = (type == coverSheetPage) ? config.DataSet.availableHeight : config.Register.availableHeight - config.Register.headerHeight;
+        page.widthLeft = (type == coverSheetPage) ?  config.DataSet.availableWidth : config.Register.availableWidth;
         page.contents = [];
         return page;
     };
@@ -30,13 +30,10 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         var indexOfDEWithOptions = [];
         var currentIndex = 0;
         var pushIndex = 0;
-        var maxDataElementWidth = config.DataSet.availableWidth;
         var newSection;
 
         var simplifySection = function(section) {
-            var optionSetLabelPadding = config.OptionSet.labelPadding;
-            var optionSetLabelLength = config.OptionSet.dataElementLabel + optionSetLabelPadding;
-            var optionsPadding = config.OptionSet.optionsPadding;
+            var optionSetLabelLength = config.OptionSet.dataElementLabel + config.OptionSet.labelPadding;
 
 
             var optionsLength = optionSetLabelLength;
@@ -45,12 +42,12 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
             var rowIndex = 0;
             dataElement.rows[rowIndex] = [];
             for(var i=0;i<dataElement.options.length;i++){
-                optionsLength = optionsLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
-                if(optionsLength < maxDataElementWidth){
+                optionsLength = optionsLength + config.OptionSet.optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                if(optionsLength < config.DataSet.availableWidth){
                     dataElement.rows[rowIndex].push(dataElement.options[i])
                 }
                 else{
-                    optionsLength = optionSetLabelLength + optionsPadding + (dataElement.options[i].name.length) * 1.8;
+                    optionsLength = optionSetLabelLength + config.OptionSet.optionsPadding + (dataElement.options[i].name.length) * 1.8;
                     dataElement.rows.push([dataElement.options[i]]);
                     rowIndex++;
                 }
@@ -123,6 +120,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         section.leftSideElements = _.slice(section.dataElements, 0, Math.ceil(section.dataElements.length / 2));
         section.rightSideElements = _.slice(section.dataElements, Math.ceil(section.dataElements.length / 2));
     };
+
 
 
     var processDataSet = function (dataSet) {
@@ -229,7 +227,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         };
 
         var getWidthOfDataElement = function(dataElement){
-            return (dataElement.type == 'TEXT') ? 50 : 30;
+            return (dataElement.type == 'TEXT') ? config.Register.textElementWidth : config.Register.otherElementWidth;
         };
 
         page = getNewPage();
@@ -237,10 +235,14 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         allDataElements.push(DataElementService.getDataElementFromData({name: 'Comments', type: 'TEXT'}))
         _.map(allDataElements ,function(dataElement){
             page.widthLeft = page.widthLeft -  getWidthOfDataElement(dataElement);
-            if(page.widthLeft  > 0)
-               page.contents.push(dataElement);
-            else
-               getNewPage().contents.push(dataElement);
+            if(page.widthLeft  > 0) {
+                page.contents.push(dataElement);
+            }
+            else {
+                getNewPage();
+                page.widthLeft = page.widthLeft -  getWidthOfDataElement(dataElement);
+                page.contents.push(dataElement);
+            }
         });
         program.isPrintFriendlyProcessed = true;
     };

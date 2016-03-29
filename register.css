@@ -52,6 +52,10 @@ table {
     table-layout: fixed;
 }
 
+.headerField{
+    width: 30mm;
+    border-bottom: 1px solid black;
+}
 
 .sectionName {
     font-size: 4mm;

@@ -22,7 +22,7 @@ TallySheets.service("DataElementService", ['$http', "OptionSetFactory", function
     var DataElement = function (data) {
         var dataElement = {};
         var promises = [];
-        dataElement.name = data.name;
+        dataElement.name = data.displayFormName ? data.displayFormName : data.name;
         dataElement.id = data.id;
         if(data.optionSetValue){
             promises.push(OptionSetFactory.then(function(optionSets){
