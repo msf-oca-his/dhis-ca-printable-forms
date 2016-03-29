@@ -40,21 +40,33 @@
 .header{
     font-weight: 600;
     font-size: 4mm;
-    width: 90%;
-    margin-bottom: 8mm
+    margin-bottom: 8mm;
+    width: 100%;
 }
 .programName {
     font-size: 6mm;
 }
+.headerLabel{
+     /*width: 14%;*/
+     padding-right: 2mm;
+ }
+.headerField{
+    width: 14%;
+    border-bottom: 1px solid black;
+}
+.seperator{
+    width: 10%;
 
+}
+.datasetName {
+    text-align:center;
+    border:none;
+    font-size: 6mm;
+    margin-bottom: 5mm;
+}
 table {
     border-collapse: collapse;
     table-layout: fixed;
-}
-
-.headerField{
-    width: 30mm;
-    border-bottom: 1px solid black;
 }
 
 .sectionName {

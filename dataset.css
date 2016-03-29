@@ -27,7 +27,18 @@
     width: 2cm;
     border-bottom: 1px solid black;
 }
+.headerLabel{
+    /*width: 14%;*/
+    padding-right: 2mm;
+}
+.headerField{
+    width: 14%;
+    border-bottom: 1px solid black;
+}
+.seperator{
+    width: 10%;
 
+}
 .deLabel{
     width: 3cm;
     padding-right: 5mm;
@@ -56,11 +67,13 @@
 .header{
     font-weight: 600;
     font-size: 4mm;
-    width: 90%;
     margin-bottom: 8mm
 }
 .datasetName {
+    text-align:center;
+    border:none;
     font-size: 6mm;
+    margin-bottom: 5mm;
 }
 
 table {
