@@ -142,8 +142,11 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
             var getNumberOfElementsThatCanFit = function (section) {
                 var overFlow = sectionHeight - page.heightLeft;
-                if (section.isCatComb)
-                    return section.dataElements.length - Math.round(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
+                if (section.isCatComb) {
+                    var numberOfOrphanDataElements = overFlow/config.DataSet.heightOfDataElementInCatCombTable;
+                    var numberOfDataElements = section.dataElements.length;
+                    return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
+                }
                 else if(section.isOptionSet)
                     return section.dataElements[0].options.length - Math.round(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
                 else

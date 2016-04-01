@@ -87,6 +87,8 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         var dataElement = section.dataElements[0];
         var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
         if (numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
+            var overflow  = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
+            numberOfFittingColumns = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
             var newDataElements = [];
             _.map(section.dataElements, function (dataElement) {
                 var data = _.cloneDeep(dataElement);
@@ -142,8 +144,11 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
             var getNumberOfElementsThatCanFit = function (section) {
                 var overFlow = sectionHeight - page.heightLeft;
-                if (section.isCatComb)
-                    return section.dataElements.length - Math.round(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
+                if (section.isCatComb) {
+                    var numberOfOrphanDataElements = overFlow/config.DataSet.heightOfDataElementInCatCombTable;
+                    var numberOfDataElements = section.dataElements.length;
+                    return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
+                }
                 else if(section.isOptionSet)
                     return section.dataElements[0].options.length - Math.round(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
                 else
