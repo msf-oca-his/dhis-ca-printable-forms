@@ -249,9 +249,12 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         page = getNewPage();
         var allDataElements = _.flatten(_.map(program.stageSections, 'dataElements'));
         allDataElements.push(DataElementService.getDataElementFromData({name: 'Comments', type: 'TEXT'}))
-        _.map(allDataElements ,function(dataElement){
+        _.map(allDataElements ,function(dataElement, index){
             page.widthLeft = page.widthLeft -  getWidthOfDataElement(dataElement);
-            if(page.widthLeft  > 0) {
+            if((allDataElements.length == (index + 1)) && page.widthLeft  > 0) {
+                page.contents.push(dataElement);
+            }
+            else if(page.widthLeft > getWidthOfDataElement(allDataElements[index+1])) {
                 page.contents.push(dataElement);
             }
             else {
