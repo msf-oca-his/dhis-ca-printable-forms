@@ -84,7 +84,10 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
     var divideCatCombsIfNecessary = function (section, index, sections) {
         var dataElement = section.dataElements[0];
         var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
+
         if (numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
+            var overflow  = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
+            numberOfFittingColumns = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
             var newDataElements = [];
             _.map(section.dataElements, function (dataElement) {
                 var data = _.cloneDeep(dataElement);

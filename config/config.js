@@ -3,7 +3,7 @@ TallySheets.factory("Config", [function () {
         Register:{
             availableHeight: 175,
             availableWidth: 270,
-            labelHeight: 20,            //table header
+            labelHeight: 10,            //table header
             tableHeaderHeight: 10,           //page header
             dataEntryRowHeight: 10,
             headerHeight: 25,
