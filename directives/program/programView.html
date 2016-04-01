@@ -4,15 +4,14 @@
 <div class="datasetName">{{programName}}</div>
     <table class="header">
         <tr>
-
-            <td class="headerLabel" style="font-weight: bold">
+            <td class="headerLabel" style="font-weight: bold" ng-if="mode == 'register'">
                 Set number
             </td>
 
-            <td class="headerField"></td>
+            <td class="headerField" ng-if="mode == 'register'"></td>
 
-            <td  class="seperator"></td>
-            
+            <td  class="seperator" ng-if="mode == 'register'"></td>
+
             <td class="headerLabel">
                 Org Structure
             </td>
