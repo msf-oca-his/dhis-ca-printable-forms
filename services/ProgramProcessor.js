@@ -118,7 +118,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
                 if (section.isCatComb)
                     height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
                 else if (section.isOptionSet)
-                    height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements[0].options.length / 3)) + config.DataSet.gapBetweenSections;
+                    height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements[0].rows.length)) + config.DataSet.gapBetweenSections;
                 else
                     height =  config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
 
@@ -207,8 +207,12 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
             var lastPage = pages[pages.length - 1];
             if(lastPage.heightLeft > 30)
                 lastPage.contents.push({type: 'comments'});
-            else
-                pages.push(new Page().contents.push({type: 'comments'}));
+            else {
+                var newPage = new Page(coverSheetPage);
+                newPage.contents.push({type: 'comments'});
+                pages.push(newPage);
+            }
+
         };
 
         if (!pages[currentPageIndex]) {
