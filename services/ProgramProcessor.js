@@ -254,11 +254,14 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
             if((allDataElements.length == (index + 1)) && page.widthLeft  > 0) {
                 page.contents.push(dataElement);
             }
-            else if(page.widthLeft > getWidthOfDataElement(allDataElements[index+1])) {
+            else if(((allDataElements.length -1) == (index + 1)) && page.widthLeft > getWidthOfDataElement(allDataElements[index+1])) {
+                page.contents.push(dataElement);
+            }
+            else if(((index +1) < allDataElements.length -1 ) && page.widthLeft > 0) {
                 page.contents.push(dataElement);
             }
             else {
-                getNewPage();
+                page = getNewPage();
                 page.widthLeft = page.widthLeft -  getWidthOfDataElement(dataElement);
                 page.contents.push(dataElement);
             }
