@@ -27,6 +27,10 @@
     width: 20%;
     border-bottom: 1px solid black;
 }
+.deFieldCatComb {
+    width: 4cm;
+    border-bottom: 1px solid black;
+}
 .headerLabel{
     /*width: 14%;*/
     padding-right: 2mm;

@@ -143,7 +143,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
             var getNumberOfElementsThatCanFit = function (section) {
                 var overFlow = sectionHeight - page.heightLeft;
                 if (section.isCatComb) {
-                    var numberOfOrphanDataElements = overFlow/config.DataSet.heightOfDataElementInCatCombTable;
+                    var numberOfOrphanDataElements = Math.floor(overFlow/config.DataSet.heightOfDataElementInCatCombTable);
                     var numberOfDataElements = section.dataElements.length;
                     return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
                 }
