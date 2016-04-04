@@ -41,21 +41,19 @@
     font-weight: 600;
     font-size: 4mm;
     margin-bottom: 8mm;
-    width: 100%;
 }
 .programName {
     font-size: 6mm;
 }
 .headerLabel{
-     width: 9%;
-     padding-right: 1mm;
+    padding-right: 2mm;
  }
 .headerField{
-    width: 10%;
+    width: 12%;
     border-bottom: 1px solid black;
 }
 .seperator{
-    width: 6%;
+    width: 7%;
 }
 .datasetName {
     text-align:center;
