@@ -5,7 +5,7 @@
 .page {
     width: 210mm;
     min-height: 297mm;
-    padding: 5mm;
+    /*padding: 5mm;*/
     /*border: 0.5px #D3D3D3  solid;*/
     /*border-radius: 5px;*/
     background: white;
@@ -24,7 +24,7 @@
 }
 
 .deField{
-    width: 2cm;
+    width: 20%;
     border-bottom: 1px solid black;
 }
 .headerLabel{
@@ -51,7 +51,7 @@
     padding-left: 1mm;
 }
 .deLabel.general{
-    width: 3cm;
+    width: 25%;
     text-align: right;
     height: 9mm;
 }

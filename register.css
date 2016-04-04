@@ -1,7 +1,7 @@
 .page {
     width: 297mm;
     min-height: 210mm;
-    padding: 5mm;
+    /*padding: 5mm;*/
     /*border: 0.5px #D3D3D3  solid;*/
     /*border-radius: 5px;*/
     background: white;
@@ -97,5 +97,8 @@ table {
         box-shadow: initial;
         background: initial;
         page-break-after: always;
+    }
+    .subpage{
+        border: none;
     }
 }
