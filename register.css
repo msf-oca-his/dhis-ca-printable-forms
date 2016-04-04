@@ -83,7 +83,7 @@ table {
 @media print {
     html, body {
         height: 210mm;
-        width: 297mm;
+        width: 298mm;
     }
     @page {size: A4 landscape;}
     .page {
