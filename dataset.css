@@ -48,7 +48,7 @@
     padding-right: 5mm;
 }
 .deLabel.catComb{
-    width: 3cm;
+    width: 4cm;
     text-align: right;
     height:12mm;
     padding-right: 2mm;
@@ -67,6 +67,7 @@
 .table-heading{
     text-align: center;
     height: 15mm;
+    width: 3cm;
 }
 .header{
     font-weight: 600;
