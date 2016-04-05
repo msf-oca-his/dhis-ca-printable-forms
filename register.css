@@ -98,5 +98,6 @@ table {
     }
     .subpage{
         border: none;
+        margin-left: 32mm;
     }
 }
