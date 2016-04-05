@@ -113,5 +113,6 @@ table {
     }
     .subpage{
         border: none;
+        margin: 8mm;
     }
 }

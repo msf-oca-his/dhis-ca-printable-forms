@@ -5,7 +5,7 @@ TallySheets.factory("Config", [function () {
             availableWidth: 270,
             labelHeight: 10,            //table header
             tableHeaderHeight: 10,           //page header
-            dataEntryRowHeight: 10,
+            dataEntryRowHeight: 9,
             headerHeight: 25,
             textElementWidth: 50,
             otherElementWidth: 30

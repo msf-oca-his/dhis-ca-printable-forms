@@ -120,5 +120,6 @@ td {
     }
     .subpage{
         border: none;
+        margin: 8mm;
     }
 }
