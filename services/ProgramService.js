@@ -28,8 +28,10 @@ TallySheets.service("ProgramService", ['$http', 'ProgramStageSectionService', fu
         };
 
         var failurePromise = function(response){
-            return {isError: true, status: response.status, statusText: response.statusText}
+            alert("Fetching program failed.....");
+            //return {isError: true, status: response.status, statusText: response.statusText}
         };
+
 
         var indexOfProgram = _.indexOf(_.map(programs,"id"), programId);
 

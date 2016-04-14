@@ -62,7 +62,8 @@ TallySheets.service("DataSetService", ['$http','DataEntrySectionService','DataEl
         };
 
         var failurePromise = function(response){
-            return {isError: true, status: response.status, statusText: response.statusText}
+            alert("Fetching dataset failed.....");
+            //return {isError: true, status: response.status, statusText: response.statusText}
         };
 
         var indexOfDataSet = _.indexOf(_.map(datasets,"id"), dataSetId);
