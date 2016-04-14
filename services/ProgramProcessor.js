@@ -24,18 +24,18 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         var currentIndex = 0;
         var pushIndex = 0;
         var newSection;
-
         var simplifySection = function(section) {
             var dataElement = section.dataElements[0];
             dataElement.rows = [];
-            var rowIndex = -1;
-            for(var i=0;i<dataElement.options.length;i++){
-                if(i % 3 != 0){
-                    dataElement.rows[rowIndex].push(dataElement.options[i])
-                }
-                else{
-                    dataElement.rows.push([dataElement.options[i]]);
-                    rowIndex++;
+            var numberOfRows = Math.ceil(dataElement.options.length /3);
+            for(var i=0;i<numberOfRows;i++){
+                var j=0;
+                while(j<dataElement.options.length) {
+                    if(j==0)
+                        dataElement.rows.push([dataElement.options[i]])
+                    else if(dataElement.options[i+j]!=undefined)
+                        dataElement.rows[i].push(dataElement.options[i+j])
+                    j=j+numberOfRows;
                 }
             }
             return section;
