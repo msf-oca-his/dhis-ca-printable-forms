@@ -12,6 +12,9 @@ TallySheets.filter('to_trusted', ['$sce', function($sce) {
     };
 }]);
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService","ProgramProcessor", function ($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
+
+    $scope.spinnerShown = false;
+
     $scope.dsId  = 1;
     $scope.form = {};
     $scope.pages = [];
@@ -72,25 +75,30 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
     $scope.renderDataSets = function () {
        $scope.pages = [];
         if ($scope.form.id) {
+            $scope.spinnerShown = true;
                 if($scope.form.type == "dataset") {
                     return DataSetService.getDataSet($scope.form.id)
                         .then(function (dataset) {
                             return dataset.isResolved
                                 .then(function () {
                                     $scope.pages = PrintFriendlyProcessor.process(_.cloneDeep(dataset));
+                                    $scope.spinnerShown = false;
                                     $scope.$apply();
                                 });
                         });
                 }
                 else if ($scope.form.type == "program" && $scope.programMode) {
+                    $scope.spinnerShown = true;
                     return ProgramService.getProgram($scope.form.id).then(function(program){
                         return program.isResolved.then(function () {
                             $scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);
+                            $scope.spinnerShown = false;
                             $scope.$apply();
 
                         })
                     });
                 }
+                $scope.spinnerShown = false;
             }
             else return Promise.resolve(0)
     };

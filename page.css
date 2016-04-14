@@ -43,6 +43,13 @@ input.clean {
 .optionsetTable td{
         padding-right: 10mm;
 }
+
+.spinner-wrapper img {
+    margin: 0 auto;
+    display: block;
+    margin-top: 100px;
+}
+
 @media print {
     .noprint{
         display:none;

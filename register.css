@@ -46,14 +46,15 @@
     font-size: 6mm;
 }
 .headerLabel{
+    /*width: 14%;*/
     padding-right: 2mm;
- }
+}
 .headerField{
-    width: 12%;
+    width: 16%;
     border-bottom: 1px solid black;
 }
 .seperator{
-    width: 7%;
+    width: 10%;
 }
 .datasetName {
     text-align:center;
