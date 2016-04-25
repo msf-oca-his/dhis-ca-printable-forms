@@ -1,6 +1,6 @@
 TallySheets.service("DataEntrySectionService", ['$http','DataElementService', function ($http, DataElementService) {
     var failurePromise = function(response){
-        return {isError: true, status: response.status, statusText: response.statusText}
+        alert("Could not connect to DHIS");
     };
 
     var Section = function(data){
