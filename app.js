@@ -1,10 +1,10 @@
 var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar']);
 var dhisUrl;
 if(window.location.href.includes("apps"))
-    dhisUrl= window.location.href.split('api/apps/')[0] + '/';
+    dhisUrl= window.location.href.split('api/apps/')[0];
 else
-    dhisUrl= "http://localhost:8000";
-var ApiUrl = dhisUrl + '/api';
+    dhisUrl= "http://localhost:8000/";
+var ApiUrl = dhisUrl + 'api';
 
 TallySheets.filter('to_trusted', ['$sce', function($sce) {
     return function (text) {
