@@ -1,0 +1,27 @@
+{
+  "name": "dhis_tally_sheets",
+  "version": "1.0.0",
+  "description": "Tally Sheets",
+  "main": "app.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-jasmine": "^1.0.2",
+    "karma-requirejs": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msf-oca-his/dhis_tally_sheets.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msf-oca-his/dhis_tally_sheets/issues"
+  },
+  "homepage": "https://github.com/msf-oca-his/dhis_tally_sheets#readme"
+}
