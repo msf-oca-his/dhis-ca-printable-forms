@@ -1,6 +1,5 @@
 describe("DataElementService", function () {
     var dataElementService;
-    var mockDataElementService = {};
     var httpMock;
     var $rootScope;
     var timeout;
@@ -8,12 +7,10 @@ describe("DataElementService", function () {
     beforeEach(function () {
         angular.module('d2HeaderBar', []);
         module("TallySheets");
-        var mockedOptionSet = function () {
-            return Promise.resolve({});
-        };
+        optionsObject = {123:{id:"123",name:"male",options:{name:"option1"}},12:{id:"12",name:"female",options:{name:"option2"}}};
 
         module(function ($provide) {
-            $provide.value('OptionSetFactory', mockedOptionSet);
+            $provide.value('OptionSetFactory', Promise.resolve(optionsObject));
         });
     });
 
@@ -212,6 +209,100 @@ describe("DataElementService", function () {
             httpMock.flush();
             expect(expectedPromise).toEqual(failurePromise)
         })
+
+        it("should get the data element of type boolean when its data valuetype is boolean", function(){
+            var dataElement = {
+                id:"1234"
+            }
+            var serverDataElement = {
+                id: "1234",
+                name: "Karma",
+                valueType:'BOOLEAN',
+                displayFormName:"displayKarma",
+                categoryCombo: {
+                    name: "default"
+                }
+            }
+            var expectedDataElement = {
+                id: "1234",
+                name: "displayKarma",
+                type: "BOOLEAN"
+            };
+            var actualDataElement;
+            httpMock.expectGET("http://localhost:8000/api/dataElements/" + dataElement.id + ".json").respond(200,serverDataElement);
+            dataElementService.getDataElement(dataElement).then(function(response){
+                actualDataElement = response;
+            });
+            httpMock.flush();
+            delete actualDataElement.isResolved;
+            expect(expectedDataElement).toEqual(actualDataElement);
+        })
+
+        it("should get the data element of type integer/number when its data valuetype is integer/number", function(){
+            var dataElement = {
+                id:"1234"
+            }
+            var serverDataElement = {
+                id: "1234",
+                name: "Karma",
+                valueType:'NUMBER',
+                displayFormName:"displayKarma",
+                categoryCombo: {
+                    name: "default"
+                }
+            }
+            var expectedDataElement = {
+                id: "1234",
+                name: "displayKarma",
+                type: "NUMBER"
+            };
+            var actualDataElement;
+            httpMock.expectGET("http://localhost:8000/api/dataElements/" + dataElement.id + ".json").respond(200,serverDataElement);
+            dataElementService.getDataElement(dataElement).then(function(response){
+                actualDataElement = response;
+            });
+            httpMock.flush();
+            delete actualDataElement.isResolved;
+            expect(expectedDataElement).toEqual(actualDataElement);
+        })
+
+        it("should get the data element options when its data value type is option set",function(done){
+            var dataElement = {
+                id:"1234"
+            }
+            var serverDataElement = {
+                id: "1234",
+                name: "Karma",
+                valueType:'NUMBER',
+                displayFormName:"displayKarma",
+                categoryCombo: {
+                    name: "default"
+                },
+                optionSetValue:true,
+                optionSet:{
+                    id:"123",
+                    name:"gender"
+                }
+            }
+            var expectedDataElement = {
+                id: "1234",
+                name: "displayKarma",
+                options:{name:"option1"},
+                type:"OPTIONSET"
+            };
+            var actualDataElement;
+            httpMock.expectGET("http://localhost:8000/api/dataElements/" + dataElement.id + ".json").respond(200,serverDataElement);
+            dataElementService.getDataElement(dataElement).then(function(response){
+                actualDataElement = response;
+                actualDataElement.isResolved.then(function(){
+                    delete actualDataElement.isResolved;
+                    expect(expectedDataElement).toEqual(actualDataElement)
+                    done();
+                })
+            });
+            httpMock.flush();
+            setInterval($rootScope.$digest, 900);
+        });
 
     });
 
