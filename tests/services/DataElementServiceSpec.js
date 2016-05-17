@@ -103,7 +103,6 @@ describe("DataElementService", function () {
             dataElementService.getDataElement(dataElement).then(function (response) {
                actualDataElement = response;
                 actualDataElement.isResolved.then(function () {
-                    console.log(actualDataElement.categoryCombo.categories);
 
                     actualCategories = actualDataElement.categoryCombo.categories;
                     expectedCategories = serverCatCombs.categories;
