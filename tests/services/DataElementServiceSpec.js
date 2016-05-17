@@ -200,7 +200,7 @@ describe("DataElementService", function () {
                 id: "1234"
             };
             var failurePromise = {isError: true, status:404, statusText:''};
-            var expectedOutput;
+            var expectedPromise;
             httpMock.expectGET("http://localhost:8000/api/dataElements/" + dataElement.id + ".json").respond(404);
             dataElementService.getDataElement(dataElement).then(function (response) {
                 expectedPromise = response;
