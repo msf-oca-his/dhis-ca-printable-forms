@@ -133,24 +133,24 @@ describe("DataSetProcessor", function () {
 
                 expectedSection1.dataElements[0].categoryCombo.categoryOptionCombos = ["male<br><5", "female<br><7", "male<br><10", "female<br><11"];
 
-               var expectedDuplicateSection = {
-                   name: "section",
-                   id: "134",
-                   dataElements: [{
-                       name: "dataElement",
-                       id: "1234",
-                       type: "TEXT",
-                       categoryCombo: {
+                var expectedDuplicateSection = {
+                    name: "section",
+                    id: "134",
+                    dataElements: [{
+                        name: "dataElement",
+                        id: "1234",
+                        type: "TEXT",
+                        categoryCombo: {
                             id: "154",
                             categoryOptionCombos: ["female<br><12", "male<br><10"],
                             isResolved: Promise.resolve({}),
                             name: "catcomb",
-                           categories: [{ id: '123', name: 'Gender' }]
+                            categories: [{id: '123', name: 'Gender'}]
                         }
-                   }],
-                   isCatComb: true,
-                   isDuplicate: true
-               }
+                    }],
+                    isCatComb: true,
+                    isDuplicate: true
+                }
 
                 var expectedPages = [
                     {
@@ -205,7 +205,58 @@ describe("DataSetProcessor", function () {
 
                 expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
                 expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
-            })
+            });
+        });
+
+        describe("sections of type Optionsets", function () {
+            var testDataSet = {
+                id: "123",
+                isPrintFriendlyProcessed: true,
+                isResolved: Promise.resolve({}),
+                name: "test dataset",
+                sections: [{
+                    dataElements: [{
+                        id: "1234",
+                        isResolved: Promise.resolve({}),
+                        name: "dataElement",
+                        options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+                        type: "OPTIONSET"
+                    }],
+                    id: "134",
+                    isResolved: Promise.resolve({}),
+                    name: "section"
+                }],
+                type: 'dataset'
+            }
+
+            it("should process the section contain only one dataelement of type optionset", function () {
+                var currentTestDataSet = _.clone(testDataSet);
+
+                var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
+
+                var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+
+                expectedSection.dataElements[0].rows = expectedRows;
+                expectedSection.isOptionSet = true;
+                expectedSection.leftSideElements = [expectedSection.dataElements[0]];
+                expectedSection.rightSideElements = [];
+
+
+                var expectedPages = [{
+                    heightLeft: 0,
+                    width: 183,
+                    contents: [
+                        {type: 'dataSetName', name: "test dataset"},
+                        {type: 'section', section: expectedSection}],
+                    datasetName: "test dataset"
+                }];
+
+                var actualPages = dataSetProcessor.process(currentTestDataSet);
+                expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+            });
+
         })
+
+
     })
 });
