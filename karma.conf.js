@@ -25,6 +25,7 @@ module.exports = function(config) {
       'include/angular-1.4.0/angular-translate-loader-static-files.min.js',
       'include/jquery-2.1.4/jquery-2.1.4.min.js',
       'app.js',
+      'config/config.js',
       'services/*.js',
       'tests/**/*.js'
       
