@@ -227,10 +227,10 @@ describe("DataSetProcessor", function () {
                     name: "section"
                 }],
                 type: 'dataset'
-            }
+            };
 
             it("should process the section contain only one dataelement of type optionset", function () {
-                var currentTestDataSet = _.clone(testDataSet);
+                var currentTestDataSet = _.cloneDeep(testDataSet);
 
                 var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
 
@@ -255,7 +255,174 @@ describe("DataSetProcessor", function () {
                 expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
             });
 
-        })
+            it("should process the dataset which contians dataelement of type optionsets where options are overflowed", function () {
+                var currentTestDataSet = _.cloneDeep(testDataSet);
+
+                var assignOptionsToDe = function (section, numberOfOptions) {
+                    for (var index = 0; index < numberOfOptions; index++) {
+                        section.dataElements[0].options[index] = {id: 1, name: "option"};
+                    }
+                }
+                assignOptionsToDe(currentTestDataSet.sections[0], 75);//75 options will overflow to the new page
+
+                var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
+                assignOptionsToDe(expectedSection1, 72);
+                var expectedRows1 = [];
+                for (var i = 0; i < 24; i++) {
+                    var j = 0;
+                    while (j < 3) {
+                        if (j == 0)
+                            expectedRows1.push([{id: 1, name: "option"}]);
+                        else
+                            expectedRows1[i].push({id: 1, name: "option"});
+                        j++;
+                    }
+                }
+
+                expectedSection1.dataElements[0].rows = expectedRows1;
+                expectedSection1.isOptionSet = true;
+                expectedSection1.leftSideElements = [expectedSection1.dataElements[0]];
+                expectedSection1.rightSideElements = [];
+
+                var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
+                assignOptionsToDe(expectedSection2, 3);
+                var expectedRows2 = [];
+                for (var i = 0; i < 1; i++) {
+                    var j = 0;
+                    while (j < 3) {
+                        if (j == 0)
+                            expectedRows2.push([{id: 1, name: "option"}]);
+                        else
+                            expectedRows2[i].push({id: 1, name: "option"});
+                        j++;
+                    }
+                }
+                expectedSection2.dataElements[0].rows = expectedRows2;
+                expectedSection2.isOptionSet = true;
+                expectedSection2.leftSideElements = [expectedSection2.dataElements[0]];
+                expectedSection2.rightSideElements = [];
+                expectedSection2.isDuplicate = false;
+
+                var expectedPages = [{
+                    contents: [
+                        {type: 'dataSetName', name: "test dataset"},
+                        {type: 'section', section: expectedSection1}],
+                    datasetName: "test dataset"
+                }, {
+                    contents: [
+                        {type: 'section', section: expectedSection2}],
+                    datasetName: "test dataset"
+                }];
+                var acutalPages = dataSetProcessor.process(currentTestDataSet);
+                expect(acutalPages[1].contents).toEqual(expectedPages[1].contents);
+                expect(acutalPages[0].contents[1]).toEqual(expectedPages[0].contents[1]);
+            });
+            it("should process the dataset which contains dataelements of type option set and general dataelements", function () {
+                var currentTestDatSet = _.cloneDeep(testDataSet);
+                currentTestDatSet.sections[0].dataElements[1] = {
+                    id: "1",
+                    name: "general de"
+                };
+
+                var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
+                var expectedRows1 = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+                expectedSection1.dataElements[0].rows = expectedRows1;
+                expectedSection1.isDuplicate = false;
+                expectedSection1.isOptionSet = true;
+                expectedSection1.leftSideElements = [expectedSection1.dataElements[0]];
+                expectedSection1.rightSideElements = [];
+
+                var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
+                expectedSection2.dataElements[0] = currentTestDatSet.sections[0].dataElements[1];
+                expectedSection2.isDuplicate = true;
+                expectedSection2.leftSideElements = [currentTestDatSet.sections[0].dataElements[1]];
+                expectedSection2.rightSideElements = [];
+
+                var expectedPages = [{
+                    contents: [
+                        {type: 'dataSetName', name: "test dataset"},
+                        {type: 'section', section: expectedSection1},
+                        {type: 'section', section: expectedSection2}],
+                    datasetName: "test dataset"
+                }];
+
+                var actualPages = dataSetProcessor.process(currentTestDatSet);
+                expect(actualPages[0].contents[2]).toEqual(expectedPages[0].contents[2]);
+            });
+
+        });
+
+        describe("data elements of type TEXT", function () {
+            var testDataSet = {
+                id: "123",
+                isPrintFriendlyProcessed: true,
+                isResolved: Promise.resolve({}),
+                name: "test dataset",
+                sections: [{
+                    dataElements: [{
+                        id: "1234",
+                        isResolved: Promise.resolve({}),
+                        name: "dataElement",
+                        type: "TEXT"
+                    }],
+                    id: "134",
+                    isCatComb: false,
+                    isResolved: Promise.resolve({}),
+                    name: "section"
+                }],
+                type: 'dataset'
+            };
+
+            it("when dataelements of type text in a section are overflowed", function () {
+                var currentTestDataSet = _.cloneDeep(testDataSet);
+                var assignDeToSections = function (section, numberOfDe) {
+                    for (var i = 0; i < numberOfDe; i++) {
+                        section.dataElements[i] = _.cloneDeep(testDataSet.sections[0].dataElements[0]);
+                    }
+                }
+                assignDeToSections(currentTestDataSet.sections[0],50);
+
+                var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
+                var expectedNumberOfElements = 48;
+                assignDeToSections(expectedSection1,expectedNumberOfElements);
+                expectedSection1.leftSideElements = [];
+                expectedSection1.rightSideElements = [];
+                for(var i=0;i<expectedNumberOfElements;i++) {
+                    if(i < (expectedNumberOfElements/2))
+                        expectedSection1.leftSideElements.push(currentTestDataSet.sections[0].dataElements[i]);
+                    else
+                        expectedSection1.rightSideElements.push(currentTestDataSet.sections[0].dataElements[i]);
+                };
+
+                var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
+                assignDeToSections(expectedSection2,2);//expected would be 2
+                expectedSection2.leftSideElements = [{
+                    id: "1234",
+                    isResolved: Promise.resolve({}),
+                    name: "dataElement",
+                    type: "TEXT"
+                }];
+                expectedSection2.rightSideElements = [{
+                    id: "1234",
+                    isResolved: Promise.resolve({}),
+                    name: "dataElement",
+                    type: "TEXT"
+                }];
+                expectedSection2.isDuplicate = false;
+
+                var expectedPages = [{
+                    contents: [
+                        {type: 'dataSetName', name: "test dataset"},
+                        {type: 'section', section: expectedSection1}],
+                    datasetName: "test dataset"
+                },{contents:[
+                    {type:'section',section:expectedSection2}
+                ]}];
+
+                var actualPages = dataSetProcessor.process(currentTestDataSet);
+                expect(actualPages[1].contents[0]).toEqual(expectedPages[1].contents[0]);
+            });
+        });
 
 
     })
