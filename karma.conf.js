@@ -24,6 +24,7 @@ module.exports = function(config) {
       'include/angular-1.4.0/angular-resource.min.js',
       'include/angular-1.4.0/angular-translate-loader-static-files.min.js',
       'include/jquery-2.1.4/jquery-2.1.4.min.js',
+      'include/bootstrap-select/js/*.js',
       'app.js',
       'config/config.js',
       'directives/**/*.js',
