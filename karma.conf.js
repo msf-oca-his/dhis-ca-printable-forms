@@ -26,6 +26,7 @@ module.exports = function(config) {
       'include/jquery-2.1.4/jquery-2.1.4.min.js',
       'app.js',
       'config/config.js',
+      'directives/**/*.js',
       'services/*.js',
       'tests/**/*.js'
       
@@ -40,7 +41,8 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/services/*.js':'coverage'
+      '**/services/*.js':'coverage',
+      '**/directives/**/*.js':'coverage'
     },
 
 

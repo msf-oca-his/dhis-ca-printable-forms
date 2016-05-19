@@ -24,7 +24,7 @@ describe("DataSetProcessor", function () {
         $rootScope = _$rootScope_;
         httpMock = $httpBackend;
         timeout = $timeout;
-        config = Config
+        config = Config;
         httpMock.expectGET("languages/en.json").respond(200, {});
     }));
 
@@ -380,22 +380,23 @@ describe("DataSetProcessor", function () {
                         section.dataElements[i] = _.cloneDeep(testDataSet.sections[0].dataElements[0]);
                     }
                 }
-                assignDeToSections(currentTestDataSet.sections[0],50);
+                assignDeToSections(currentTestDataSet.sections[0], 50);
 
                 var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
                 var expectedNumberOfElements = 48;
-                assignDeToSections(expectedSection1,expectedNumberOfElements);
+                assignDeToSections(expectedSection1, expectedNumberOfElements);
                 expectedSection1.leftSideElements = [];
                 expectedSection1.rightSideElements = [];
-                for(var i=0;i<expectedNumberOfElements;i++) {
-                    if(i < (expectedNumberOfElements/2))
+                for (var i = 0; i < expectedNumberOfElements; i++) {
+                    if (i < (expectedNumberOfElements / 2))
                         expectedSection1.leftSideElements.push(currentTestDataSet.sections[0].dataElements[i]);
                     else
                         expectedSection1.rightSideElements.push(currentTestDataSet.sections[0].dataElements[i]);
-                };
+                }
+                ;
 
                 var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
-                assignDeToSections(expectedSection2,2);//expected would be 2
+                assignDeToSections(expectedSection2, 2);//expected would be 2
                 expectedSection2.leftSideElements = [{
                     id: "1234",
                     isResolved: Promise.resolve({}),
@@ -415,15 +416,16 @@ describe("DataSetProcessor", function () {
                         {type: 'dataSetName', name: "test dataset"},
                         {type: 'section', section: expectedSection1}],
                     datasetName: "test dataset"
-                },{contents:[
-                    {type:'section',section:expectedSection2}
-                ]}];
+                }, {
+                    contents: [
+                        {type: 'section', section: expectedSection2}
+                    ]
+                }];
 
                 var actualPages = dataSetProcessor.process(currentTestDataSet);
-                expect(actualPages[1].contents[0]).toEqual(expectedPages[1].contents[0]);
+                expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+                expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
             });
         });
-
-
     })
 });
