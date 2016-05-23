@@ -7,3 +7,4 @@ bower_components
 nginx.conf
 node_modules/
 npm-debug.log
+coverage/

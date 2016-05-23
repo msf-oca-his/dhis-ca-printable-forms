@@ -28,7 +28,7 @@ describe("ProgramProcessor", function () {
     httpMock.expectGET("languages/en.json").respond(200, {});
   }));
 
-  describe("process dataset", function () {
+  describe("process program of type coversheet", function () {
     it("should process the basic program without stage sections to check page width and height", function () {
       var testProgram = {
         id: "123",
@@ -81,21 +81,22 @@ describe("ProgramProcessor", function () {
       };
 
 
-      it("should process the program with sections of type catcomb with category optionCombos", function () {
-        var myprogram = _.clone(testProgram);
+      it("should process the program with sections of type catcomb without category optionCombos", function () {
+        var currentTestProgram = _.clone(testProgram);
         //section height would be 32 and dataset title would be 10 and datasection title would be 7 total height is 237-49=188
         var expectedPages = [
           {
-            heightLeft: 150,
-            widthLeft: 170,
+            heightLeft: 188,
+            widthLeft: 183,
             contents: [
-               myprogram.stageSections[0].dataElements[0],
-              { name: 'Comments', id: undefined, type:"TEXT", categoryCombo: undefined}
+              {type: 'dataSetName', name: "test program"},
+              {type: 'section', section: currentTestProgram.stageSections[0]},
+              {type: 'comments'}
             ],
             programName: "test program"
           }
         ];
-        var actualPages = programProcessor.process(myprogram);
+        var actualPages = programProcessor.process(currentTestProgram,"coversheet");
         expect(actualPages).toEqual(expectedPages);
       });
 
@@ -115,21 +116,22 @@ describe("ProgramProcessor", function () {
 
         var expectedPages = [
           {
-            heightLeft: 150,
-            widthLeft: 170,
+            heightLeft: 188,
+            widthLeft: 183,
             contents: [
-              currentTestProgram.stageSections[0].dataElements[0],
-              { name: 'Comments', id: undefined, type:"TEXT", categoryCombo: undefined}
+              {type: 'dataSetName', name: "test program"},
+              {type: 'section', section: expectedSection},
+              {type: 'comments'}
             ],
             programName: "test program"
           }
         ];
-        var actualPages = programProcessor.process(currentTestProgram);
+        var actualPages = programProcessor.process(currentTestProgram,'coversheet');
         expect(actualPages).toEqual(expectedPages);
       });
 
-      
-      it("should process the dataset with sections of type catcomb with catgory option combos are overflowed", function () {
+
+      it("should process the program with sections of type catcomb with catgory option combos are overflowed", function () {
 
         var currentProgram = _.cloneDeep(testProgram);
 
@@ -140,8 +142,8 @@ describe("ProgramProcessor", function () {
         expectedSection1.dataElements[0].categoryCombo.categoryOptionCombos = ["male<br><5", "female<br><7", "male<br><10", "female<br><11"];
 
         var expectedDuplicateSection = {
-          name: "section",
-          id: "134",
+          name: "test section",
+          id: "1234",
           dataElements: [{
             name: "dataElement",
             id: "1234",
@@ -156,75 +158,65 @@ describe("ProgramProcessor", function () {
           }],
           isCatComb: true,
           isDuplicate: true
-        }
+        };
 
 
-        var expectedPages = [
-          currentProgram.stageSections[0].dataElements[0]
-        ];
-
-        var actualPages = programProcessor.process(currentProgram);
-        expect(actualPages[0].contents[0]).toEqual(expectedPages[0]);
-
-      });
-
-    });
-
-    describe("sections of type Optionsets", function () {
-
-      var testProgram = {
-        id: "123",
-        isPrintFriendlyProcessed: true,
-        isResolved: Promise.resolve({}),
-        name: "test program",
-        stageSections: [{
-          dataElements: [{
-            categoryCombo: {
-              id: "154",
-              isResolved: Promise.resolve({}),
-              name: "dataElement",
-              options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
-              type: "OPTIONSET"
-            },
-            id: "1234",
-            isResolved: Promise.resolve({}),
-            name: "dataElement",
-            type: "TEXT",
-          }
-
+        var expectedPages = [{
+          heightLeft: 156,
+          widthLeft: 183,
+          contents: [
+            {type: 'dataSetName', name: "test program"},
+            {type: 'section', section: expectedSection1},
+            {type: 'section', section: expectedDuplicateSection},
+            {type: 'comments'}
           ],
-          id: "1234",
-          isResolved: Promise.resolve({}),
-          name: "test section"
-        }],
-        type: "program"
-      };
+          programName: "test program"
+        }];
 
-      it("should process the section contain only one dataelement of type optionset", function () {
-        var currentTestDataSet = _.cloneDeep(testProgram);
+        var actualPages = programProcessor.process(currentProgram,'coversheet');
+        expect(actualPages[0]).toEqual(expectedPages[0]);
 
-        var expectedSection = _.cloneDeep(currentTestDataSet.stageSections[0]);
-
-        var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
-
-        expectedSection.dataElements[0].rows = expectedRows;
-        expectedSection.isOptionSet = true;
-        expectedSection.leftSideElements = [expectedSection.dataElements[0]];
-        expectedSection.rightSideElements = [];
-
-
-        var expectedPages = [
-          currentTestDataSet.stageSections[0].dataElements[0],
-          { name: 'Comments', id: undefined, type:"TEXT", categoryCombo: undefined}
-        ];
-
-        var actualPages = programProcessor.process(currentTestDataSet);
-        expect(actualPages[0].contents).toEqual(expectedPages);
       });
 
+      it("should process the program with overflowed section of type catcomb", function () {
+        var currentTestProgram = _.cloneDeep(testProgram);
 
+        var assignCOCToSection = function (section, numofDe) {
+          for (var index = 0; index < numofDe; index++) {
+            section.dataElements[index] = _.cloneDeep(testProgram.stageSections[0].dataElements[0]);
+          }
+        };
 
+        assignCOCToSection(currentTestProgram.stageSections[0], 20);
 
+        var expectedSection1 = _.cloneDeep(testProgram.stageSections[0]);
+        assignCOCToSection(expectedSection1, 16); //because 16 elements will fit into the first page
+
+        var expectedSection2 = _.cloneDeep(testProgram.stageSections[0]);
+        assignCOCToSection(expectedSection2, 4);
+        expectedSection2.isDuplicate = false;
+        var expectedPages = [{
+          heightLeft: 0,
+          width: 183,
+          contents: [
+            {type: 'dataSetName', name: "test program"},
+            {type: 'section', section: expectedSection1}],
+          datasetName: "test program"
+        },
+          {
+            heightLeft: 164,
+            width: 183,
+            contents: [
+              {type: 'section', section: expectedSection2},
+              {type: 'comments'}],
+            datasetName: "test program"
+          }];
+
+        var actualPages = programProcessor.process(currentTestProgram,'coversheet');
+
+        expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+        expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
+      });
 
     });
 
