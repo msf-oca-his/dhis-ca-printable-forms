@@ -220,5 +220,155 @@ describe("ProgramProcessor", function () {
 
     });
 
+    describe("sections with option sets", function(){
+      var testProgram = {
+        id: "123",
+        isPrintFriendlyProcessed: true,
+        isResolved: Promise.resolve({}),
+        name: "test program",
+        stageSections: [{
+          dataElements: [{
+            id: "1234",
+            isResolved: Promise.resolve({}),
+            name: "dataElement",
+            options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+            type: "OPTIONSET"
+          }],
+          id: "134",
+          isResolved: Promise.resolve({}),
+          name: "section"
+        }],
+        type: 'program'
+      };
+
+      it("should process the section contain only one dataelement of type optionset", function () {
+        var currentTestProgram = _.cloneDeep(testProgram);
+
+        var expectedSection = _.cloneDeep(currentTestProgram.stageSections[0]);
+
+        var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+
+        expectedSection.dataElements[0].rows = expectedRows;
+        expectedSection.isOptionSet = true;
+        expectedSection.leftSideElements = [expectedSection.dataElements[0]];
+        expectedSection.rightSideElements = [];
+
+
+        var expectedPages = [{
+          heightLeft: 0,
+          width: 183,
+          contents: [
+            {type: 'dataSetName', name: "test program"},
+            {type: 'section', section: expectedSection},
+            {type:'comments'}],
+          datasetName: "test program"
+        }];
+
+        var actualPages = programProcessor.process(currentTestProgram,'coversheet');
+        expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+      });
+
+
+      it("should process the program which contians dataelement of type optionsets where options are overflowed", function () {
+        var currentTestProgram = _.cloneDeep(testProgram);
+
+        var assignOptionsToDe = function (section, numberOfOptions) {
+          for (var index = 0; index < numberOfOptions; index++) {
+            section.dataElements[0].options[index] = {id: 1, name: "option"};
+          }
+        }
+        assignOptionsToDe(currentTestProgram.stageSections[0], 75);//75 options will overflow to the new page
+
+        var expectedSection1 = _.cloneDeep(testProgram.stageSections[0]);
+        assignOptionsToDe(expectedSection1, 72);
+        var expectedRows1 = [];
+        for (var i = 0; i < 24; i++) {
+          var j = 0;
+          while (j < 3) {
+            if (j == 0)
+              expectedRows1.push([{id: 1, name: "option"}]);
+            else
+              expectedRows1[i].push({id: 1, name: "option"});
+            j++;
+          }
+        }
+
+        expectedSection1.dataElements[0].rows = expectedRows1;
+        expectedSection1.isOptionSet = true;
+        expectedSection1.leftSideElements = [expectedSection1.dataElements[0]];
+        expectedSection1.rightSideElements = [];
+
+        var expectedSection2 = _.cloneDeep(testProgram.stageSections[0]);
+        assignOptionsToDe(expectedSection2, 3);
+        var expectedRows2 = [];
+        for (var i = 0; i < 1; i++) {
+          var j = 0;
+          while (j < 3) {
+            if (j == 0)
+              expectedRows2.push([{id: 1, name: "option"}]);
+            else
+              expectedRows2[i].push({id: 1, name: "option"});
+            j++;
+          }
+        }
+        expectedSection2.dataElements[0].rows = expectedRows2;
+        expectedSection2.isOptionSet = true;
+        expectedSection2.leftSideElements = [expectedSection2.dataElements[0]];
+        expectedSection2.rightSideElements = [];
+        expectedSection2.isDuplicate = false;
+
+        var expectedPages = [{
+          contents: [
+            {type: 'dataSetName', name: "test program"},
+            {type: 'section', section: expectedSection1}],
+          datasetName: "test program"
+        }, {
+          contents: [
+            {type: 'section', section: expectedSection2},
+            {type:'comments'}],
+          datasetName: "test program"
+        }];
+        var acutalPages = programProcessor.process(currentTestProgram,'coversheet');
+        expect(acutalPages[1].contents).toEqual(expectedPages[1].contents);
+        expect(acutalPages[0].contents[1]).toEqual(expectedPages[0].contents[1]);
+      });
+
+      it("should process the program which contains dataelements of type option set and general dataelements", function () {
+        var currentTestProgram = _.cloneDeep(testProgram);
+        currentTestProgram.stageSections[0].dataElements[1] = {
+          id: "1",
+          name: "general de"
+        };
+
+        var expectedSection1 = _.cloneDeep(testProgram.stageSections[0]);
+        var expectedRows1 = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+        expectedSection1.dataElements[0].rows = expectedRows1;
+        expectedSection1.isDuplicate = false;
+        expectedSection1.isOptionSet = true;
+        expectedSection1.leftSideElements = [expectedSection1.dataElements[0]];
+        expectedSection1.rightSideElements = [];
+
+        var expectedSection2 = _.cloneDeep(testProgram.stageSections[0]);
+        expectedSection2.dataElements[0] = currentTestProgram.stageSections[0].dataElements[1];
+        expectedSection2.isDuplicate = true;
+        expectedSection2.leftSideElements = [currentTestProgram.stageSections[0].dataElements[1]];
+        expectedSection2.rightSideElements = [];
+
+        var expectedPages = [{
+          contents: [
+            {type: 'dataSetName', name: "test program"},
+            {type: 'section', section: expectedSection1},
+            {type: 'section', section: expectedSection2},
+            {type:'comments'}],
+          datasetName: "test program"
+        }];
+
+        var actualPages = programProcessor.process(currentTestProgram,'coversheet');
+        expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+      });
+
+
+    });
+
   })
 });

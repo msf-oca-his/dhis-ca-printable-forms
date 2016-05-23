@@ -347,7 +347,7 @@ describe("DataSetProcessor", function () {
                 }];
 
                 var actualPages = dataSetProcessor.process(currentTestDatSet);
-                expect(actualPages[0].contents[2]).toEqual(expectedPages[0].contents[2]);
+                expect(actualPages[0].contents).toEqual(expectedPages[0].contents)
             });
 
         });
