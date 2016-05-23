@@ -206,6 +206,68 @@ describe("DataSetProcessor", function () {
                 expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
                 expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
             });
+
+            it("should process the dataset with overflowed section height is less than grace height", function () {
+                var currentTestDataSet = _.cloneDeep(testDataSet);
+
+                var assignCOCToSection = function (section, numofDe) {
+                    for (var index = 0; index < numofDe; index++) {
+                        section.dataElements[index] = _.cloneDeep(testDataSet.sections[0].dataElements[0]);
+                    }
+                };
+
+                assignCOCToSection(currentTestDataSet.sections[0], 17);
+
+                var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
+                assignCOCToSection(expectedSection1, 17); //because 17 elements will fit into the first page
+                var expectedPages = [{
+                    heightLeft: 0,
+                    width: 183,
+                    contents: [
+                        {type: 'dataSetName', name: "test dataset"},
+                        {type: 'section', section: expectedSection1}],
+                    datasetName: "test dataset"
+                }];
+
+                var actualPages = dataSetProcessor.process(currentTestDataSet);
+                expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+            });
+
+            it("should process the dataset with overflowed elements are exactly one", function () {
+                var currentTestDataSet = _.cloneDeep(testDataSet);
+
+                var assignCOCToSection = function (section, numofDe) {
+                    for (var index = 0; index < numofDe; index++) {
+                        section.dataElements[index] = _.cloneDeep(testDataSet.sections[0].dataElements[0]);
+                    }
+                };
+
+                assignCOCToSection(currentTestDataSet.sections[0], 15);
+                currentTestDataSet.sections[1] = _.cloneDeep(testDataSet.sections[0]);
+                assignCOCToSection(currentTestDataSet.sections[1],1);
+                var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
+                assignCOCToSection(expectedSection1, 15); //because 17 elements will fit into the first page
+                var expectedSection2 = _.cloneDeep(currentTestDataSet.sections[1]);
+                assignCOCToSection(expectedSection2,1);
+                expectedSection2.isDuplicate = false;
+
+                var expectedPages = [{
+                    heightLeft: 0,
+                    width: 183,
+                    contents: [
+                        {type: 'dataSetName', name: "test dataset"},
+                        {type: 'section', section: expectedSection1}],
+                    datasetName: "test dataset"
+                },{
+                    contents:[
+                        {type:'section',section:expectedSection2}
+                    ]
+                }];
+
+                var actualPages = dataSetProcessor.process(currentTestDataSet);
+                expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+                expect(actualPages[1].contents).toEqual(expectedPages[1].contents)
+            });
         });
 
         describe("sections of type Optionsets", function () {
@@ -263,7 +325,7 @@ describe("DataSetProcessor", function () {
                         section.dataElements[0].options[index] = {id: 1, name: "option"};
                     }
                 }
-                assignOptionsToDe(currentTestDataSet.sections[0], 75);//75 options will overflow to the new page
+                assignOptionsToDe(currentTestDataSet.sections[0], 76);//75 options will overflow to the new page
 
                 var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
                 assignOptionsToDe(expectedSection1, 72);
@@ -285,18 +347,15 @@ describe("DataSetProcessor", function () {
                 expectedSection1.rightSideElements = [];
 
                 var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
-                assignOptionsToDe(expectedSection2, 3);
+                assignOptionsToDe(expectedSection2, 4);
                 var expectedRows2 = [];
-                for (var i = 0; i < 1; i++) {
-                    var j = 0;
-                    while (j < 3) {
-                        if (j == 0)
-                            expectedRows2.push([{id: 1, name: "option"}]);
-                        else
-                            expectedRows2[i].push({id: 1, name: "option"});
-                        j++;
-                    }
-                }
+                expectedRows2[0] = [];
+                expectedRows2[1] = []
+                expectedRows2[0].push({id: 1, name: "option"},{id: 1, name: "option"});
+
+                expectedRows2[1].push({id: 1, name: "option"},{id: 1, name: "option"});
+
+
                 expectedSection2.dataElements[0].rows = expectedRows2;
                 expectedSection2.isOptionSet = true;
                 expectedSection2.leftSideElements = [expectedSection2.dataElements[0]];
