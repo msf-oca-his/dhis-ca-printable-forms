@@ -370,5 +370,206 @@ describe("ProgramProcessor", function () {
 
     });
 
+    describe("program-coversheets of type TEXT", function(){
+      var testProgram = {
+        id: "123",
+        isPrintFriendlyProcessed: true,
+        isResolved: Promise.resolve({}),
+        name: "test program",
+        stageSections: [{
+          dataElements: [{
+            id: "1234",
+            isResolved: Promise.resolve({}),
+            name: "dataElement",
+            type: "TEXT"
+          }],
+          id: "134",
+          isCatComb: false,
+          isResolved: Promise.resolve({}),
+          name: "section"
+        }],
+        type: 'program'
+      };
+      it("when dataelements of type text in a section are overflowed", function () {
+        var currentTestProgram = _.cloneDeep(testProgram);
+        var assignDeToSections = function (section, numberOfDe) {
+          for (var i = 0; i < numberOfDe; i++) {
+            section.dataElements[i] = _.cloneDeep(testProgram.stageSections[0].dataElements[0]);
+          }
+        }
+        assignDeToSections(currentTestProgram.stageSections[0], 50);
+
+        var expectedSection1 = _.cloneDeep(testProgram.stageSections[0]);
+        var expectedNumberOfElements = 48;
+        assignDeToSections(expectedSection1, expectedNumberOfElements);
+        expectedSection1.leftSideElements = [];
+        expectedSection1.rightSideElements = [];
+        for (var i = 0; i < expectedNumberOfElements; i++) {
+          if (i < (expectedNumberOfElements / 2))
+            expectedSection1.leftSideElements.push(currentTestProgram.stageSections[0].dataElements[i]);
+          else
+            expectedSection1.rightSideElements.push(currentTestProgram.stageSections[0].dataElements[i]);
+        }
+        ;
+
+        var expectedSection2 = _.cloneDeep(testProgram.stageSections[0]);
+        assignDeToSections(expectedSection2, 2);//expected would be 2
+        expectedSection2.leftSideElements = [{
+          id: "1234",
+          isResolved: Promise.resolve({}),
+          name: "dataElement",
+          type: "TEXT"
+        }];
+        expectedSection2.rightSideElements = [{
+          id: "1234",
+          isResolved: Promise.resolve({}),
+          name: "dataElement",
+          type: "TEXT"
+        }];
+        expectedSection2.isDuplicate = false;
+
+        var expectedPages = [{
+          contents: [
+            {type: 'dataSetName', name: "test program"},
+            {type: 'section', section: expectedSection1}],
+          datasetName: "test program"
+        }, {
+          contents: [
+            {type: 'section', section: expectedSection2},
+            {type:"comments"}
+          ]
+        }];
+
+        var actualPages = programProcessor.process(currentTestProgram,'coversheet');
+        expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+        expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
+      });
+
+    });
+
+    describe("program-register", function(){
+      var testProgram = {
+        id: "123",
+        isPrintFriendlyProcessed: true,
+        isResolved: Promise.resolve({}),
+        name: "test program",
+        stageSections: [{
+          dataElements: [],
+          id: "134",
+          isCatComb: false,
+          isResolved: Promise.resolve({}),
+          name: "section"
+        }],
+        type: 'program'
+      };
+
+
+      it("should test regiseters page width and height and test the register which contains only comments data element", function(){
+        var expectedPages = [{
+          heightLeft:150,
+          widthLeft:220,
+          contents:[
+            { name: 'Comments', id: undefined, type: 'TEXT', categoryCombo: undefined }],
+          programName:'test program',
+        }];
+
+        var actualPages = programProcessor.process(testProgram,'register');
+        expect(actualPages[0]).toEqual(expectedPages[0])
+      });
+
+      it("should test Orphan DataElements", function(){
+        var currentTestProgram = _.clone(testProgram);
+
+        for(var i=0;i<5;i++) {
+          currentTestProgram.stageSections[0].dataElements[i] = {
+            name: "dataElement",
+            id: "1234",
+            type: "TEXT"
+          };
+        }
+
+        var expectedPages = [{
+          heightLeft:0,
+          widthLeft:0,
+          contents:[
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+          ],
+          programName:'test program',
+        },
+          {
+            heightLeft:30,
+            widthLeft:0,
+            contents:[
+              {name:"dataElement", id:"1234" ,type:"TEXT"},
+              {name: 'Comments', id: undefined, type: 'TEXT', categoryCombo: undefined}
+            ],
+            programName:'test program'
+          }];
+
+        var actualPages = programProcessor.process(testProgram,'register');
+        expect(actualPages[0].contents).toEqual(expectedPages[0].contents)
+        expect(actualPages[1].contents).toEqual(expectedPages[1].contents)
+      });
+
+      it("should test the last second element can be fit into the current page or not", function(){
+        var currentTestProgram = _.clone(testProgram);
+
+
+          currentTestProgram.stageSections[0].dataElements[0] = {
+            name: "dataElement",
+            id: "1234",
+            type: "TEXT"
+
+        };
+
+        currentTestProgram.stageSections[0].dataElements[1] = {
+          name: "dataElement",
+          id: "1234",
+          type: "OPTIONSET"
+
+        };
+
+        currentTestProgram.stageSections[0].dataElements[2] = {
+          name: "dataElement",
+          id: "1234",
+          type: "OPTIONSET"
+
+        };
+
+        currentTestProgram.stageSections[0].dataElements[3] = {
+          name: "dataElement",
+          id: "1234",
+          type: "TEXT"
+
+        };
+
+        currentTestProgram.stageSections[0].dataElements[4] = {
+          name: "dataElement",
+          id: "1234",
+          type: "TEXT"
+        };
+
+        var expectedPages = [{
+          heightLeft:0,
+          widthLeft:0,
+          contents:[
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+            {name:"dataElement", id:"1234" ,type:"OPTIONSET"},
+            {name:"dataElement", id:"1234" ,type:"OPTIONSET"},
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+            {name:"dataElement", id:"1234" ,type:"TEXT"},
+            {name: 'Comments', id: undefined, type: 'TEXT', categoryCombo: undefined}
+          ],
+          programName:'test program',
+        }];
+
+        var actualPages = programProcessor.process(testProgram,'register');
+        expect(actualPages[0].contents).toEqual(expectedPages[0].contents)
+      })
+    })
+
   })
 });
