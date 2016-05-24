@@ -33,11 +33,16 @@ describe("Optionset Factory", function () {
             httpMock.flush();
         });
 
-        it("error fecthing of optionsets", function(){
+        it("error fecthing of optionsets", function(done){
             httpMock.expectGET("http://localhost:8000/api/optionSets.json?paging=false").respond(400, {
                 id: 123,
                 optionSets: [{id: 123}]
             });
+            optionSetFactory.then(function(optionsets){
+                expect(optionsets).toEqual({});
+                done();
+            });
+            setInterval(rootScope.$digest,900);
             httpMock.flush();
         });
 
