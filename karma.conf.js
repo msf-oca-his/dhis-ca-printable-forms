@@ -29,8 +29,8 @@ module.exports = function(config) {
       'config/config.js',
       'directives/**/*.js',
       'services/*.js',
+      'factories/*.js',
       'tests/**/*.js'
-      
     ],
 
 
