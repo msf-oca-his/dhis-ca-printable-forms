@@ -165,7 +165,7 @@ TallySheets.directive('onFinishRender', function ($timeout) {
         }
     }
 });
-
+//#TODO: move this progress bar to directive folder and rename it to progress bar
 TallySheets.directive('d2Progressbar', function () {
     return {
         restrict: 'E',
