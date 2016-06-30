@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="TallySheets" lang="en">
+	<head>
+		<script src="dependencies/angular/angular.min.js" type="text/javascript"> </script>
+		<script src="dependencies/angular-translate/angular-translate.min.js" type="text/javascript"> </script>
+		<script src="dependencies/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js" type="text/javascript"> </script>
+		<script src="dependencies/angular-route/angular-route.min.js" type="text/javascript"> </script>
+		<script src="dependencies/angular-cookies/angular-cookies.min.js" type="text/javascript"> </script>
+		<script src="dependencies/angular-resource/angular-resource.min.js" type="text/javascript"> </script>
+		<script src="dependencies/jquery/dist/jquery.min.js" type="text/javascript"> </script>
+		<script src="dependencies/jquery-ui/jquery-ui.min.js" type="text/javascript"> </script>
+		<script src="dependencies/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"> </script>
+		<script src="dependencies/bootstrap-select/dist/js/bootstrap-select.min.js" type="text/javascript"> </script>
+		<script src="dependencies/lodash/dist/lodash.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="dependencies/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="dependencies/bootstrap-select/dist/css/bootstrap-select.min.css">
+
+		<!--DHIS related stuff-->
+		<script>
+			window.dhis2 = window.dhis2 || {};
+			dhis2.settings = dhis2.settings || {};
+			dhis2.settings.baseUrl = '..';
+		</script>
+<!--#TODO: move this to d2-ui-->
+		<script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.translate.js"></script>
+		<script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.menu.js"></script>
+		<script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.menu.ui.js"></script>
+		<link type="text/css" rel="stylesheet" href="/dhis-web-commons/font-awesome/css/font-awesome.min.css"/>
+		<link type="text/css" rel="stylesheet" media="screen" href="/dhis-web-commons/css/menu.css">
+
+		<script src="app.js" type="text/javascript"> </script>
+		<link href="css/app.css" rel="stylesheet" type="text/css">
+
+
+		<!-- Load directives and modules -->
+		<script src="config/config.js" type="text/javascript"></script>
+		<script src="services/DataSetService.js" type="text/javascript"></script>
+		<script src="services/DataEntrySectionService.js" type="text/javascript"></script>
+		<script src="services/ProgramStageSectionService.js" type="text/javascript"></script>
+		<script src="services/DataElementService.js" type="text/javascript"></script>
+		<script src="services/ProgramService.js" type="text/javascript"></script>
+		<script src="services/DataSetProcessor.js" type="text/javascript"></script>
+		<script src="services/ProgramProcessor.js" type="text/javascript"></script>
+		<script src="directives/datasetSelector/datasetSelectorCtrl.js" type="text/javascript"></script>
+		<script src="directives/page/pageCtrl.js" type="text/javascript"></script>
+		<script src="directives/dataset/datasetCtrl.js" type="text/javascript"></script>
+		<script src="directives/program/programCtrl.js" type="text/javascript"></script>
+
+
+	</head>
+	<body ng-controller="TallySheetsController">
+	<d2-header-bar class="noprint"></d2-header-bar>
+	<div id="app">
+		<div id="mainMenu" class="panel panel-default hidden-print">
+			<div class="panel-body">
+
+				<span>
+					<dataset-selector selector-id="dsId" select-dataset= "renderDataSets()" bind-to-dataset="form"></dataset-selector>
+					<span>&nbsp;&nbsp;</span>
+					<span class="pull-right">
+					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
+					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+					</span>
+					<span ng-if="form.type=='program'">
+						<label class="radio-inline">
+							<input  ng-model="$parent.programMode" value="coversheet" type="radio" ng-click="renderDataSets()"> CoverSheet
+						</label>
+						<label class="radio-inline">
+							<input ng-model="$parent.programMode"  value="register" type="radio" ng-click="renderDataSets()"> Register
+						</label>
+					</span>
+
+				</span>
+			</div>
+
+		</div>
+		<br>
+		<page class="page" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length" form="form" program-mode="programMode"></page>
+		<div class="spinner-wrapper" ng-show="spinnerShown">
+			<img src="resources/img/spinner.gif" alt="loading......."/>
+		</div>
+	</div>
+	</body>
+</html>

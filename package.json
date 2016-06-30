@@ -5,6 +5,11 @@
   "main": "app.js",
   "dependencies": {},
   "devDependencies": {
+    "browser-sync": "^2.13.0",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-sync": "^0.1.4",
+    "http-proxy-middleware": "^0.16.0",
     "jasmine": "^2.4.1",
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",

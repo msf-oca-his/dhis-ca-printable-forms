@@ -2,9 +2,9 @@
 .settings
 .tern-project
 .idea
-bower_components
+dependencies/bower_components
+node_modules
+.temp
 *.zip
-nginx.conf
 node_modules/
-npm-debug.log
 coverage/
