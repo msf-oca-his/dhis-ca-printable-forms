@@ -3,7 +3,7 @@ var gulp = require('gulp'),
   browserSync = require('browser-sync').create(),
   gulpsync = require('gulp-sync')(gulp),
   proxy = require('http-proxy-middleware');
-
+  webpack = require('webpack');
 
 gulp.task('connect', function() {
   connect.server({
@@ -17,8 +17,8 @@ APP = {
   src: {
     root: "src",
     all: "src/**/*.*",
-    html: "src/**/*.html",
-    js: "src/**/*.js",
+    html: "src/index.html",
+    //js: "src/**/*.js",
     css: "src/**/*.css"
   },
   resources: {
@@ -64,7 +64,8 @@ TASKS = {
   copyDependenciesToTemp: '_copyDependenciesToTemp',
   copyi18nToTemp: '_copyi18nToTemp',
   setUpTemp: '_setUpTemp',
-  reload: '_reload'
+  reload: '_reload',
+  webpack: 'webpack'
 };
 
 gulp.task(TASKS.clean, [TASKS.cleanTemp]);
@@ -75,7 +76,7 @@ gulp.task(TASKS.cleanTemp, function(){
 });
 
 gulp.task(TASKS.copySrcToTemp, function() {
-    return gulp.src(APP.src.all)
+    return gulp.src([APP.src.html, APP.src.css])
       .pipe(gulp.dest(APP.temp.root))
 });
 
@@ -90,6 +91,7 @@ gulp.task(TASKS.copyResourcesToTemp, [], function() {
     .pipe(gulp.dest(APP.temp.resources))
 });
 
+//TODO: remove this task once scss comes into place. Right now, js files are handled by webpack. css should be taken care by scss
 gulp.task(TASKS.copyDependenciesToTemp, [], function() {
   return gulp.src(APP.dependencies.bower_components.all)
     .pipe(gulp.dest(APP.temp.dependencies))
@@ -100,12 +102,12 @@ gulp.task(TASKS.reload, function(){
 });
 
 gulp.task(TASKS.watch,  function() {
-  gulp.watch(APP.src.all, gulpsync.sync([TASKS.copySrcToTemp, TASKS.reload]))
+  gulp.watch(APP.src.all, gulpsync.sync([TASKS.webpack, TASKS.copySrcToTemp, TASKS.reload]))
   gulp.watch(APP.resources.all, gulpsync.sync([TASKS.copyResourcesToTemp, TASKS.reload]))
   gulp.watch(APP.i18n.all, gulpsync.sync([TASKS.copyi18nToTemp, TASKS.reload]))
 });
 
-gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.copySrcToTemp, TASKS.copyDependenciesToTemp, TASKS.copyResourcesToTemp, TASKS.copyi18nToTemp]))
+gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack, TASKS.copySrcToTemp, TASKS.copyDependenciesToTemp, TASKS.copyResourcesToTemp, TASKS.copyi18nToTemp]))
 
 gulp.task(TASKS.serve, [TASKS.setUpTemp], function(){
   browserSync.init({
@@ -116,6 +118,15 @@ gulp.task(TASKS.serve, [TASKS.setUpTemp], function(){
       middleware: [proxy(['/api', '/dhis-web-commons', '/icons'], {target:'http://localhost:8080'})]
     }
 
+  });
+});
+
+gulp.task(TASKS.webpack, function(callback) {
+  webpack(require('./webpack.config.js'), function(err, stats) {
+    if(err) {
+      console.log("error while doing webpack", err)
+    }
+    callback();
   });
 });
 gulp.task('default', [TASKS.serve, TASKS.watch]);

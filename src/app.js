@@ -169,12 +169,13 @@ TallySheets.directive('onFinishRender', function ($timeout) {
 TallySheets.directive('d2Progressbar', function () {
     return {
         restrict: 'E',
-        templateUrl: 'directives/progressBar/progressBar.html'
+        template: require('./directives/progressBar/progressBar.html')
     };
 });
 
 TallySheets.config(function ($translateProvider) {
     $translateProvider.useSanitizeValueStrategy('escape'); //TODO: create a story to select sanitize strategy
+    //#TODO: load translations preemptively in js rather than loading them at run time with a http call
     $translateProvider.useStaticFilesLoader({
         prefix: 'i18n/',
         suffix: '.json'

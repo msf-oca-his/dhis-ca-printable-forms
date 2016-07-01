@@ -1,7 +1,7 @@
 TallySheets.directive('program', function(){
     return{
         restrict: 'E',
-        templateUrl: 'directives/program/programView.html',
+        template: require('./programView.html'),
         scope: {
             contents: '=',
             mode: '=',

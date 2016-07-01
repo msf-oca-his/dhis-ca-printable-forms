@@ -1,7 +1,7 @@
 TallySheets.directive('page', function(){
     return{
         restrict: 'E',
-        templateUrl: 'directives/page/pageView.html',
+        template: require('./pageView.html'),
         scope: {
             selectorId: '=',
             bindToDataset: '=',
