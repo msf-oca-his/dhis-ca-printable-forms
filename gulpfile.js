@@ -2,7 +2,8 @@ var gulp = require('gulp'),
   clean = require('gulp-clean'),
   browserSync = require('browser-sync').create(),
   gulpsync = require('gulp-sync')(gulp),
-  proxy = require('http-proxy-middleware');
+  proxy = require('http-proxy-middleware'),
+  KarmaServer = require('karma').Server;
   webpack = require('webpack');
 
 gulp.task('connect', function() {
@@ -129,4 +130,12 @@ gulp.task(TASKS.webpack, function(callback) {
     callback();
   });
 });
+
+gulp.task('test', function (done) {
+  new KarmaServer({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: false
+  }, done).start();
+});
+
 gulp.task('default', [TASKS.serve, TASKS.watch]);
