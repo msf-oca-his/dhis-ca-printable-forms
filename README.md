@@ -2,6 +2,7 @@
 Tally Sheets
 
 Dependencies
+Also do the preinstall for the karma cli. This is required for running the tests.
 bower
 nginx(only for dev environment)
 
