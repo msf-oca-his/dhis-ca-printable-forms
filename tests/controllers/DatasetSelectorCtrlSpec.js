@@ -24,7 +24,7 @@ describe("DatasetSelector ctrl", function () {
         dataSetsUID = DataSetsUID;
         programsUID = ProgramsUID;
         httpMock = $httpBackend;
-        httpMock.expectGET("languages/en.json").respond(200, {});
+        httpMock.expectGET("i18n/en.json").respond(200, {});
     }));
 
     describe("dataset controller", function() {

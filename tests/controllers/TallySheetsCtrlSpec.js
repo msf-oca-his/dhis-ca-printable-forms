@@ -81,7 +81,7 @@ describe("TallySheets ctrl", function () {
         scope = _$rootScope.$new();
         $controller = _$controller_;
         httpMock = $httpBackend;
-        httpMock.expectGET("languages/en.json").respond(200, {});
+        httpMock.expectGET("i18n/en.json").respond(200, {});
     }));
 
     beforeEach(function() {

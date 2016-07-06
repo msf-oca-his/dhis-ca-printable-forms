@@ -1,16 +1,20 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: {
-        "./.temp/dependencies.js" : "./src/dependencies.js",
-        "./.temp/services.js" : "./src/services/services.js",
-        "./.temp/directives.js" : "./src/directives/directives.js",
-        "./.temp/app.js" : "script!./src/app.js",
-        "./.temp/config.js" : "script!./src/config/config.js",
-
+        dependencies : "./src/dependencies.js",
+        services : "./src/services.js",
+        directives: "./src/directives.js",
     },
+    plugins: [
+        new CopyWebpackPlugin([
+            // {output}/file.txt
+            { from: './src/app.js', to: './app.js' },
+            {from: './src/config/config.js', to: './config.js'}, //TODO: move this config as a entry point when we have more config files
+        ])],
 
     output: {
-        path: './',
-        filename: "[name]"
+        path: './.temp',
+        filename: "[name].js"
     },
     module:{
         loaders:  [{ test: /\.html$/, loader: "raw-loader" }]

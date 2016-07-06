@@ -35,7 +35,7 @@ describe("ProgramStageSectionService", function () {
         $rootScope = _$rootScope_;
         httpMock = $httpBackend;
         timeout = $timeout;
-        httpMock.expectGET("languages/en.json").respond(200, {});
+        httpMock.expectGET("i18n/en.json").respond(200, {});
     }));
 
     describe("getStageSection", function () {

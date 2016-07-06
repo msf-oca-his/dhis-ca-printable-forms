@@ -25,7 +25,7 @@ describe("ProgramProcessor", function () {
     httpMock = $httpBackend;
     timeout = $timeout;
     config = Config;
-    httpMock.expectGET("languages/en.json").respond(200, {});
+    httpMock.expectGET("i18n/en.json").respond(200, {});
   }));
 
   describe("process program of type coversheet", function () {

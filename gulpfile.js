@@ -144,7 +144,7 @@ gulp.task(TASKS.webpack, function(callback) {
 
 gulp.task('test', function(done) {
   new KarmaServer({
-    configFile: __dirname + '/karma.conf.js',
+    configFile: __dirname + '/tests/karma.conf.js',
     singleRun: false
   }, done).start();
 });

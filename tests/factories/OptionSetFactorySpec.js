@@ -11,7 +11,7 @@ describe("Optionset Factory", function () {
         rootScope = $rootScope;
         httpMock = $httpBackend;
         optionSetFactory = OptionSetFactory;
-        httpMock.expectGET("languages/en.json").respond(200, {});
+        httpMock.expectGET("i18n/en.json").respond(200, {});
     }));
 
     describe('fecthing of optionsets', function(){
