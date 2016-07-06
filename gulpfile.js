@@ -84,7 +84,7 @@ gulp.task(TASKS.cleanTarget, function() {
 });
 
 
-//TODO: the css part will go away when css preprocessor setup will happen. And only index.html will be copied. Rest of the htmls/js are taken care by webpack [common/local]
+//TODO: the css part will go away when css preprocessor setup will happen. And only index.html will be copied may be using webpack. Rest of the htmls/js are taken care by webpack [common/local]
 gulp.task(TASKS.copySrcToTemp, function() {
   return gulp.src([ APP.src.html, APP.src.css ])
     .pipe(gulp.dest(TEMP.root))
