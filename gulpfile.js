@@ -7,14 +7,6 @@ var gulp = require('gulp'),
   webpack = require('webpack'),
   zip = require('gulp-zip');
 
-gulp.task('connect', function() {
-  connect.server({
-    root: APP.src.root,
-    livereload: true
-  });
-});
-
-
 APP = {
   src: {
     root: "src",
@@ -64,6 +56,7 @@ TEMP = {
 TASKS = {
   watch: '_watch',
   cleanTemp: '_cleanTemp',
+  cleanTarget: '_cleanTarget',
   clean: 'clean',
   serve: 'serve',
   copySrcToTemp: '_copySrcToTemp',
@@ -73,16 +66,23 @@ TASKS = {
   setUpTemp: '_setUpTemp',
   reload: '_reload',
   webpack: 'webpack',
-  pack: 'pack'
+  pack: 'pack',
+  test: 'test'
 
 };
 
-gulp.task(TASKS.clean, [ TASKS.cleanTemp ]);
+gulp.task(TASKS.clean, [ TASKS.cleanTemp, TASKS.cleanTarget ]);
 
 gulp.task(TASKS.cleanTemp, function() {
   return gulp.src(TEMP.root, { read: false })
     .pipe(clean())
 });
+
+gulp.task(TASKS.cleanTarget, function() {
+  return gulp.src(DEST.target, { read: false })
+    .pipe(clean())
+});
+
 
 //TODO: the css part will go away when css preprocessor setup will happen. And only index.html will be copied. Rest of the htmls/js are taken care by webpack [common/local]
 gulp.task(TASKS.copySrcToTemp, function() {
@@ -142,7 +142,7 @@ gulp.task(TASKS.webpack, function(callback) {
 });
 
 
-gulp.task('test', function(done) {
+gulp.task(TASKS.test, function(done) {
   new KarmaServer({
     configFile: __dirname + '/tests/karma.conf.js',
     singleRun: false

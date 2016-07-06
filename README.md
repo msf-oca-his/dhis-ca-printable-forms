@@ -1,15 +1,16 @@
 # tally_sheets
 Tally Sheets
 
-Dependencies
-Also do the preinstall for the karma cli. This is required for running the tests.
+Dependencies - use brew, apt-get or any package managers to install these below dependencies
+nodejs
 bower
-nginx(only for dev environment)
 
-To install dependencies, do a bower install
-bower install
 
-edit nginx.conf
-nginx -c <absolute path of nginx conf> (to start nginx)
+To install dependencies, use the commands below
+npm run preinstall
+npm install
+bower install (inside dependencies folder)
 
-after this, open localhost:8000
+
+After this, run command `gulp`. This will start compiling app and launch the app in browser(localhost:8000). Pre-requisite here
+would be that dhis is running on localhost:8080.
