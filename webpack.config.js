@@ -4,11 +4,12 @@ module.exports = {
         dependencies : "./src/dependencies.js",
         services : "./src/services.js",
         directives: "./src/directives.js",
+        app: "./src/app.js",
     },
     plugins: [
         new CopyWebpackPlugin([
             // {output}/file.txt
-            { from: './src/app.js', to: './app.js' },
+            // { from: './src/app.js', to: './app.js' },
             {from: './src/config/config.js', to: './config.js'}, //TODO: move this config as a entry point when we have more config files
         ])],
 

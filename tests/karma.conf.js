@@ -18,7 +18,8 @@ module.exports = function(config) {
       '../.temp/dependencies.js',
       '../dependencies/bower_components/angular-mocks/angular-mocks.js',
       '../.temp/*.js',
-      '../tests/!(coverage)/*.js',
+      //'../tests/!(coverage)/*.js',
+      '../tests/services/DataSetServiceSpec.js'
     ],
 
 
@@ -62,7 +63,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Firefox'],
 
 
     // Continuous Integration mode

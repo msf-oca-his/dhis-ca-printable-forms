@@ -142,7 +142,7 @@ gulp.task(TASKS.webpack, function(callback) {
 });
 
 
-gulp.task(TASKS.test, function(done) {
+gulp.task(TASKS.test, [ TASKS.setUpTemp ], function(done) {
   new KarmaServer({
     configFile: __dirname + '/tests/karma.conf.js',
     singleRun: false

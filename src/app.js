@@ -1,10 +1,10 @@
-var TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar']);
+window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar']);
 var dhisUrl;
 if(window.location.href.includes("apps"))
     dhisUrl= window.location.href.split('api/apps/')[0];
 else
     dhisUrl= "http://localhost:8000/";
-var ApiUrl = dhisUrl + 'api';
+window.ApiUrl = dhisUrl + 'api';
 
 TallySheets.filter('to_trusted', ['$sce', function($sce) {
     return function (text) {
@@ -81,9 +81,14 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
                         .then(function (dataset) {
                             return dataset.isResolved
                                 .then(function () {
+                                    console.log(sizeof(dataset))
+                                    _.map(dataset.sections[0].dataElements, function(de){
+                                        console.log(sizeof(de),"....");
+                                    })
                                     $scope.pages = PrintFriendlyProcessor.process(_.cloneDeep(dataset));
                                     $scope.spinnerShown = false;
                                     $scope.$apply();
+
                                 });
                         });
                 }
@@ -103,19 +108,32 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetsUID", "DataS
             else return Promise.resolve(0)
     };
 }]);
+//TODO: find a better way to expose d2. not through promise
+TallySheets.factory("d2",[function(){
+    var d2Lib = require("../node_modules/d2/lib/d2.js");
+    return d2Lib.init({baseUrl: ApiUrl})
+        .then(function (d2) {
+            console.log(d2);
+            return d2;
+        })
+      .catch(function(err){
+        return console.log(err, 'yayy')
+    })
 
+}]);
+// TODO: what will happen if call fails
 TallySheets.factory("DataSetsUID", ['$resource', function ($resource) {
     return $resource(ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true",
         {},
         {get: {method: "GET"}});
 }]);
-
+// TODO: what will happen if call fails
 TallySheets.factory("ProgramsUID", ['$resource', function ($resource) {
     return $resource(ApiUrl + "/programStages.json?fields=id,displayName&paging=false&translate=true",
         {},
         {get: {method: "GET"}});
 }]);
-
+// TODO: what will happen if call fails
 TallySheets.factory("DataSetEntryForm", ['$resource', function ($resource) {
     return $resource(dhisUrl + "/dhis-web-dataentry/loadForm.action",
         {dataSetId: '@dataSetId'},

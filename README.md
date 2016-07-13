@@ -7,7 +7,6 @@ bower
 
 
 To install dependencies, use the commands below
-npm run preinstall
 npm install
 bower install (inside dependencies folder)
 
