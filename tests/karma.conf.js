@@ -18,8 +18,7 @@ module.exports = function(config) {
       '../.temp/dependencies.js',
       '../dependencies/bower_components/angular-mocks/angular-mocks.js',
       '../.temp/*.js',
-      //'../tests/!(coverage)/*.js',
-      '../tests/services/DataSetServiceSpec.js'
+      './.temp/tests.js'
     ],
 
 

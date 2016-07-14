@@ -10,54 +10,8 @@ TallySheets.service("DataSetService", [ '$http', 'd2', function($http, d2) {
       return 'TEXT';
   };
 
-  var CategoryCombo = function(data){
-    var categoryCombo = _.pick(data, [ 'id', 'name' ]);
-    categoryCombo.categories = _.map(data.categories, function(category){
-      return _.pick(category, [ 'id', 'name' ]);
-    });
-    return categoryCombo;
-  };
-
-  var DataElement = function(data){
-      var dataElement = _.pick(data, [ 'id', 'name' ]);
-      dataElement.displayFormName = data.displayFormName ? data.displayFormName : data.name;
-      if( data.optionSetValue ) {
-        dataElement.options = data.optionSet.options;
-        dataElement.valueType = 'OPTIONSET';
-      }
-      else
-        dataElement.valueType = determineValueType(data);
-      if( data.categoryCombo.name != "default" ) {
-        dataElement.categoryCombo = new CategoryCombo(data.categoryCombo)
-      }
-      return dataElement;
-  };
-
-  var Section = function(data){
-    var section = _.pick(data, [ 'id', 'name' ]);
-    section.dataElements = _.map(data.dataElements.toArray(), function(dataElementData) {
-        return new DataElement(dataElementData);
-    });
-    if(section.dataElements[0] && section.dataElements[0].categoryCombo)
-      section.isCatComb = true;
-    else
-      section.isCatComb = false;
-    return section;
-  };
-
-  var DataSet = function(data) {
-    var dataSet = _.pick(data, [ 'name', 'id' ]);
-    dataSet.type = "dataset"; //TODO: remove this from model.
-    dataSet.isPrintFriendlyProcessed = false; //TODO: check the relavance
-    console.log(data.sections.toArray())
-    dataSet.sections = _.map(data.sections.toArray(), (function(sectionData) {
-      return new Section(sectionData);
-    }));
-    console.log(dataSet);
-    return dataSet;
-  };
-
   var getDataSetFromD2Model = function(dataSetCollection) {
+    var DataSet = require('../dhis-model/DataSet.js');
     if(dataSetCollection.size == 0)
       throw "No DataSet with given id found"; //TODO: i18n
     return new DataSet(dataSetCollection.toArray()[0]);

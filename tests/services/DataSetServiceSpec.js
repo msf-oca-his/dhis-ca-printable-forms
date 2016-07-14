@@ -6,7 +6,11 @@ describe("DataSetService", function () {
     var p;
     var mockd2;
     var mockedDataSets;
-
+    var getToArray = function(arguments){
+        return function(){
+            return arguments;
+        }
+    };
     beforeEach(function () {
         angular.module('d2HeaderBar', []);
         module("TallySheets");
@@ -65,7 +69,18 @@ describe("DataSetService", function () {
                 }],
                 isPrintFriendlyProcessed: false
             };
-            mockedDataSets =
+            var section1DataElements = [{
+                id: "1234",
+                name: "section3"
+            }, {
+              id: "1234",
+              name: "section3"
+              }
+            ];
+
+            var mockedSections = [{toArray: getToArray(section1DataElements)}];
+            var mockedDataSets = [{sections:{toArray: getToArray(mockedSections)} }];
+            var d2DataSetCollection = {toArray: getToArray(mockedDataSets), size: 1 };
             dataSetService.getDataSet(expectedDataSet.id).then(function (dataSet) {
                     console.log(expectedDataSet, dataSet)
                     expect(expectedDataSet).toEqual(dataSet)

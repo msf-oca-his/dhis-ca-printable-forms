@@ -27,9 +27,20 @@ APP = {
   appManifest: {
     manifest: "manifest.webapp"
   },
+  webpack: {
+    config: "./webpack.config.js",
+  },
+  tests: {
+    root: 'tests',
+    testsSrc: 'tests/!(.temp|coverage)/*.js',
+    temp: {
+      root: './tests/.temp'
+    },
+    webpack: {
+      config: './tests/webpack.config.js'
+    }
+  },
 
-  test: {},
-  
   dependencies: {
     root: 'dependencies',
     bower_components: {
@@ -54,7 +65,9 @@ TEMP = {
 };
 
 TASKS = {
-  watch: '_watch',
+  watchSrc: '_watchSrc',
+  watchTests: '_watchTests',
+  watchSrcDuringTests: '_watchSrcDuringTests', //TODO: find a good name for this.
   cleanTemp: '_cleanTemp',
   cleanTarget: '_cleanTarget',
   clean: 'clean',
@@ -66,6 +79,7 @@ TASKS = {
   setUpTemp: '_setUpTemp',
   reload: '_reload',
   webpack: 'webpack',
+  webpackTest: '_webpackTest',
   pack: 'pack',
   test: 'test'
 
@@ -112,10 +126,20 @@ gulp.task(TASKS.reload, function() {
   browserSync.reload();
 });
 
-gulp.task(TASKS.watch, function() {
-  gulp.watch(APP.src.all, gulpsync.sync([ TASKS.webpack, TASKS.copySrcToTemp, TASKS.reload ]))
+gulp.task(TASKS.watchSrc, function() {
+  gulp.watch(APP.src.all, gulpsync.sync([ TASKS.webpack, TASKS.copySrcToTemp, TASKS.reload ]));
   gulp.watch(APP.resources.all, gulpsync.sync([ TASKS.copyResourcesToTemp, TASKS.reload ]))
-  gulp.watch(APP.i18n.all, gulpsync.sync([ TASKS.copyi18nToTemp, TASKS.reload ]))
+  gulp.watch(APP.i18n.all, gulpsync.sync([ TASKS.copyi18nToTemp, TASKS.reload ]));
+});
+
+gulp.task(TASKS.watchSrcDuringTests, function(){
+  gulp.watch(APP.src.all, gulpsync.sync([ TASKS.webpack, TASKS.webpackTest ]));
+  gulp.watch(APP.resources.all, gulpsync.sync([ TASKS.copyResourcesToTemp, TASKS.webpackTest ]));
+  gulp.watch(APP.i18n.all, gulpsync.sync([ TASKS.copyi18nToTemp, TASKS.webpackTest ]))
+});
+
+gulp.task(TASKS.watchTests, function() {
+  gulp.watch(APP.tests.testsSrc, gulpsync.sync([ TASKS.webpackTest ]))
 });
 
 gulp.task(TASKS.setUpTemp, gulpsync.sync([ TASKS.cleanTemp, TASKS.webpack, TASKS.copySrcToTemp, TASKS.copyDependenciesToTemp, TASKS.copyResourcesToTemp, TASKS.copyi18nToTemp ]))
@@ -133,7 +157,7 @@ gulp.task(TASKS.serve, [ TASKS.setUpTemp ], function() {
 });
 
 gulp.task(TASKS.webpack, function(callback) {
-  webpack(require('./webpack.config.js'), function(err, stats) {
+  webpack(require(APP.webpack.config), function(err, stats) {
     if( err ) {
       console.log("error while doing webpack", err)
     }
@@ -141,8 +165,17 @@ gulp.task(TASKS.webpack, function(callback) {
   });
 });
 
+gulp.task(TASKS.webpackTest, [TASKS.watchSrcDuringTests, TASKS.watchTests], function(callback) {
+  webpack(require(APP.tests.webpack.config), function(err, stats) {
+    if( err ) {
+      console.log("error while doing webpack tests", err)
+    }
+    callback();
+  });
+});
 
-gulp.task(TASKS.test, [ TASKS.setUpTemp ], function(done) {
+
+gulp.task(TASKS.test, [ TASKS.setUpTemp, TASKS.webpackTest, TASKS.watchTests ], function(done) {
   new KarmaServer({
     configFile: __dirname + '/tests/karma.conf.js',
     singleRun: false
@@ -155,4 +188,4 @@ gulp.task(TASKS.pack, [ TASKS.setUpTemp ], function() {
     .pipe(gulp.dest(DEST.target));
 });
 
-gulp.task('default', [ TASKS.serve, TASKS.watch ]);
+gulp.task('default', [ TASKS.serve, TASKS.watchSrc ]);
