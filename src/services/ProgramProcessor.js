@@ -43,7 +43,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
 
         _.map(section.dataElements, function(dataElement, index){
 
-            if(dataElement.type == 'OPTIONSET') {
+            if(dataElement.valueType == 'OPTIONSET') {
                 indexOfDEWithOptions.push(index);
             }
         });
@@ -243,7 +243,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         };
 
         var getWidthOfDataElement = function(dataElement){
-            return (dataElement.type == 'TEXT') ? config.Register.textElementWidth : config.Register.otherElementWidth;
+            return (dataElement.valueType == 'TEXT') ? config.Register.textElementWidth : config.Register.otherElementWidth;
         };
 
         page = getNewPage();

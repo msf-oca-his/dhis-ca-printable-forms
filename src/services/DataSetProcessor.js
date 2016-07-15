@@ -42,7 +42,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
         _.map(section.dataElements, function(dataElement, index){
 
-              if(dataElement.type == 'OPTIONSET') {
+              if(dataElement.valueType == 'OPTIONSET') {
                   indexOfDEWithOptions.push(index);
               }
         });
@@ -86,15 +86,15 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var dataElement = section.dataElements[0];
         var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
 
-        if (numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
-            var overflow  = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
+        if (numberOfFittingColumns < dataElement.categoryCombo.categories.length) {
+            var overflow  = dataElement.categoryCombo.categories.length - numberOfFittingColumns;
             numberOfFittingColumns = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
             var newDataElements = [];
             _.map(section.dataElements, function (dataElement) {
                 var data = _.cloneDeep(dataElement);
-                data.categoryCombo.categoryOptionCombos.splice(0, numberOfFittingColumns);
+                data.categoryCombo.categories.splice(0, numberOfFittingColumns);
                 newDataElements.push(DataElementService.getDataElementFromData(data));
-                dataElement.categoryCombo.categoryOptionCombos.splice(numberOfFittingColumns);
+                dataElement.categoryCombo.categories.splice(numberOfFittingColumns);
             });
             var sectionData = _.cloneDeep(section)
             sectionData.isDuplicate = true;
@@ -224,6 +224,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         pages = [];
         currentPageIndex = 0;
         _.map([dataset], function (dataset) {
+            console.log(dataset.sections)
             for(var i = 0; i < dataset.sections.length; i++){
                 if(dataset.sections[i].isCatComb) {
                     divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);

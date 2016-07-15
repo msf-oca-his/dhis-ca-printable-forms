@@ -32,8 +32,8 @@
             <tr>
                 <td></td>
                 <td class="table-heading"
-                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos"
-                    ng-bind-html="catComb | to_trusted">
+                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categories"
+                    ng-bind-html="catComb.name | to_trusted">
                 </td>
             </tr>
             </thead>
@@ -43,7 +43,7 @@
                     {{dataElement.name}}
                 </td>
                 <td class="deFieldCatComb"
-                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
+                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categories">
 
                 </td>
             </tr>
