@@ -1,4 +1,4 @@
-window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar']);
+window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar','DhisCommons']);
 var dhisUrl;
 if(window.location.href.includes("apps"))
     dhisUrl= window.location.href.split('api/apps/')[0];

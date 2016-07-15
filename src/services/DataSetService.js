@@ -1,11 +1,10 @@
-TallySheets.service("DataSetService", [ '$http', 'd2', function($http, d2) {
+TallySheets.service("DataSetService", [ '$http', 'd2','DhisModel',function($http, d2, DhisModel) {
   var cachedDataSets = [];
 
   var getDataSetFromD2Model = function(dataSetCollection) {
-    var DataSet = require('../dhis-model/DataSet.js');
     if(dataSetCollection.size == 0)
       throw "No DataSet with given id found"; //TODO: i18n
-    return new DataSet(dataSetCollection.toArray()[0]);
+    return new DhisModel.DataSet(dataSetCollection.toArray()[0]);
   };
 
   var cacheDataSet = function(dataSet){

@@ -9,5 +9,5 @@ require("script!../dependencies/bower_components/jquery-ui/jquery-ui.min.js")
 require("script!../dependencies/bower_components/bootstrap/dist/js/bootstrap.min.js")
 require("script!../dependencies/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js")
 require("script!../dependencies/bower_components/lodash/dist/lodash.min.js")
-require("./dhis-model.js")
+require("../../custom_app_commons/angular-commons/dhis-commons/dhis-model.js")
 
