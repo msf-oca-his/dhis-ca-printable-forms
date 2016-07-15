@@ -1,15 +1,6 @@
 TallySheets.service("DataSetService", [ '$http', 'd2', function($http, d2) {
   var cachedDataSets = [];
 
-  var determineValueType = function(data){
-    if( data.valueType == 'BOOLEAN' )
-      return 'BOOLEAN';
-    else if( data.valueType == 'NUMBER' || data.valueType == 'INTEGER' )
-      return 'NUMBER';
-    else
-      return 'TEXT';
-  };
-
   var getDataSetFromD2Model = function(dataSetCollection) {
     var DataSet = require('../dhis-model/DataSet.js');
     if(dataSetCollection.size == 0)

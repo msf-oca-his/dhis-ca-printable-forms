@@ -30,8 +30,8 @@ describe("CategoryCombination", function(){
 
   it("should create a valid object if partial data is passed", function(){
     testData.name = null;
-    var categoryComboination = new CategoryCombination(testData);
-    expect(_.isEqual(categoryComboination, testData)).toEqual(true)
+    var categoryCombination = new CategoryCombination(testData);
+    expect(_.isEqual(categoryCombination, testData)).toEqual(true)
   });
 
   it("should create required CategoryCombination object even if extra data is passed", function(){
@@ -68,14 +68,14 @@ describe("CategoryCombination", function(){
     delete(testData.categories[0].name);
     delete(testData.categories[0].id);
     testData.categories[0].extraField = 'extraField'
-    var categoryComboination = new CategoryCombination(testData);
-    expect(_.isEqual(categoryComboination.categories[0], {})).toEqual(true)
-    expect(_.isEqual(categoryComboination.categories[1], testData.categories[1])).toEqual(true)
+    var categoryCombination = new CategoryCombination(testData);
+    expect(_.isEqual(categoryCombination.categories[0], {})).toEqual(true)
+    expect(_.isEqual(categoryCombination.categories[1], testData.categories[1])).toEqual(true)
   });
 
   it("should create partial category object with available fields in the category's data passed", function() {
     delete(testData.categories[0].name);
-    var categoryComboination = new CategoryCombination(testData);
-    expect(_.isEqual(categoryComboination.categories[0], testData.categories[0])).toEqual(true)
+    var categoryCombination = new CategoryCombination(testData);
+    expect(_.isEqual(categoryCombination.categories[0], testData.categories[0])).toEqual(true)
   })
 });

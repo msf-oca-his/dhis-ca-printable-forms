@@ -17,8 +17,11 @@ module.exports = function(config) {
     files: [
       '../.temp/dependencies.js',
       '../dependencies/bower_components/angular-mocks/angular-mocks.js',
-      '../.temp/*.js',
-      './.temp/tests.js'
+      '../.temp/app.js',
+      '../.temp/services.js',
+      '../.temp/directives.js',
+      //'../tests/!(coverage)/*.js',
+      './dhis-model/DataElementSpec.js'
     ],
 
 
