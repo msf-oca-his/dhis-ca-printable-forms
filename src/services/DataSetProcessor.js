@@ -13,7 +13,7 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
 
     var processTableHeader = function(section){
         _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr){
-            arr[index] = categoryOptionCombo.replace(/,/g, "<br>");
+            arr[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
         });
     };
 
@@ -86,15 +86,15 @@ TallySheets.service("PrintFriendlyProcessor", [ 'DataElementService', 'DataEntry
         var dataElement = section.dataElements[0];
         var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
 
-        if (numberOfFittingColumns < dataElement.categoryCombo.categories.length) {
-            var overflow  = dataElement.categoryCombo.categories.length - numberOfFittingColumns;
+        if (numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
+            var overflow  = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
             numberOfFittingColumns = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
             var newDataElements = [];
             _.map(section.dataElements, function (dataElement) {
                 var data = _.cloneDeep(dataElement);
-                data.categoryCombo.categories.splice(0, numberOfFittingColumns);
+                data.categoryCombo.categoryOptionCombos.splice(0, numberOfFittingColumns);
                 newDataElements.push(DataElementService.getDataElementFromData(data));
-                dataElement.categoryCombo.categories.splice(numberOfFittingColumns);
+                dataElement.categoryCombo.categoryOptionCombos.splice(numberOfFittingColumns);
             });
             var sectionData = _.cloneDeep(section)
             sectionData.isDuplicate = true;
