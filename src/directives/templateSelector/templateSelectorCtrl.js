@@ -1,7 +1,7 @@
-TallySheets.directive('datasetSelector', function(){
+TallySheets.directive('templateSelector', function(){
     return{
         restrict: 'E',
-        template: require('./datasetSelectorView.html'),
+        template: require('./templateSelectorView.html'),
         scope: {
             selectorId: '=',
             bindToDataset: '=',
@@ -9,7 +9,7 @@ TallySheets.directive('datasetSelector', function(){
         }
     };
 });
-TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', 'ProgramsUID', 'Config', function($scope, $rootScope, DataSetsUID, ProgramsUID, config){
+TallySheets.controller('templateSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', 'ProgramsUID', 'Config', function($scope, $rootScope, DataSetsUID, ProgramsUID, config){
 
     $scope.id = "dsSelector" + $scope.selectorId;
     $scope.selectorLoaded = false;

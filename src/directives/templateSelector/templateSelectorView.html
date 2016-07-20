@@ -1,4 +1,4 @@
-<span ng-controller="datasetSelectorCtrl">
+<span ng-controller="templateSelectorCtrl">
     <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true">
         <option value="0"><i>{{ 'SELECT_TEMPLATE' | translate }}</i></option>
         <option ng-repeat="dataSet in dataSetList | orderBy : dataSet.displayName"

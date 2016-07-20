@@ -1,4 +1,4 @@
-describe("DatasetSelector ctrl", function () {
+describe("templateSelector ctrl", function () {
     var $controller;
     var queryDeferred;
     var scope;
@@ -27,7 +27,7 @@ describe("DatasetSelector ctrl", function () {
         httpMock.expectGET("i18n/en.json").respond(200, {});
     }));
 
-    describe("dataset controller", function() {
+    describe("template controller", function() {
         var datasets =[{id:1,name:"dataset"},{id:2,name:"dataset2"}];
         var programs = [{id:1,name:"program1"},{id:2,name:"program2"}]
         beforeEach(function(){
@@ -39,7 +39,7 @@ describe("DatasetSelector ctrl", function () {
                 queryDeferred.promise.then(callback);
                 return {$promise: queryDeferred.promise}
             });
-            datasetCntrl = $controller('datasetSelectorCtrl',{$scope:scope});
+            datasetCntrl = $controller('templateSelectorCtrl',{$scope:scope});
         });
         it("should test displaying of datasets in the dropdown", function(){
             var currentDatasets = _.cloneDeep(datasets);
