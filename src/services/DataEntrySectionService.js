@@ -18,10 +18,10 @@ TallySheets.service("DataEntrySectionService", ['$http','DataElementService', fu
             })
         });
         section.isResolved = Promise.all(promises)
-                                .then(function(){
-                                        section.isCatComb = !!section.dataElements[0].categoryCombo;
-                                        return true;
-                                    });
+            .then(function(){
+                    section.isCatComb = section.dataElements[0].categoryCombo.name != "default";
+                    return true;
+                });
         return section;
     };
 

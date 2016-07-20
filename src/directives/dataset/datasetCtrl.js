@@ -5,15 +5,16 @@ TallySheets.directive('dataset', function(){
         scope: {
             contents: '=',
             datasetName: '='
+            
         }
     };
 });
 
-TallySheets.controller('datasetCtrl', ['$scope', function($scope){
+TallySheets.controller('datasetCtrl', ['$scope', 'Config', function($scope, config){
+    $scope.displayOptions = config.DisplayOptions;
     $scope.getTableWidth = function(section){
         if(section.isCatComb){
             return (section.dataElements[0].categoryCombo.categoryOptionCombos.length * 3 + 4) + "cm";
-
         }
         else return "9.5cm";
     }

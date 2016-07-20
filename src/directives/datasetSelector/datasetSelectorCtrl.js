@@ -9,26 +9,26 @@ TallySheets.directive('datasetSelector', function(){
         }
     };
 });
-TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', 'ProgramsUID', function($scope, $rootScope, DataSetsUID, ProgramsUID){
+TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', 'ProgramsUID', 'Config', function($scope, $rootScope, DataSetsUID, ProgramsUID, config){
 
     $scope.id = "dsSelector" + $scope.selectorId;
-
     $scope.selectorLoaded = false;
+    $scope.dataSetPrefix = config.Prefixes.dataSetPrefix;
+    $scope.programPrefix = config.Prefixes.programPrefix;
 
-    DataSetsUID.get().$promise.then(function(result){
-        _.map(result.dataSets, function(dataset){
-              dataset.type = "dataset"
+    DataSetsUID.get().$promise.then(function(result) {
+        _.map(result.dataSets, function (dataset) {
+            dataset.type = "dataset"
         });
         $scope.dataSetList = result.dataSets;
-
-        ProgramsUID.get().$promise.then(function(result){
-            _.map(result.programStages, function(program){
-                program.type = "program"
-                $scope.dataSetList.push(program);
-            });
-        });
     });
 
+    ProgramsUID.get().$promise.then(function(result){
+        _.map(result.programStages, function(program){
+            program.type = "program"
+        });
+        $scope.programList = result.programStages;
+    });
 
 
     $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
@@ -51,5 +51,4 @@ TallySheets.controller('datasetSelectorCtrl', ['$scope', '$rootScope', 'DataSets
         }
         $rootScope.$apply();
     });
-
 }]);

@@ -135,7 +135,7 @@ TallySheets.factory("OptionSetFactory", ['$http', function ($http) {
             return optionSets[response.data.id] = response.data;
         };
         var promises = _.map(response.data.optionSets, function(optionSet){
-            return $http.get(ApiUrl + "/optionSets/"+ optionSet.id + ".json?paging=false")
+            return $http.get(ApiUrl + "/optionSets/"+ optionSet.id + ".json?fields=id,options[id,name]&&paging=false")
                 .then(successPromise, failurePromise);
         });
         return Promise.all(promises)

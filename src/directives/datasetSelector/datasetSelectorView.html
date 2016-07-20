@@ -1,9 +1,13 @@
 <span ng-controller="datasetSelectorCtrl">
     <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true">
-        <option value="0"><i>{{ 'SELECT_DATASET' | translate }}</i></option>
+        <option value="0"><i>{{ 'SELECT_TEMPLATE' | translate }}</i></option>
         <option ng-repeat="dataSet in dataSetList | orderBy : dataSet.displayName"
                 value="{{ dataSet.id }}" data-type="{{ dataSet.type }}" on-finish-render="ngRepeatFinished">
-            {{ dataSet.displayName }}
+            {{ dataSetPrefix + dataSet.displayName }}
+        </option>
+        <option ng-repeat="program in programList | orderBy : program.displayName"
+                value="{{ program.id }}" data-type="{{ program.type }}" on-finish-render="ngRepeatFinished">
+            {{ programPrefix + program.displayName }}
         </option>
     </select>
     <span ng-show="!selectorLoaded" class="loading-icon">
