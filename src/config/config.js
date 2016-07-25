@@ -26,6 +26,18 @@ TallySheets.factory("Config", [function () {
             labelPadding: 4,
             dataElementLabel: 48 ,
             optionsPadding:12
+        },
+        Prefixes: {
+            dataSetPrefix: "DS_",
+            programPrefix: "PROG_"
+        },
+        DisplayOptions: {//TODO: make the code values string instead of numbers.
+            none : 0,
+            text : 1,
+            list : 2
+        },
+        Attributes: {
+            printFlagUID: "FsTeAXO7tNP"
         }
     }
 }]);

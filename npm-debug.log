@@ -1,0 +1,398 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'i',
+1 verbose cli   '-g',
+1 verbose cli   'karma-cli',
+1 verbose cli   'gulp' ]
+2 info using npm@2.12.1
+3 info using node@v4.1.1
+4 verbose install initial load of /usr/local/lib/package.json
+5 verbose readDependencies loading dependencies from /usr/local/lib/package.json
+6 silly cache add args [ 'karma-cli', null ]
+7 verbose cache add spec karma-cli
+8 silly cache add args [ 'gulp', null ]
+9 verbose cache add spec gulp
+10 silly cache add parsed spec Result {
+10 silly cache add   raw: 'karma-cli',
+10 silly cache add   scope: null,
+10 silly cache add   name: 'karma-cli',
+10 silly cache add   rawSpec: '',
+10 silly cache add   spec: '*',
+10 silly cache add   type: 'range' }
+11 silly addNamed karma-cli@*
+12 verbose addNamed "*" is a valid semver range for karma-cli
+13 silly addNameRange { name: 'karma-cli', range: '*', hasData: false }
+14 silly mapToRegistry name karma-cli
+15 silly mapToRegistry using default registry
+16 silly mapToRegistry registry https://registry.npmjs.org/
+17 silly mapToRegistry uri https://registry.npmjs.org/karma-cli
+18 verbose addNameRange registry:https://registry.npmjs.org/karma-cli not in flight; fetching
+19 silly cache add parsed spec Result {
+19 silly cache add   raw: 'gulp',
+19 silly cache add   scope: null,
+19 silly cache add   name: 'gulp',
+19 silly cache add   rawSpec: '',
+19 silly cache add   spec: '*',
+19 silly cache add   type: 'range' }
+20 silly addNamed gulp@*
+21 verbose addNamed "*" is a valid semver range for gulp
+22 silly addNameRange { name: 'gulp', range: '*', hasData: false }
+23 silly mapToRegistry name gulp
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry uri https://registry.npmjs.org/gulp
+27 verbose addNameRange registry:https://registry.npmjs.org/gulp not in flight; fetching
+28 verbose request uri https://registry.npmjs.org/karma-cli
+29 verbose request no auth needed
+30 info attempt registry request try #1 at 12:59:02 PM
+31 verbose request id 6f2cf748842adb5a
+32 verbose etag "BZP1VT7P2AOLYBNMO7N10ESCI"
+33 http request GET https://registry.npmjs.org/karma-cli
+34 verbose request uri https://registry.npmjs.org/gulp
+35 verbose request no auth needed
+36 info attempt registry request try #1 at 12:59:02 PM
+37 verbose etag "AA3Z4UCYCXQ2UXEDUU1BGAT4H"
+38 http request GET https://registry.npmjs.org/gulp
+39 http 304 https://registry.npmjs.org/karma-cli
+40 silly get cb [ 304,
+40 silly get   { date: 'Mon, 11 Jul 2016 07:28:58 GMT',
+40 silly get     via: '1.1 varnish',
+40 silly get     'cache-control': 'max-age=300',
+40 silly get     etag: '"BZP1VT7P2AOLYBNMO7N10ESCI"',
+40 silly get     age: '225',
+40 silly get     connection: 'keep-alive',
+40 silly get     'x-served-by': 'cache-sin6920-SIN',
+40 silly get     'x-cache': 'HIT',
+40 silly get     'x-cache-hits': '2',
+40 silly get     'x-timer': 'S1468222138.807696,VS0,VE0',
+40 silly get     vary: 'Accept-Encoding' } ]
+41 verbose etag https://registry.npmjs.org/karma-cli from cache
+42 verbose get saving karma-cli to /Users/archanac/.npm/registry.npmjs.org/karma-cli/.cache.json
+43 http 304 https://registry.npmjs.org/gulp
+44 silly get cb [ 304,
+44 silly get   { date: 'Mon, 11 Jul 2016 07:28:58 GMT',
+44 silly get     via: '1.1 varnish',
+44 silly get     'cache-control': 'max-age=300',
+44 silly get     etag: '"AA3Z4UCYCXQ2UXEDUU1BGAT4H"',
+44 silly get     age: '205',
+44 silly get     connection: 'keep-alive',
+44 silly get     'x-served-by': 'cache-sin6926-SIN',
+44 silly get     'x-cache': 'HIT',
+44 silly get     'x-cache-hits': '5',
+44 silly get     'x-timer': 'S1468222138.813262,VS0,VE0',
+44 silly get     vary: 'Accept-Encoding' } ]
+45 verbose etag https://registry.npmjs.org/gulp from cache
+46 verbose get saving gulp to /Users/archanac/.npm/registry.npmjs.org/gulp/.cache.json
+47 silly addNameRange number 2 { name: 'karma-cli', range: '*', hasData: true }
+48 silly addNameRange versions [ 'karma-cli',
+48 silly addNameRange   [ '0.0.1',
+48 silly addNameRange     '0.0.2',
+48 silly addNameRange     '0.0.3',
+48 silly addNameRange     '0.0.4',
+48 silly addNameRange     '0.1.0',
+48 silly addNameRange     '0.1.1',
+48 silly addNameRange     '0.1.2',
+48 silly addNameRange     '1.0.0',
+48 silly addNameRange     '1.0.1' ] ]
+49 silly addNamed karma-cli@1.0.1
+50 verbose addNamed "1.0.1" is a plain semver version for karma-cli
+51 silly addNameRange number 2 { name: 'gulp', range: '*', hasData: true }
+52 silly addNameRange versions [ 'gulp',
+52 silly addNameRange   [ '0.0.1',
+52 silly addNameRange     '0.0.2',
+52 silly addNameRange     '0.0.3',
+52 silly addNameRange     '0.0.4',
+52 silly addNameRange     '0.0.5',
+52 silly addNameRange     '0.0.7',
+52 silly addNameRange     '0.0.8',
+52 silly addNameRange     '0.0.9',
+52 silly addNameRange     '0.1.0',
+52 silly addNameRange     '0.2.0',
+52 silly addNameRange     '1.0.0',
+52 silly addNameRange     '1.1.0',
+52 silly addNameRange     '1.2.0',
+52 silly addNameRange     '1.2.1',
+52 silly addNameRange     '2.0.0',
+52 silly addNameRange     '2.0.1',
+52 silly addNameRange     '2.1.0',
+52 silly addNameRange     '2.2.0',
+52 silly addNameRange     '2.3.0',
+52 silly addNameRange     '2.4.0',
+52 silly addNameRange     '2.4.1',
+52 silly addNameRange     '2.6.0',
+52 silly addNameRange     '2.6.1',
+52 silly addNameRange     '2.7.0',
+52 silly addNameRange     '3.0.0',
+52 silly addNameRange     '3.1.1',
+52 silly addNameRange     '3.1.2',
+52 silly addNameRange     '3.1.3',
+52 silly addNameRange     '3.1.4',
+52 silly addNameRange     '3.2.0',
+52 silly addNameRange     '3.2.1',
+52 silly addNameRange     '3.2.2',
+52 silly addNameRange     '3.2.3',
+52 silly addNameRange     '3.2.4',
+52 silly addNameRange     '3.2.5',
+52 silly addNameRange     '3.3.0',
+52 silly addNameRange     '3.3.1',
+52 silly addNameRange     '3.3.2',
+52 silly addNameRange     '3.3.4',
+52 silly addNameRange     '3.4.0',
+52 silly addNameRange     '3.5.0',
+52 silly addNameRange     '3.5.1',
+52 silly addNameRange     '3.5.2',
+52 silly addNameRange     '3.5.5',
+52 silly addNameRange     '3.5.6',
+52 silly addNameRange     '3.6.0',
+52 silly addNameRange     '3.6.1',
+52 silly addNameRange     '3.6.2',
+52 silly addNameRange     '3.7.0',
+52 silly addNameRange     '3.8.0',
+52 silly addNameRange     '3.8.1',
+52 silly addNameRange     '3.8.2',
+52 silly addNameRange     '3.8.3',
+52 silly addNameRange     '3.8.4',
+52 silly addNameRange     '3.8.5',
+52 silly addNameRange     '3.8.6',
+52 silly addNameRange     '3.8.7',
+52 silly addNameRange     '3.8.8',
+52 silly addNameRange     '3.8.9',
+52 silly addNameRange     '3.8.10',
+52 silly addNameRange     '3.8.11',
+52 silly addNameRange     '3.9.0',
+52 silly addNameRange     '3.9.1' ] ]
+53 silly addNamed gulp@3.9.1
+54 verbose addNamed "3.9.1" is a plain semver version for gulp
+55 silly cache afterAdd gulp@3.9.1
+56 verbose afterAdd /Users/archanac/.npm/gulp/3.9.1/package/package.json not in flight; writing
+57 silly cache afterAdd karma-cli@1.0.1
+58 verbose afterAdd /Users/archanac/.npm/karma-cli/1.0.1/package/package.json not in flight; writing
+59 verbose afterAdd /Users/archanac/.npm/gulp/3.9.1/package/package.json written
+60 verbose afterAdd /Users/archanac/.npm/karma-cli/1.0.1/package/package.json written
+61 silly install resolved [ { name: 'gulp',
+61 silly install resolved     description: 'The streaming build system',
+61 silly install resolved     version: '3.9.1',
+61 silly install resolved     homepage: 'http://gulpjs.com',
+61 silly install resolved     repository: { type: 'git', url: 'git+https://github.com/gulpjs/gulp.git' },
+61 silly install resolved     author:
+61 silly install resolved      { name: 'Fractal',
+61 silly install resolved        email: 'contact@wearefractal.com',
+61 silly install resolved        url: 'http://wearefractal.com/' },
+61 silly install resolved     tags: [ 'build', 'stream', 'system', 'make', 'tool', 'asset', 'pipeline' ],
+61 silly install resolved     files: [ 'index.js', 'lib', 'bin', 'completion', 'gulp.1' ],
+61 silly install resolved     bin: { gulp: './bin/gulp.js' },
+61 silly install resolved     man: [ 'gulp.1' ],
+61 silly install resolved     dependencies:
+61 silly install resolved      { archy: '^1.0.0',
+61 silly install resolved        chalk: '^1.0.0',
+61 silly install resolved        deprecated: '^0.0.1',
+61 silly install resolved        'gulp-util': '^3.0.0',
+61 silly install resolved        interpret: '^1.0.0',
+61 silly install resolved        liftoff: '^2.1.0',
+61 silly install resolved        minimist: '^1.1.0',
+61 silly install resolved        orchestrator: '^0.3.0',
+61 silly install resolved        'pretty-hrtime': '^1.0.0',
+61 silly install resolved        semver: '^4.1.0',
+61 silly install resolved        tildify: '^1.0.0',
+61 silly install resolved        v8flags: '^2.0.2',
+61 silly install resolved        'vinyl-fs': '^0.3.0' },
+61 silly install resolved     devDependencies:
+61 silly install resolved      { coveralls: '^2.7.0',
+61 silly install resolved        eslint: '^1.7.3',
+61 silly install resolved        'eslint-config-gulp': '^2.0.0',
+61 silly install resolved        'graceful-fs': '^3.0.0',
+61 silly install resolved        istanbul: '^0.3.0',
+61 silly install resolved        jscs: '^2.3.5',
+61 silly install resolved        'jscs-preset-gulp': '^1.0.0',
+61 silly install resolved        'marked-man': '^0.1.3',
+61 silly install resolved        mkdirp: '^0.5.0',
+61 silly install resolved        mocha: '^2.0.1',
+61 silly install resolved        'mocha-lcov-reporter': '^0.0.1',
+61 silly install resolved        q: '^1.0.0',
+61 silly install resolved        rimraf: '^2.2.5',
+61 silly install resolved        should: '^5.0.1' },
+61 silly install resolved     scripts:
+61 silly install resolved      { prepublish: 'marked-man --name gulp docs/CLI.md > gulp.1',
+61 silly install resolved        lint: 'eslint . && jscs *.js bin/ lib/ test/',
+61 silly install resolved        pretest: 'npm run lint',
+61 silly install resolved        test: 'mocha --reporter spec',
+61 silly install resolved        coveralls: 'istanbul cover _mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage' },
+61 silly install resolved     engines: { node: '>= 0.9' },
+61 silly install resolved     license: 'MIT',
+61 silly install resolved     gitHead: '9c14e3a13a73a32e424f144d62566671b2fcdbed',
+61 silly install resolved     bugs: { url: 'https://github.com/gulpjs/gulp/issues' },
+61 silly install resolved     _id: 'gulp@3.9.1',
+61 silly install resolved     _shasum: '571ce45928dd40af6514fc4011866016c13845b4',
+61 silly install resolved     _from: 'gulp@*',
+61 silly install resolved     _npmVersion: '2.14.14',
+61 silly install resolved     _nodeVersion: '0.10.41',
+61 silly install resolved     _npmUser: { name: 'phated', email: 'blaine@iceddev.com' },
+61 silly install resolved     maintainers: [ [Object], [Object] ],
+61 silly install resolved     dist:
+61 silly install resolved      { shasum: '571ce45928dd40af6514fc4011866016c13845b4',
+61 silly install resolved        tarball: 'http://registry.npmjs.org/gulp/-/gulp-3.9.1.tgz' },
+61 silly install resolved     _npmOperationalInternal:
+61 silly install resolved      { host: 'packages-6-west.internal.npmjs.com',
+61 silly install resolved        tmp: 'tmp/gulp-3.9.1.tgz_1454957415500_0.15343931876122952' },
+61 silly install resolved     directories: {},
+61 silly install resolved     _resolved: 'https://registry.npmjs.org/gulp/-/gulp-3.9.1.tgz',
+61 silly install resolved     readme: 'ERROR: No README data found!' },
+61 silly install resolved   { name: 'karma-cli',
+61 silly install resolved     description: 'The Karma command line interface.',
+61 silly install resolved     homepage: 'http://karma-runner.github.io/',
+61 silly install resolved     repository:
+61 silly install resolved      { type: 'git',
+61 silly install resolved        url: 'git://github.com/karma-runner/karma-cli.git' },
+61 silly install resolved     bugs: { url: 'https://github.com/karma-runner/karma-cli/issues' },
+61 silly install resolved     keywords:
+61 silly install resolved      [ 'karma',
+61 silly install resolved        'spectacular',
+61 silly install resolved        'runner',
+61 silly install resolved        'karma',
+61 silly install resolved        'js',
+61 silly install resolved        'javascript',
+61 silly install resolved        'testing',
+61 silly install resolved        'test',
+61 silly install resolved        'remote',
+61 silly install resolved        'execution' ],
+61 silly install resolved     author: { name: 'Vojta Jína', email: 'vojta.jina@gmail.com' },
+61 silly install resolved     contributors:
+61 silly install resolved      [ [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object],
+61 silly install resolved        [Object] ],
+61 silly install resolved     dependencies: { resolve: '^1.1.6' },
+61 silly install resolved     devDependencies:
+61 silly install resolved      { 'eslint-config-standard': '^4.4.0',
+61 silly install resolved        'eslint-plugin-standard': '^1.3.1',
+61 silly install resolved        grunt: '^0.4.1',
+61 silly install resolved        'grunt-bump': '^0.3.1',
+61 silly install resolved        'grunt-conventional-changelog': '^1.2.2',
+61 silly install resolved        'grunt-eslint': '^17.0.0',
+61 silly install resolved        'grunt-npm': '0.0.2',
+61 silly install resolved        'load-grunt-tasks': '^3.2.0' },
+61 silly install resolved     preferGlobal: true,
+61 silly install resolved     bin: { karma: './bin/karma' },
+61 silly install resolved     engines: { node: '0.10 || 0.12 || 4 || 5 || 6' },
+61 silly install resolved     version: '1.0.1',
+61 silly install resolved     license: 'MIT',
+61 silly install resolved     gitHead: '48860704e7f59f8f640f944914af9cfa5282b296',
+61 silly install resolved     _id: 'karma-cli@1.0.1',
+61 silly install resolved     scripts: {},
+61 silly install resolved     _shasum: 'ae6c3c58a313a1d00b45164c455b9b86ce17f960',
+61 silly install resolved     _from: 'karma-cli@*',
+61 silly install resolved     _npmVersion: '3.8.9',
+61 silly install resolved     _nodeVersion: '6.2.0',
+61 silly install resolved     _npmUser: { name: 'dignifiedquire', email: 'dignifiedquire@gmail.com' },
+61 silly install resolved     dist:
+61 silly install resolved      { shasum: 'ae6c3c58a313a1d00b45164c455b9b86ce17f960',
+61 silly install resolved        tarball: 'https://registry.npmjs.org/karma-cli/-/karma-cli-1.0.1.tgz' },
+61 silly install resolved     maintainers: [ [Object], [Object], [Object] ],
+61 silly install resolved     _npmOperationalInternal:
+61 silly install resolved      { host: 'packages-16-east.internal.npmjs.com',
+61 silly install resolved        tmp: 'tmp/karma-cli-1.0.1.tgz_1466955043087_0.47408990492112935' },
+61 silly install resolved     directories: {},
+61 silly install resolved     _resolved: 'https://registry.npmjs.org/karma-cli/-/karma-cli-1.0.1.tgz',
+61 silly install resolved     readme: 'ERROR: No README data found!' } ]
+62 info install gulp@3.9.1 into /usr/local/lib
+63 info install karma-cli@1.0.1 into /usr/local/lib
+64 info installOne gulp@3.9.1
+65 verbose installOne of gulp to /usr/local/lib not in flight; installing
+66 info installOne karma-cli@1.0.1
+67 verbose installOne of karma-cli to /usr/local/lib not in flight; installing
+68 verbose lock using /Users/archanac/.npm/_locks/gulp-709d00e5d169ceb3.lock for /usr/local/lib/node_modules/gulp
+69 verbose lock using /Users/archanac/.npm/_locks/karma-cli-0e5318cdc71a1121.lock for /usr/local/lib/node_modules/karma-cli
+70 silly install write writing gulp 3.9.1 to /usr/local/lib/node_modules/gulp
+71 silly install write writing karma-cli 1.0.1 to /usr/local/lib/node_modules/karma-cli
+72 verbose unbuild lib/node_modules/gulp
+73 verbose unbuild lib/node_modules/karma-cli
+74 info preuninstall gulp@3.9.1
+75 info uninstall gulp@3.9.1
+76 info preuninstall karma-cli@1.0.1
+77 verbose unbuild rmStuff gulp@3.9.1 from /usr/local/lib/node_modules
+78 silly gentlyRm /usr/local/bin/gulp is being gently removed
+79 silly gentlyRm verifying /usr/local is an npm working directory
+80 verbose rmMans man files are [ 'gulp.1' ] in /usr/local/share/man
+81 silly rmMan preparing to remove gulp.1
+82 silly gentlyRm /usr/local/share/man/man1/gulp.1.1 is being gently removed
+83 silly gentlyRm verifying /usr/local is an npm working directory
+84 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+85 silly gentlyRm deletion target /usr/local/bin/gulp is under /usr/local
+86 verbose gentlyRm vacuuming from /usr/local/bin/gulp up to /usr/local
+87 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+88 silly gentlyRm deletion target /usr/local/share/man/man1/gulp.1.1 is under /usr/local
+89 verbose gentlyRm vacuuming from /usr/local/share/man/man1/gulp.1.1 up to /usr/local
+90 info uninstall karma-cli@1.0.1
+91 silly vacuum-fs removing /usr/local/bin/gulp
+92 verbose unbuild rmStuff karma-cli@1.0.1 from /usr/local/lib/node_modules
+93 silly gentlyRm /usr/local/bin/karma is being gently removed
+94 silly gentlyRm verifying /usr/local is an npm working directory
+95 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+96 silly gentlyRm deletion target /usr/local/bin/karma is under /usr/local
+97 verbose gentlyRm vacuuming from /usr/local/bin/karma up to /usr/local
+98 silly vacuum-fs quitting because other entries in /usr/local/bin
+99 info postuninstall gulp@3.9.1
+100 silly vacuum-fs removing /usr/local/bin/karma
+101 silly gentlyRm /usr/local/lib/node_modules/gulp is being purged from base /usr/local
+102 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/gulp
+103 silly vacuum-fs quitting because other entries in /usr/local/bin
+104 info postuninstall karma-cli@1.0.1
+105 silly vacuum-fs purging /usr/local/lib/node_modules/gulp
+106 silly gentlyRm /usr/local/lib/node_modules/karma-cli is being purged from base /usr/local
+107 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/karma-cli
+108 silly vacuum-fs purging /usr/local/lib/node_modules/karma-cli
+109 verbose unlock done using /Users/archanac/.npm/_locks/gulp-709d00e5d169ceb3.lock for /usr/local/lib/node_modules/gulp
+110 verbose unlock done using /Users/archanac/.npm/_locks/karma-cli-0e5318cdc71a1121.lock for /usr/local/lib/node_modules/karma-cli
+111 verbose stack Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/gulp'
+111 verbose stack     at Error (native)
+112 verbose cwd /Users/archanac/MSF_OCA/dhis_tally_sheets
+113 error Darwin 15.2.0
+114 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "i" "-g" "karma-cli" "gulp"
+115 error node v4.1.1
+116 error npm  v2.12.1
+117 error path /usr/local/lib/node_modules/gulp
+118 error code EACCES
+119 error errno -13
+120 error syscall rmdir
+121 error Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/gulp'
+121 error     at Error (native)
+121 error  { [Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/gulp']
+121 error   errno: -13,
+121 error   code: 'EACCES',
+121 error   syscall: 'rmdir',
+121 error   path: '/usr/local/lib/node_modules/gulp' }
+122 error Please try running this command again as root/Administrator.
+123 verbose exit [ -13, true ]
+124 verbose unbuild lib/node_modules/gulp
+125 info preuninstall gulp@3.9.1
+126 info uninstall gulp@3.9.1
+127 verbose unbuild rmStuff gulp@3.9.1 from /usr/local/lib/node_modules
+128 silly gentlyRm /usr/local/bin/gulp is being gently removed
+129 silly gentlyRm verifying /usr/local is an npm working directory
+130 verbose rmMans man files are [ 'gulp.1' ] in /usr/local/share/man
+131 silly rmMan preparing to remove gulp.1
+132 silly gentlyRm /usr/local/share/man/man1/gulp.1.1 is being gently removed
+133 silly gentlyRm verifying /usr/local is an npm working directory
+134 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+135 silly gentlyRm deletion target /usr/local/bin/gulp is under /usr/local
+136 verbose gentlyRm vacuuming from /usr/local/bin/gulp up to /usr/local
+137 silly gentlyRm containing path /usr/local is under npm's control, in /usr/local
+138 silly gentlyRm deletion target /usr/local/share/man/man1/gulp.1.1 is under /usr/local
+139 verbose gentlyRm vacuuming from /usr/local/share/man/man1/gulp.1.1 up to /usr/local
+140 info postuninstall gulp@3.9.1
+141 silly gentlyRm /usr/local/lib/node_modules/gulp is being purged from base /usr/local
+142 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/gulp
+143 silly vacuum-fs purging /usr/local/lib/node_modules/gulp
+144 error error rolling back Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/gulp'
+144 error error rolling back     at Error (native)
+144 error error rolling back  { [Error: EACCES: permission denied, rmdir '/usr/local/lib/node_modules/gulp']
+144 error error rolling back   errno: -13,
+144 error error rolling back   code: 'EACCES',
+144 error error rolling back   syscall: 'rmdir',
+144 error error rolling back   path: '/usr/local/lib/node_modules/gulp' }

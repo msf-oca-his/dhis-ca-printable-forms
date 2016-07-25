@@ -141,24 +141,24 @@ TallySheets.factory("DataSetEntryForm", [ '$resource', function($resource) {
     });
 } ]);
 
-TallySheets.factory("OptionSetFactory", [ '$http', function($http) {
-  var optionSets = {};
-  var successPromise = function(response) {
-    var successPromise = function(response) {
-      return optionSets[ response.data.id ] = response.data;
+TallySheets.factory("OptionSetFactory", ['$http', function ($http) {
+    var optionSets = {};
+    var successPromise = function (response) {
+        var successPromise = function(response){
+            return optionSets[response.data.id] = response.data;
+        };
+        var promises = _.map(response.data.optionSets, function(optionSet){
+            return $http.get(ApiUrl + "/optionSets/"+ optionSet.id + ".json?fields=id,options[id,name]&&paging=false")
+                .then(successPromise, failurePromise);
+        });
+        return Promise.all(promises)
+            .then(function(){
+                    return optionSets;
+            });
     };
-    var promises = _.map(response.data.optionSets, function(optionSet) {
-      return $http.get(ApiUrl + "/optionSets/" + optionSet.id + ".json?paging=false")
-        .then(successPromise, failurePromise);
-    });
-    return Promise.all(promises)
-      .then(function() {
-        return optionSets;
-      });
-  };
-  var failurePromise = function(err) {
-    return Promise.resolve(optionSets);
-  };
+    var failurePromise = function (err) {
+        return Promise.resolve(optionSets);
+    };
 
   return $http.get(ApiUrl + "/optionSets.json?paging=false")
     .then(successPromise, failurePromise);

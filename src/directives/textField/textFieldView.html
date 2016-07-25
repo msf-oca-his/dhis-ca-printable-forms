@@ -1,0 +1,34 @@
+<h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
+<table style="width:90%">
+
+    <tr ng-repeat="dataElement in content.section.leftSideElements">
+
+        <td class="deLabel general">
+            {{content.section.leftSideElements[$index].name}}
+        </td>
+        <td class="yesno" ng-if="content.section.leftSideElements[$index].type=='BOOLEAN'">
+            <input type="checkbox" class="pffcheckbox">Yes
+            <span style="margin-right: 5mm"></span>
+            <input type="checkbox" class="pffcheckbox">No
+        </td>
+
+        <td class="deField" ng-if="content.section.leftSideElements[$index].type!='BOOLEAN'"></td>
+
+        <td class="seperator" style="width:1cm"></td>
+
+
+        <td class="deLabel general" ng-if="content.section.rightSideElements[$index]">
+            {{content.section.rightSideElements[$index].name}}
+        </td>
+
+        <span ng-if="content.section.rightSideElements[$index]">
+            <td class="yesno" ng-if="content.section.rightSideElements[$index].type=='BOOLEAN'">
+                <input type="checkbox">Yes</input>
+                <input type="checkbox">No</input>
+            </td>
+            <td class="deField"
+                ng-if="content.section.rightSideElements[$index] && content.section.rightSideElements[$index].type!='BOOLEAN'">
+            </td>
+        </span>
+    </tr>
+</table>
