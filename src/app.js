@@ -89,13 +89,11 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
       }
       else if( $scope.form.type == "program" && $scope.programMode ) {
         $scope.spinnerShown = true;
-        return ProgramService.getProgram($scope.form.id).then(function(program) {
-          return program.isResolved.then(function() {
+        return ProgramService.getProgram($scope.form.id)
+          .then(function(program) {
             $scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);
             $scope.spinnerShown = false;
             $scope.$apply();
-
-          })
         });
       }
       $scope.spinnerShown = false;
@@ -124,7 +122,7 @@ TallySheets.factory("DataSetsUID", [ '$resource', function($resource) {
 } ]);
 // TODO: what will happen if call fails
 TallySheets.factory("ProgramsUID", [ '$resource', function($resource) {
-  return $resource(ApiUrl + "/programStages.json?fields=id,displayName&paging=false&translate=true",
+  return $resource(ApiUrl + "/programs.json?fields=id,displayName&paging=false&translate=true",
     {},
     { get: { method: "GET" } });
 } ]);

@@ -24,10 +24,10 @@ TallySheets.controller('templateSelectorCtrl', ['$scope', '$rootScope', 'DataSet
     });
 
     ProgramsUID.get().$promise.then(function(result){
-        _.map(result.programStages, function(program){
+        _.map(result.programs, function(program){
             program.type = "program"
         });
-        $scope.programList = result.programStages;
+        $scope.programList = result.programs;
     });
 
 

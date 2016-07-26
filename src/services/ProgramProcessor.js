@@ -229,7 +229,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
             page = pages[currentPageIndex];
         }
 
-        _.map(dataSet.stageSections, processSection);
+        _.map(dataSet.stages[0].sections, processSection);
         addComments();
         dataSet.isPrintFriendlyProcessed = true;
     };
@@ -274,14 +274,14 @@ TallySheets.service("ProgramProcessor", [ 'DataElementService', 'DataEntrySectio
         currentPageIndex = -1;
         if (mode == 'coversheet')
             _.map([program], function (program) {
-                for (var i = 0; i < program.stageSections.length; i++) {
-                    if (program.stageSections[i].isCatComb) {
-                        divideCatCombsIfNecessary(program.stageSections[i], i, program.stageSections);
-                        processTableHeader(program.stageSections[i]);
+                for (var i = 0; i < program.stages[0].sections.length; i++) {
+                    if (program.stages[0].sections[i].isCatComb) {//TODO: revalidate this, is it needed.
+                        divideCatCombsIfNecessary(program.stages[0].sections[i], i, program.stages[0].sections);
+                        processTableHeader(program.stages[0].sections[i]);
                     }
                     else {
-                        divideOptionSetsIntoNewSection(program.stageSections[i], i, program.stageSections);
-                        splitLeftAndRightElements(program.stageSections[i]);
+                        divideOptionSetsIntoNewSection(program.stages[0].sections[i], i, program.stages[0].sections);
+                        splitLeftAndRightElements(program.stages[0].sections[i]);
                     }
                 }
                 processDataSet(program)
