@@ -33,6 +33,11 @@ input.clean {
 .pffcheckbox{
     margin-right: 2mm !important;
 }
+/*TODO: rename this class to hidden*/
+.hideDE {
+    display: none
+}
+
 .option{
     width: 5cm;
     height: 9mm;

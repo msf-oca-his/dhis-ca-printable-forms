@@ -11,7 +11,7 @@ TallySheets.filter('to_trusted', [ '$sce', function($sce) {
     return $sce.trustAsHtml(text);
   };
 } ]);
-TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "DataSetEntryForm", "DataSetService", "PrintFriendlyProcessor", "ProgramService", "ProgramProcessor", function($scope, DataSetsUID, DataSetEntryForm, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
+TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "PrintFriendlyProcessor", "ProgramService", "ProgramProcessor", function($scope, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
 
   $scope.spinnerShown = false;
 
@@ -70,37 +70,36 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetsUID", "Data
     window.location.replace(dhisUrl);
   };
 
-  // Initialize the app with one dataset selector
+  // Initialize the app with one dataSet selector
 
   $scope.renderDataSets = function() {
     $scope.pages = [];
     if( $scope.form.id ) {
       $scope.spinnerShown = true;
-      if( $scope.form.type == "dataset" ) {
+      if( $scope.form.type == "DATASET" ) {
         return DataSetService.getDataSet($scope.form.id)
           .then(function(dataset) {
-
             $scope.pages = PrintFriendlyProcessor.process(_.cloneDeep(dataset));
             $scope.spinnerShown = false;
             $scope.$apply();
-
           });
 
       }
-      else if( $scope.form.type == "program" && $scope.programMode ) {
+      else if( $scope.form.type == "PROGRAM" && $scope.programMode ) {
         $scope.spinnerShown = true;
         return ProgramService.getProgram($scope.form.id)
           .then(function(program) {
             $scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);
             $scope.spinnerShown = false;
             $scope.$apply();
-        });
+          });
       }
       $scope.spinnerShown = false;
     }
     else return Promise.resolve(0)
   };
 } ]);
+
 //TODO: find a better way to expose d2. not through promise
 TallySheets.factory("d2", [ function() {
   var d2Lib = require("../node_modules/d2/lib/d2.js");
@@ -114,54 +113,6 @@ TallySheets.factory("d2", [ function() {
     })
 
 } ]);
-// TODO: what will happen if call fails
-TallySheets.factory("DataSetsUID", [ '$resource', function($resource) {
-  return $resource(ApiUrl + "/dataSets.json?fields=id,displayName&paging=false&translate=true",
-    {},
-    { get: { method: "GET" } });
-} ]);
-// TODO: what will happen if call fails
-TallySheets.factory("ProgramsUID", [ '$resource', function($resource) {
-  return $resource(ApiUrl + "/programs.json?fields=id,displayName&paging=false&translate=true",
-    {},
-    { get: { method: "GET" } });
-} ]);
-// TODO: what will happen if call fails
-TallySheets.factory("DataSetEntryForm", [ '$resource', function($resource) {
-  return $resource(dhisUrl + "/dhis-web-dataentry/loadForm.action",
-    { dataSetId: '@dataSetId' },
-    {
-      get: {
-        method: "GET", transformResponse: function(response) {
-          return { codeHtml: response };
-        }
-      }
-    });
-} ]);
-
-TallySheets.factory("OptionSetFactory", ['$http', function ($http) {
-    var optionSets = {};
-    var successPromise = function (response) {
-        var successPromise = function(response){
-            return optionSets[response.data.id] = response.data;
-        };
-        var promises = _.map(response.data.optionSets, function(optionSet){
-            return $http.get(ApiUrl + "/optionSets/"+ optionSet.id + ".json?fields=id,options[id,name]&&paging=false")
-                .then(successPromise, failurePromise);
-        });
-        return Promise.all(promises)
-            .then(function(){
-                    return optionSets;
-            });
-    };
-    var failurePromise = function (err) {
-        return Promise.resolve(optionSets);
-    };
-
-  return $http.get(ApiUrl + "/optionSets.json?paging=false")
-    .then(successPromise, failurePromise);
-} ]);
-
 
 TallySheets.directive('onFinishRender', function($timeout) {
   return {
@@ -174,13 +125,6 @@ TallySheets.directive('onFinishRender', function($timeout) {
       }
     }
   }
-});
-//#TODO: move this progress bar to directive folder and rename it to progress bar
-TallySheets.directive('d2Progressbar', function() {
-  return {
-    restrict: 'E',
-    template: require('./directives/progressBar/progressBar.html')
-  };
 });
 
 TallySheets.config(function($translateProvider) {
@@ -204,7 +148,7 @@ TallySheets.config(function($translateProvider) {
 
   $translateProvider.fallbackLanguage([ 'en' ]);
 
-  jQuery.ajax({
+  jQuery.ajax({ //TODO: this is a http call. if we are not using d2's translate then move this to d2
     url: ApiUrl + '/userSettings/keyUiLocale/',
     contentType: 'text/plain',
     method: 'GET',

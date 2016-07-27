@@ -27,6 +27,7 @@
 		<script src="config.js" type="text/javascript"></script>
 		<script src="services.js" type="text/javascript"></script>
 		<script src="directives.js" type="text/javascript"></script>
+		<script src="pff-model.js" type="text/javascript"></script>
 
 	</head>
 	<body ng-controller="TallySheetsController">
@@ -36,13 +37,13 @@
 			<div class="panel-body">
 
 				<span>
-					<template-selector selector-id="dsId" select-dataset= "renderDataSets()" bind-to-dataset="form"></template-selector>
+					<template-selector selector-id="dsId" on-select-dataset= "renderDataSets()" bind-to-dataset="form"></template-selector>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
 					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
 					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
 					</span>
-					<span ng-if="form.type=='program'">
+					<span ng-if="form.type=='PROGRAM'">
 						<label class="radio-inline">
 							<input  ng-model="$parent.programMode" value="coversheet" type="radio" ng-click="renderDataSets()"> CoverSheet
 						</label>

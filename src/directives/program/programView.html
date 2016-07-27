@@ -96,6 +96,7 @@
                      </td>
                 </tr>
             <tr ng-repeat="row in rows track by $index">
+              <!--TODO: remove hardcoded height here...-->
                 <td style="height:9.5mm;text-align:center">{{$index + 1}}</td>
                 <td ng-repeat="dataElement in contents" ng-class="getClass(dataElement)">
                 </td>

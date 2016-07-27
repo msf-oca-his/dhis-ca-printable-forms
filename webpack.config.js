@@ -4,7 +4,8 @@ module.exports = {
         dependencies : "./src/dependencies.js",
         services : "./src/services.js",
         directives: "./src/directives.js",
-        app: "./src/app.js"
+        app: "./src/app.js",
+        'pff-model': "./src/pff-model.js"
     },
     plugins: [
         new CopyWebpackPlugin([

@@ -1,54 +1,47 @@
-TallySheets.directive('templateSelector', function(){
-    return{
-        restrict: 'E',
-        template: require('./templateSelectorView.html'),
-        scope: {
-            selectorId: '=',
-            bindToDataset: '=',
-            selectDataset: '&'
-        }
-    };
+TallySheets.directive('templateSelector', function() {
+  return {
+    restrict: 'E',
+    template: require('./templateSelectorView.html'),
+    scope: {
+      selectorId: '=',
+      bindToDataset: '=',
+      onSelectDataset: '&'
+    }
+  };
 });
-TallySheets.controller('templateSelectorCtrl', ['$scope', '$rootScope', 'DataSetsUID', 'ProgramsUID', 'Config', function($scope, $rootScope, DataSetsUID, ProgramsUID, config){
+TallySheets.controller('templateSelectorCtrl', [ '$scope', '$rootScope', 'DataSetService', 'ProgramService', 'Config', function($scope, $rootScope, DataSetService, ProgramService, config) {
+  $scope.id = "dsSelector" + $scope.selectorId;
+  $scope.selectorLoaded = false;
+  $scope.dataSetPrefix = config.Prefixes.dataSetPrefix;
+  $scope.programPrefix = config.Prefixes.programPrefix;
 
-    $scope.id = "dsSelector" + $scope.selectorId;
-    $scope.selectorLoaded = false;
-    $scope.dataSetPrefix = config.Prefixes.dataSetPrefix;
-    $scope.programPrefix = config.Prefixes.programPrefix;
-
-    DataSetsUID.get().$promise.then(function(result) {
-        _.map(result.dataSets, function (dataset) {
-            dataset.type = "dataset"
-        });
-        $scope.dataSetList = result.dataSets;
+  DataSetService.getAllDataSets()
+    .then(function(dataSets) {
+      $scope.dataSetList = dataSets;
+      $rootScope.$apply()
     });
 
-    ProgramsUID.get().$promise.then(function(result){
-        _.map(result.programs, function(program){
-            program.type = "program"
-        });
-        $scope.programList = result.programs;
+  ProgramService.getAllPrograms()
+    .then(function(programs) {
+      console.log(programs)
+      $scope.programList = programs;
     });
 
 
-    $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-        // Refresh bootstrap-select
-        $('.selectpicker').selectpicker('refresh');
-        $('.selectpicker').selectpicker('render');
-        $scope.selectorLoaded = true;
-    });
+  $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+    // Refresh bootstrap-select
+    $('.selectpicker').selectpicker('refresh');
+    $('.selectpicker').selectpicker('render');
+    $scope.selectorLoaded = true;
+  });
 
-    $(document).on('change', '#' + $scope.id ,function(){
-        var dsId = $("option:selected", this).val();
-        var dsName = $("option:selected", this).html().trim();
-        var dsType = $("option:selected", this)[0].dataset.type;
-        $scope.selectorId = dsId;
-        $scope.bindToDataset.id = dsId;
-        $scope.bindToDataset.name = dsName;
-        $scope.bindToDataset.type = dsType;
-        if(dsId) {
-          $scope.selectDataset()
-        }
-        $rootScope.$apply();
-    });
-}]);
+  $(document).on('change', '#' + $scope.id, function() {
+    $scope.selectorId = this.value;
+    $scope.bindToDataset.id = this.value;
+    $scope.bindToDataset.type = this.selectedOptions[ 0 ].getAttribute("data-type");
+    if( $scope.selectorId ) {
+      $scope.onSelectDataset()
+    }
+    $rootScope.$apply();
+  });
+} ]);
