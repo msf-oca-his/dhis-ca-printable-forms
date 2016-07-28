@@ -1,7 +1,7 @@
 <div ng-controller="pageCtrl">
     <div class="subpage">
-        <dataset ng-if="form.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset>
-        <program ng-if="form.type=='PROGRAM'" contents="page.contents" mode="programMode" program-name="page.programName" is-last-page="totalPages==pageNumber"></program>
+        <dataset ng-if="type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset>
+        <program ng-if="type=='PROGRAM'" contents="page.contents" mode="programMode" program-name="page.programName" is-last-page="totalPages==pageNumber"></program>
         <div class="page-number" ng-if="programMode!='REGISTER'">
             Page {{pageNumber}} of {{totalPages}}
         </div>

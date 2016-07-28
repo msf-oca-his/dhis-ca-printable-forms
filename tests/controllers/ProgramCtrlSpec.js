@@ -2,11 +2,25 @@ describe("Program controller", function () {
     var $controller;
     var section;
     var $scopeCtrl = {};
+    var config = {};
     beforeEach(function () {
         module("TallySheets");
         angular.module('d2HeaderBar', []);
+        config={
+            Register:{
+                availableHeight: 100,
+                availableWidth: 270,
+                labelHeight: 10,            //table header
+                tableHeaderHeight: 10,           //page header
+                dataEntryRowHeight: 20,
+                headerHeight: 10,
+                textElementWidth: 50,
+                otherElementWidth: 30
+            },
+            DisplayOptions: "testDisplayOptions"
+        };
         module(function ($provide) {
-            $provide.value('OptionSetFactory', Promise.resolve({}));
+            $provide.value('Config', config);
         });
     });
 
@@ -31,6 +45,10 @@ describe("Program controller", function () {
         $controller('programCtrl', {$scope: $scopeCtrl})
     });
 
+    it("should get displayOptions from config", function(){
+       expect($scopeCtrl.displayOptions).toEqual(config.DisplayOptions)
+    });
+
     describe("get table width", function () {
         it("should return table width as 9.5cm when section is not catcomb", function () {
             expect($scopeCtrl.getTableWidth(section)).toEqual("9.5cm");
@@ -46,23 +64,17 @@ describe("Program controller", function () {
 
     describe("get class", function () {
         it("should give de field text type if dataelement type is TEXT", function () {
-            var dataElement = {
-                type: 'TEXT'
-            };
+            var dataElement = { valueType: 'TEXT' };
             expect($scopeCtrl.getClass(dataElement)).toEqual('deField text');
-            ;
         });
 
         it("should give de general text type if dataelement type is not TEXT", function () {
-            var dataElement = {
-                type: 'CatComb'
-            };
+            var dataElement = { valueType: 'CatComb' };
             expect($scopeCtrl.getClass(dataElement)).toEqual('deField general');
-            ;
         });
 
         it("finding number rows for scope variable", function () {
-            expect($scopeCtrl.rows.length).toEqual(15);
+            expect($scopeCtrl.rows.length).toBe(4);
         })
 
     });

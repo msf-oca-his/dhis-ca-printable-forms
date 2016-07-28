@@ -1,14 +1,7 @@
-<span ng-controller="templateSelectorCtrl">
-    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true">
-        <option value="0"><i>{{ 'SELECT_TEMPLATE' | translate }}</i></option>
-        <option ng-repeat="dataSet in dataSetList | orderBy : dataSet.displayName"
-                value="{{ dataSet.id }}" data-type="DATASET" on-finish-render="ngRepeatFinished">
-            {{ dataSetPrefix + dataSet.displayName }}
-        </option>
-        <option ng-repeat="program in programList | orderBy : program.displayName"
-                value="{{ program.id }}" data-type="PROGRAM" on-finish-render="ngRepeatFinished">
-            {{ programPrefix + program.displayName }}
-        </option>
+<span>
+    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" ng-change="changeHandler()" ng-model="selectedDataSet"
+            ng-options="template | prependWithPrefix  for template in templates ">
+      <option value=""><i>{{ 'SELECT_TEMPLATE' | translate }}</i></option>
     </select>
     <span ng-show="!selectorLoaded" class="loading-icon">
         <span class="glyphicon glyphicon-hourglass"></span>

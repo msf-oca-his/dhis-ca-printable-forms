@@ -14,9 +14,8 @@ TallySheets.filter('to_trusted', [ '$sce', function($sce) {
 TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "PrintFriendlyProcessor", "ProgramService", "ProgramProcessor", function($scope, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
 
   $scope.spinnerShown = false;
-
   $scope.dsId = 1;
-  $scope.form = {};
+  $scope.template = {};
   $scope.pages = [];
   $scope.exportToTable = function(tableId) {
     var uri = 'data:application/vnd.ms-excel;base64,'
@@ -66,18 +65,14 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "P
 
   };
 
-  $scope.goHome = function() {
-    window.location.replace(dhisUrl);
-  };
-
   // Initialize the app with one dataSet selector
 
   $scope.renderDataSets = function() {
     $scope.pages = [];
-    if( $scope.form.id ) {
+    if( $scope.template.id ) {
       $scope.spinnerShown = true;
-      if( $scope.form.type == "DATASET" ) {
-        return DataSetService.getDataSet($scope.form.id)
+      if( $scope.template.type == "DATASET" ) {
+        return DataSetService.getDataSet($scope.template.id)
           .then(function(dataset) {
             $scope.pages = PrintFriendlyProcessor.process(_.cloneDeep(dataset));
             $scope.spinnerShown = false;
@@ -85,9 +80,9 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "P
           });
 
       }
-      else if( $scope.form.type == "PROGRAM" && $scope.programMode ) {
+      else if( $scope.template.type == "PROGRAM" && $scope.programMode ) {
         $scope.spinnerShown = true;
-        return ProgramService.getProgram($scope.form.id)
+        return ProgramService.getProgram($scope.template.id)
           .then(function(program) {
             $scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);
             $scope.spinnerShown = false;

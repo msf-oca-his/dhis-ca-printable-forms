@@ -9,46 +9,24 @@ describe("TallySheets ctrl", function () {
     var mockedDataSetProcessor;
     var mockedProgramService;
     var mockedProgramProcessor;
+    var expectedPages;
     beforeEach(function () {
         module("TallySheets");
         angular.module('d2HeaderBar', []);
 
-        var mockDataset={
-            id: "12",
-            name: "general",
-            sections: [{id: "1", name: "section1"}, {id: "2", name: "section2"}],
-            isResolved:Promise.resolve({})
-        };
+        var mockDataset="testDataSet"
+        var mockProgram="testProgram"
 
-        var mockProgram={
-            id: "12",
-            name: "general",
-            stageSections: [{id: "1", name: "section1"}, {id: "2", name: "section2"}],
-            isResolved:Promise.resolve({})
-        };
-
-        var expectedPages = [
-            {
-                heightLeft: 188,
-                width: 183,
-                contents: [
-                    {type: 'dataSetName', name: "test dataset"},
-                    {type: 'section', section: {}}],
-                datasetName: "test dataset"
-            }
-        ];
+        expectedPages = "testPages"
 
         mockedDataSetService = {
             getDataSet: function () {
-                defer.resolve(mockDataset);
-                return defer.promise;
-
+                return Promise.resolve(mockDataset);
             }
         };
         mockedProgramService = {
             getProgram: function() {
-                defer.resolve(mockProgram);
-                return defer.promise;
+                return Promise.resolve(mockProgram);
             }
         };
         mockedDataSetProcessor = {
@@ -89,61 +67,43 @@ describe("TallySheets ctrl", function () {
     });
 
     describe("render datasets", function(){
-        it("should not render dataset if it doesn't have form id", function(){
-            scope.form.id = undefined;
+        it("should not render dataset if it doesn't have template id", function(){
+            scope.template.id = undefined;
             expect(scope.renderDataSets()).toEqual(Promise.resolve({}));
         });
 
-        it("should render the dataSets if it has form id", function(done){
-            scope.form.id = 123;
-            scope.form.type ="dataset";
-            var expectedPages = [
-                {
-                    heightLeft: 188,
-                    width: 183,
-                    contents: [
-                        {type: 'dataSetName', name: "test dataset"},
-                        {type: 'section', section: {}}],
-                    datasetName: "test dataset"
-                }
-            ]
-
+        it("should render the dataSets if it has template id", function(done){
+            scope.template.id = 123;
+            scope.template.type ="DATASET";
+            _$rootScope.$apply();
             scope.renderDataSets().then(function(){
                 expect(scope.spinnerShown).toEqual(false);
                 expect(scope.pages).toEqual(expectedPages);
                 done();
             });
-            setInterval(_$rootScope.$digest, 900);
+            scope.$digest();
         });
 
-        it("should render the programs if it has form id", function(){
-            scope.form.id = 123;
-            scope.form.type ="program";
-            scope.programMode = true;
-            var expectedPages = [
-                {
-                    heightLeft: 188,
-                    width: 183,
-                    contents: [
-                        {type: 'dataSetName', name: "test program"},
-                        {type: 'section', section: {}}],
-                    datasetName: "test program"
-                }
-            ];
-
+        it("should render the programs if it has template id", function(done){
+            scope.template.id = 123;
+            scope.template.type ="PROGRAM";
+            scope.programMode = "COVERSHEET";
+            _$rootScope.$apply();
             scope.renderDataSets().then(function(){
                 expect(scope.spinnerShown).toEqual(false);
                 expect(scope.pages).toEqual(expectedPages);
                 done();
             });
-            setInterval(_$rootScope.$digest, 900);
+
+            scope.$digest();
         });
 
-        it("should render the template which is neither program nor dataset if it has form id", function(){
-            scope.form.id = 123;
-            scope.form.type =""
+        it("should not render the template which is neither program nor dataset if it has template id", function(){
+            scope.template.id = 123;
+            scope.template.type =""
             scope.renderDataSets();
             expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual([]);
         });
     })
 });

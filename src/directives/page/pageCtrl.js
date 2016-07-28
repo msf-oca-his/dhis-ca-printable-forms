@@ -3,12 +3,10 @@ TallySheets.directive('page', function(){
         restrict: 'E',
         template: require('./pageView.html'),
         scope: {
-            selectorId: '=',
-            bindToDataset: '=',
             page: '=',
             pageNumber: '=',
             totalPages: '=',
-            form:'=',
+            type:'=',
             programMode: '='
         }
     };

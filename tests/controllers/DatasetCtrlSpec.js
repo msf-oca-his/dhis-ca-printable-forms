@@ -5,7 +5,7 @@ describe("Dataset ctrl", function () {
         module("TallySheets");
         angular.module('d2HeaderBar', []);
         module(function ($provide) {
-            $provide.value('OptionSetFactory', Promise.resolve({}));
+            $provide.value('Config', {});
         });
     });
 

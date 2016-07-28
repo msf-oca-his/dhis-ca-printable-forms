@@ -1,47 +1,57 @@
-TallySheets.directive('templateSelector', function() {
+TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetService', 'ProgramService', function($rootScope, $timeout, DataSetService, ProgramService) {
   return {
     restrict: 'E',
     template: require('./templateSelectorView.html'),
     scope: {
-      selectorId: '=',
-      bindToDataset: '=',
-      onSelectDataset: '&'
+      onSelectDataset: '&',
+      selectedTemplate: '='
+    },
+    link: function($scope, element) {
+      $scope.selectedDataSet = {};
+      $scope.selectorLoaded = false;
+
+      var refreshBootstrapSelect = function() {
+        $(element).find('.selectpicker').selectpicker('refresh');
+        $(element).find('.selectpicker').selectpicker('render');
+        $scope.selectorLoaded = true;
+        $rootScope.$apply();
+      };
+
+      var loadTemplates = function(){
+        Promise.all([ DataSetService.getAllDataSets(), ProgramService.getAllPrograms() ])
+          .then(function(dataSetsAndPrograms) {
+            $scope.templates = _.flatten(dataSetsAndPrograms);
+            $rootScope.$apply();
+            refreshBootstrapSelect();
+          });
+      };
+
+      $scope.changeHandler = function() {
+        if( $scope.selectedDataSet == null ) return;
+        $scope.selectedTemplate.id = $scope.selectedDataSet.id;
+        $scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedDataSet);
+        $scope.onSelectDataset();
+      };
+      loadTemplates();
     }
   };
-});
-TallySheets.controller('templateSelectorCtrl', [ '$scope', '$rootScope', 'DataSetService', 'ProgramService', 'Config', function($scope, $rootScope, DataSetService, ProgramService, config) {
-  $scope.id = "dsSelector" + $scope.selectorId;
-  $scope.selectorLoaded = false;
-  $scope.dataSetPrefix = config.Prefixes.dataSetPrefix;
-  $scope.programPrefix = config.Prefixes.programPrefix;
+} ]);
 
-  DataSetService.getAllDataSets()
-    .then(function(dataSets) {
-      $scope.dataSetList = dataSets;
-      $rootScope.$apply()
-    });
+var getTypeOfTemplate = function(template) {
+  if( template.constructor.name == "DataSet" )
+    return "DATASET";
+  else if( template.constructor.name == "Program" )
+    return "PROGRAM";
+};
 
-  ProgramService.getAllPrograms()
-    .then(function(programs) {
-      console.log(programs)
-      $scope.programList = programs;
-    });
-
-
-  $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
-    // Refresh bootstrap-select
-    $('.selectpicker').selectpicker('refresh');
-    $('.selectpicker').selectpicker('render');
-    $scope.selectorLoaded = true;
-  });
-
-  $(document).on('change', '#' + $scope.id, function() {
-    $scope.selectorId = this.value;
-    $scope.bindToDataset.id = this.value;
-    $scope.bindToDataset.type = this.selectedOptions[ 0 ].getAttribute("data-type");
-    if( $scope.selectorId ) {
-      $scope.onSelectDataset()
-    }
-    $rootScope.$apply();
-  });
+TallySheets.filter('prependWithPrefix', [ 'Config', function(config) {
+  return function(template) {
+    var typeOfTemplate = getTypeOfTemplate(template)
+    if( typeOfTemplate == "DATASET" )
+      return config.Prefixes.dataSetPrefix + template.displayName;
+    if( typeOfTemplate == "PROGRAM" )
+      return config.Prefixes.programPrefix + template.displayName;
+    else
+      return template;
+  }
 } ]);
