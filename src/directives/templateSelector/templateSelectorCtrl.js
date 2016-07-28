@@ -1,4 +1,4 @@
-TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetService', 'ProgramService', function($rootScope, $timeout, DataSetService, ProgramService) {
+TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetService', 'ProgramService', 'Config', function($rootScope, $timeout, DataSetService, ProgramService, config) {
   return {
     restrict: 'E',
     template: require('./templateSelectorView.html'),
@@ -17,10 +17,27 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetSe
         $rootScope.$apply();
       };
 
-      var loadTemplates = function(){
+      var getPrintableAttribute = function(attributeValues) {
+        return _.reduce(_.filter(attributeValues, function(attributeValue) {
+          if( attributeValue.attribute.id === config.Attributes.printableUID ) {
+            return attributeValue;
+          }
+        }));
+      };
+
+      var loadTemplates = function() {
         Promise.all([ DataSetService.getAllDataSets(), ProgramService.getAllPrograms() ])
           .then(function(dataSetsAndPrograms) {
-            $scope.templates = _.flatten(dataSetsAndPrograms);
+            //$scope.templates = _.flatten(dataSetsAndPrograms);
+            $scope.templates = [];
+            _.map(_.flatten(dataSetsAndPrograms), function(template) {
+              var printableAttribute = getPrintableAttribute(template.attributeValues);
+              if( printableAttribute && printableAttribute.value == "true" ) {
+                $scope.templates.push(template)
+              }
+            });
+
+            console.log($scope.templates, 'templates');
             $rootScope.$apply();
             refreshBootstrapSelect();
           });

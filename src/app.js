@@ -149,7 +149,7 @@ TallySheets.config(function($translateProvider) {
     method: 'GET',
     dataType: 'text',
     async: false
-  }).success(function(uiLocale) {
+  }).done(function(uiLocale) {
     if( uiLocale == '' ) {
       $translateProvider.determinePreferredLanguage();
     }
