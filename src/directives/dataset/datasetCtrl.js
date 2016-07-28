@@ -8,7 +8,7 @@ TallySheets.directive('dataset', function(){
         }
     };
 });
-
+//TODO: no need of extra controller.. add this code to link.
 TallySheets.controller('datasetCtrl', ['$scope', 'Config', function($scope, config){
     $scope.displayOptions = config.DisplayOptions;
     $scope.getTableWidth = function(section){

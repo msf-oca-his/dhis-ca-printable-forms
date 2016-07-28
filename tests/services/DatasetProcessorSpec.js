@@ -14,17 +14,16 @@ describe("DataSetProcessor", function () {
             12: {id: "12", name: "female", options: {name: "option2"}}
         };
         module(function ($provide) {
-            $provide.value('OptionSetFactory', Promise.resolve(optionsObject));
+            $provide.value('Config', config);
         });
     });
 
-    beforeEach(inject(function (PrintFriendlyProcessor, $httpBackend, $q, _$rootScope_, $timeout, Config) {
+    beforeEach(inject(function (PrintFriendlyProcessor, $httpBackend, $q, _$rootScope_, $timeout) {
         dataSetProcessor = PrintFriendlyProcessor;
         p = $q;
         $rootScope = _$rootScope_;
         httpMock = $httpBackend;
         timeout = $timeout;
-        config = Config;
         httpMock.expectGET("i18n/en.json").respond(200, {});
     }));
 

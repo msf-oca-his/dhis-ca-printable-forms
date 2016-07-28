@@ -6,7 +6,7 @@ else
   dhisUrl = "http://localhost:8000/";
 window.ApiUrl = dhisUrl + 'api';
 
-TallySheets.filter('to_trusted', [ '$sce', function($sce) {
+TallySheets.filter('to_trusted_html', [ '$sce', function($sce) {
   return function(text) {
     return $sce.trustAsHtml(text);
   };
