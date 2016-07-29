@@ -1,4 +1,4 @@
-describe("templateSelector ctrl", function() {
+describe("templateSelector Directive", function() {
   var $controller;
   var queryDeferred;
   var scope;

@@ -1,12 +1,10 @@
-<div ng-controller="pageCtrl">
-    <div class="subpage">
-        <dataset ng-if="type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset>
-        <program ng-if="type=='PROGRAM'" contents="page.contents" mode="programMode" program-name="page.programName" is-last-page="totalPages==pageNumber"></program>
-        <div class="page-number" ng-if="programMode!='REGISTER'">
-            Page {{pageNumber}} of {{totalPages}}
-        </div>
-        <div class="page-number" ng-if="programMode=='REGISTER'">
-            Part {{pageNumber}} of {{totalPages}}
-        </div>
-    </div>
+<div class="subpage">
+  <dataset ng-if="type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset>
+  <program ng-if="type=='PROGRAM'" contents="page.contents" mode="programMode" program-name="page.programName" is-last-page="totalPages==pageNumber"></program>
+  <div class="page-number" ng-if="programMode!='REGISTER'">
+    Page {{pageNumber}} of {{totalPages}}
+  </div>
+  <div class="page-number" ng-if="programMode=='REGISTER'">
+    Part {{pageNumber}} of {{totalPages}}
+  </div>
 </div>
