@@ -1,4 +1,4 @@
-TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetService', 'ProgramService', function($rootScope, $timeout, DataSetService, ProgramService) {
+TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', function($rootScope, $timeout, DataSetService, ProgramService, CustomAttributeService, config) {
   return {
     restrict: 'E',
     template: require('./templateSelectorView.html'),
@@ -17,10 +17,62 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetSe
         $rootScope.$apply();
       };
 
+      var getPrintableAttribute = function(attributeValues) {
+        return _.reduce(_.filter(attributeValues, function(attributeValue) {
+          if( attributeValue.attribute.id === config.Attributes.printableUID ) {
+            return attributeValue;
+          }
+        }));
+      };
+
+      var isAttributeExistsInSystem = function() {
+        var isAttributeExists = false;
+        return Promise.all([ CustomAttributeService.getAllCustomAttributes() ])
+          .then(function(customAttributes) {
+            console.log(_.flatten(customAttributes), 'attributes');
+
+            _.map(_.flatten(customAttributes), function(customAttribute) {
+              if( customAttribute.id == config.Attributes.printableUID ) {
+                isAttributeExists = true;
+              }
+            });
+            console.log('2')
+
+            return isAttributeExists;
+
+          })
+      };
+
       var loadTemplates = function() {
+
+        console.log('1')
+        var data = isAttributeExistsInSystem().then(function(data) {
+          console.log(data, '3');
+          if( !data ) {
+            alert("Specified UID doesn't exists in system.Please contact the system administrator.");
+          }
+        });
+
+
+
+
         Promise.all([ DataSetService.getAllDataSets(), ProgramService.getAllPrograms() ])
           .then(function(dataSetsAndPrograms) {
-            $scope.templates = _.flatten(dataSetsAndPrograms);
+            $scope.templates = [];
+
+            if( config.Attributes.printableUID === undefined ) {
+              $scope.templates = _.flatten(dataSetsAndPrograms);
+            }
+
+
+            _.map(_.flatten(dataSetsAndPrograms), function(template) {
+              var printableAttribute = getPrintableAttribute(template.attributeValues);
+              if( printableAttribute && printableAttribute.value == "true" ) {
+                $scope.templates.push(template)
+              }
+            });
+
+            console.log($scope.templates, 'templates');
             $rootScope.$apply();
             refreshBootstrapSelect();
           });
@@ -32,6 +84,7 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetSe
         $scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedDataSet);
         $scope.onSelectDataset();
       };
+
       loadTemplates();
     }
   };

@@ -37,7 +37,8 @@ TallySheets.factory("Config", [function () {
             list : 2
         },
         Attributes: {
-            printFlagUID: "FsTeAXO7tNP"
+            printFlagUID: "FsTeAXO7tNP",
+            printableUID: "xxxx"
         }
     }
 }]);
