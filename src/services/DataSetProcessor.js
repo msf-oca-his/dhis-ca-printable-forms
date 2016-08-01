@@ -1,17 +1,9 @@
-TallySheets.service("PrintFriendlyProcessor", [ 'Config', function(config) {
+TallySheets.service("PrintFriendlyProcessor", [ 'Config','Page', function(config,Page) {
   var pages = [];
   var currentPageIndex;
   var page;
 
-    var Page = function () {
-        var page = {};
-        page.heightLeft = config.DataSet.availableHeight;
-        page.width = config.DataSet.availableWidth;
-        page.contents = [];
-        return page;
-    };
-
-    var processTableHeader = function(section){
+  var processTableHeader = function(section){
         _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr){
             arr[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
         });

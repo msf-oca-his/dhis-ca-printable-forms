@@ -5,7 +5,7 @@ describe("DataSetProcessor", function () {
     var timeout;
     var p;
     var config;
-
+    var page;
     beforeEach(function () {
         angular.module('d2HeaderBar', []);
         module("TallySheets");
@@ -22,7 +22,7 @@ describe("DataSetProcessor", function () {
                 availableWidth: 183,
                 numberOfCOCColumns: 5
             }
-        }
+        },
         optionsObject = {
             123: {id: "123", name: "male", options: {name: "option1"}},
             12: {id: "12", name: "female", options: {name: "option2"}}
