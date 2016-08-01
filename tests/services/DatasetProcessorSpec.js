@@ -75,7 +75,7 @@ describe("DataSetProcessor", function () {
                     dataElements: [{
                         name: "dataElement",
                         id: "1234",
-                        type: "TEXT",
+                        valueType: "TEXT",
                         categoryCombo: {
                             id: "154",
                             categoryOptionCombos: ["female<br><12", "male<br><10"],
@@ -150,7 +150,7 @@ describe("DataSetProcessor", function () {
                     dataElements: [{
                         name: "dataElement",
                         id: "1234",
-                        type: "TEXT",
+                        valueType: "TEXT",
                         categoryCombo: {
                             id: "154",
                             categoryOptionCombos: ["female<br><12", "male<br><10"],
@@ -433,7 +433,7 @@ describe("DataSetProcessor", function () {
                         id: "1234",
                         isResolved: Promise.resolve({}),
                         name: "dataElement",
-                        type: "TEXT"
+                        valueType: "TEXT"
                     }],
                     id: "134",
                     isCatComb: false,
@@ -471,13 +471,13 @@ describe("DataSetProcessor", function () {
                     id: "1234",
                     isResolved: Promise.resolve({}),
                     name: "dataElement",
-                    type: "TEXT"
+                    valueType: "TEXT"
                 }];
                 expectedSection2.rightSideElements = [{
                     id: "1234",
                     isResolved: Promise.resolve({}),
                     name: "dataElement",
-                    type: "TEXT"
+                    valueType: "TEXT"
                 }];
                 expectedSection2.isDuplicate = false;
 
