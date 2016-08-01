@@ -38,7 +38,8 @@ TallySheets.factory("Config", [function () {
         },
         Attributes: {
             printFlagUID: "FsTeAXO7tNP",
-            printableUID: "xxxx"
+            printableUID: "HNDsEzqp9KR"
+            //printableUID: "qXtlSQC9PIQ"
         }
     }
 }]);
