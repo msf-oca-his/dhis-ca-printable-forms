@@ -1,13 +1,21 @@
-TallySheets.service("PrintFriendlyProcessor", [ 'Config', 'Page', function(config, Page) {
+TallySheets.service("PrintFriendlyProcessor", [ 'Config', function(config) {
   var pages = [];
   var currentPageIndex;
   var page;
 
-  var processTableHeader = function(section) {
-    _.map(section.dataElements[ 0 ].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr) {
-      arr[ index ] = categoryOptionCombo.toString().replace(/,/g, "<br>");
-    });
-  };
+    var Page = function () {
+        var page = {};
+        page.heightLeft = config.DataSet.availableHeight;
+        page.width = config.DataSet.availableWidth;
+        page.contents = [];
+        return page;
+    };
+
+    var processTableHeader = function(section){
+        _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr){
+            arr[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
+        });
+    };
 
   var divideOptionSetsIntoNewSection = function(section, index, sections) {
     var indexOfDEWithOptions = [];

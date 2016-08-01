@@ -9,6 +9,20 @@ describe("DataSetProcessor", function () {
     beforeEach(function () {
         angular.module('d2HeaderBar', []);
         module("TallySheets");
+        config = {
+            DataSet: {
+                heightOfTableHeader: 15,
+                heightOfDataElementInCatCombTable: 12,
+                heightOfDataElementInGeneralDataElement: 9,
+                heightOfSectionTitle: 7,
+                heightOfDataSetTitle: 10,
+                gapBetweenSections: 5,
+                graceHeight: 10,
+                availableHeight: 237,
+                availableWidth: 183,
+                numberOfCOCColumns: 5
+            }
+        }
         optionsObject = {
             123: {id: "123", name: "male", options: {name: "option1"}},
             12: {id: "12", name: "female", options: {name: "option2"}}
@@ -46,7 +60,7 @@ describe("DataSetProcessor", function () {
             }];
 
             var actualPages = dataSetProcessor.process(testDataSet);
-            expect(actualPages).toEqual(expectedPages);
+            expect(expectedPages).toEqual(actualPages);
         });
 
         describe("sections with Only Catcombs", function () {
@@ -56,22 +70,20 @@ describe("DataSetProcessor", function () {
                 isResolved: Promise.resolve({}),
                 name: "test dataset",
                 sections: [{
+                    name: "section",
+                    id: "134",
                     dataElements: [{
+                        name: "dataElement",
+                        id: "1234",
+                        type: "TEXT",
                         categoryCombo: {
                             id: "154",
                             categoryOptionCombos: ["female<br><12", "male<br><10"],
                             isResolved: Promise.resolve({}),
                             name: "catcomb"
-                        },
-                        id: "1234",
-                        isResolved: Promise.resolve({}),
-                        name: "dataElement",
-                        type: "TEXT"
+                        }
                     }],
-                    id: "134",
-                    isCatComb: true,
-                    isResolved: Promise.resolve({}),
-                    name: "section"
+                    isCatComb: true
                 }],
                 type: "dataset"
             };
@@ -243,11 +255,11 @@ describe("DataSetProcessor", function () {
 
                 assignCOCToSection(currentTestDataSet.sections[0], 15);
                 currentTestDataSet.sections[1] = _.cloneDeep(testDataSet.sections[0]);
-                assignCOCToSection(currentTestDataSet.sections[1],1);
+                assignCOCToSection(currentTestDataSet.sections[1], 1);
                 var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
                 assignCOCToSection(expectedSection1, 15); //because 17 elements will fit into the first page
                 var expectedSection2 = _.cloneDeep(currentTestDataSet.sections[1]);
-                assignCOCToSection(expectedSection2,1);
+                assignCOCToSection(expectedSection2, 1);
                 expectedSection2.isDuplicate = false;
 
                 var expectedPages = [{
@@ -257,9 +269,9 @@ describe("DataSetProcessor", function () {
                         {type: 'dataSetName', name: "test dataset"},
                         {type: 'section', section: expectedSection1}],
                     datasetName: "test dataset"
-                },{
-                    contents:[
-                        {type:'section',section:expectedSection2}
+                }, {
+                    contents: [
+                        {type: 'section', section: expectedSection2}
                     ]
                 }];
 
@@ -281,7 +293,7 @@ describe("DataSetProcessor", function () {
                         isResolved: Promise.resolve({}),
                         name: "dataElement",
                         options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
-                        type: "OPTIONSET"
+                        valueType: "OPTIONSET"
                     }],
                     id: "134",
                     isResolved: Promise.resolve({}),
