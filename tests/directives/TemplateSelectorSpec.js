@@ -63,6 +63,7 @@ describe("templateSelector Directive", function() {
     });
 
     it("should load all the datasets and programs", function(done) {
+
       Promise.resolve({})
         .then(function() {
           Promise.resolve()

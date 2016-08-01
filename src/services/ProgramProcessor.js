@@ -13,7 +13,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
     return page;
   };
   var processTableHeader = function(section) {
-    _.map(section.dataElements[ 0 ].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr) {
+    _.map(section.programStageDataElements[ 0 ].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr) {
       arr[ index ] = categoryOptionCombo.replace(/,/g, "<br>");
     });
   };
@@ -24,7 +24,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
     var pushIndex = 0;
     var newSection;
     var simplifySection = function(section) {
-      var dataElement = section.dataElements[ 0 ];
+      var dataElement = section.programStageDataElements[ 0 ];
       dataElement.rows = [];
       var numberOfRows = Math.ceil(dataElement.options.length / 3);
       for( var i = 0; i < numberOfRows; i++ ) {
@@ -40,34 +40,34 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
       return section;
     };
 
-    _.map(section.dataElements, function(dataElement, index) {
+    _.map(section.programStageDataElements, function(dataElement, index) {
 
       if( dataElement.valueType == 'OPTIONSET' ) {
         indexOfDEWithOptions.push(index);
       }
     });
-    if( (indexOfDEWithOptions.length == 1) && (section.dataElements.length == 1) ) {
+    if( (indexOfDEWithOptions.length == 1) && (section.programStageDataElements.length == 1) ) {
       section = simplifySection(section)
       section.isOptionSet = true;
       return;
     }
 
     var pushSection = function(section) {
-      if( section.dataElements.length > 0 ) sections.splice(index + (++pushIndex), 0, section);
+      if( section.programStageDataElements.length > 0 ) sections.splice(index + (++pushIndex), 0, section);
     };
 
 
     var cloneSection = function(section, dataElements) {
       var newSection = _.cloneDeep(section);
       newSection.isDuplicate = true;
-      newSection.dataElements = dataElements;
+      newSection.programStageDataElements = dataElements;
       return newSection;
     };
 
     _.map(indexOfDEWithOptions, function(indexOfDE) {
-      newSection = cloneSection(section, _.slice(section.dataElements, currentIndex, indexOfDE));
+      newSection = cloneSection(section, _.slice(section.programStageDataElements, currentIndex, indexOfDE));
       pushSection(newSection);
-      newSection = cloneSection(section, [ section.dataElements[ indexOfDE ] ]);
+      newSection = cloneSection(section, [ section.programStageDataElements[ indexOfDE ] ]);
       newSection = simplifySection(newSection);
       newSection.isOptionSet = true;
       pushSection(newSection);
@@ -75,21 +75,21 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
     });
 
     if( indexOfDEWithOptions.length > 0 ) {
-      newSection = cloneSection(section, _.slice(section.dataElements, currentIndex, section.dataElements.length));
+      newSection = cloneSection(section, _.slice(section.programStageDataElements, currentIndex, section.programStageDataElements.length));
       pushSection(newSection);
       sections.splice(index, 1);
       sections[ index ].isDuplicate = false;
     }
   };
   var divideCatCombsIfNecessary = function(section, index, sections) {
-    var dataElement = section.dataElements[ 0 ];
+    var dataElement = section.programStageDataElements[ 0 ];
     var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
 
     if( numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length ) {
       var overflow = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
       numberOfFittingColumns = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
       var newDataElements = [];
-      _.map(section.dataElements, function(dataElement) {
+      _.map(section.programStageDataElements, function(dataElement) {
         var newDataElement = _.cloneDeep(dataElement);
         newDataElement.categoryCombo.categoryOptionCombos.splice(0, numberOfFittingColumns);
         newDataElements.push(newDataElement);
@@ -97,14 +97,15 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
       });
       var newSection = _.cloneDeep(section)
       newSection.isDuplicate = true;
-      newSection.dataElements = newDataElements;
+      newSection.programStageDataElements = newDataElements;
       sections.splice(index + 1, 0, newSection)
     }
   };
 
   var splitLeftAndRightElements = function(section) {
-    section.leftSideElements = _.slice(section.dataElements, 0, Math.ceil(section.dataElements.length / 2));
-    section.rightSideElements = _.slice(section.dataElements, Math.ceil(section.dataElements.length / 2));
+    if( section.isOptionSet ) return;
+    section.leftSideElements = _.slice(section.programStageDataElements, 0, Math.ceil(section.programStageDataElements.length / 2));
+    section.rightSideElements = _.slice(section.programStageDataElements, Math.ceil(section.programStageDataElements.length / 2));
   };
 
 
@@ -115,11 +116,11 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
       var getHeightForSection = function(section) {
         var height;
         if( section.isCatComb )
-          height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
+          height = config.DataSet.heightOfDataElementInCatCombTable * (section.programStageDataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
         else if( section.isOptionSet )
-          height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements[ 0 ].rows.length)) + config.DataSet.gapBetweenSections;
+          height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements[ 0 ].rows.length)) + config.DataSet.gapBetweenSections;
         else
-          height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
+          height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements.length / 2)) + config.DataSet.gapBetweenSections;
 
         return section.isDuplicate ? height : height + config.DataSet.heightOfSectionTitle;
       };
@@ -143,18 +144,18 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
         var overFlow = sectionHeight - page.heightLeft;
         if( section.isCatComb ) {
           var numberOfOrphanDataElements = overFlow / config.DataSet.heightOfDataElementInCatCombTable;
-          var numberOfDataElements = section.dataElements.length;
+          var numberOfDataElements = section.programStageDataElements.length;
           return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
         }
         else if( section.isOptionSet )
-          return section.dataElements[ 0 ].options.length - Math.round(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
+          return section.programStageDataElements[ 0 ].options.length - Math.round(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
         else
-          return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.heightOfDataElementInGeneralDataElement));
+          return section.programStageDataElements.length - Math.round(overFlow * 2 / (config.DataSet.heightOfDataElementInGeneralDataElement));
       };
       var breakAndAddSection = function(section) {
         if( section.isCatComb ) {
           var newSection = _.cloneDeep(section);
-          newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
+          newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
           newSection.isDuplicate = true;
           processTableHeader(newSection);
           addSectionToPage(section, page.heightLeft);
@@ -165,7 +166,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
           var newSection = _.cloneDeep(section);
           if( numberOfElementsThatCanFit % 3 > 0 )
             numberOfElementsThatCanFit = numberOfElementsThatCanFit + (3 - numberOfElementsThatCanFit % 3);
-          newSection.dataElements[ 0 ].options = section.dataElements[ 0 ].options.splice(numberOfElementsThatCanFit);
+          newSection.programStageDataElements[ 0 ].options = section.programStageDataElements[ 0 ].options.splice(numberOfElementsThatCanFit);
           divideOptionSetsIntoNewSection(section);
           divideOptionSetsIntoNewSection(newSection);
           newSection.isDuplicate = true;
@@ -175,7 +176,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
         else {
           var newSection = _.cloneDeep(section);
           (numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
-          newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
+          newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
           splitLeftAndRightElements(section);
           splitLeftAndRightElements(newSection);
           newSection.isDuplicate = true;
@@ -194,7 +195,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
       else {
         var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)
 
-        if( numberOfElementsThatCanFit == section.dataElements.length )
+        if( numberOfElementsThatCanFit == section.programStageDataElements.length )
           addSectionToPage(section, sectionHeight);
         else if( numberOfElementsThatCanFit > 1 )
           breakAndAddSection(section);
@@ -226,7 +227,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
       page = pages[ currentPageIndex ];
     }
 
-    _.map(dataSet.stages[ 0 ].sections, processSection);
+    _.map(dataSet.programStages[ 0 ].programStageSections, processSection);
     addComments();
     dataSet.isPrintFriendlyProcessed = true;
   };
@@ -244,7 +245,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
     };
 
     page = getNewPage();
-    var allDataElements = _.flatten(_.map(program.stages[0].sections, 'dataElements'));
+    var allDataElements = _.flatten(_.map(program.programStages[ 0 ].programStageSections, 'programStageDataElements'));
     allDataElements.push(new DataElement({ name: 'Comments', type: 'TEXT' }))
     _.map(allDataElements, function(dataElement, index) {
       page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);
@@ -263,7 +264,6 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
         page.contents.push(dataElement);
       }
     });
-    program.isPrintFriendlyProcessed = true;
   };
 
   this.process = function(program, mode) {
@@ -271,14 +271,16 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
     currentPageIndex = -1;
     if( mode == 'coversheet' )
       _.map([ program ], function(program) {
-        for( var i = 0; i < program.stages[ 0 ].sections.length; i++ ) {
-          if( program.stages[ 0 ].sections[ i ].isCatComb ) {//TODO: revalidate this, is it needed.
-            divideCatCombsIfNecessary(program.stages[ 0 ].sections[ i ], i, program.stages[ 0 ].sections);
-            processTableHeader(program.stages[ 0 ].sections[ i ]);
+        if( program.programStages.length == 0 ) return;
+        for( var i = 0; i < program.programStages[ 0 ].programStageSections.length; i++ ) {
+          if( program.programStages[ 0 ].programStageSections.length == 0 ) return;
+          if( program.programStages[ 0 ].programStageSections[ i ].isCatComb ) {//TODO: revalidate this, is it needed.
+            divideCatCombsIfNecessary(program.programStages[ 0 ].programStageSections[ i ], i, program.programStages[ 0 ].programStageSections);
+            processTableHeader(program.programStages[ 0 ].programStageSections[ i ]);
           }
           else {
-            divideOptionSetsIntoNewSection(program.stages[ 0 ].sections[ i ], i, program.stages[ 0 ].sections);
-            splitLeftAndRightElements(program.stages[ 0 ].sections[ i ]);
+            divideOptionSetsIntoNewSection(program.programStages[ 0 ].programStageSections[ i ], i, program.programStages[ 0 ].programStageSections);
+            splitLeftAndRightElements(program.programStages[ 0 ].programStageSections[ i ]);
           }
         }
         processDataSet(program)
@@ -286,7 +288,6 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
     else {
 
       processRegisterProgram(program);
-      console.log(pages)
     }
     return pages;
   }
