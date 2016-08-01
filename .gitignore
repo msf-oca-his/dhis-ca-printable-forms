@@ -11,3 +11,5 @@ tests/coverage
 target
 .DS_Store
 npm-debug.log
+bower_components/
+coverage/
