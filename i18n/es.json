@@ -4,5 +4,8 @@
   	"EXPORT_EXCEL": "Exportar a MS Excel",
 	"HOME": "Inicio",
 	"SELECT_TEMPLATE": "Seleccione una plantilla",
-  	"ADD_FORM": "Añadir formulario"
+  	"ADD_FORM": "Añadir formulario",
+	"NO_ATTRIBUTE_EXISTS":"Especificado UID no existe en contacto system.Please el administrador del sistema.",
+	"NO_ASSOCIATION_WITH_ATTRIBUTE":"existe atributo personalizado en el sistema, pero no assigned.Please en contacto con el administrador del sistema.",
+	"ATTRIBUTE_NOT_SET":"Atributo personalizado no se establece en true . Por favor, póngase en contacto con el administrador del sistema."
 }

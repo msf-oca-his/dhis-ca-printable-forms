@@ -126,29 +126,16 @@ describe("templateSelector ctrl", function () {
             customAttributeService.getAllCustomAttributes = function () {
                 return Promise.resolve(customAttributes)
             };
+
+            customAttributeService.getCustomAttribute = function () {
+                return Promise.resolve(customAttributes[0])
+            };
+
             scope.testRenderDataSets = jasmine.createSpy('testSpy');
             scope.testTemplate = {};
-
-            elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
-            elements = compile(elements)(scope);
-            scope.$digest();
         });
 
         it("should load all the datasets and programs when custom attribute is not specified in config", function (done) {
-            Promise.resolve({})
-                .then(function () {
-                    Promise.resolve()
-                        .then(function () {
-                            expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-                            done();
-                        });
-                    _$rootScope.$digest();
-                });
-            _$rootScope.$digest();
-        });
-
-        it("should load all dataSets and programs when they have custom attribute along with value", function (done) {
-            config.Attributes.printableUID = "1";
             elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
             elements = compile(elements)(scope);
             scope.$digest();
@@ -164,28 +151,63 @@ describe("templateSelector ctrl", function () {
             _$rootScope.$digest();
         });
 
-        it("should not load all dataSets and programs when they have custom attribute along with no value", function (done) {
+        it("should load all templates which has attribute value as true", function (done) {
+            config.Attributes.printableUID = "1";
+            elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+            elements = compile(elements)(scope);
+            scope.$digest();
+            Promise.resolve({})
+                .then(function () {
+                    Promise.resolve()
+                        .then(function () {
+                            Promise.resolve().then(function () {
+                                Promise.resolve().then(function () {
+                                    Promise.resolve().then(function () {
+                                        expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+                                        done();
+
+                                    })
+                                    scope.$digest();
+                                })
+                                scope.$digest();
+                            })
+                            scope.$digest();
+                        });
+                    scope.$digest();
+                });
+            scope.$digest();
+        });
+
+        it("should not load templates which has attribute value as false", function (done) {
             config.Attributes.printableUID = "1";
             datasets[0].attributeValues[0].value = "false";
             programs[0].attributeValues[0].value = "false";
-
             elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
             elements = compile(elements)(scope);
+            scope.$digest();
             datasets.splice(0, 1);
             programs.splice(0, 1);
-            scope.$digest();
+
             Promise.resolve({})
                 .then(function () {
                     Promise.resolve()
                         .then(function () {
-                            expectedTemplates = scope.$$childHead.templates;
-                            console.log(expectedTemplates, "scope.$$childHead.templates")
-                            expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-                            done();
+                            Promise.resolve().then(function () {
+                                Promise.resolve().then(function () {
+                                    Promise.resolve().then(function () {
+                                        expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+                                        done();
+
+                                    })
+                                    scope.$digest();
+                                })
+                                scope.$digest();
+                            })
+                            scope.$digest();
                         });
-                    _$rootScope.$digest();
+                    scope.$digest();
                 });
-            _$rootScope.$digest();
+            scope.$digest();
         });
 
 

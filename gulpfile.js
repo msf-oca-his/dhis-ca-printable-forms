@@ -175,7 +175,7 @@ gulp.task(TASKS.webpackTest, [TASKS.watchSrcDuringTests, TASKS.watchTests], func
 });
 
 
-gulp.task(TASKS.test, [ TASKS.setUpTemp ], function(done) {
+gulp.task(TASKS.test, gulpsync.sync([ TASKS.setUpTemp,  TASKS.watchSrc ]), function(done) {
   new KarmaServer({
     configFile: __dirname + '/tests/karma.conf.js',
     singleRun: false

@@ -4,5 +4,8 @@
   	"EXPORT_EXCEL": "Exporter à MS Excel",
 	"HOME": "Accueil",
 	"SELECT_TEMPLATE": "Sélectionnez un modèle",
-  	"ADD_FORM": "Ajouter formulaire"
+  	"ADD_FORM": "Ajouter formulaire",
+	"NO_ATTRIBUTE_EXISTS":"UID spécifié n'existe pas dans system.Please , contactez l'administrateur système.",
+	"NO_ASSOCIATION_WITH_ATTRIBUTE":"attribut personnalisé existe dans le système , mais pas affecté de manière s'il vous plaît contacter l'administrateur du système.",
+	"ATTRIBUTE_NOT_SET":"Attribut personnalisé est pas réglé sur vrai. Veuillez contacter votre administrateur système"
 }

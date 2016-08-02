@@ -22,6 +22,7 @@ module.exports = function(config) {
       '../.temp/directives.js',
       //'../tests/!(coverage)/*.js',
       '../tests/controllers/*.js',
+      '../tests/directives/TemplateSelectorSpec.js',
       './dhis-model/DataElementSpec.js'
     ],
 

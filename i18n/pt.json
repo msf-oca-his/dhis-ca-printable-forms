@@ -4,5 +4,9 @@
   "EXPORT_EXCEL": "Exportar para Excel",
   "HOME": "Principal",
   "SELECT_TEMPLATE": "selecione um modelo",
-  "ADD_FORM": "Adicionar forma"
+  "ADD_FORM": "Adicionar forma",
+  "NO_ATTRIBUTE_EXISTS":"não especificado UID não existe em contato system.Please o administrador do sistema.",
+  "NO_ASSOCIATION_WITH_ATTRIBUTE":"atributo personalizado existe no sistema , mas não assigned.Please em contato com o administrador do sistema.",
+  "ATTRIBUTE_NOT_SET":"Atributo personalizado não está definido para true. Entre em contato com o administrador do sistema"
+
 }
