@@ -214,7 +214,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'Config','Page', function(config
     pages = [];
     currentPageIndex = 0;
     _.map([ dataset ], function(dataset) {
-      console.log(dataset.sections)
       for( var i = 0; i < dataset.sections.length; i++ ) {
         if( dataset.sections[ i ].isCatComb ) {
           divideCatCombsIfNecessary(dataset.sections[ i ], i, dataset.sections);

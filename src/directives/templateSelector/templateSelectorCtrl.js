@@ -36,8 +36,6 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetSe
                 isAttributeExists = true;
               }
             });
-            console.log('2')
-
             return isAttributeExists;
 
           })
@@ -45,9 +43,7 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$timeout', 'DataSetSe
 
       var loadTemplates = function() {
 
-        console.log('1')
         var data = isAttributeExistsInSystem().then(function(data) {
-          console.log(data, '3');
           if( !data ) {
             alert("Specified UID doesn't exists in system.Please contact the system administrator.");
           }

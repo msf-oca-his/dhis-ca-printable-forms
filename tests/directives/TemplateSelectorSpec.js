@@ -50,7 +50,7 @@ describe("templateSelector Directive", function() {
     beforeEach(function() {
       dataSetService.getAllDataSets = function() {
         return Promise.resolve(datasets);
-      }
+      };
       programService.getAllPrograms = function() {
         return Promise.resolve(programs);
       };
