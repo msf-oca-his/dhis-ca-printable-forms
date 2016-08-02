@@ -1,9 +1,7 @@
 TallySheets.factory('Page', ['Config', function(config){
-  return function (type){
-    var page = {};
-    page.heightLeft = config.DataSet.availableHeight;
-    page.width = config.DataSet.availableWidth;
-    page.contents = [];
-    return page;
+  return function Page(type){
+    this.heightLeft = config.DataSet.availableHeight;
+    this.width = config.DataSet.availableWidth;
+    this.contents = [];
   }
 }]);
