@@ -97,9 +97,9 @@ TallySheets.filter('addPrefix', [ 'Config', function(config) {  //TODO: find a g
   return function(template) {
     var typeOfTemplate = getTypeOfTemplate(template)
     if( typeOfTemplate == "DATASET" )
-      return config.Prefixes.dataSetPrefix + "-" + template.displayName;
+      return config.Prefixes.dataSetPrefix + template.displayName;
     if( typeOfTemplate == "PROGRAM" )
-      return config.Prefixes.programPrefix + "-" + template.displayName;
+      return config.Prefixes.programPrefix + template.displayName;
     else
       return template;
   }
