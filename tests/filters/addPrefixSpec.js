@@ -4,7 +4,7 @@ describe("addPrefix Filter", function() {
   beforeEach(function() {
     module("TallySheets")
     module(function($provide) {
-      config = { Prefixes: { dataSetPrefix: 'testDSPrefix', programPrefix: 'testProgramPrefix' } };
+      config = { Prefixes: { dataSetPrefix: 'testDSPrefix_', programPrefix: 'testProgramPrefix_' } };
       $provide.value('Config', config);
     });
     angular.module("d2HeaderBar", [])
@@ -16,14 +16,14 @@ describe("addPrefix Filter", function() {
   describe("when template is dataset", function() {
     it("should prefix template with dataset prefix", function() {
       var dataSet = { displayName: 'testDataSet', constructor: { name: 'DataSet' } };
-      expect(addPrefix(dataSet)).toBe("testDSPrefix-testDataSet")
+      expect(addPrefix(dataSet)).toBe("testDSPrefix_testDataSet")
     })
   });
 
   describe("when template is program", function() {
     it("should prefix template with program prefix", function() {
       var program = { displayName: 'testProgram', constructor: { name: 'Program' } };
-      expect(addPrefix(program)).toBe("testProgramPrefix-testProgram")
+      expect(addPrefix(program)).toBe("testProgramPrefix_testProgram")
     })
   })
 

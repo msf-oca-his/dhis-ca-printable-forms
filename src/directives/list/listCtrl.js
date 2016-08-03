@@ -3,7 +3,7 @@ TallySheets.directive('list', function(){
         restrict: 'E',
         template: require('./listView.html'),
         scope: {
-            content: '='
+            dataelement: '='
         }
     };
 });

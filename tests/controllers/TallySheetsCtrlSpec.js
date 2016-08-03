@@ -20,7 +20,7 @@ describe("TallySheets ctrl", function () {
         expectedPages = "testPages"
 
         mockedDataSetService = {
-            getDataSet: function () {
+            getReferentialDataSet: function () {
                 return Promise.resolve(mockDataset);
             }
         };

@@ -39,18 +39,18 @@
             <tr>
                 <td></td>
                 <td class="table-heading"
-                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos"
+                    ng-repeat="catComb in content.section.programStageDataElements[0].categoryCombo.categoryOptionCombos"
                     ng-bind-html="catComb.name | to_trusted">
                 </td>
             </tr>
             </thead>
-            <tr ng-repeat="dataElement in content.section.dataElements">
+            <tr ng-repeat="dataElement in content.section.programStageDataElements">
 
                 <td class="deLabel catComb">
                     {{dataElement.name}}
                 </td>
                 <td class="deField"
-                    ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
+                    ng-repeat="catComb in content.section.programStageDataElements[0].categoryCombo.categoryOptionCombos">
 
                 </td>
             </tr>
@@ -59,16 +59,17 @@
 
     <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
       <!--TODO: Good name for hidde and extract it out to app.css-->
-       <div  class="hideDE" ng-if="content.section.dataElements[0].displayOption == displayOptions.none">
-            {{content.section.dataElements[0]}}
+       <div  class="hideDE" ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.none">
+            {{content.section.programStageDataElements[0]}}
         </div>
-        <div  ng-if="content.section.dataElements[0].displayOption == displayOptions.text">
+        <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.text">
             <text-field content="content"></text-field>
         </div>
 
-        <div  ng-if="content.section.dataElements[0].displayOption == displayOptions.list || !content.section.dataElements[0].displayOption">
+        <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.list || !content.section.programStageDataElements[0].displayOption">
           <!--#TODO: bring section name back to html-->
-            <list content="content"></list>
+          <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
+          <list dataelement="content.section.programStageDataElements[0]"></list>
         </div>
     </div>
 

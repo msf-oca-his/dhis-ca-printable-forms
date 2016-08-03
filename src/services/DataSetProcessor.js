@@ -1,13 +1,13 @@
-TallySheets.service("PrintFriendlyProcessor", [ 'Config', 'Page', function(config, Page) {
+TallySheets.service("PrintFriendlyProcessor", [ 'Config','Page', function(config,Page) {
   var pages = [];
   var currentPageIndex;
   var page;
 
-  var processTableHeader = function(section) {
-    _.map(section.dataElements[ 0 ].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr) {
-      arr[ index ] = categoryOptionCombo.toString().replace(/,/g, "<br>");
-    });
-  };
+  var processTableHeader = function(section){
+        _.map(section.dataElements[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, arr){
+            arr[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
+        });
+    };
 
   var divideOptionSetsIntoNewSection = function(section, index, sections) {
     var indexOfDEWithOptions = [];
@@ -214,7 +214,6 @@ TallySheets.service("PrintFriendlyProcessor", [ 'Config', 'Page', function(confi
     pages = [];
     currentPageIndex = 0;
     _.map([ dataset ], function(dataset) {
-      console.log(dataset.sections)
       for( var i = 0; i < dataset.sections.length; i++ ) {
         if( dataset.sections[ i ].isCatComb ) {
           divideCatCombsIfNecessary(dataset.sections[ i ], i, dataset.sections);

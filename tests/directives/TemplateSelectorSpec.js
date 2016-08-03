@@ -1,4 +1,4 @@
-describe("templateSelector ctrl", function() {
+describe("templateSelector Directive", function() {
   var $controller;
   var queryDeferred;
   var scope;
@@ -217,12 +217,10 @@ describe("templateSelector ctrl", function() {
 
     describe("On selecting a  template", function() {
       //TODO: pending testcases
-      xit("should show the hour glass icon until templates are loaded", function() {
-      })
-      xit("should remove the hour glass icon after templates are loaded", function() {
-      })
+      xit("should show the hour glass icon until templates are loaded",function(){})
+      xit("should remove the hour glass icon after templates are loaded",function(){})
 
-      xit("should update template", function(done) {
+      it("should update template", function(done) {
         var selectElement = elements[ 0 ].querySelector('select')
         Promise.resolve({})
           .then(function() {
@@ -231,7 +229,7 @@ describe("templateSelector ctrl", function() {
                 selectElement.selectedIndex = 3;
                 selectElement.dispatchEvent(new Event('change'));
                 _$rootScope.$digest();
-                expect(scope.testTemplate).toEqual({ id: programs[ 0 ].id, type: "PROGRAM" })
+                expect(scope.testTemplate).toEqual({id:programs[0].id, type: "PROGRAM"})
                 expect(scope.testRenderDataSets).toHaveBeenCalled();
                 done();
               });
@@ -242,5 +240,7 @@ describe("templateSelector ctrl", function() {
       });
 
     })
+
+
   })
 });
