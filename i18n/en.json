@@ -5,7 +5,7 @@
   "HOME": "Home",
   "SELECT_TEMPLATE": "Select a Template",
   "ADD_FORM": "Add form",
-  "NO_ATTRIBUTE_EXISTS": "Specified UID doesn't exists in system.Please contact the system administrator.",
-  "NO_ASSOCIATION_WITH_ATTRIBUTE": "Custom attribute exists in the system but not assigned.Please contact the system administrator.",
-  "ATTRIBUTE_NOT_SET": "Custom Attribute is not set to true. Please contact your system administrator"
+  "NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator.",
+  "NO_ASSOCIATION_WITH_ATTRIBUTE": "The specified UID exists in the system, but is not assigned to any template. Please contact your system administrator.",
+  "ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator."
 }
