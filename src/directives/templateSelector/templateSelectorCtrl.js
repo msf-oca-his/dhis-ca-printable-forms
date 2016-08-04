@@ -31,7 +31,8 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$window', '$timeout',
         var alertShown = false;
 
         //checking whether custom attribute present in config or not
-        if( config.Attributes.printableUID === undefined || config.Attributes.printableUID === "" ) {
+        //if( config.Attributes.printableUID === undefined || config.Attributes.printableUID === "" ) {
+        if( _.isEmpty(config.Attributes.printableUID) ) {
           Promise.all([ DataSetService.getAllDataSets(), ProgramService.getAllPrograms() ])
             .then(function(templates) {
               $scope.templates = _.flatten(templates);
