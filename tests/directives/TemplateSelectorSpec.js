@@ -197,8 +197,6 @@ describe("templateSelector Directive", function() {
               Promise.resolve().then(function() {
                 Promise.resolve().then(function() {
                   Promise.resolve().then(function() {
-                    console.log(scope.$$childHead.templates, 'actual')
-                    console.log(expectedDataSets.concat(expectedPrograms), 'expected')
                     expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
                     done();
 
@@ -220,7 +218,10 @@ describe("templateSelector Directive", function() {
       xit("should show the hour glass icon until templates are loaded",function(){})
       xit("should remove the hour glass icon after templates are loaded",function(){})
 
-      it("should update template", function(done) {
+      it("should update selectedTemplate", function(done) {
+        elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+        elements = compile(elements)(scope);
+        scope.$digest();
         var selectElement = elements[ 0 ].querySelector('select')
         Promise.resolve({})
           .then(function() {

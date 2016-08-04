@@ -68,7 +68,6 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$window', '$timeout',
                       var yes = "true";
 
                       _.map(_.flatten(templates), function(template) {
-                        console.log(template, 'template')
                         var printableAttribute = getPrintableAttribute(template.attributeValues);
                         //checking whether the template has that custom attribute along with value as true
                         if( printableAttribute && printableAttribute.value == yes ) {
