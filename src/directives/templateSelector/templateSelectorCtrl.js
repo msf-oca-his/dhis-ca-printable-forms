@@ -26,13 +26,12 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$window', '$timeout',
       };
 
 
-      //TODO: Making api call to show detailed messages to user
       //TODO: UX input: How should alerts be handled ?
       var loadTemplates = function() {
         var alertShown = false;
 
         //checking whether custom attribute present in config or not
-        if( config.Attributes.printableUID === undefined ) {
+        if( config.Attributes.printableUID === undefined || config.Attributes.printableUID === "" ) {
           Promise.all([ DataSetService.getAllDataSets(), ProgramService.getAllPrograms() ])
             .then(function(templates) {
               $scope.templates = _.flatten(templates);
@@ -55,7 +54,7 @@ TallySheets.directive('templateSelector', [ '$rootScope', '$window', '$timeout',
               }
               else {
                 //checking whether custom attribute associated to dataSets/programs or not
-                if( attribute[ 0 ] != undefined && (!attribute[ 0 ].dataSetAttribute || !attribute[ 0 ].programAttribute) ) {
+                if( attribute[ 0 ] != undefined && (!attribute[ 0 ].dataSetAttribute && !attribute[ 0 ].programAttribute) ) {
                   $translate('NO_ASSOCIATION_WITH_ATTRIBUTE').then(function(translatedValue) {
                     alertShown = true;
                     alert(translatedValue);
