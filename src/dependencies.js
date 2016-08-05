@@ -9,5 +9,7 @@ require("script!../dependencies/bower_components/jquery-ui/jquery-ui.min.js")
 require("script!../dependencies/bower_components/bootstrap/dist/js/bootstrap.min.js")
 require("script!../dependencies/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js")
 require("script!../dependencies/bower_components/lodash/dist/lodash.min.js")
+
+window.d2Lib = require("../node_modules/d2/lib/d2.js")
 require("../../custom_app_commons/js/angular-commons/dhis-commons/dhis-model.js")
 require("../../custom_app_commons/js/angular-commons/dhis-commons/dhis-services.js")

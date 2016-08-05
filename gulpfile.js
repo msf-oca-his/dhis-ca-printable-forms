@@ -81,8 +81,7 @@ TASKS = {
   webpack: 'webpack',
   webpackTest: '_webpackTest',
   pack: 'pack',
-  test: 'test'
-
+  test: 'test',
 };
 
 gulp.task(TASKS.clean, [ TASKS.cleanTemp, TASKS.cleanTarget ]);
@@ -132,12 +131,6 @@ gulp.task(TASKS.watchSrc, function() {
   gulp.watch(APP.i18n.all, gulpsync.sync([ TASKS.copyi18nToTemp, TASKS.reload ]));
 });
 
-gulp.task(TASKS.watchSrcDuringTests, function(){
-  gulp.watch(APP.src.all, gulpsync.sync([ TASKS.webpack, TASKS.webpackTest ]));
-  gulp.watch(APP.resources.all, gulpsync.sync([ TASKS.copyResourcesToTemp, TASKS.webpackTest ]));
-  gulp.watch(APP.i18n.all, gulpsync.sync([ TASKS.copyi18nToTemp, TASKS.webpackTest ]))
-});
-
 gulp.task(TASKS.watchTests, function() {
   gulp.watch(APP.tests.testsSrc, gulpsync.sync([ TASKS.webpackTest ]))
 });
@@ -165,21 +158,20 @@ gulp.task(TASKS.webpack, function(callback) {
   });
 });
 
-gulp.task(TASKS.webpackTest, [TASKS.watchSrcDuringTests, TASKS.watchTests], function(callback) {
-  webpack(require(APP.tests.webpack.config), function(err, stats) {
-    if( err ) {
-      console.log("error while doing webpack tests", err)
-    }
-    callback();
-  });
-});
 
 
 gulp.task(TASKS.test, gulpsync.sync([ TASKS.setUpTemp,  TASKS.watchSrc ]), function(done) {
   new KarmaServer({
     configFile: __dirname + '/tests/karma.conf.js',
-    singleRun: false
-  }, done).start();
+    singleRun: true
+  }, function(err) {
+    if( err == 1 ) {
+      console.error("unit tests have failed...");
+      process.exit(1);
+    }
+    else
+      done();
+  }).start();
 });
 
 gulp.task(TASKS.pack, [ TASKS.setUpTemp ], function() {

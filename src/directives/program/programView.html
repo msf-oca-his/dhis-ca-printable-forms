@@ -1,5 +1,5 @@
-<link ng-if="mode=='coversheet'" href="css/coversheet.css" rel="stylesheet" type="text/css">
-<link ng-if="mode=='register'" href="css/register.css" rel="stylesheet" type="text/css">
+<link ng-if="mode=='COVERSHEET'" href="css/coversheet.css" rel="stylesheet" type="text/css">
+<link ng-if="mode=='REGISTER'" href="css/register.css" rel="stylesheet" type="text/css">
 <span ng-controller="programCtrl">
 <div class="datasetName">{{programName}}</div>
     <table class="header">
@@ -27,7 +27,7 @@
     </table>
 
 
-<span ng-if="mode=='coversheet'">
+<span ng-if="mode=='COVERSHEET'">
 <div ng-repeat="content in contents">
 
 <!--//TODO: refactor as per program - catCombs are not necessary (also duplication between datasetView & ProgramView)-->
@@ -86,7 +86,7 @@
 
 
 
-    <span ng-if="mode=='register'">
+    <span ng-if="mode=='REGISTER'">
         <table border="1">
                 <tr>
                     <td class="deLabel" style="width: 1cm">

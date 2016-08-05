@@ -269,7 +269,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
   this.process = function(program, mode) {
     pages = [];
     currentPageIndex = -1;
-    if( mode == 'coversheet' )
+    if( mode == 'COVERSHEET' )
       _.map([ program ], function(program) {
         if( program.programStages.length == 0 ) return;
         for( var i = 0; i < program.programStages[ 0 ].programStageSections.length; i++ ) {
@@ -285,8 +285,7 @@ TallySheets.service("ProgramProcessor", [ 'DataElement', 'DataSetSection', 'Conf
         }
         processDataSet(program)
       });
-    else {
-
+    else if( mode == 'REGISTER' ){
       processRegisterProgram(program);
     }
     return pages;

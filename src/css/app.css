@@ -1,62 +1,74 @@
 body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    /*font-family: "Lucida Console", Monaco, monospace !important;*/
-    font-size: 3mm;
-}
- #app *{
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    font-family: "Lucida Console", Monaco, monospace;
+  width     : 100%;
+  height    : 100%;
+  margin    : 0;
+  padding   : 0;
+  font-size : 3mm;
 }
 
-#mainMenu{
-    margin-top:45px;/*#TODO: Not a good thing to do, should find a better way to do this */
+#under-headerbar {
+  margin-top : 45px; /*#TODO: Not a good thing to do, should find a better way to do this */
+  height: 1px;
+}
+
+#app * {
+  box-sizing      : border-box;
+  -moz-box-sizing : border-box;
+  font-family     : "Lucida Console", Monaco, monospace;
 }
 
 input.clean {
-    border: none;
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    transition: none;
-    -webkit-transition: none;
-    -moz-transition: none;
-    -o-transition: none;
-    transition: none;
-}
-.pffcheckbox{
-    margin-right: 2mm !important;
-}
-/*TODO: rename this class to hidden*/
-.hideDE {
-    display: none
+  border                : none;
+  -webkit-border-radius : 0;
+  -moz-border-radius    : 0;
+  border-radius         : 0;
+  -webkit-box-shadow    : none;
+  -moz-box-shadow       : none;
+  box-shadow            : none;
+  transition            : none;
+  -webkit-transition    : none;
+  -moz-transition       : none;
+  -o-transition         : none;
+  transition            : none;
 }
 
-.option{
-    width: 5cm;
-    height: 9mm;
+.pffcheckbox {
+  margin-right : 2mm !important;
 }
-.checkboxcontainer{
-    margin-left: 5mm;
+
+/*TODO: rename this class to hidden*/
+.hideDE {
+  display : none
 }
-.optionsetTable td{
-        padding-right: 10mm;
+
+.option {
+  width  : 5cm;
+  height : 9mm;
+}
+
+.checkboxcontainer {
+  margin-left : 5mm;
+}
+
+.optionsetTable td {
+  padding-right : 10mm;
 }
 
 .spinner-wrapper img {
-    margin: 0 auto;
-    display: block;
-    margin-top: 100px;
+  margin     : 0 auto;
+  display    : block;
+  margin-top : 100px;
 }
 
+.error {
+  color : red;
+}
+
+.hidden {
+  visibility: hidden;
+}
 @media print {
-    .noprint{
-        display:none;
-    }
+  .noprint {
+    display : none;
+  }
 }

@@ -1,18 +1,13 @@
-window.TallySheets = angular.module('TallySheets', [ 'ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar', 'DhisModel', 'DhisServices' ]);
-var dhisUrl;
-if( window.location.href.includes("apps") )
-  dhisUrl = window.location.href.split('api/apps/')[ 0 ];
-else
-  dhisUrl = "http://localhost:8000/";
-window.ApiUrl = dhisUrl + 'api';
-
+require('./boot.js');
 TallySheets.filter('to_trusted_html', [ '$sce', function($sce) {
   return function(text) {
     return $sce.trustAsHtml(text);
   };
 } ]);
-TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "PrintFriendlyProcessor", "ProgramService", "ProgramProcessor", function($scope, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor) {
 
+TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "PrintFriendlyProcessor", "ProgramService", "ProgramProcessor", "appLoadingFailed", function($scope, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor, appLoadingFailed) {
+
+  $scope.appLoadingFailed = appLoadingFailed;
   $scope.spinnerShown = false;
   $scope.dsId = 1;
   $scope.template = {};
@@ -95,19 +90,6 @@ TallySheets.controller('TallySheetsController', [ "$scope", "DataSetService", "P
   };
 } ]);
 
-//TODO: find a better way to expose d2. not through promise
-TallySheets.factory("d2", [ function() {
-  var d2Lib = require("../node_modules/d2/lib/d2.js");
-  return d2Lib.init({ baseUrl: ApiUrl })
-    .then(function(d2) {
-      console.log(d2);
-      return d2;
-    })
-    .catch(function(err) {
-      return console.log(err, 'yayy')
-    })
-
-} ]);
 
 TallySheets.directive('onFinishRender', function($timeout) {
   return {
@@ -142,7 +124,6 @@ TallySheets.config(function($translateProvider) {
   );
 
   $translateProvider.fallbackLanguage([ 'en' ]);
-
   jQuery.ajax({ //TODO: this is a http call. if we are not using d2's translate then move this to d2
     url: ApiUrl + '/userSettings/keyUiLocale/',
     contentType: 'text/plain',

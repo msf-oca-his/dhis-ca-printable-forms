@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html ng-app="TallySheets" lang="en">
-	<head>
-		<script src="dependencies.js" type="text/javascript"></script>
-		<!--#TODO: place the dependencies css in a dependencies scss file and import all of them-->
-		<link rel="stylesheet" type="text/css" href="dependencies/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="dependencies/bootstrap-select/dist/css/bootstrap-select.min.css">
+<html lang="en">
+<head>
+  <script src="dependencies.js" type="text/javascript"></script>
+  <!--#TODO: place the dependencies css in a dependencies scss file and import all of them-->
+  <link rel="stylesheet" type="text/css" href="dependencies/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="dependencies/bootstrap-select/dist/css/bootstrap-select.min.css">
 
-		<!--DHIS related stuff-->
-		<script>
-			window.dhis2 = window.dhis2 || {};
-			dhis2.settings = dhis2.settings || {};
-			dhis2.settings.baseUrl = '..';
-		</script>
-<!--#TODO: move this to d2-ui-->
-		<script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.translate.js"></script>
-		<script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.menu.js"></script>
-		<script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.menu.ui.js"></script>
-		<link type="text/css" rel="stylesheet" href="/dhis-web-commons/font-awesome/css/font-awesome.min.css"/>
-		<link type="text/css" rel="stylesheet" media="screen" href="/dhis-web-commons/css/menu.css">
+  <!--DHIS related stuff-->
+  <script>
+    window.dhis2 = window.dhis2 || {};
+    dhis2.settings = dhis2.settings || {};
+    dhis2.settings.baseUrl = '..';
+  </script>
+  <!--#TODO: move this to d2-ui-->
+  <script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.translate.js"></script>
+  <script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.menu.js"></script>
+  <script type="text/javascript" src="/dhis-web-commons/javascripts/dhis2/dhis2.menu.ui.js"></script>
+  <link type="text/css" rel="stylesheet" href="/dhis-web-commons/font-awesome/css/font-awesome.min.css"/>
+  <link type="text/css" rel="stylesheet" media="screen" href="/dhis-web-commons/css/menu.css">
 
-		<script src="app.js" type="text/javascript"> </script>
-		<link href="css/app.css" rel="stylesheet" type="text/css">
+  <script src="app.js" type="text/javascript"></script>
+  <link href="css/app.css" rel="stylesheet" type="text/css">
 
 
-		<!-- Load directives and modules -->
-		<script src="config.js" type="text/javascript"></script>
-		<script src="services.js" type="text/javascript"></script>
-		<script src="directives.js" type="text/javascript"></script>
-		<script src="pff-model.js" type="text/javascript"></script>
+  <!-- Load directives and modules -->
+  <script src="config.js" type="text/javascript"></script>
+  <script src="services.js" type="text/javascript"></script>
+  <script src="directives.js" type="text/javascript"></script>
+  <script src="pff-model.js" type="text/javascript"></script>
 
-	</head>
-	<body ng-controller="TallySheetsController">
-	<d2-header-bar class="noprint"></d2-header-bar>
-	<div id="app">
-		<div id="mainMenu" class="panel panel-default hidden-print">
-			<div class="panel-body">
-
+</head>
+<body ng-controller="TallySheetsController">
+<d2-header-bar class="noprint"></d2-header-bar>
+<div id="under-headerbar"></div>
+<div id="app">
+  <div ng-if="!appLoadingFailed">
+    <div id="mainMenu" class="panel panel-default hidden-print">
+      <div class="panel-body">
 				<span>
-					<template-selector on-select-dataset= "renderDataSets(dataSets)" selected-template="template"></template-selector>
+					<template-selector on-select-dataset="renderDataSets(dataSets)" selected-template="template"></template-selector>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
 					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
@@ -45,22 +46,27 @@
 					</span>
 					<span ng-if="template.type=='PROGRAM'">
 						<label class="radio-inline">
-							<input  ng-model="$parent.programMode" value="coversheet" type="radio" ng-click="renderDataSets()"> CoverSheet
-						</label>
+              <input ng-model="$parent.$parent.programMode" value="COVERSHEET" type="radio" ng-click="renderDataSets()"> CoverSheet
+            </label>
 						<label class="radio-inline">
-							<input ng-model="$parent.programMode"  value="register" type="radio" ng-click="renderDataSets()"> Register
-						</label>
+              <input ng-model="$parent.$parent.programMode" value="REGISTER" type="radio" ng-click="renderDataSets()"> Register
+            </label>
 					</span>
 
 				</span>
-			</div>
+      </div>
+    </div>
+    <br>
+    <page class="page" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length" type="template.type" program-mode="programMode"></page>
+    <div class="spinner-wrapper" ng-show="spinnerShown">
+      <img src="resources/img/spinner.gif" alt="loading......."/>
+    </div>
+  </div>
+  <div ng-if="appLoadingFailed" class="noprint">
+    <h2 class="error">Could not load the app, Please refresh the page.</h2>
+  </div>
+</div>
 
-		</div>
-		<br>
-		<page class="page" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length" type="template.type" program-mode="programMode"></page>
-		<div class="spinner-wrapper" ng-show="spinnerShown">
-			<img src="resources/img/spinner.gif" alt="loading......."/>
-		</div>
-	</div>
-	</body>
+
+</body>
 </html>
