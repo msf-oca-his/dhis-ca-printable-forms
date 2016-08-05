@@ -11,9 +11,9 @@ var createD2AngularModule = function(d2){
   });
 };
 
-var bootStrapAngularApp = function(error){
-  console.log('bootstrapping')
-  TallySheets.value('appLoadingFailed', _.isError(error))
+var bootStrapAngularApp = function(){
+  console.log('bootstrapping');
+  TallySheets.value('appLoadingFailed', _.isError(arguments[0]));
   angular.bootstrap(document, ['TallySheets']);
 };
 
@@ -24,14 +24,14 @@ var initializeD2 = function(ApiUrl){
 
 
 window.TallySheets = angular.module('TallySheets', [ 'ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar', 'DhisModel', 'DhisServices', 'D2' ]);
-var dhisUrl = determineDhisUrl();
+window.dhisUrl = determineDhisUrl();
 window.ApiUrl = dhisUrl + 'api';
 initializeD2(ApiUrl)
   .then(bootStrapAngularApp)
   .catch(function(err) {
     createD2AngularModule({});
     bootStrapAngularApp(new Error("d2 failed to load"));
-    console.log(err, 'yayy')
+    console.log(err)
   });
 
 
