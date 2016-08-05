@@ -5,7 +5,6 @@ describe("Program controller", function () {
     var config = {};
     beforeEach(function () {
         module("TallySheets");
-        angular.module('d2HeaderBar', []);
         config={
             Register:{
                 availableHeight: 100,

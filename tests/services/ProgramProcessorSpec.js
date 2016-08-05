@@ -84,7 +84,7 @@ describe("ProgramProcessor", function() {
         programName: "test program"
       } ];
 
-      var actualPages = programProcessor.process(testProgram, 'coversheet');
+      var actualPages = programProcessor.process(testProgram, 'COVERSHEET');
       expect(actualPages).toEqual(expectedPages);
     });
 
@@ -133,7 +133,7 @@ describe("ProgramProcessor", function() {
             programName: "test program"
           }
         ];
-        var actualPages = programProcessor.process(currentTestProgram, "coversheet");
+        var actualPages = programProcessor.process(currentTestProgram, "COVERSHEET");
         expect(actualPages).toEqual(expectedPages);
       });
 
@@ -163,7 +163,7 @@ describe("ProgramProcessor", function() {
             programName: "test program"
           }
         ];
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(actualPages).toEqual(expectedPages);
       });
 
@@ -209,7 +209,7 @@ describe("ProgramProcessor", function() {
           programName: "test program"
         } ];
 
-        var actualPages = programProcessor.process(currentProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentProgram, 'COVERSHEET');
         expect(actualPages[ 0 ]).toEqual(expectedPages[ 0 ]);
 
       });
@@ -248,7 +248,7 @@ describe("ProgramProcessor", function() {
             datasetName: "test program"
           } ];
 
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
 
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents);
         expect(actualPages[ 1 ].contents).toEqual(expectedPages[ 1 ].contents);
@@ -276,7 +276,7 @@ describe("ProgramProcessor", function() {
           datasetName: "test program"
         } ];
 
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents);
       });
 
@@ -312,7 +312,7 @@ describe("ProgramProcessor", function() {
           ]
         } ];
 
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents);
         expect(actualPages[ 1 ].contents).toEqual(expectedPages[ 1 ].contents)
       });
@@ -359,7 +359,7 @@ describe("ProgramProcessor", function() {
           datasetName: "test program"
         } ];
 
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents);
       });
 
@@ -416,7 +416,7 @@ describe("ProgramProcessor", function() {
             { type: 'comments' } ],
           datasetName: "test program"
         } ];
-        var acutalPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var acutalPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(acutalPages[ 1 ].contents).toEqual(expectedPages[ 1 ].contents);
         expect(acutalPages[ 0 ].contents[ 1 ]).toEqual(expectedPages[ 0 ].contents[ 1 ]);
       });
@@ -449,7 +449,7 @@ describe("ProgramProcessor", function() {
           datasetName: "test program"
         } ];
 
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents);
       });
 
@@ -526,7 +526,7 @@ describe("ProgramProcessor", function() {
           ]
         } ];
 
-        var actualPages = programProcessor.process(currentTestProgram, 'coversheet');
+        var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents);
         expect(actualPages[ 1 ].contents).toEqual(expectedPages[ 1 ].contents);
       });
@@ -559,7 +559,7 @@ describe("ProgramProcessor", function() {
           programName: 'test program',
         } ];
 
-        var actualPages = programProcessor.process(testProgram, 'register');
+        var actualPages = programProcessor.process(testProgram, 'REGISTER');
         expect(actualPages[ 0 ]).toEqual(expectedPages[ 0 ])
       });
       it("should test Orphan DataElements", function() {
@@ -594,7 +594,7 @@ describe("ProgramProcessor", function() {
             programName: 'test program'
           } ];
 
-        var actualPages = programProcessor.process(testProgram, 'register');
+        var actualPages = programProcessor.process(testProgram, 'REGISTER');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents)
         expect(actualPages[ 1 ].contents).toEqual(expectedPages[ 1 ].contents)
       });
@@ -651,7 +651,7 @@ describe("ProgramProcessor", function() {
           programName: 'test program',
         } ];
 
-        var actualPages = programProcessor.process(testProgram, 'register');
+        var actualPages = programProcessor.process(testProgram, 'REGISTER');
         expect(actualPages[ 0 ].contents).toEqual(expectedPages[ 0 ].contents)
       })
   })

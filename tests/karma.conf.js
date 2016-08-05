@@ -18,6 +18,7 @@ module.exports = function(config) {
             '../.temp/dependencies.js',
             '../dependencies/bower_components/angular-mocks/angular-mocks.js',
             '../../custom_app_commons/js/angular-commons/tests/test-utility/*.js',
+            '../tests/test-utility/*.js',
             '../.temp/app.js',
             '../.temp/services.js',
             '../.temp/directives.js',
