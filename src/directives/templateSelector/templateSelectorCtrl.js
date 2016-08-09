@@ -2,11 +2,11 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
-		scope   : {
-			onSelectDataset : '&',
+		scope: {
+			onSelectDataset: '&',
 			selectedTemplate: '='
 		},
-		link    : function($scope, element) {
+		link: function($scope, element) {
 			$scope.selectedDataSet = {};
 			$scope.selectorLoaded = false;
 

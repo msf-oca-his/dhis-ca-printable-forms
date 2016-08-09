@@ -2,8 +2,8 @@ TallySheets.directive('dataset', function() {
 	return {
 		restrict: 'E',
 		template: require('./datasetView.html'),
-		scope   : {
-			contents   : '=',
+		scope: {
+			contents: '=',
 			datasetName: '='
 		}
 	};

@@ -11,21 +11,21 @@ describe("DataSetProcessor", function() {
 		module("TallySheets");
 		config = {
 			DataSet: {
-				heightOfTableHeader                    : 15,
-				heightOfDataElementInCatCombTable      : 12,
+				heightOfTableHeader: 15,
+				heightOfDataElementInCatCombTable: 12,
 				heightOfDataElementInGeneralDataElement: 9,
-				heightOfSectionTitle                   : 7,
-				heightOfDataSetTitle                   : 10,
-				gapBetweenSections                     : 5,
-				graceHeight                            : 10,
-				availableHeight                        : 237,
-				availableWidth                         : 183,
-				numberOfCOCColumns                     : 5
+				heightOfSectionTitle: 7,
+				heightOfDataSetTitle: 10,
+				gapBetweenSections: 5,
+				graceHeight: 10,
+				availableHeight: 237,
+				availableWidth: 183,
+				numberOfCOCColumns: 5
 			}
 		},
 			optionsObject = {
 				123: {id: "123", name: "male", options: {name: "option1"}},
-				12 : {id: "12", name: "female", options: {name: "option2"}}
+				12: {id: "12", name: "female", options: {name: "option2"}}
 			};
 		module(function($provide) {
 			$provide.value('Config', config);
@@ -45,10 +45,10 @@ describe("DataSetProcessor", function() {
 	describe("process dataset", function() {
 		it("should process the basic dataset without sections to check page width and height", function() {
 			var testDataSet = {
-				id      : "123",
-				name    : "test dataset",
+				id: "123",
+				name: "test dataset",
 				sections: [],
-				type    : "dataset"
+				type: "dataset"
 			};
 
 			var expectedPage = new _Page();
@@ -60,24 +60,24 @@ describe("DataSetProcessor", function() {
 
 		describe("sections with Only Catcombs", function() {
 			var testDataSet = {
-				id      : "123",
-				name    : "test dataset",
+				id: "123",
+				name: "test dataset",
 				sections: [{
-					name        : "section",
-					id          : "134",
+					name: "section",
+					id: "134",
 					dataElements: [{
-						name         : "dataElement",
-						id           : "1234",
-						valueType    : "TEXT",
+						name: "dataElement",
+						id: "1234",
+						valueType: "TEXT",
 						categoryCombo: {
-							id                  : "154",
+							id: "154",
 							categoryOptionCombos: ["female<br><12", "male<br><10"],
-							name                : "catcomb"
+							name: "catcomb"
 						}
 					}],
-					isCatComb   : true
+					isCatComb: true
 				}],
-				type    : "dataset"
+				type: "dataset"
 			};
 
 			it("should process the dataset with sections of type catcomb without category optionCombos", function() {
@@ -94,7 +94,7 @@ describe("DataSetProcessor", function() {
 				var currentTestDataSet = _.clone(testDataSet);
 
 				currentTestDataSet.sections[0].dataElements[0].categoryCombo.categories = [{
-					id  : "123",
+					id: "123",
 					name: "Gender"
 				}];
 
@@ -105,9 +105,9 @@ describe("DataSetProcessor", function() {
 				expectedSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male<br>5", "female<br>7"];
 				var expectedPages = [
 					{
-						heightLeft : 188,
-						width      : 183,
-						contents   : [
+						heightLeft: 188,
+						width: 183,
+						contents: [
 							{type: 'dataSetName', name: "test dataset"},
 							{type: 'section', section: expectedSection}],
 						datasetName: "test dataset"
@@ -128,28 +128,28 @@ describe("DataSetProcessor", function() {
 				expectedSection1.dataElements[0].categoryCombo.categoryOptionCombos = ["male<br><5", "female<br><7", "male<br><10", "female<br><11"];
 
 				var expectedDuplicateSection = {
-					name        : "section",
-					id          : "134",
+					name: "section",
+					id: "134",
 					dataElements: [{
-						name         : "dataElement",
-						id           : "1234",
-						valueType    : "TEXT",
+						name: "dataElement",
+						id: "1234",
+						valueType: "TEXT",
 						categoryCombo: {
-							id                  : "154",
+							id: "154",
 							categoryOptionCombos: ["female<br><12", "male<br><10"],
-							name                : "catcomb",
-							categories          : [{id: '123', name: 'Gender'}]
+							name: "catcomb",
+							categories: [{id: '123', name: 'Gender'}]
 						}
 					}],
-					isCatComb   : true,
-					isDuplicate : true
+					isCatComb: true,
+					isDuplicate: true
 				}
 
 				var expectedPages = [
 					{
-						heightLeft : 156,
-						width      : 183,
-						contents   : [
+						heightLeft: 156,
+						width: 183,
+						contents: [
 							{type: 'dataSetName', name: "test dataset"},
 							{type: 'section', section: expectedSection1},
 							{type: 'section', section: expectedDuplicateSection}],
@@ -179,17 +179,17 @@ describe("DataSetProcessor", function() {
 				assignCOCToSection(expectedSection2, 3);
 				expectedSection2.isDuplicate = false;
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test dataset"
 				},
 					{
-						heightLeft : 164,
-						width      : 183,
-						contents   : [
+						heightLeft: 164,
+						width: 183,
+						contents: [
 							{type: 'section', section: expectedSection2}],
 						datasetName: "test dataset"
 					}];
@@ -214,9 +214,9 @@ describe("DataSetProcessor", function() {
 				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
 				assignCOCToSection(expectedSection1, 17); //because 17 elements will fit into the first page
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test dataset"
@@ -245,9 +245,9 @@ describe("DataSetProcessor", function() {
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test dataset"
@@ -265,23 +265,23 @@ describe("DataSetProcessor", function() {
 
 		describe("sections of type Optionsets", function() {
 			var testDataSet = {
-				id                      : "123",
+				id: "123",
 				isPrintFriendlyProcessed: true,
-				isResolved              : Promise.resolve({}),
-				name                    : "test dataset",
-				sections                : [{
+				isResolved: Promise.resolve({}),
+				name: "test dataset",
+				sections: [{
 					dataElements: [{
-						id        : "1234",
+						id: "1234",
 						isResolved: Promise.resolve({}),
-						name      : "dataElement",
-						options   : [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
-						valueType : "OPTIONSET"
+						name: "dataElement",
+						options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+						valueType: "OPTIONSET"
 					}],
-					id          : "134",
-					isResolved  : Promise.resolve({}),
-					name        : "section"
+					id: "134",
+					isResolved: Promise.resolve({}),
+					name: "section"
 				}],
-				type                    : 'dataset'
+				type: 'dataset'
 			};
 
 			it("should process the section contain only one dataelement of type optionset", function() {
@@ -297,9 +297,9 @@ describe("DataSetProcessor", function() {
 				expectedSection.rightSideElements = [];
 
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection}],
 					datasetName: "test dataset"
@@ -354,12 +354,12 @@ describe("DataSetProcessor", function() {
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
-					contents   : [
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test dataset"
 				}, {
-					contents   : [
+					contents: [
 						{type: 'section', section: expectedSection2}],
 					datasetName: "test dataset"
 				}];
@@ -370,7 +370,7 @@ describe("DataSetProcessor", function() {
 			it("should process the dataset which contains dataelements of type option set and general dataelements", function() {
 				var currentTestDatSet = _.cloneDeep(testDataSet);
 				currentTestDatSet.sections[0].dataElements[1] = {
-					id  : "1",
+					id: "1",
 					name: "general de"
 				};
 
@@ -389,7 +389,7 @@ describe("DataSetProcessor", function() {
 				expectedSection2.rightSideElements = [];
 
 				var expectedPages = [{
-					contents   : [
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection1},
 						{type: 'section', section: expectedSection2}],
@@ -404,23 +404,23 @@ describe("DataSetProcessor", function() {
 
 		describe("data elements of type TEXT", function() {
 			var testDataSet = {
-				id                      : "123",
+				id: "123",
 				isPrintFriendlyProcessed: true,
-				isResolved              : Promise.resolve({}),
-				name                    : "test dataset",
-				sections                : [{
+				isResolved: Promise.resolve({}),
+				name: "test dataset",
+				sections: [{
 					dataElements: [{
-						id        : "1234",
+						id: "1234",
 						isResolved: Promise.resolve({}),
-						name      : "dataElement",
-						valueType : "TEXT"
+						name: "dataElement",
+						valueType: "TEXT"
 					}],
-					id          : "134",
-					isCatComb   : false,
-					isResolved  : Promise.resolve({}),
-					name        : "section"
+					id: "134",
+					isCatComb: false,
+					isResolved: Promise.resolve({}),
+					name: "section"
 				}],
-				type                    : 'dataset'
+				type: 'dataset'
 			};
 
 			it("when dataelements of type text in a section are overflowed", function() {
@@ -448,21 +448,21 @@ describe("DataSetProcessor", function() {
 				var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
 				assignDeToSections(expectedSection2, 2);//expected would be 2
 				expectedSection2.leftSideElements = [{
-					id        : "1234",
+					id: "1234",
 					isResolved: Promise.resolve({}),
-					name      : "dataElement",
-					valueType : "TEXT"
+					name: "dataElement",
+					valueType: "TEXT"
 				}];
 				expectedSection2.rightSideElements = [{
-					id        : "1234",
+					id: "1234",
 					isResolved: Promise.resolve({}),
-					name      : "dataElement",
-					valueType : "TEXT"
+					name: "dataElement",
+					valueType: "TEXT"
 				}];
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
-					contents   : [
+					contents: [
 						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test dataset"

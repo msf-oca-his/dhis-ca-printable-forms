@@ -2,11 +2,11 @@ TallySheets.directive('program', function() {
 	return {
 		restrict: 'E',
 		template: require('./programView.html'),
-		scope   : {
-			contents   : '=',
-			mode       : '=',
+		scope: {
+			contents: '=',
+			mode: '=',
 			programName: '=',
-			isLastPage : '='
+			isLastPage: '='
 		}
 	};
 });

@@ -1,11 +1,11 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
-	entry  : {
+	entry: {
 		dependencies: "./src/dependencies.js",
-		services    : "./src/services.js",
-		directives  : "./src/directives.js",
-		app         : "./src/app.js",
-		'pff-model' : "./src/pff-model.js"
+		services: "./src/services.js",
+		directives: "./src/directives.js",
+		app: "./src/app.js",
+		'pff-model': "./src/pff-model.js"
 	},
 	plugins: [
 		new CopyWebpackPlugin([
@@ -15,7 +15,7 @@ module.exports = {
 		])],
 
 	output: {
-		path    : './.temp',
+		path: './.temp',
 		filename: "[name].js"
 	},
 	module: {

@@ -5,34 +5,34 @@ describe("ProgramProcessor", function() {
 	var timeout;
 	var p;
 	var config = {
-		Register      : {
-			availableHeight   : 175,
-			availableWidth    : 270,
-			labelHeight       : 10,            //table header
-			tableHeaderHeight : 10,           //page header
+		Register: {
+			availableHeight: 175,
+			availableWidth: 270,
+			labelHeight: 10,            //table header
+			tableHeaderHeight: 10,           //page header
 			dataEntryRowHeight: 9,
-			headerHeight      : 25,
-			textElementWidth  : 50,
-			otherElementWidth : 30
+			headerHeight: 25,
+			textElementWidth: 50,
+			otherElementWidth: 30
 		},
-		DataSet       : {
-			heightOfTableHeader                    : 15,
-			heightOfDataElementInCatCombTable      : 12,
+		DataSet: {
+			heightOfTableHeader: 15,
+			heightOfDataElementInCatCombTable: 12,
 			heightOfDataElementInGeneralDataElement: 9,
-			heightOfSectionTitle                   : 7,
-			heightOfDataSetTitle                   : 10,
-			gapBetweenSections                     : 5,
-			graceHeight                            : 10,
-			availableHeight                        : 237,
-			availableWidth                         : 183,
-			numberOfCOCColumns                     : 5
+			heightOfSectionTitle: 7,
+			heightOfDataSetTitle: 10,
+			gapBetweenSections: 5,
+			graceHeight: 10,
+			availableHeight: 237,
+			availableWidth: 183,
+			numberOfCOCColumns: 5
 		},
-		OptionSet     : {
-			labelPadding    : 4,
+		OptionSet: {
+			labelPadding: 4,
 			dataElementLabel: 48,
-			optionsPadding  : 12
+			optionsPadding: 12
 		},
-		Prefixes      : {
+		Prefixes: {
 			dataSetPrefix: "DS_",
 			programPrefix: "PROG_"
 		},
@@ -41,7 +41,7 @@ describe("ProgramProcessor", function() {
 			text: 1,
 			list: 2
 		},
-		Attributes    : {
+		Attributes: {
 			printFlagUID: "FsTeAXO7tNP"
 		}
 	};
@@ -51,7 +51,7 @@ describe("ProgramProcessor", function() {
 		module("TallySheets");
 		optionsObject = {
 			123: {id: "123", name: "male", options: {name: "option1"}},
-			12 : {id: "12", name: "female", options: {name: "option2"}}
+			12: {id: "12", name: "female", options: {name: "option2"}}
 		};
 		module(function($provide) {
 			$provide.value('Config', config);
@@ -71,16 +71,16 @@ describe("ProgramProcessor", function() {
 	describe("process program of type coversheet", function() {
 		it("should process the basic program without stage sections to check page width and height", function() {
 			var testProgram = {
-				id           : "123",
-				name         : "test program",
+				id: "123",
+				name: "test program",
 				programStages: [{programStageSections: []}],
-				type         : "program",
+				type: "program",
 			};
 
 			var expectedPages = [{
-				heightLeft : config.DataSet.availableHeight,
-				widthLeft  : config.DataSet.availableWidth,
-				contents   : [{type: 'comments'}],
+				heightLeft: config.DataSet.availableHeight,
+				widthLeft: config.DataSet.availableWidth,
+				contents: [{type: 'comments'}],
 				programName: "test program"
 			}];
 
@@ -91,26 +91,26 @@ describe("ProgramProcessor", function() {
 		describe("sections with Only Catcombs", function() {
 
 			var testProgram = {
-				id           : "123",
-				name         : "test program",
+				id: "123",
+				name: "test program",
 				programStages: [
 					{
 						programStageSections: [{
 							programStageDataElements: [{
 								categoryCombo: {
-									id                  : "154",
+									id: "154",
 									categoryOptionCombos: ["female<br><12", "male<br><10"],
-									name                : "catcomb"
+									name: "catcomb"
 								},
-								id           : "1234",
-								name         : "dataElement",
-								type         : "TEXT",
+								id: "1234",
+								name: "dataElement",
+								type: "TEXT",
 							}
 
 							],
-							id                      : "1234",
-							isCatComb               : true,
-							name                    : "test section"
+							id: "1234",
+							isCatComb: true,
+							name: "test section"
 						}]
 					},
 				],
@@ -122,9 +122,9 @@ describe("ProgramProcessor", function() {
 				//section height would be 32 and dataset title would be 10 and datasection title would be 7 total height is 237-49=188
 				var expectedPages = [
 					{
-						heightLeft : 188,
-						widthLeft  : 183,
-						contents   : [
+						heightLeft: 188,
+						widthLeft: 183,
+						contents: [
 							{type: 'dataSetName', name: "test program"},
 							{type: 'section', section: currentTestProgram.programStages[0].programStageSections[0]},
 							{type: 'comments'}
@@ -140,7 +140,7 @@ describe("ProgramProcessor", function() {
 				var currentTestProgram = _.clone(testProgram);
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].categoryCombo.categories = [{
-					id  : "123",
+					id: "123",
 					name: "Gender"
 				}];
 
@@ -152,9 +152,9 @@ describe("ProgramProcessor", function() {
 
 				var expectedPages = [
 					{
-						heightLeft : 188,
-						widthLeft  : 183,
-						contents   : [
+						heightLeft: 188,
+						widthLeft: 183,
+						contents: [
 							{type: 'dataSetName', name: "test program"},
 							{type: 'section', section: expectedSection},
 							{type: 'comments'}
@@ -177,27 +177,27 @@ describe("ProgramProcessor", function() {
 				expectedSection1.programStageDataElements[0].categoryCombo.categoryOptionCombos = ["male<br><5", "female<br><7", "male<br><10", "female<br><11"];
 
 				var expectedDuplicateSection = {
-					name                    : "test section",
-					id                      : "1234",
+					name: "test section",
+					id: "1234",
 					programStageDataElements: [{
-						name         : "dataElement",
-						id           : "1234",
-						type         : "TEXT",
+						name: "dataElement",
+						id: "1234",
+						type: "TEXT",
 						categoryCombo: {
-							id                  : "154",
+							id: "154",
 							categoryOptionCombos: ["female<br><12", "male<br><10"],
-							name                : "catcomb",
-							categories          : [{id: '123', name: 'Gender'}]
+							name: "catcomb",
+							categories: [{id: '123', name: 'Gender'}]
 						}
 					}],
-					isCatComb               : true,
-					isDuplicate             : true
+					isCatComb: true,
+					isDuplicate: true
 				};
 
 				var expectedPages = [{
-					heightLeft : 156,
-					widthLeft  : 183,
-					contents   : [
+					heightLeft: 156,
+					widthLeft: 183,
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1},
 						{type: 'section', section: expectedDuplicateSection},
@@ -229,17 +229,17 @@ describe("ProgramProcessor", function() {
 				assignCOCToSection(expectedSection2, 4);
 				expectedSection2.isDuplicate = false;
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test program"
 				},
 					{
-						heightLeft : 164,
-						width      : 183,
-						contents   : [
+						heightLeft: 164,
+						width: 183,
+						contents: [
 							{type: 'section', section: expectedSection2},
 							{type: 'comments'}],
 						datasetName: "test program"
@@ -265,9 +265,9 @@ describe("ProgramProcessor", function() {
 				var expectedSection1 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				assignCOCToSection(expectedSection1, 17); //because 17 elements will fit into the first page
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test program"
@@ -296,9 +296,9 @@ describe("ProgramProcessor", function() {
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test program"
@@ -318,19 +318,19 @@ describe("ProgramProcessor", function() {
 
 		describe("Section with option sets", function() {
 			var testProgram = {
-				id           : "123",
-				name         : "test program",
+				id: "123",
+				name: "test program",
 				programStages: [
 					{
 						programStageSections: [{
 							programStageDataElements: [{
-								id       : "1234",
-								name     : "dataElement",
-								options  : [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+								id: "1234",
+								name: "dataElement",
+								options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
 								valueType: "OPTIONSET"
 							}],
-							id                      : "134",
-							name                    : "section"
+							id: "134",
+							name: "section"
 						}]
 					}]
 			};
@@ -346,9 +346,9 @@ describe("ProgramProcessor", function() {
 				expectedSection.isOptionSet = true;
 
 				var expectedPages = [{
-					heightLeft : 0,
-					width      : 183,
-					contents   : [
+					heightLeft: 0,
+					width: 183,
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection},
 						{type: 'comments'}],
@@ -401,12 +401,12 @@ describe("ProgramProcessor", function() {
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
-					contents   : [
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test program"
 				}, {
-					contents   : [
+					contents: [
 						{type: 'section', section: expectedSection2},
 						{type: 'comments'}],
 					datasetName: "test program"
@@ -419,7 +419,7 @@ describe("ProgramProcessor", function() {
 			it("should process the program which contains dataelements of type option set and general dataelements", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
-					id  : "1",
+					id: "1",
 					name: "general de"
 				};
 
@@ -436,7 +436,7 @@ describe("ProgramProcessor", function() {
 				expectedSection2.rightSideElements = [];
 
 				var expectedPages = [{
-					contents   : [
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1},
 						{type: 'section', section: expectedSection2},
@@ -452,23 +452,23 @@ describe("ProgramProcessor", function() {
 
 		describe("program-coversheets of type TEXT", function() {
 			var testProgram = {
-				id           : "123",
-				name         : "test program",
+				id: "123",
+				name: "test program",
 				programStages: [{
 					programStageSections: [{
 						programStageDataElements: [{
-							id        : "1234",
+							id: "1234",
 							isResolved: Promise.resolve({}),
-							name      : "dataElement",
-							type      : "TEXT"
+							name: "dataElement",
+							type: "TEXT"
 						}],
-						id                      : "134",
-						isCatComb               : false,
-						isResolved              : Promise.resolve({}),
-						name                    : "section"
+						id: "134",
+						isCatComb: false,
+						isResolved: Promise.resolve({}),
+						name: "section"
 					}]
 				}],
-				type         : 'program'
+				type: 'program'
 			};
 			it("when dataelements of type text in a section are overflowed", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
@@ -495,21 +495,21 @@ describe("ProgramProcessor", function() {
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				assignDeToSections(expectedSection2, 2);//expected would be 2
 				expectedSection2.leftSideElements = [{
-					id        : "1234",
+					id: "1234",
 					isResolved: Promise.resolve({}),
-					name      : "dataElement",
-					type      : "TEXT"
+					name: "dataElement",
+					type: "TEXT"
 				}];
 				expectedSection2.rightSideElements = [{
-					id        : "1234",
+					id: "1234",
 					isResolved: Promise.resolve({}),
-					name      : "dataElement",
-					type      : "TEXT"
+					name: "dataElement",
+					type: "TEXT"
 				}];
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
-					contents   : [
+					contents: [
 						{type: 'dataSetName', name: "test program"},
 						{type: 'section', section: expectedSection1}],
 					datasetName: "test program"
@@ -529,25 +529,25 @@ describe("ProgramProcessor", function() {
 
 		describe("program-register", function() {
 			var testProgram = {
-				    id           : "123",
-				    name         : "test program",
+				    id: "123",
+				    name: "test program",
 				    programStages: [{
 					    programStageSections: [{
 						    programStageDataElements: [],
-						    id                      : "134",
-						    isCatComb               : false,
-						    name                    : "section"
+						    id: "134",
+						    isCatComb: false,
+						    name: "section"
 					    }]
 				    }],
-				    type         : 'program'
+				    type: 'program'
 			    }
 				;
 
 			it("should test regiseters page width and height and test the register which contains only comments data element", function() {
 				var expectedPages = [{
-					heightLeft : 150,
-					widthLeft  : 220,
-					contents   : [
+					heightLeft: 150,
+					widthLeft: 220,
+					contents: [
 						new _DataElement({name: 'Comments', type: 'TEXT'})],
 					programName: 'test program',
 				}];
@@ -560,16 +560,16 @@ describe("ProgramProcessor", function() {
 
 				for(var i = 0; i < 5; i++) {
 					currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[i] = {
-						name     : "dataElement",
-						id       : "1234",
+						name: "dataElement",
+						id: "1234",
 						valueType: "TEXT"
 					};
 				}
 
 				var expectedPages = [{
-					heightLeft : 0,
-					widthLeft  : 0,
-					contents   : [
+					heightLeft: 0,
+					widthLeft: 0,
+					contents: [
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
@@ -578,9 +578,9 @@ describe("ProgramProcessor", function() {
 					programName: 'test program',
 				},
 					{
-						heightLeft : 30,
-						widthLeft  : 0,
-						contents   : [
+						heightLeft: 30,
+						widthLeft: 0,
+						contents: [
 							{name: "dataElement", id: "1234", valueType: "TEXT"},
 							new _DataElement({name: 'Comments', type: 'TEXT'})
 						],
@@ -596,43 +596,43 @@ describe("ProgramProcessor", function() {
 				var currentTestProgram = _.clone(testProgram);
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0] = {
-					name     : "dataElement",
-					id       : "1234",
+					name: "dataElement",
+					id: "1234",
 					valueType: "TEXT"
 
 				};
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
-					name     : "dataElement",
-					id       : "1234",
+					name: "dataElement",
+					id: "1234",
 					valueType: "OPTIONSET"
 
 				};
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
-					name     : "dataElement",
-					id       : "1234",
+					name: "dataElement",
+					id: "1234",
 					valueType: "OPTIONSET"
 
 				};
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[3] = {
-					name     : "dataElement",
-					id       : "1234",
+					name: "dataElement",
+					id: "1234",
 					valueType: "TEXT"
 
 				};
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[4] = {
-					name     : "dataElement",
-					id       : "1234",
+					name: "dataElement",
+					id: "1234",
 					valueType: "TEXT"
 				};
 
 				var expectedPages = [{
-					heightLeft : 0,
-					widthLeft  : 0,
-					contents   : [
+					heightLeft: 0,
+					widthLeft: 0,
+					contents: [
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "OPTIONSET"},
 						{name: "dataElement", id: "1234", valueType: "OPTIONSET"},

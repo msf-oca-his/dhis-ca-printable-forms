@@ -50,10 +50,10 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Pr
 		// Create a fake link to download the file
 		var link = angular.element('<a class="hidden" id="idlink"></a>');
 		link.attr({
-			          href    : uri + base64(format(template, ctx)),
-			          target  : '_blank',
-			          download: name
-		          });
+			href: uri + base64(format(template, ctx)),
+			target: '_blank',
+			download: name
+		});
 		$("body").prepend(link[0].outerHTML);
 		$("#idlink")[0].click();
 		$("#idlink")[0].remove();
@@ -93,7 +93,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Pr
 TallySheets.directive('onFinishRender', function($timeout) {
 	return {
 		restrict: 'A',
-		link    : function(scope, element, attr) {
+		link: function(scope, element, attr) {
 			if(scope.$last === true) {
 				$timeout(function() {
 					scope.$emit('ngRepeatFinished');
@@ -107,9 +107,9 @@ TallySheets.config(function($translateProvider) {
 	$translateProvider.useSanitizeValueStrategy('escape'); //TODO: create a story to select sanitize strategy
 	//#TODO: load translations preemptively in js rather than loading them at run time with a http call
 	$translateProvider.useStaticFilesLoader({
-		                                        prefix: 'i18n/',
-		                                        suffix: '.json'
-	                                        });
+		prefix: 'i18n/',
+		suffix: '.json'
+	});
 
 	$translateProvider.registerAvailableLanguageKeys(
 		['es', 'fr', 'en', 'pt'],
@@ -118,18 +118,18 @@ TallySheets.config(function($translateProvider) {
 			'es*': 'es',
 			'fr*': 'fr',
 			'pt*': 'pt',
-			'*'  : 'en' // must be last!
+			'*': 'en' // must be last!
 		}
 	);
 
 	$translateProvider.fallbackLanguage(['en']);
 	jQuery.ajax({ //TODO: this is a http call. if we are not using d2's translate then move this to d2
-		            url        : ApiUrl + '/userSettings/keyUiLocale/',
-		            contentType: 'text/plain',
-		            method     : 'GET',
-		            dataType   : 'text',
-		            async      : false
-	            }).done(function(uiLocale) {
+		url: ApiUrl + '/userSettings/keyUiLocale/',
+		contentType: 'text/plain',
+		method: 'GET',
+		dataType: 'text',
+		async: false
+	}).done(function(uiLocale) {
 		if(uiLocale == '') {
 			$translateProvider.determinePreferredLanguage();
 		}

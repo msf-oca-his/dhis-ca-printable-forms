@@ -21,7 +21,7 @@ describe("templateSelector Directive", function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
 		config = {
-			Prefixes  : {
+			Prefixes: {
 				dataSetPrefix: "test_DS",
 				programPrefix: "test_PROG_"
 			},
@@ -51,23 +51,23 @@ describe("templateSelector Directive", function() {
 		customAttribute = CustomAttribute;
 		datasets = [
 			new dataSet({
-				id             : 1,
-				displayName    : "dataset",
+				id: 1,
+				displayName: "dataset",
 				attributeValues: [{
-					value    : "true",
+					value: "true",
 					attribute: {
-						id  : "1",
+						id: "1",
 						name: "isPrintable"
 					}
 				}]
 			}),
 			new dataSet({
-				id             : 2,
-				displayName    : "dataset2",
+				id: 2,
+				displayName: "dataset2",
 				attributeValues: [{
-					value    : "true",
+					value: "true",
 					attribute: {
-						id  : "1",
+						id: "1",
 						name: "isPrintable"
 					}
 				}]
@@ -75,23 +75,23 @@ describe("templateSelector Directive", function() {
 		];
 		programs = [
 			new program({
-				id             : "1",
-				displayName    : "program1",
+				id: "1",
+				displayName: "program1",
 				attributeValues: [{
-					value    : "true",
+					value: "true",
 					attribute: {
-						id  : "1",
+						id: "1",
 						name: "isPrintable"
 					}
 				}]
 			}),
 			new program({
-				id             : 2,
-				displayName    : "program2",
+				id: 2,
+				displayName: "program2",
 				attributeValues: [{
-					value    : "true",
+					value: "true",
 					attribute: {
-						id  : "1",
+						id: "1",
 						name: "isPrintable"
 					}
 				}]
@@ -99,16 +99,16 @@ describe("templateSelector Directive", function() {
 		];
 		customAttributes = [
 			new customAttribute({
-				name            : "isPrintable",
-				id              : "1",
-				displayName     : "isPrintable",
+				name: "isPrintable",
+				id: "1",
+				displayName: "isPrintable",
 				dataSetAttribute: true,
 				programAttribute: true
 			}),
 			new customAttribute({
-				name            : "isReporting",
-				id              : "2",
-				displayName     : "isReporting",
+				name: "isReporting",
+				id: "2",
+				displayName: "isReporting",
 				dataSetAttribute: true,
 				programAttribute: true
 			})

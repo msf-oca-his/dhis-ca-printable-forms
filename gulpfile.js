@@ -8,80 +8,80 @@ var gulp        = require('gulp'),
     zip         = require('gulp-zip');
 
 APP = {
-	src        : {
+	src: {
 		root: "src",
-		all : "src/**/*.*",
+		all: "src/**/*.*",
 		html: "src/index.html",
 		//js: "src/**/*.js",
-		css : "src/**/*.css"
+		css: "src/**/*.css"
 	},
-	resources  : {
+	resources: {
 		root: "resources",
-		all : "resources/**/*.*",
-		img : "resources/img"
+		all: "resources/**/*.*",
+		img: "resources/img"
 	},
-	i18n       : {
+	i18n: {
 		root: "i18n",
-		all : "i18n/**/*.*"
+		all: "i18n/**/*.*"
 	},
 	appManifest: {
 		manifest: "manifest.webapp"
 	},
-	webpack    : {
+	webpack: {
 		config: "./webpack.config.js",
 	},
-	tests      : {
-		root    : 'tests',
+	tests: {
+		root: 'tests',
 		testsSrc: 'tests/!(.temp|coverage)/*.js',
-		temp    : {
+		temp: {
 			root: './tests/.temp'
 		},
-		webpack : {
+		webpack: {
 			config: './tests/webpack.config.js'
 		}
 	},
 
 	dependencies: {
-		root            : 'dependencies',
+		root: 'dependencies',
 		bower_components: {
 			root: 'dependencies/bower_components',
-			all : 'dependencies/bower_components/**/*.*'
+			all: 'dependencies/bower_components/**/*.*'
 		}
 	}
 };
 
 DEST = {
-	target : "target",
+	target: "target",
 	prodZip: "print_tally_sheets.zip"
 };
 
 TEMP = {
-	root        : ".temp",
-	all         : ".temp/**/*.*",
+	root: ".temp",
+	all: ".temp/**/*.*",
 	dependencies: ".temp/dependencies",
-	resources   : ".temp/resources",
-	i18n        : ".temp/i18n"
+	resources: ".temp/resources",
+	i18n: ".temp/i18n"
 
 };
 
 TASKS = {
-	watchSrc              : '_watchSrc',
-	watchTests            : '_watchTests',
-	watchSrcDuringTests   : '_watchSrcDuringTests', //TODO: find a good name for this.
-	cleanTemp             : '_cleanTemp',
-	cleanTarget           : '_cleanTarget',
-	clean                 : 'clean',
-	serve                 : 'serve',
-	copySrcToTemp         : '_copySrcToTemp',
-	copyResourcesToTemp   : '_copyResourcesToTemp',
+	watchSrc: '_watchSrc',
+	watchTests: '_watchTests',
+	watchSrcDuringTests: '_watchSrcDuringTests', //TODO: find a good name for this.
+	cleanTemp: '_cleanTemp',
+	cleanTarget: '_cleanTarget',
+	clean: 'clean',
+	serve: 'serve',
+	copySrcToTemp: '_copySrcToTemp',
+	copyResourcesToTemp: '_copyResourcesToTemp',
 	copyDependenciesToTemp: '_copyDependenciesToTemp',
-	copyi18nToTemp        : '_copyi18nToTemp',
-	setUpTemp             : '_setUpTemp',
-	reload                : '_reload',
-	webpack               : 'webpack',
-	webpackTest           : '_webpackTest',
-	pack                  : 'pack',
-	test                  : 'test',
+	copyi18nToTemp: '_copyi18nToTemp',
+	setUpTemp: '_setUpTemp',
+	reload: '_reload',
+	webpack: 'webpack',
+	webpackTest: '_webpackTest',
+	pack: 'pack',
+	test: 'test',
 };
 
 gulp.task(TASKS.clean, [TASKS.cleanTemp, TASKS.cleanTarget]);
@@ -136,14 +136,14 @@ gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack, TASKS.
 
 gulp.task(TASKS.serve, [TASKS.setUpTemp], function() {
 	browserSync.init({
-		                 port  : 8000,
-		                 server: {
-			                 port      : 8000,
-			                 baseDir   : TEMP.root,
-			                 middleware: [proxy(['/api', '/dhis-web-commons', '/icons'], {target: 'http://localhost:8080'})]
-		                 }
+		port: 8000,
+		server: {
+			port: 8000,
+			baseDir: TEMP.root,
+			middleware: [proxy(['/api', '/dhis-web-commons', '/icons'], {target: 'http://localhost:8080'})]
+		}
 
-	                 });
+	});
 });
 
 gulp.task(TASKS.webpack, function(callback) {
@@ -158,7 +158,7 @@ gulp.task(TASKS.webpack, function(callback) {
 gulp.task(TASKS.test, gulpsync.sync([TASKS.setUpTemp]), function(done) {
 	new KarmaServer({
 		configFile: __dirname + '/tests/karma.conf.js',
-		singleRun : true
+		singleRun: true
 	}, function(err) {
 		if(err == 1) {
 			console.error("unit tests have failed...");

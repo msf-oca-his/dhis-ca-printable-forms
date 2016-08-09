@@ -6,15 +6,15 @@ describe("Program controller", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
-			Register      : {
-				availableHeight   : 100,
-				availableWidth    : 270,
-				labelHeight       : 10,            //table header
-				tableHeaderHeight : 10,           //page header
+			Register: {
+				availableHeight: 100,
+				availableWidth: 270,
+				labelHeight: 10,            //table header
+				tableHeaderHeight: 10,           //page header
 				dataEntryRowHeight: 20,
-				headerHeight      : 10,
-				textElementWidth  : 50,
-				otherElementWidth : 30
+				headerHeight: 10,
+				textElementWidth: 50,
+				otherElementWidth: 30
 			},
 			DisplayOptions: "testDisplayOptions"
 		};
@@ -30,15 +30,15 @@ describe("Program controller", function() {
 	beforeEach(function() {
 		section = {
 			dataElements: [{
-				id           : "1234",
-				isResolved   : Promise.resolve({}),
-				name         : "dataElement",
-				type         : "TEXT",
+				id: "1234",
+				isResolved: Promise.resolve({}),
+				name: "dataElement",
+				type: "TEXT",
 				categoryCombo: {}
 			}],
-			id          : "134",
-			isResolved  : Promise.resolve({}),
-			name        : "section"
+			id: "134",
+			isResolved: Promise.resolve({}),
+			name: "section"
 		};
 		$controller('programCtrl', {$scope: $scopeCtrl})
 	});

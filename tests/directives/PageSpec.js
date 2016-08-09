@@ -24,15 +24,15 @@ describe("Page Directive", function() {
 	beforeEach(function() {
 		section = {
 			dataElements: [{
-				id           : "1234",
-				isResolved   : Promise.resolve({}),
-				name         : "dataElement",
-				type         : "TEXT",
+				id: "1234",
+				isResolved: Promise.resolve({}),
+				name: "dataElement",
+				type: "TEXT",
 				categoryCombo: {}
 			}],
-			id          : "134",
-			isResolved  : Promise.resolve({}),
-			name        : "section"
+			id: "134",
+			isResolved: Promise.resolve({}),
+			name: "section"
 		}
 	});
 
