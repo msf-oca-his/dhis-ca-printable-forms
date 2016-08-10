@@ -41,8 +41,8 @@ describe("ProgramProcessor", function() {
 			text: 1,
 			list: 2
 		},
-		Attributes: {
-			displayOptionUID: "FsTeAXO7tNP"
+		CustomAttributes: {
+			displayOptionUID: "111"
 		}
 	};
 
@@ -327,7 +327,14 @@ describe("ProgramProcessor", function() {
 								id: "1234",
 								name: "dataElement",
 								options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
-								valueType: "OPTIONSET"
+								valueType: "OPTIONSET",
+								attributeValues: [
+									{
+										value: "0",
+										attribute: {
+											id: "111"
+										}
+									}]
 							}],
 							id: "134",
 							name: "section"
@@ -344,6 +351,7 @@ describe("ProgramProcessor", function() {
 
 				expectedSection.programStageDataElements[0].rows = expectedRows;
 				expectedSection.isOptionSet = true;
+				expectedSection.programStageDataElements[0].displayOption = "0";
 
 				var expectedPages = [{
 					heightLeft: 0,
@@ -356,7 +364,7 @@ describe("ProgramProcessor", function() {
 				}];
 
 				var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
-				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
 			it("should process the program which contians dataelement of type optionsets where options are overflowed", function() {
@@ -385,6 +393,9 @@ describe("ProgramProcessor", function() {
 
 				expectedSection1.programStageDataElements[0].rows = expectedRows1;
 				expectedSection1.isOptionSet = true;
+				expectedSection1.programStageDataElements[0].displayOption = "0";
+
+
 
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				assignOptionsToDe(expectedSection2, 4);
@@ -398,6 +409,7 @@ describe("ProgramProcessor", function() {
 
 				expectedSection2.programStageDataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
+				expectedSection2.programStageDataElements[0].displayOption = "0";
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
@@ -412,8 +424,8 @@ describe("ProgramProcessor", function() {
 					datasetName: "test program"
 				}];
 				var acutalPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
-				expect(acutalPages[1].contents).toEqual(expectedPages[1].contents);
-				expect(acutalPages[0].contents[1]).toEqual(expectedPages[0].contents[1]);
+				expect(expectedPages[1].contents ).toEqual(acutalPages[1].contents);
+				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
 			});
 
 			it("should process the program which contains dataelements of type option set and general dataelements", function() {
@@ -428,6 +440,8 @@ describe("ProgramProcessor", function() {
 				expectedSection1.programStageDataElements[0].rows = expectedRows1;
 				expectedSection1.isDuplicate = false;
 				expectedSection1.isOptionSet = true;
+				expectedSection1.programStageDataElements[0].displayOption = "0";
+
 
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				expectedSection2.programStageDataElements[0] = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1];
@@ -445,7 +459,7 @@ describe("ProgramProcessor", function() {
 				}];
 
 				var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
-				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
+				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
 		});

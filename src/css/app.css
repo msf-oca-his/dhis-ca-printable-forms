@@ -36,8 +36,7 @@ input.clean {
   margin-right : 2mm !important;
 }
 
-/*TODO: rename this class to hidden*/
-.hideDE {
+.hidden {
   display : none
 }
 

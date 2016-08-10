@@ -218,17 +218,14 @@ TallySheets.service("PrintFriendlyProcessor", ['CustomAttributeService', 'Config
 	};
 
 	function getModifiedDataSet(dataset) {
-		var dataElements = [];
 		_.map(dataset.sections, function(section) {
 			_.map(section.dataElements, function(dataElement) {
 				var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 				if(attributeValue) {
 					dataElement.displayOption = attributeValue.value;
 				}
-				dataElements.push(dataElement);
 			});
 		});
-		dataset.sections.dataElements = dataElements;
 		return dataset;
 	}
 

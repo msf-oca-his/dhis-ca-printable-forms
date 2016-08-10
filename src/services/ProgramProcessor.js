@@ -263,12 +263,34 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 			}
 		});
 	};
+	var getCustomAttributeForRenderingOptionSets = function(attributeValues) {
+		return _.reduce(_.filter(attributeValues, function(attributeValue) {
+			if(attributeValue.attribute.id === config.CustomAttributes.displayOptionUID) {
+				return attributeValue;
+			}
+		}));
+	};
+
+	function getModifiedPrograms(program) {
+		_.map(program.programStages, function(programStage) {
+			_.map(programStage.programStageSections, function(programStageSection) {
+				_.map(programStageSection.programStageDataElements, function(dataElement) {
+					var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+					if(attributeValue) {
+						dataElement.displayOption = attributeValue.value;
+					}
+				});
+			});
+		});
+		return program;
+	}
 
 	this.process = function(program, mode) {
 		pages = [];
 		currentPageIndex = -1;
+		var _program = getModifiedPrograms(program);
 		if(mode == 'COVERSHEET')
-			_.map([program], function(program) {
+			_.map([_program], function(program) {
 				if(program.programStages.length == 0) return;
 				for(var i = 0; i < program.programStages[0].programStageSections.length; i++) {
 					if(program.programStages[0].programStageSections.length == 0) return;
@@ -284,7 +306,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 				processDataSet(program)
 			});
 		else if(mode == 'REGISTER') {
-			processRegisterProgram(program);
+			processRegisterProgram(_program);
 		}
 		return pages;
 	}
