@@ -42,7 +42,7 @@ describe("ProgramProcessor", function() {
 			list: 2
 		},
 		Attributes: {
-			printFlagUID: "FsTeAXO7tNP"
+			displayOptionUID: "FsTeAXO7tNP"
 		}
 	};
 

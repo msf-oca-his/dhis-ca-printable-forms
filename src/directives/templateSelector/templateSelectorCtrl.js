@@ -19,7 +19,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var getPrintableAttribute = function(attributeValues) {
 				return _.reduce(_.filter(attributeValues, function(attributeValue) {
-					if(attributeValue.attribute.id === config.Attributes.printableUID) {
+					if(attributeValue.attribute.id === config.CustomAttributes.printFlagUID) {
 						return attributeValue;
 					}
 				}));
@@ -30,8 +30,8 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				var alertShown = false;
 
 				//checking whether custom attribute present in config or not
-				//if( config.Attributes.printableUID === undefined || config.Attributes.printableUID === "" ) {
-				if(_.isEmpty(config.Attributes.printableUID)) {
+				//if( config.CustomAttributes.printFlagUID === undefined || config.CustomAttributes.printFlagUID === "" ) {
+				if(_.isEmpty(config.CustomAttributes.printFlagUID)) {
 					Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 						.then(function(templates) {
 							$scope.templates = _.flatten(templates);
@@ -41,7 +41,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 						})
 				}
 				else {
-					Promise.all([CustomAttributeService.getCustomAttribute(config.Attributes.printableUID)])
+					Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.printFlagUID)])
 						.then(function(customAttribute) {
 
 							var attribute = _.flatten(customAttribute);

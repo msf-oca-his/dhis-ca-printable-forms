@@ -1,4 +1,5 @@
-TallySheets.service("PrintFriendlyProcessor", ['Config', 'Page', function(config, Page) {
+//TODO change processor name
+TallySheets.service("PrintFriendlyProcessor", ['CustomAttributeService', 'Config', 'Page', function(CustomAttributeService, config, Page) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -208,22 +209,47 @@ TallySheets.service("PrintFriendlyProcessor", ['Config', 'Page', function(config
 		dataSet.isPrintFriendlyProcessed = true;
 	};
 
+	var getCustomAttributeForRenderingOptionSets = function(attributeValues) {
+		return _.reduce(_.filter(attributeValues, function(attributeValue) {
+			if(attributeValue.attribute.id === config.CustomAttributes.displayOptionUID) {
+				return attributeValue;
+			}
+		}));
+	};
+
+	function getModifiedDataSet(dataset) {
+		var dataElements = [];
+		_.map(dataset.sections, function(section) {
+			_.map(section.dataElements, function(dataElement) {
+				var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+				if(attributeValue) {
+					dataElement.displayOption = attributeValue.value;
+				}
+				dataElements.push(dataElement);
+			});
+		});
+		dataset.sections.dataElements = dataElements;
+		return dataset;
+	}
+
 	this.process = function(dataset) {
 		pages = [];
 		currentPageIndex = 0;
-		_.map([dataset], function(dataset) {
-			for(var i = 0; i < dataset.sections.length; i++) {
-				if(dataset.sections[i].isCatComb) {
-					divideCatCombsIfNecessary(dataset.sections[i], i, dataset.sections);
-					processTableHeader(dataset.sections[i]);
+		var dataSet = getModifiedDataSet(dataset);
+		_.map([dataSet], function(dataSet) {
+			for(var i = 0; i < dataSet.sections.length; i++) {
+				if(dataSet.sections[i].isCatComb) {
+					divideCatCombsIfNecessary(dataSet.sections[i], i, dataSet.sections);
+					processTableHeader(dataSet.sections[i]);
 				}
 				else {
-					divideOptionSetsIntoNewSection(dataset.sections[i], i, dataset.sections);
-					splitLeftAndRightElements(dataset.sections[i]);
+					divideOptionSetsIntoNewSection(dataSet.sections[i], i, dataSet.sections);
+					splitLeftAndRightElements(dataSet.sections[i]);
 				}
 			}
-			processDataSet(dataset)
+			processDataSet(dataSet)
 		});
 		return pages;
 	}
-}]);
+}])
+;

@@ -31,14 +31,14 @@ TallySheets.factory("Config", [function() {
 			dataSetPrefix: "DS_",
 			programPrefix: "PROG_"
 		},
-		DisplayOptions: {//TODO: make the code values string instead of numbers.
-			none: 0,
-			text: 1,
-			list: 2
+		DisplayOptions: {
+			none: '0',
+			text: '1',
+			list: '2'
 		},
-		Attributes: {
-			printFlagUID: "FsTeAXO7tNP",
-			//printableUID: "KpyV0FJgBS9"
+		CustomAttributes: {
+			displayOptionUID: "ZWkFrJQJUpv",
+			printFlagUID: "eqoShD9PGLO"
 		}
 	}
 }]);

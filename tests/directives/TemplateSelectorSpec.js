@@ -25,7 +25,7 @@ describe("templateSelector Directive", function() {
 				dataSetPrefix: "test_DS",
 				programPrefix: "test_PROG_"
 			},
-			Attributes: {}
+			CustomAttributes: {}
 		};
 		module(function($provide) {
 			$provide.value('Config', config);
@@ -152,7 +152,7 @@ describe("templateSelector Directive", function() {
 		});
 
 		it("should load all templates which has attribute value as true", function(done) {
-			config.Attributes.printableUID = "1";
+			config.CustomAttributes.printFlagUID = "1";
 			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
 			elements = compile(elements)(scope);
 			scope.$digest();
@@ -179,7 +179,7 @@ describe("templateSelector Directive", function() {
 		});
 
 		it("should not load templates which has attribute value as false", function(done) {
-			config.Attributes.printableUID = "1";
+			config.CustomAttributes.printFlagUID = "1";
 			datasets[0].attributeValues[0].value = "false";
 			programs[0].attributeValues[0].value = "false";
 			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
