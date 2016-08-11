@@ -60,11 +60,12 @@
 
         <div  ng-if="content.section.dataElements[0].displayOption == displayOptions.list || !content.section.dataElements[0].displayOption">
             <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
-            <list dataelement="content.section.dataElements[0]"></list>
+            <list dataElement="content.section.dataElements[0]"></list>
         </div>
     </div>
 
     <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
+        <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
         <text-field content="content"></text-field>
     </div>
 

@@ -248,5 +248,4 @@ TallySheets.service("PrintFriendlyProcessor", ['CustomAttributeService', 'Config
 		});
 		return pages;
 	}
-}])
-;
+}]);
