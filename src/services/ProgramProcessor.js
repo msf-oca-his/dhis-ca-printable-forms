@@ -280,6 +280,9 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 						dataElement.displayOption = attributeValue.value;
 					}
 				});
+				_.remove(programStageSection.programStageDataElements,function(dataElement){
+					return dataElement.displayOption == config.DisplayOptions.none;
+				});
 			});
 		});
 		return program;

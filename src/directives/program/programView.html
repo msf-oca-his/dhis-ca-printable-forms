@@ -40,7 +40,7 @@
 
             <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.list || !content.section.programStageDataElements[0].displayOption">
               <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
-              <list dataElement="content.section.programStageDataElements[0]"></list>
+              <list dataelement="content.section.programStageDataElements[0]"></list>
             </div>
         </div>
 
@@ -63,9 +63,7 @@
                   S.NO
               </td>
                <td class="deLabel" ng-repeat="dataElement in contents">
-                 <div ng-show="dataElement.displayOption != displayOptions.none">
                   {{dataElement.name}}
-                 </div>
                </td>
           </tr>
           <tr ng-repeat="row in rows track by $index">
