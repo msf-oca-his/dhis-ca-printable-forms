@@ -101,10 +101,22 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 		}
 	};
 
+	var getDataElementsToSplit = function(dataElements) {
+		var _dataElements = [];
+		_.map(dataElements, function(dataElement) {
+			if(dataElement.displayOption != config.DisplayOptions.list) {
+				_dataElements.push(dataElement);
+			}
+		});
+		return _dataElements;
+	};
+
 	var splitLeftAndRightElements = function(section) {
-		if(section.isOptionSet) return;
-		section.leftSideElements = _.slice(section.programStageDataElements, 0, Math.ceil(section.programStageDataElements.length / 2));
-		section.rightSideElements = _.slice(section.programStageDataElements, Math.ceil(section.programStageDataElements.length / 2));
+		console.log(section.programStageDataElements,"section.programStageDataElements",section.programStageDataElements.length);
+		var dataElements = getDataElementsToSplit(section.programStageDataElements);
+		console.log(dataElements,"kka dataemelment")
+		section.leftSideElements = _.slice(dataElements, 0, Math.ceil(dataElements.length / 2));
+		section.rightSideElements = _.slice(dataElements, Math.ceil(dataElements.length / 2));
 	};
 
 	var processDataSet = function(dataSet) {
@@ -175,6 +187,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 					var newSection = _.cloneDeep(section);
 					(numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
+					console.log(section, "section", "----", newSection, "newSection")
 					splitLeftAndRightElements(section);
 					splitLeftAndRightElements(newSection);
 					newSection.isDuplicate = true;
@@ -280,7 +293,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 						dataElement.displayOption = attributeValue.value;
 					}
 				});
-				_.remove(programStageSection.programStageDataElements,function(dataElement){
+				_.remove(programStageSection.programStageDataElements, function(dataElement) {
 					return dataElement.displayOption == config.DisplayOptions.none;
 				});
 			});
@@ -303,6 +316,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 					}
 					else {
 						divideOptionSetsIntoNewSection(program.programStages[0].programStageSections[i], i, program.programStages[0].programStageSections);
+						console.log(program.programStages[0].programStageSections[i],"program.programStages[0].programStageSections[i]");
 						splitLeftAndRightElements(program.programStages[0].programStageSections[i]);
 					}
 				}
