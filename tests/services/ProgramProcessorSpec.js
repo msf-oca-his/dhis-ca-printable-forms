@@ -49,10 +49,6 @@ describe("ProgramProcessor", function() {
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
-		optionsObject = {
-			123: {id: "123", name: "male", options: {name: "option1"}},
-			12: {id: "12", name: "female", options: {name: "option2"}}
-		};
 		module(function($provide) {
 			$provide.value('Config', config);
 		});
@@ -330,7 +326,7 @@ describe("ProgramProcessor", function() {
 								valueType: "OPTIONSET",
 								attributeValues: [
 									{
-										value: "1",
+										value: "2",
 										attribute: {
 											id: "111"
 										}
@@ -351,6 +347,51 @@ describe("ProgramProcessor", function() {
 
 				expectedSection.programStageDataElements[0].rows = expectedRows;
 				expectedSection.isOptionSet = true;
+				expectedSection.programStageDataElements[0].displayOption = "2";
+
+				var expectedPages = [{
+					heightLeft: 0,
+					width: 183,
+					contents: [
+						{type: 'dataSetName', name: "test program"},
+						{type: 'section', section: expectedSection},
+						{type: 'comments'}],
+					datasetName: "test program"
+				}];
+
+				var actualPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
+				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
+			});
+
+			it("should process the section contain dataElement of type optionset and displayOption text", function() {
+				var testProgram = {
+					id: "123",
+					name: "test program",
+					programStages: [
+						{
+							programStageSections: [{
+								programStageDataElements: [{
+									id: "1234",
+									name: "dataElement",
+									options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+									valueType: "OPTIONSET",
+									attributeValues: [
+										{
+											value: "1",
+											attribute: {
+												id: "111"
+											}
+										}]
+								}],
+								id: "134",
+								name: "section"
+							}]
+						}]
+				};
+				var currentTestProgram = _.cloneDeep(testProgram);
+				var expectedSection = _.cloneDeep(currentTestProgram.programStages[0].programStageSections[0]);
+				expectedSection.leftSideElements = [currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0]];
+				expectedSection.rightSideElements=[];
 				expectedSection.programStageDataElements[0].displayOption = "1";
 
 				var expectedPages = [{
@@ -368,7 +409,6 @@ describe("ProgramProcessor", function() {
 			});
 
 			it("should remove dataElements from given dataElements if displayOption is none", function() {
-
 
 				var dataElements = [{
 					id: "123",
@@ -400,7 +440,7 @@ describe("ProgramProcessor", function() {
 				expectedSection.programStageDataElements[1].rows = expectedRows;
 
 				expectedSection.isOptionSet = true;
-				expectedSection.programStageDataElements[0].displayOption = "1";
+				expectedSection.programStageDataElements[0].displayOption = "2";
 
 				var expectedPages = [{
 					heightLeft: 0,
@@ -420,6 +460,7 @@ describe("ProgramProcessor", function() {
 			});
 
 			it("should process the program which contians dataelement of type optionsets where options are overflowed", function() {
+
 				var currentTestProgram = _.cloneDeep(testProgram);
 
 				var assignOptionsToDe = function(section, numberOfOptions) {
@@ -445,9 +486,7 @@ describe("ProgramProcessor", function() {
 
 				expectedSection1.programStageDataElements[0].rows = expectedRows1;
 				expectedSection1.isOptionSet = true;
-				expectedSection1.programStageDataElements[0].displayOption = "1";
-
-
+				expectedSection1.programStageDataElements[0].displayOption = "2";
 
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				assignOptionsToDe(expectedSection2, 4);
@@ -461,7 +500,7 @@ describe("ProgramProcessor", function() {
 
 				expectedSection2.programStageDataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
-				expectedSection2.programStageDataElements[0].displayOption = "1";
+				expectedSection2.programStageDataElements[0].displayOption = "2";
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
@@ -476,7 +515,7 @@ describe("ProgramProcessor", function() {
 					datasetName: "test program"
 				}];
 				var acutalPages = programProcessor.process(currentTestProgram, 'COVERSHEET');
-				expect(expectedPages[1].contents ).toEqual(acutalPages[1].contents);
+				expect(expectedPages[1].contents).toEqual(acutalPages[1].contents);
 				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
 			});
 
@@ -492,8 +531,7 @@ describe("ProgramProcessor", function() {
 				expectedSection1.programStageDataElements[0].rows = expectedRows1;
 				expectedSection1.isDuplicate = false;
 				expectedSection1.isOptionSet = true;
-				expectedSection1.programStageDataElements[0].displayOption = "1";
-
+				expectedSection1.programStageDataElements[0].displayOption = "2";
 
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				expectedSection2.programStageDataElements[0] = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1];

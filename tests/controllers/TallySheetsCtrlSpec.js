@@ -44,7 +44,7 @@ describe("TallySheets ctrl", function() {
 		module(function($provide) {
 			$provide.value('OptionSetFactory', Promise.resolve({}));
 			$provide.value('DataSetService', mockedDataSetService);
-			$provide.value('PrintFriendlyProcessor', mockedDataSetProcessor);
+			$provide.value('DataSetProcessor', mockedDataSetProcessor);
 			$provide.value('ProgramService', mockedProgramService);
 			$provide.value('ProgramProcessor', mockedProgramProcessor);
 

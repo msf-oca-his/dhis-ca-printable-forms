@@ -49,8 +49,8 @@ describe("DataSetProcessor", function() {
 		});
 	});
 
-	beforeEach(inject(function(PrintFriendlyProcessor, $httpBackend, $q, _$rootScope_, $timeout, Page) {
-		dataSetProcessor = PrintFriendlyProcessor;
+	beforeEach(inject(function(DataSetProcessor, $httpBackend, $q, _$rootScope_, $timeout, Page) {
+		dataSetProcessor = DataSetProcessor;
 		p = $q;
 		$rootScope = _$rootScope_;
 		httpMock = $httpBackend;

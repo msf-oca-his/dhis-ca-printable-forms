@@ -30,13 +30,8 @@
     <span ng-if="mode=='COVERSHEET'">
     <div ng-repeat="content in contents">
         <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
-            <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.text">
-                <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
-                <text-field content="content"></text-field>
-            </div>
-
+          <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
             <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.list || !content.section.programStageDataElements[0].displayOption">
-              <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
               <list dataelement="content.section.programStageDataElements[0]"></list>
             </div>
         </div>

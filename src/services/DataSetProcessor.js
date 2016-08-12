@@ -1,5 +1,4 @@
-//TODO change processor name
-TallySheets.service("PrintFriendlyProcessor", ['CustomAttributeService', 'Config', 'Page', function(CustomAttributeService, config, Page) {
+TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Page', function(CustomAttributeService, config, Page) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -34,7 +33,6 @@ TallySheets.service("PrintFriendlyProcessor", ['CustomAttributeService', 'Config
 		};
 
 		_.map(section.dataElements, function(dataElement, index) {
-
 			if(dataElement.valueType == 'OPTIONSET') {
 				indexOfDEWithOptions.push(index);
 			}
@@ -220,9 +218,11 @@ TallySheets.service("PrintFriendlyProcessor", ['CustomAttributeService', 'Config
 	function getModifiedDataSet(dataset) {
 		_.map(dataset.sections, function(section) {
 			_.map(section.dataElements, function(dataElement) {
-				var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
-				if(attributeValue) {
-					dataElement.displayOption = attributeValue.value;
+				if(dataElement.valueType == "OPTIONSET") {
+					var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+					if(attributeValue) {
+						dataElement.displayOption = attributeValue.value;
+					}
 				}
 			});
 		});

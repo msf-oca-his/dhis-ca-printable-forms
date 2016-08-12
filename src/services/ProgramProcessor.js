@@ -41,8 +41,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 		};
 
 		_.map(section.programStageDataElements, function(dataElement, index) {
-
-			if(dataElement.valueType == 'OPTIONSET') {
+			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.DisplayOptions.list || !dataElement.displayOption)) {
 				indexOfDEWithOptions.push(index);
 			}
 		});
@@ -102,21 +101,21 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 	};
 
 	var getDataElementsToSplit = function(dataElements) {
-		var _dataElements = [];
+		var dataElementsOfOptionTypeText = [];
 		_.map(dataElements, function(dataElement) {
 			if(dataElement.displayOption != config.DisplayOptions.list) {
-				_dataElements.push(dataElement);
+				dataElementsOfOptionTypeText.push(dataElement);
 			}
 		});
-		return _dataElements;
+		return dataElementsOfOptionTypeText;
 	};
 
 	var splitLeftAndRightElements = function(section) {
-		console.log(section.programStageDataElements,"section.programStageDataElements",section.programStageDataElements.length);
 		var dataElements = getDataElementsToSplit(section.programStageDataElements);
-		console.log(dataElements,"kka dataemelment")
-		section.leftSideElements = _.slice(dataElements, 0, Math.ceil(dataElements.length / 2));
-		section.rightSideElements = _.slice(dataElements, Math.ceil(dataElements.length / 2));
+		if(!_.isEmpty(dataElements)) {
+			section.leftSideElements = _.slice(dataElements, 0, Math.ceil(dataElements.length / 2));
+			section.rightSideElements = _.slice(dataElements, Math.ceil(dataElements.length / 2));
+		}
 	};
 
 	var processDataSet = function(dataSet) {
@@ -187,7 +186,6 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 					var newSection = _.cloneDeep(section);
 					(numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
-					console.log(section, "section", "----", newSection, "newSection")
 					splitLeftAndRightElements(section);
 					splitLeftAndRightElements(newSection);
 					newSection.isDuplicate = true;
@@ -287,12 +285,14 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 	function getModifiedPrograms(program) {
 		_.map(program.programStages, function(programStage) {
 			_.map(programStage.programStageSections, function(programStageSection) {
-				_.map(programStageSection.programStageDataElements, function(dataElement) {
-					var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
-					if(attributeValue) {
-						dataElement.displayOption = attributeValue.value;
-					}
-				});
+					_.map(programStageSection.programStageDataElements, function(dataElement) {
+						if(dataElement.valueType == 'OPTIONSET') {
+							var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+							if(attributeValue) {
+								dataElement.displayOption = attributeValue.value;
+							}
+						}
+					});
 				_.remove(programStageSection.programStageDataElements, function(dataElement) {
 					return dataElement.displayOption == config.DisplayOptions.none;
 				});
@@ -304,26 +304,26 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 	this.process = function(program, mode) {
 		pages = [];
 		currentPageIndex = -1;
-		var _program = getModifiedPrograms(program);
-		if(mode == 'COVERSHEET')
-			_.map([_program], function(program) {
-				if(program.programStages.length == 0) return;
-				for(var i = 0; i < program.programStages[0].programStageSections.length; i++) {
-					if(program.programStages[0].programStageSections.length == 0) return;
-					if(program.programStages[0].programStageSections[i].isCatComb) {//TODO: revalidate this, is it needed.
-						divideCatCombsIfNecessary(program.programStages[0].programStageSections[i], i, program.programStages[0].programStageSections);
-						processTableHeader(program.programStages[0].programStageSections[i]);
+		var Program = getModifiedPrograms(program);
+		if(mode == 'COVERSHEET') {
+			_.map([Program], function(Program) {
+				if(Program.programStages.length == 0) return;
+				for(var i = 0; i < Program.programStages[0].programStageSections.length; i++) {
+					if(Program.programStages[0].programStageSections.length == 0) return;
+					if(Program.programStages[0].programStageSections[i].isCatComb) {//TODO: revalidate this, is it needed.
+						divideCatCombsIfNecessary(Program.programStages[0].programStageSections[i], i, Program.programStages[0].programStageSections);
+						processTableHeader(Program.programStages[0].programStageSections[i]);
 					}
 					else {
-						divideOptionSetsIntoNewSection(program.programStages[0].programStageSections[i], i, program.programStages[0].programStageSections);
-						console.log(program.programStages[0].programStageSections[i],"program.programStages[0].programStageSections[i]");
-						splitLeftAndRightElements(program.programStages[0].programStageSections[i]);
+						divideOptionSetsIntoNewSection(Program.programStages[0].programStageSections[i], i, Program.programStages[0].programStageSections);
+						splitLeftAndRightElements(Program.programStages[0].programStageSections[i]);
 					}
 				}
-				processDataSet(program)
+				processDataSet(Program)
 			});
+		}
 		else if(mode == 'REGISTER') {
-			processRegisterProgram(_program);
+			processRegisterProgram(Program);
 		}
 		return pages;
 	}

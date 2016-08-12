@@ -5,7 +5,7 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "PrintFriendlyProcessor", "ProgramService", "ProgramProcessor", "appLoadingFailed", function($scope, DataSetService, PrintFriendlyProcessor, ProgramService, ProgramProcessor, appLoadingFailed) {
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "ProgramProcessor", "appLoadingFailed", function($scope, DataSetService, DataSetProcessor, ProgramService, ProgramProcessor, appLoadingFailed) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
@@ -69,7 +69,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Pr
 			if($scope.template.type == "DATASET") {
 				return DataSetService.getReferentialDataSet($scope.template.id)
 					.then(function(dataset) {
-						$scope.pages = PrintFriendlyProcessor.process(_.cloneDeep(dataset));
+						$scope.pages = DataSetProcessor.process(_.cloneDeep(dataset));
 						$scope.spinnerShown = false;
 						$scope.$apply();
 					});
