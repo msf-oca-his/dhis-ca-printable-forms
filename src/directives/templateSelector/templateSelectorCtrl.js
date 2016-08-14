@@ -25,67 +25,81 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				}));
 			};
 
-			//TODO: UX input: How should alerts be handled ?
-			var loadTemplates = function() {
-				var alertShown = false;
+			var isAttributePresentInConfig = function(printableUID) {
+				return _.isEmpty(printableUID);
+			};
 
-				//checking whether custom attribute present in config or not
-				//if( config.CustomAttributes.printFlagUID === undefined || config.CustomAttributes.printFlagUID === "" ) {
-				if(_.isEmpty(config.CustomAttributes.printFlagUID)) {
-					Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-						.then(function(templates) {
-							$scope.templates = _.flatten(templates);
+			var isAttributeAssignedToTemplate = function(attribute) {
+				return attribute != undefined && (attribute.dataSetAttribute && attribute.programAttribute)
+			};
 
-							$rootScope.$apply();
-							refreshBootstrapSelect();
-						})
+			var alertForEmptyTemplates = function() {
+				if($scope.templates.length == 0 && !$scope.alertShown) {
+					$translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
+						alert(translatedValue);
+					});
 				}
-				else {
-					Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.printFlagUID)])
-						.then(function(customAttribute) {
+			};
 
-							var attribute = _.flatten(customAttribute);
-							//checking whether custom attribute exists in system or not
-							if(attribute[0] === undefined) {
-								$translate('NO_ATTRIBUTE_EXISTS').then(function(translatedValue) {
-									alertShown = true;
+			var addTemplateToDisplay = function(templates) {
+				var yes = "true";
+				_.map(_.flatten(templates), function(template) {
+					var printableAttribute = getPrintableAttribute(template.attributeValues);
+					if(printableAttribute && printableAttribute.value == yes) {
+						$scope.templates.push(template)
+					}
+				});
+			};
+
+			var showAllTemplates = function() {
+				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+					.then(function(templates) {
+						$scope.templates = _.flatten(templates);
+						$rootScope.$apply();
+						refreshBootstrapSelect();
+					});
+			};
+
+			var showValidReportingTemplates = function() {
+				Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.printFlagUID)])
+					.then(function(customAttribute) {
+						var attribute = _.flatten(customAttribute);
+						if(_.isEmpty(attribute[0])) {
+							$translate('NO_ATTRIBUTE_EXISTS').then(function(translatedValue) {
+								$scope.alertShown = true;
+								alert(translatedValue);
+							});
+						}
+						else {
+							if(!(isAttributeAssignedToTemplate(attribute[0]))) {
+								$translate('NO_ASSOCIATION_WITH_ATTRIBUTE').then(function(translatedValue) {
+									$scope.alertShown = true;
 									alert(translatedValue);
 								});
 							}
-							else {
-								//checking whether custom attribute associated to dataSets/programs or not
-								if(attribute[0] != undefined && (!attribute[0].dataSetAttribute && !attribute[0].programAttribute)) {
-									$translate('NO_ASSOCIATION_WITH_ATTRIBUTE').then(function(translatedValue) {
-										alertShown = true;
-										alert(translatedValue);
-									});
-								}
-								else {
-									Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-										.then(function(templates) {
-											$scope.templates = [];
-											var yes = "true";
+							else
+								Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+									.then(function(templates) {
+										addTemplateToDisplay(templates);
+										alertForEmptyTemplates();
 
-											_.map(_.flatten(templates), function(template) {
-												var printableAttribute = getPrintableAttribute(template.attributeValues);
-												//checking whether the template has that custom attribute along with value as true
-												if(printableAttribute && printableAttribute.value == yes) {
-													$scope.templates.push(template)
-												}
-											});
-											//checking if none of the template has the custom attribute set
-											if($scope.templates.length == 0 && !alertShown) {
-												$translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
-													alert(translatedValue);
-												});
-											}
-											$rootScope.$apply();
-											refreshBootstrapSelect();
-										})
-								}
-							}
+										$rootScope.$apply();
+										refreshBootstrapSelect();
+									})
+						}
+					})
+			};
 
-						})
+			//TODO: UX input: How should alerts be handled ?
+			var loadTemplates = function() {
+				$scope.alertShown = false;
+				$scope.templates = [];
+
+				if(isAttributePresentInConfig(config.CustomAttributes.printFlagUID)) {
+					showAllTemplates();
+				}
+				else {
+					showValidReportingTemplates();
 				}
 			};
 
