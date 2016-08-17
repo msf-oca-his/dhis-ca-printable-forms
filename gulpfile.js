@@ -5,7 +5,8 @@ var gulp        = require('gulp'),
     proxy       = require('http-proxy-middleware'),
     KarmaServer = require('karma').Server,
     webpack     = require('webpack'),
-    zip         = require('gulp-zip');
+    zip         = require('gulp-zip'),
+		chmod       = require('gulp-chmod');
 
 APP = {
 	src: {
@@ -64,6 +65,16 @@ TEMP = {
 
 };
 
+GitHooks = {
+	scripts:{
+		all: "githooks/*.*"
+	},
+	defaultFolder: {
+		root: ".git/hooks/"
+	}
+
+};
+
 TASKS = {
 	watchSrc: '_watchSrc',
 	watchTests: '_watchTests',
@@ -82,7 +93,14 @@ TASKS = {
 	webpackTest: '_webpackTest',
 	pack: 'pack',
 	test: 'test',
+	setupGitHooks: 'setupGitHooks'
 };
+
+gulp.task(TASKS.setupGitHooks, function(){
+	gulp.src(GitHooks.scripts.all)
+		.pipe(chmod(700))
+		.pipe(gulp.dest(GitHooks.defaultFolder.root))
+});
 
 gulp.task(TASKS.clean, [TASKS.cleanTemp, TASKS.cleanTarget]);
 
