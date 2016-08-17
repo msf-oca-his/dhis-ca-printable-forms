@@ -1,0 +1,3 @@
+//TODO: this import here is compiling entire css file of bootstrap. It should not compile the entire css as it is plain css and doesnt require a compilation. SCSS V4 is supposed to solve this. waiting for it.
+@import '../../dependencies/bower_components/bootstrap/dist/css/bootstrap.min';
+@import '../../dependencies/bower_components/bootstrap-select/dist/css/bootstrap-select.min';

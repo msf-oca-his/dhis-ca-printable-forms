@@ -6,15 +6,16 @@ var gulp        = require('gulp'),
     KarmaServer = require('karma').Server,
     webpack     = require('webpack'),
     zip         = require('gulp-zip'),
-		chmod       = require('gulp-chmod');
+		chmod       = require('gulp-chmod'),
+		sass        = require('gulp-sass');
 
 APP = {
 	src: {
 		root: "src",
 		all: "src/**/*.*",
-		html: "src/index.html",
-		//js: "src/**/*.js",
-		css: "src/**/*.css"
+		html: "src/**/*.html",
+		js: "src/**/*.js",
+		scss:"src/scss/*.scss"
 	},
 	resources: {
 		root: "resources",
@@ -40,14 +41,6 @@ APP = {
 		webpack: {
 			config: './tests/webpack.config.js'
 		}
-	},
-
-	dependencies: {
-		root: 'dependencies',
-		bower_components: {
-			root: 'dependencies/bower_components',
-			all: 'dependencies/bower_components/**/*.*'
-		}
 	}
 };
 
@@ -58,8 +51,8 @@ DEST = {
 
 TEMP = {
 	root: ".temp",
+	css:".temp/css",
 	all: ".temp/**/*.*",
-	dependencies: ".temp/dependencies",
 	resources: ".temp/resources",
 	i18n: ".temp/i18n"
 
@@ -77,15 +70,12 @@ GitHooks = {
 
 TASKS = {
 	watchSrc: '_watchSrc',
-	watchTests: '_watchTests',
-	watchSrcDuringTests: '_watchSrcDuringTests', //TODO: find a good name for this.
 	cleanTemp: '_cleanTemp',
 	cleanTarget: '_cleanTarget',
 	clean: 'clean',
 	serve: 'serve',
-	copySrcToTemp: '_copySrcToTemp',
+	compileScss: 'compileScss',
 	copyResourcesToTemp: '_copyResourcesToTemp',
-	copyDependenciesToTemp: '_copyDependenciesToTemp',
 	copyi18nToTemp: '_copyi18nToTemp',
 	setUpTemp: '_setUpTemp',
 	reload: '_reload',
@@ -114,10 +104,10 @@ gulp.task(TASKS.cleanTarget, function() {
 		.pipe(clean())
 });
 
-//TODO: the css part will go away when css preprocessor setup will happen. And only index.html will be copied may be using webpack. Rest of the htmls/js are taken care by webpack [common/local]
-gulp.task(TASKS.copySrcToTemp, function() {
-	return gulp.src([APP.src.html, APP.src.css])
-		.pipe(gulp.dest(TEMP.root))
+gulp.task(TASKS.compileScss, function() {
+	return gulp.src([APP.src.scss])
+		.pipe(sass())
+		.pipe(gulp.dest(TEMP.css))
 });
 
 gulp.task(TASKS.copyi18nToTemp, function() {
@@ -130,27 +120,19 @@ gulp.task(TASKS.copyResourcesToTemp, [], function() {
 		.pipe(gulp.dest(TEMP.resources))
 });
 
-//TODO: remove this task once scss comes into place. Right now, js files are handled by webpack. css should be taken care by scss
-gulp.task(TASKS.copyDependenciesToTemp, [], function() {
-	return gulp.src(APP.dependencies.bower_components.all)
-		.pipe(gulp.dest(TEMP.dependencies))
-});
-
 gulp.task(TASKS.reload, function() {
 	browserSync.reload();
 });
 
 gulp.task(TASKS.watchSrc, function() {
-	gulp.watch(APP.src.all, gulpsync.sync([TASKS.webpack, TASKS.copySrcToTemp, TASKS.reload]));
+	gulp.watch([APP.src.html, APP.src.js], gulpsync.sync([TASKS.webpack, TASKS.reload]));
+	gulp.watch(APP.src.scss, gulpsync.sync([TASKS.compileScss, TASKS.reload]));
 	gulp.watch(APP.resources.all, gulpsync.sync([TASKS.copyResourcesToTemp, TASKS.reload]))
 	gulp.watch(APP.i18n.all, gulpsync.sync([TASKS.copyi18nToTemp, TASKS.reload]));
 });
 
-gulp.task(TASKS.watchTests, function() {
-	gulp.watch(APP.tests.testsSrc, gulpsync.sync([TASKS.webpackTest]))
-});
 
-gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack, TASKS.copySrcToTemp, TASKS.copyDependenciesToTemp, TASKS.copyResourcesToTemp, TASKS.copyi18nToTemp]))
+gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack,TASKS.compileScss, TASKS.copyResourcesToTemp, TASKS.copyi18nToTemp]))
 
 gulp.task(TASKS.serve, [TASKS.setUpTemp], function() {
 	browserSync.init({
