@@ -60,7 +60,7 @@ TEMP = {
 
 GitHooks = {
 	scripts:{
-		all: "githooks/*.*"
+		all: "githooks/*"
 	},
 	defaultFolder: {
 		root: ".git/hooks/"
