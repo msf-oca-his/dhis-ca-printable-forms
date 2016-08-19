@@ -1,4 +1,4 @@
-TallySheets.directive('dataset', function() {
+TallySheets.directive('templateDataset', function() {
 	return {
 		restrict: 'E',
 		template: require('./datasetView.html'),

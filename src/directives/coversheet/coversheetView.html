@@ -1,0 +1,16 @@
+<div ng-repeat="content in contents">
+  <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
+    <section-title content="content"></section-title>
+    <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.list || !content.section.programStageDataElements[0].displayOption">
+      <list dataelement="content.section.programStageDataElements[0]"></list>
+    </div>
+  </div>
+
+  <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
+    <section-title content="content"></section-title>
+    <text-field content="content"></text-field>
+  </div>
+        <span ng-if="content.type=='comments'">
+            Comments: <hr style="margin-top:8mm;margin-bottom: 8mm;width:90%;border-color:black;"><hr style="border-color:black;;width:90%;"/>
+        </span>
+</div>

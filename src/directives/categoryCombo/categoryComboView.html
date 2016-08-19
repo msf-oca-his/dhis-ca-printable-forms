@@ -1,0 +1,20 @@
+<table border="1" style="width:{{getTableWidth(content.section)}};table-layout: fixed;">
+  <thead>
+  <tr>
+    <td></td>
+    <td class="table-heading"
+        ng-repeat="categoryOptionCombos in content.section.dataElements[0].categoryCombo.categoryOptionCombos"
+        ng-bind-html="categoryOptionCombos | to_trusted_html">
+    </td>
+  </tr>
+  </thead>
+  <tr ng-repeat="dataElement in content.section.dataElements">
+
+    <td class="deLabel catComb">
+      {{dataElement.name}}
+    </td>
+    <td class="deFieldCatComb"
+        ng-repeat="catComb in content.section.dataElements[0].categoryCombo.categoryOptionCombos">
+    </td>
+  </tr>
+</table>

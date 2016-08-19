@@ -46,8 +46,8 @@ describe("Page Directive", function() {
 		});
 
 		it("should render dataset and not program", function() {
-			expect(_.isEmpty(PageElement[0].querySelector('dataset'))).toBe(false)
-			expect(_.isEmpty(PageElement[0].querySelector('program'))).toBe(true)
+			expect(_.isEmpty(PageElement[0].querySelector('template-dataset'))).toBe(false)
+			expect(_.isEmpty(PageElement[0].querySelector('template-program'))).toBe(true)
 		});
 
 		it("should render page number", function() {
@@ -55,7 +55,7 @@ describe("Page Directive", function() {
 		})
 
 		it("should assign page.content and page.datasetName to dataset directive", function() {
-			datasetElement = PageElement[0].querySelector('dataset');
+			datasetElement = PageElement[0].querySelector('template-dataset');
 			expect(datasetElement.getAttribute('contents')).toBe("page.contents")
 			expect(datasetElement.getAttribute('dataset-name')).toBe("page.datasetName")
 		})

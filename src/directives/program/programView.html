@@ -28,51 +28,11 @@
 
 
     <span ng-if="mode=='COVERSHEET'">
-    <div ng-repeat="content in contents">
-        <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
-          <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
-            <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.list || !content.section.programStageDataElements[0].displayOption">
-              <list dataelement="content.section.programStageDataElements[0]"></list>
-            </div>
-        </div>
-
-        <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
-          <h4 class="sectionName" ng-if="!content.section.isDuplicate">{{content.section.name}}</h4>
-          <text-field content="content"></text-field>
-        </div>
-        <span ng-if="content.type=='comments'">
-            Comments: <hr style="margin-top:8mm;margin-bottom: 8mm;width:90%;border-color:black;"><hr style="border-color:black;;width:90%;"/>
-        </span>
-    </div>
+      <coversheet contents="contents"></coversheet>
     </span>
 
 
-
     <span ng-if="mode=='REGISTER'">
-        <table border="1">
-          <tr>
-              <td class="deLabel" style="width: 1cm">
-                  S.NO
-              </td>
-               <td class="deLabel" ng-repeat="dataElement in contents">
-                  {{dataElement.name}}
-               </td>
-          </tr>
-          <tr ng-repeat="row in rows track by $index">
-            <!--TODO: remove hardcoded height here...-->
-              <td style="height:9.5mm;text-align:center">{{$index + 1}}</td>
-              <td ng-repeat="dataElement in contents" ng-class="getClass(dataElement)">
-              </td>
-            </tr>
-            </table>
-
-        </table>
-        
-      <table style="margin-top:15px">
-            <td class="headerLabel" style="font-size: 0.41cm">
-                Set Number
-            </td>
-            <td style=" width:60%;border-bottom: 1px solid black;"></td>
-      </table>
+      <register contents="contents" rows="rows"></register>
     </span>
 </span>

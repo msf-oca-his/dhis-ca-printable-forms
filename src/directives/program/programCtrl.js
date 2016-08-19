@@ -1,4 +1,4 @@
-TallySheets.directive('program', function() {
+TallySheets.directive('templateProgram', function() {
 	return {
 		restrict: 'E',
 		template: require('./programView.html'),
