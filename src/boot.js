@@ -2,7 +2,7 @@ var determineDhisUrl = function() {
 	if(window.location.href.includes("apps"))
 		return window.location.href.split('api/apps/')[0];
 	else
-		return "http://localhost:8000/";
+		return "http://localhost:8000/"; //TODO: extract this url into config.
 };
 
 var createD2AngularModule = function(d2) {
