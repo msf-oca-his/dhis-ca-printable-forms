@@ -1,8 +1,9 @@
 describe("Program controller", function() {
-	var $controller;
+	var compile;
 	var section;
 	var $scopeCtrl = {};
 	var config = {};
+	var httpMock;
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
@@ -23,8 +24,12 @@ describe("Program controller", function() {
 		});
 	});
 
-	beforeEach(inject(function(_$controller_) {
-		$controller = _$controller_;
+	beforeEach(inject(function($compile, $rootScope, $httpBackend) {
+		$scopeCtrl = $rootScope.$new();
+		compile = $compile;
+		httpMock = $httpBackend;
+		httpMock.expectGET("i18n/en.json").respond(200, {});
+
 	}));
 
 	beforeEach(function() {
@@ -40,39 +45,52 @@ describe("Program controller", function() {
 			isResolved: Promise.resolve({}),
 			name: "section"
 		};
-		$controller('programCtrl', {$scope: $scopeCtrl})
 	});
 
 	it("should get displayOptions from config", function() {
-		expect($scopeCtrl.displayOptions).toEqual(config.DisplayOptions)
-	});
-
-	describe("get table width", function() {
-		it("should return table width as 9.5cm when section is not catcomb", function() {
-			expect($scopeCtrl.getTableWidth(section)).toEqual("9.5cm");
-		});
-
-		it("should return calculated table width when section is catcomb", function() {
-			var currentSection = _.cloneDeep(section);
-			currentSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male,5", "female,7"];
-			currentSection.isCatComb = true;
-			expect($scopeCtrl.getTableWidth(currentSection)).toEqual("10cm");
-		});
+		var element = angular.element('<template-coversheet contents="" program-name="test_program"></template-coversheet>');
+		$scopeCtrl.test_program = "programName"
+		$scopeCtrl.modelContents = [];
+		element = compile(element)($scopeCtrl);
+		$scopeCtrl.$digest();
+		elementsScope = element.scope().$$childHead;
+		expect(elementsScope.displayOptions).toEqual(config.DisplayOptions)
 	});
 
 	describe("get class", function() {
 		it("should give de field text type if dataelement type is TEXT", function() {
 			var dataElement = {valueType: 'TEXT'};
-			expect($scopeCtrl.getClass(dataElement)).toEqual('deField text');
+			var element = angular.element('<template-register contents="modelContents" program-name="test_program" rows="rows"></template-register>');
+			$scopeCtrl.test_program = "programName";
+			$scopeCtrl.modelContents = [];
+			$scopeCtrl.rows = [];
+			element = compile(element)($scopeCtrl);
+			$scopeCtrl.$digest();
+			elementsScope = element.scope().$$childHead;
+			expect(elementsScope.getClass(dataElement)).toEqual('deField text');
 		});
 
 		it("should give de general text type if dataelement type is not TEXT", function() {
 			var dataElement = {valueType: 'CatComb'};
-			expect($scopeCtrl.getClass(dataElement)).toEqual('deField general');
+			var element = angular.element('<template-register contents="modelContents" program-name="test_program" rows="rows"></template-register>');
+			$scopeCtrl.test_program = "programName";
+			$scopeCtrl.modelContents = [];
+			$scopeCtrl.rows = [];
+			element = compile(element)($scopeCtrl);
+			$scopeCtrl.$digest();
+			elementsScope = element.scope().$$childHead;
+			expect(elementsScope.getClass(dataElement)).toEqual('deField general');
 		});
 
 		it("finding number rows for scope variable", function() {
-			expect($scopeCtrl.rows.length).toBe(4);
+			var element = angular.element('<template-register contents="modelContents" program-name="test_program" rows="rows"></template-register>');
+			$scopeCtrl.test_program = "programName";
+			$scopeCtrl.modelContents = [];
+			$scopeCtrl.rows = [];
+			element = compile(element)($scopeCtrl);
+			$scopeCtrl.$digest();
+			elementsScope = element.scope().$$childHead;
+			expect(elementsScope.rows.length).toBe(4);
 		})
 
 	});

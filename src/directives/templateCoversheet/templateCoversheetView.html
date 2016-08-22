@@ -1,3 +1,29 @@
+<link href="../css/coversheet.css" rel="stylesheet" type="text/css">
+  <div class="datasetName">{{programName}}</div>
+   <table class="header">
+        <tr>
+            <td class="headerLabel">
+                Org Structure
+            </td>
+            <td class="headerField"></td>
+
+            <td  class="seperator"></td>
+
+            <td class="headerLabel">
+                Supervisor
+            </td>
+            <td class="headerField"></td>
+
+            <td  class="seperator"></td>
+
+            <td class="headerLabel">
+                Period
+            </td>
+            <td class="headerField"></td>
+
+        </tr>
+    </table>
+
 <div ng-repeat="content in contents">
   <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
     <section-title content="content"></section-title>

@@ -1,6 +1,14 @@
 <div class="subpage">
   <template-dataset ng-if="type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></template-dataset>
-  <template-program ng-if="type=='PROGRAM'" contents="page.contents" mode="programMode" program-name="page.programName" is-last-page="totalPages==pageNumber"></template-program>
+
+  <div ng-if="programMode == 'COVERSHEET'">
+    <template-coversheet contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-coversheet>
+  </div>
+
+  <div ng-if="programMode == 'REGISTER'">
+    <template-register contents="page.contents" program-name="page.programName" rows="rows" is-last-page="totalPages == pageNumber"></template-register>
+  </div>
+
 
   <div class="page-number" ng-if="programMode!='REGISTER'">
     Page {{pageNumber}} of {{totalPages}}

@@ -67,6 +67,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		if($scope.template.id) {
 			$scope.spinnerShown = true;
 			if($scope.template.type == "DATASET") {
+				$scope.programMode = null;
 				return DataSetService.getReferentialDataSet($scope.template.id)
 					.then(function(dataset) {
 						$scope.pages = DataSetProcessor.process(_.cloneDeep(dataset));
