@@ -1,5 +1,5 @@
 require("./directives/templateSelector/templateSelector.js")
-require("./directives/page/pageCtrl.js")
+require("./directives/page/page.js")
 require("./directives/templateDataset/templateDataSet.js")
 require("./directives/list/list.js")
 require("./directives/textField/textField.js")
