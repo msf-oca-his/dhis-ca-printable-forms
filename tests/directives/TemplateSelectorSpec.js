@@ -18,7 +18,6 @@ describe("templateSelector Directive", function() {
 	var customAttributes;
 	var elements;
 	beforeEach(function() {
-		module("TallySheets");
 		angular.module('d2HeaderBar', []);
 		config = {
 			Prefixes: {
@@ -27,12 +26,16 @@ describe("templateSelector Directive", function() {
 			},
 			CustomAttributes: {}
 		};
-		module(function($provide) {
+
+		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('d2', d2);
 			$provide.value('DataSetService', dataSetService);
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
+			$translateProvider.translations('en', {
+				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator."
+			});
 		});
 	});
 
@@ -135,47 +138,228 @@ describe("templateSelector Directive", function() {
 			scope.testTemplate = {};
 		});
 
-		it("should load all the datasets and programs when custom attribute is not specified in config", function(done) {
-			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
-			elements = compile(elements)(scope);
-			scope.$digest();
-			Promise.resolve({})
-				.then(function() {
-					Promise.resolve()
-						.then(function() {
-							expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-							done();
-						});
-					_$rootScope.$digest();
-				});
-			_$rootScope.$digest();
+		describe("no printable uid and display option uid", function() {
+			it("should load all the templates when print flag uid and display option uid are not present in config", function(done) {
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
+								expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+								done();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			});
 		});
 
-		it("should load all templates which has attribute value as true", function(done) {
-			config.CustomAttributes.printFlagUID = "1";
-			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
-			elements = compile(elements)(scope);
-			scope.$digest();
-			Promise.resolve({})
-				.then(function() {
-					Promise.resolve()
-						.then(function() {
-							Promise.resolve().then(function() {
+		describe("printabe uid and no display option uid", function() {
+			it("should load all templates which has print uid attribute value as true and display option uid not there in config", function(done) {
+				config.CustomAttributes.printFlagUID = "1";
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
 								Promise.resolve().then(function() {
 									Promise.resolve().then(function() {
-										expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-										done();
+										Promise.resolve().then(function() {
+											expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+											done();
 
+										})
+										scope.$digest();
 									})
 									scope.$digest();
 								})
 								scope.$digest();
-							})
-							scope.$digest();
-						});
-					scope.$digest();
-				});
-			scope.$digest();
+							});
+						scope.$digest();
+					});
+				scope.$digest();
+			});
+		});
+
+		describe("no printable uid and display option uid", function() {
+
+			it("should show an alert when display option attribute is not present in system", function(done) {
+				customAttributes[0] = {};
+				spyOn(window, 'alert');
+				config.CustomAttributes.displayOptionUID = "3";
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
+								expect(window.alert).toHaveBeenCalledWith("The specified UID doesn't exist in the system. Please contact your system administrator.");
+								done();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			});
+
+			it("should show an alert when there is no association between display option attribute and optionset and there is no printable uid ", function(done) {
+				spyOn(window, 'alert');
+				config.CustomAttributes.displayOptionUID = "3";
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
+								expect(window.alert).toHaveBeenCalledWith("The specified attribute is not associated with any optionSet. Please contact your system administrator.");
+								done();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			});
+
+			it("should show an alert when The specified attribute of type optionSet doesn't have any options and there is no printable uid ", function(done) {
+				customAttributes[0].optionSet = {id: "optionSetId"};
+				spyOn(window, 'alert');
+				config.CustomAttributes.displayOptionUID = "3";
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
+								expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.");
+								done();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			});
+
+			it("should show an alert when The specified attribute of type optionSet's options are incorrect and there is no printable uid ", function(done) {
+				customAttributes[0].optionSet = {
+					id: "optionSetId",
+					options: [
+						{
+							code: "0"
+						}, {
+							code: "3"
+						},
+						{
+							code: "2"
+						}
+					]
+				};
+				spyOn(window, 'alert');
+				config.CustomAttributes.displayOptionUID = "3";
+				config.DisplayOptions = {
+					none: '0',
+					text: '1',
+					list: '2'
+				};
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
+								expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
+								done();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			});
+
+			it("should show an alert when The specified attribute of type optionSet is not assigned to any dataElement and there is no printable uid ", function(done) {
+				customAttributes[0].optionSet = {
+					id: "optionSetId",
+					options: [
+						{
+							code: "0"
+						}, {
+							code: "1"
+						},
+						{
+							code: "2"
+						}
+					]
+				};
+				customAttributes[0].dataElementAttribute = false;
+				spyOn(window, 'alert');
+				config.CustomAttributes.displayOptionUID = "3";
+				config.DisplayOptions = {
+					none: '0',
+					text: '1',
+					list: '2'
+				};
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve()
+							.then(function() {
+								expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator");
+								done();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			});
+
+			it("should render the all templates when everyting goes well", function(done) {
+				customAttributes[0].optionSet = {
+					id: "optionSetId",
+					options: [
+						{
+							code: "0"
+						}, {
+							code: "1"
+						},
+						{
+							code: "2"
+						}
+					]
+				};
+				customAttributes[0].dataelementAttribute = true;
+				config.CustomAttributes.displayOptionUID = "3";
+				config.DisplayOptions = {
+					none: '0',
+					text: '1',
+					list: '2'
+				};
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve({})
+							.then(function() {
+								Promise.resolve({})
+									.then(function() {
+										Promise.resolve({})
+											.then(function() {
+												expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+												done();
+											})
+										_$rootScope.$digest();
+									})
+								_$rootScope.$digest();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+			})
+
 		});
 
 		it("should not load templates which has attribute value as false", function(done) {
