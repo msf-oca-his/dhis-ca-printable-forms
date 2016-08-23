@@ -2,9 +2,17 @@
 describe("Coversheet Template", function() {
 	var compile, element;
 	var section;
-	var $scope = {};
+	var $scope = {}, elementScope;
 	var config = {};
 	var httpMock;
+
+	function createElement() {
+		element = angular.element('<template-coversheet contents="modelContents" program-name="programName"></template-coversheet>');
+		element = compile(element)($scope);
+		elementScope = element.scope().$$childHead;
+		element = element[0];
+	}
+
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
@@ -18,15 +26,14 @@ describe("Coversheet Template", function() {
 			compile = $compile;
 			httpMock = $httpBackend;
 			httpMock.expectGET("i18n/en.json").respond(200, {});
-
 		});
+
 		section = {
 			dataElements: [{
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement",
-				type: "TEXT",
-				categoryCombo: {}
+				type: "TEXT"
 			}],
 			id: "134",
 			isResolved: Promise.resolve({}),
@@ -35,18 +42,15 @@ describe("Coversheet Template", function() {
 
 		$scope.programName = "programName"
 		$scope.modelContents = [];
-		element = angular.element('<template-coversheet contents="modelContents" program-name="programName"></template-coversheet>');
-		element = compile(element)($scope);
+		createElement()
+	});
+
+	it("should display the name of the program", function() {
 		$scope.$digest();
+		expect(element.innerHTML).toContain($scope.programName)
 	});
 
-	it("should get the program name", function() {
-		expect(element[0].innerHTML).toContain($scope.programName)
-	});
 
-	it("should get displayOptions", function() {
-		elementsScope = element.scope().$$childHead;
-		expect(elementsScope.displayOptions).toEqual(config.DisplayOptions)
-	});
+
 
 });

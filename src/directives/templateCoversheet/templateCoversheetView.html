@@ -32,11 +32,12 @@
     </div>
   </div>
 
-  <div class="section" ng-if="content.type=='section' && !content.section.isCatComb && !content.section.isOptionSet">
+  <div class="section" ng-if="content.type=='section' && !content.section.isOptionSet">
     <section-title content="content"></section-title>
     <text-field content="content"></text-field>
   </div>
-        <span ng-if="content.type=='comments'">
-            Comments: <hr style="margin-top:8mm;margin-bottom: 8mm;width:90%;border-color:black;"><hr style="border-color:black;;width:90%;"/>
-        </span>
+
+  <span ng-if="content.type=='comments'">
+      Comments: <hr id="comments-line1" class="comments-line"> <hr class="comments-line"/>
+  </span>
 </div>

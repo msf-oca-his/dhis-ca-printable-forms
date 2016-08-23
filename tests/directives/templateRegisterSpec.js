@@ -65,19 +65,19 @@ describe("Register Template", function() {
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement1",
-				type: "TEXT",
+				type: "TEXT"
 			},
 			{
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement2",
-				type: "TEXT",
+				type: "TEXT"
 			},
 			{
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement3",
-				type: "TEXT",
+				type: "TEXT"
 			}
 		];
 		createElement();
