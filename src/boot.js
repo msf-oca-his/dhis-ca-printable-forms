@@ -1,8 +1,9 @@
+var bootConfig = require("./config/bootConfig.js")
 var determineDhisUrl = function() {
 	if(window.location.href.includes("apps"))
 		return window.location.href.split('api/apps/')[0];
 	else
-		return "http://localhost:8000/";
+		return bootConfig.localAppUrl;
 };
 
 var createD2AngularModule = function(d2) {
@@ -24,7 +25,7 @@ var initializeD2 = function(ApiUrl) {
 
 window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar', 'DhisModel', 'DhisServices', 'D2']);
 window.dhisUrl = determineDhisUrl();
-window.ApiUrl = dhisUrl + 'api';
+window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 initializeD2(ApiUrl)
 	.then(bootStrapAngularApp)
 	.catch(function(err) {

@@ -16,7 +16,9 @@ describe("Coversheet Template", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
-			DisplayOptions: "testDisplayOptions"
+			DisplayOptions: {
+				list: '2'
+			}
 		};
 		module(function($provide) {
 			$provide.value('Config', config);
@@ -33,7 +35,8 @@ describe("Coversheet Template", function() {
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement",
-				type: "TEXT"
+				type: "TEXT",
+				displayOption: '2'
 			}],
 			id: "134",
 			isResolved: Promise.resolve({}),
@@ -41,8 +44,8 @@ describe("Coversheet Template", function() {
 		};
 
 		$scope.programName = "programName"
-		$scope.modelContents = [];
-		createElement()
+		$scope.modelContents = section;
+		createElement();
 	});
 
 	it("should display the name of the program", function() {
@@ -50,7 +53,10 @@ describe("Coversheet Template", function() {
 		expect(element.innerHTML).toContain($scope.programName)
 	});
 
-
-
-
+	it("should display comments section if content type is comments", function() {
+		$scope.modelContents = [{type: 'comments'}];
+		createElement();
+		$scope.$digest();
+		expect(element.innerText).toContain('Comments');
+	})
 });
