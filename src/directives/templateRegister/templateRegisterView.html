@@ -26,7 +26,7 @@
 
 <table border="1">
   <tr>
-    <td class="deLabel" style="width: 1cm">
+    <td class="sno-header">
       S.NO
     </td>
     <td class="deLabel" ng-repeat="dataElement in contents">
@@ -34,8 +34,7 @@
     </td>
   </tr>
   <tr ng-repeat="row in rows track by $index">
-    <!--TODO: remove hardcoded height here...-->
-    <td style="height:9.5mm;text-align:center">{{$index + 1}}</td>
+    <td class="sno-value" style="height:{{rowHeight}}mm">{{$index + 1}}</td>
     <td ng-repeat="dataElement in contents" ng-class="getClass(dataElement)">
     </td>
   </tr>
@@ -43,9 +42,9 @@
 
 </table>
 
-<table style="margin-top:15px">
-  <td class="headerLabel" style="font-size: 0.41cm">
+<table class="footer">
+  <td class="set-number-label">
     Set Number
   </td>
-  <td style=" width:60%;border-bottom: 1px solid black;"></td>
+  <td class="set-number-value"></td>
 </table>
