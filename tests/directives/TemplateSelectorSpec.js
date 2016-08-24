@@ -138,7 +138,7 @@ describe("templateSelector Directive", function() {
 			scope.testTemplate = {};
 		});
 
-		describe("no printable uid and display option uid", function() {
+		describe("no printable uid and display option uid in config", function() {
 			it("should load all the templates when print flag uid and display option uid are not present in config", function(done) {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
 				elements = compile(elements)(scope);
@@ -156,7 +156,7 @@ describe("templateSelector Directive", function() {
 			});
 		});
 
-		describe("printabe uid and no display option uid", function() {
+		describe("printabe uid and no display option uid in config", function() {
 			it("should load all templates which has print uid attribute value as true and display option uid not there in config", function(done) {
 				config.CustomAttributes.printFlagUID = "1";
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
@@ -185,7 +185,7 @@ describe("templateSelector Directive", function() {
 			});
 		});
 
-		describe("no printable uid and display option uid", function() {
+		describe("no printable uid and display option uid in config", function() {
 
 			it("should show an alert when display option attribute is not present in system", function(done) {
 				customAttributes[0] = {};
@@ -316,7 +316,7 @@ describe("templateSelector Directive", function() {
 				_$rootScope.$digest();
 			});
 
-			it("should render the all templates when everyting goes well", function(done) {
+			it("should render the all templates when all validations of display option uid are passed", function(done) {
 				customAttributes[0].optionSet = {
 					id: "optionSetId",
 					options: [
@@ -348,16 +348,71 @@ describe("templateSelector Directive", function() {
 									.then(function() {
 										Promise.resolve({})
 											.then(function() {
-												expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-												done();
-											})
+												Promise.resolve({})
+													.then(function() {
+														expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+														done();
+													})
+											});
 										_$rootScope.$digest();
-									})
+									});
 								_$rootScope.$digest();
 							});
 						_$rootScope.$digest();
 					});
 				_$rootScope.$digest();
+			})
+
+		});
+
+		describe("print flag uid and display option uid present", function() {
+			it("should render templates which passes both validations", function() {
+				customAttributes[0].optionSet = {
+					id: "optionSetId",
+					options: [
+						{
+							code: "0"
+						}, {
+							code: "1"
+						},
+						{
+							code: "2"
+						}
+					]
+				};
+				customAttributes[0].dataelementAttribute = true;
+				config.CustomAttributes.printFlagUID = "1"
+				config.CustomAttributes.displayOptionUID = "3";
+				config.DisplayOptions = {
+					none: '0',
+					text: '1',
+					list: '2'
+				};
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				Promise.resolve({})
+					.then(function() {
+						Promise.resolve({})
+							.then(function() {
+								Promise.resolve({})
+									.then(function() {
+										Promise.resolve({})
+											.then(function() {
+												Promise.resolve({})
+													.then(function() {
+														expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+														done();
+													})
+											});
+										_$rootScope.$digest();
+									});
+								_$rootScope.$digest();
+							});
+						_$rootScope.$digest();
+					});
+				_$rootScope.$digest();
+
 			})
 
 		});

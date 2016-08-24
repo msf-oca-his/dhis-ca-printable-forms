@@ -61,7 +61,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			};
 
 			//TODO:change the method name and also refactor the code
-			var showValidReportingTemplates = function() {
+			var showValidPrintableTemplates = function() {
 				Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.printFlagUID)])
 					.then(function(customAttribute) {
 						var attribute = _.flatten(customAttribute);
@@ -91,63 +91,87 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 					})
 			};
 
-			var validateDisplayOptionsUID = function() {
-				Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.displayOptionUID)]).then(function(customAttribute) {
+			var areConfigOptionsNotEqualTo = function(systemOptions) {
+				var systemOptions = _.map(systemOptions, function(option) {
+					return option.code
+				});
+
+				var configOptions = _.map(config.DisplayOptions, function(option) {
+					return option
+				});
+				return !_.isEqual(configOptions.sort(), systemOptions.sort())
+			};
+
+			var isAttributeAssignedToDataElement = function(attribute) {
+				if(attribute.dataElementAttribute == false) {
+					alert("The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator");
+				} else {
+					return true;
+				}
+			};
+
+			var isAttributeValid = function(attribute) {
+				if(_.isEmpty(attribute.optionSet)) {
+					alert("The specified attribute is not associated with any optionSet. Please contact your system administrator.");
+				}
+
+				else if(_.isEmpty(attribute.optionSet.options)) {
+					alert("The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.")
+				}
+				else {
+					var yes = areConfigOptionsNotEqualTo(attribute.optionSet.options);
+					if(yes) {
+						alert("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.")
+					}
+					else {
+						return isAttributeAssignedToDataElement(attribute);
+					}
+				}
+			};
+
+			var isDisplayOptionsAttributeValid = function() {
+				return Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.displayOptionUID)]).then(function(customAttribute) {
 					var attribute = _.flatten(customAttribute);
-					if(_.isEmpty(attribute[0])) {
+					attribute = attribute[0];
+
+					if(_.isEmpty(attribute)) {
 						alert("The specified UID doesn't exist in the system. Please contact your system administrator.");
 					}
 					else {
-						if(_.isEmpty(attribute[0].optionSet)) {
-							alert("The specified attribute is not associated with any optionSet. Please contact your system administrator.");
-						}
-						else if(_.isEmpty(attribute[0].optionSet.options)) {
-							alert("The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.")
-						}
-						else {
-							var systemOptions = _.map(attribute[0].optionSet.options, function(option) {
-								return option.code
-							});
-
-							var configOptions = _.map(config.DisplayOptions, function(option) {
-								return option
-							});
-							if(!_.isEqual(configOptions.sort(), systemOptions.sort())) {
-								alert("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.")
-							}
-							else {
-								if(attribute[0].dataElementAttribute == false) {
-									alert("The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator");
-								} else {
-									showAllTemplates();
-								}
-							}
-
-						}
-
+						return isAttributeValid(attribute);
 					}
 				})
-			}
+			};
 			//TODO: UX input: How should alerts be handled ?
 			var loadTemplates = function() {
 				$scope.alertShown = false;
 				$scope.templates = [];
-				//TODO:Move this to check config mehtod
 
-				if(isAttributeNotPresentInConfig(config.CustomAttributes.printFlagUID) && isAttributeNotPresentInConfig(config.CustomAttributes.displayOptionUID)) {
+				var noDisplayOptionUID = isAttributeNotPresentInConfig(config.CustomAttributes.displayOptionUID);
+				var noPrintFlagUID = isAttributeNotPresentInConfig(config.CustomAttributes.printFlagUID);
+
+				if(noPrintFlagUID && noDisplayOptionUID) {
 					showAllTemplates();
 				}
 
-				else if(!isAttributeNotPresentInConfig(config.CustomAttributes.printFlagUID) && isAttributeNotPresentInConfig(config.CustomAttributes.displayOptionUID)) {
-					showValidReportingTemplates();
+				else if(!noPrintFlagUID && noDisplayOptionUID) {
+					showValidPrintableTemplates();
 				}
 
-				else if(isAttributeNotPresentInConfig(config.CustomAttributes.printFlagUID) && !isAttributeNotPresentInConfig(config.CustomAttributes.displayOptionUID)) {
-					validateDisplayOptionsUID()
+				else if(noPrintFlagUID && !noDisplayOptionUID) {
+					isDisplayOptionsAttributeValid().then(function(isValid) {
+						if(isValid) {
+							showAllTemplates();
+						}
+					})
 				}
 				else {
+					isDisplayOptionsAttributeValid().then(function(isValid) {
+						if(isValid) {
+							showValidPrintableTemplates();
+						}
+					})
 				}
-				// else if(isAttributeNotPresentInConfig(config.))
 			};
 
 			$scope.changeHandler = function() {
