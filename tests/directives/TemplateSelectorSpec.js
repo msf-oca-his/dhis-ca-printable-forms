@@ -34,7 +34,11 @@ describe("templateSelector Directive", function() {
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
 			$translateProvider.translations('en', {
-				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator."
+				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator.",
+				"NO_ASSOCIATION_WITH_OPTIONSET": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
+				"OPTIONSET_WITHOUT_OPTIONS": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
+				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
+				"NO_ASSOCIATION_WITH_DATAELEMENT": "The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator"
 			});
 		});
 	});
@@ -171,12 +175,11 @@ describe("templateSelector Directive", function() {
 										Promise.resolve().then(function() {
 											expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
 											done();
-
-										})
+										});
 										scope.$digest();
-									})
+									});
 									scope.$digest();
-								})
+								});
 								scope.$digest();
 							});
 						scope.$digest();
@@ -198,8 +201,12 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								expect(window.alert).toHaveBeenCalledWith("The specified UID doesn't exist in the system. Please contact your system administrator.");
-								done();
+								Promise.resolve({})
+									.then(function() {
+										expect(window.alert).toHaveBeenCalledWith("The specified UID doesn't exist in the system. Please contact your system administrator.");
+										done();
+									});
+								_$rootScope.$digest();
 							});
 						_$rootScope.$digest();
 					});
@@ -216,8 +223,12 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								expect(window.alert).toHaveBeenCalledWith("The specified attribute is not associated with any optionSet. Please contact your system administrator.");
-								done();
+								Promise.resolve({})
+									.then(function() {
+										expect(window.alert).toHaveBeenCalledWith("The specified attribute is not associated with any optionSet. Please contact your system administrator.");
+										done();
+									});
+								_$rootScope.$digest();
 							});
 						_$rootScope.$digest();
 					});
@@ -235,8 +246,12 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.");
-								done();
+								Promise.resolve({})
+									.then(function() {
+										expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.");
+										done();
+									});
+								_$rootScope.$digest();
 							});
 						_$rootScope.$digest();
 					});
@@ -271,8 +286,12 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
-								done();
+								Promise.resolve({})
+									.then(function() {
+										expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
+										done();
+									});
+								_$rootScope.$digest();
 							});
 						_$rootScope.$digest();
 					});
@@ -308,8 +327,12 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator");
-								done();
+								Promise.resolve({})
+									.then(function() {
+										expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator");
+										done();
+									})
+								_$rootScope.$digest();
 							});
 						_$rootScope.$digest();
 					});
@@ -381,7 +404,7 @@ describe("templateSelector Directive", function() {
 					]
 				};
 				customAttributes[0].dataelementAttribute = true;
-				config.CustomAttributes.printFlagUID = "1"
+				config.CustomAttributes.printFlagUID = "1";
 				config.CustomAttributes.displayOptionUID = "3";
 				config.DisplayOptions = {
 					none: '0',

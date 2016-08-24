@@ -48,9 +48,13 @@ describe("DataSetProcessor", function() {
 				return Promise.resolve(mockedCustomAttribute);
 			}
 		}
-		module(function($provide) {
+		module(function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', mockedCustomAttributeService);
+			$translateProvider.translations('en', {
+				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator."
+			})
+
 		});
 	});
 
@@ -342,6 +346,17 @@ describe("DataSetProcessor", function() {
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
+			it("should show an alert if value of custom attribute is not matching with config options", function() {
+				var currentTestDataSet = _.cloneDeep(testDataSet);
+				currentTestDataSet.sections[0].dataElements[0].attributeValues[0].value = '5';
+				spyOn(window, 'alert');
+				dataSetProcessor.process(currentTestDataSet);
+				Promise.resolve({}).then(function() {
+					expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
+				});
+				$rootScope.$digest();
+			});
+
 			it("should process the dataSet which contains dataElement of type optionSets where options are overflowed", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 
@@ -349,7 +364,7 @@ describe("DataSetProcessor", function() {
 					for(var index = 0; index < numberOfOptions; index++) {
 						section.dataElements[0].options[index] = {id: 1, name: "option"};
 					}
-				}
+				};
 				assignOptionsToDe(currentTestDataSet.sections[0], 76);   //75 options will overflow to the new page
 
 				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
@@ -402,7 +417,7 @@ describe("DataSetProcessor", function() {
 				expect(expectedPages[1].contents).toEqual(acutalPages[1].contents);
 				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
 			});
-			
+
 			it("should process the dataSet which contains dataElements of type optionSet and general dataElements", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				currentTestDataSet.sections[0].dataElements[1] = {
@@ -467,7 +482,7 @@ describe("DataSetProcessor", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
 				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];
-				expectedSection.rightSideElements=[];
+				expectedSection.rightSideElements = [];
 				expectedSection.dataElements[0].displayOption = "1";
 
 				var expectedPages = [{

@@ -104,7 +104,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var isAttributeAssignedToDataElement = function(attribute) {
 				if(attribute.dataElementAttribute == false) {
-					alert("The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator");
+					$translate('NO_ASSOCIATION_WITH_DATAELEMENT').then(function(translatedValue) {
+						alert(translatedValue)
+					});
 				} else {
 					return true;
 				}
@@ -112,16 +114,22 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var isAttributeValid = function(attribute) {
 				if(_.isEmpty(attribute.optionSet)) {
-					alert("The specified attribute is not associated with any optionSet. Please contact your system administrator.");
+					$translate('NO_ASSOCIATION_WITH_OPTIONSET').then(function(translatedValue) {
+						alert(translatedValue);
+					});
 				}
 
 				else if(_.isEmpty(attribute.optionSet.options)) {
-					alert("The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.")
+					$translate('OPTIONSET_WITHOUT_OPTIONS').then(function(translatedValue) {
+						alert(translatedValue);
+					});
 				}
 				else {
 					var yes = areConfigOptionsNotEqualTo(attribute.optionSet.options);
 					if(yes) {
-						alert("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.")
+						$translate('OPTIONSET_WITH_INCORRECT_OPTIONS').then(function(translatedValue) {
+							alert(translatedValue);
+						});
 					}
 					else {
 						return isAttributeAssignedToDataElement(attribute);
@@ -135,7 +143,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 					attribute = attribute[0];
 
 					if(_.isEmpty(attribute)) {
-						alert("The specified UID doesn't exist in the system. Please contact your system administrator.");
+						$translate('NO_ATTRIBUTE_EXISTS').then(function(translatedValue) {
+							alert(translatedValue);
+						});
 					}
 					else {
 						return isAttributeValid(attribute);

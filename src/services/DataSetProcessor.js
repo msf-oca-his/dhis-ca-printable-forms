@@ -1,4 +1,4 @@
-TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Page', function(CustomAttributeService, config, Page) {
+TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Page', '$translate', function(CustomAttributeService, config, Page, $translate) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -215,13 +215,28 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 		}));
 	};
 
+	var isAttributeValueValid = function(attributeValue) {
+		var configOptions = _.map(config.DisplayOptions, function(option) {
+			return option
+		});
+		return configOptions.includes(attributeValue);
+	};
+
 	function getModifiedDataSet(dataset) {
 		_.map(dataset.sections, function(section) {
 			_.map(section.dataElements, function(dataElement) {
 				if(dataElement.valueType == "OPTIONSET") {
 					var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 					if(attributeValue) {
-						dataElement.displayOption = attributeValue.value;
+						var isValid = isAttributeValueValid(attributeValue.value);
+						if(isValid) {
+							dataElement.displayOption = attributeValue.value;
+						}
+						else {
+							$translate('OPTIONSET_WITH_INCORRECT_OPTIONS').then(function(translatedValue) {
+								alert(translatedValue);
+							});
+						}
 					}
 				}
 			});
