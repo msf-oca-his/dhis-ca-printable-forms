@@ -227,7 +227,7 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 			_.map(section.dataElements, function(dataElement) {
 				if(dataElement.valueType == "OPTIONSET") {
 					var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
-					if(attributeValue) {
+					if(attributeValue.value) {
 						var isValid = isAttributeValueValid(attributeValue.value);
 						if(isValid) {
 							dataElement.displayOption = attributeValue.value;

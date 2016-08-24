@@ -48,9 +48,11 @@ describe("ProgramProcessor", function() {
 
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
-		module("TallySheets");
-		module(function($provide) {
+		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
+			$translateProvider.translations('en', {
+				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator."
+			})
 		});
 	});
 
@@ -363,6 +365,18 @@ describe("ProgramProcessor", function() {
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
+			it("should show an alert if value of custom attribute is not matching with config options", function(done) {
+				var currentTestProgram = _.cloneDeep(testProgram);
+				spyOn(window, 'alert');
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].attributeValues[0].value = '7';
+				programProcessor.process(currentTestProgram, 'COVERSHEET');
+				Promise.resolve({}).then(function() {
+					expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
+					done();
+				});
+				$rootScope.$digest()
+			});
+
 			it("should process the section contain dataElement of type optionset and displayOption text", function() {
 				var testProgram = {
 					id: "123",
@@ -391,7 +405,7 @@ describe("ProgramProcessor", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 				var expectedSection = _.cloneDeep(currentTestProgram.programStages[0].programStageSections[0]);
 				expectedSection.leftSideElements = [currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0]];
-				expectedSection.rightSideElements=[];
+				expectedSection.rightSideElements = [];
 				expectedSection.programStageDataElements[0].displayOption = "1";
 
 				var expectedPages = [{
@@ -709,15 +723,27 @@ describe("ProgramProcessor", function() {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
 					name: "dataElement",
 					id: "1234",
-					valueType: "OPTIONSET"
-
+					valueType: "OPTIONSET",
+					attributeValues: [
+						{
+							value: "2",
+							attribute: {
+								id: "111"
+							}
+						}]
 				};
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
 					name: "dataElement",
 					id: "1234",
-					valueType: "OPTIONSET"
-
+					valueType: "OPTIONSET",
+					attributeValues: [
+						{
+							value: "2",
+							attribute: {
+								id: "111"
+							}
+						}]
 				};
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[3] = {
@@ -738,8 +764,34 @@ describe("ProgramProcessor", function() {
 					widthLeft: 0,
 					contents: [
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
-						{name: "dataElement", id: "1234", valueType: "OPTIONSET"},
-						{name: "dataElement", id: "1234", valueType: "OPTIONSET"},
+						{
+							name: "dataElement",
+							id: "1234",
+							valueType: "OPTIONSET",
+							attributeValues: [
+								{
+									value: "2",
+									attribute: {
+										id: "111"
+									}
+								}
+							],
+							displayOption: '2'
+						},
+						{
+							name: "dataElement",
+							id: "1234",
+							valueType: "OPTIONSET",
+							attributeValues: [
+								{
+									value: "2",
+									attribute: {
+										id: "111"
+									}
+								}
+							],
+							displayOption: '2'
+						},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						new _DataElement({name: 'Comments', valueType: 'TEXT'})

@@ -1,4 +1,4 @@
-TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Config', function(DataElement, DataSetSection, config) {
+TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Config', '$translate', function(DataElement, DataSetSection, config, $translate) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -282,17 +282,32 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 		}));
 	};
 
+	var isAttributeValueValid = function(attributeValue) {
+		var configOptions = _.map(config.DisplayOptions, function(option) {
+			return option
+		});
+		return configOptions.includes(attributeValue);
+	};
+
 	function getModifiedPrograms(program) {
 		_.map(program.programStages, function(programStage) {
 			_.map(programStage.programStageSections, function(programStageSection) {
-					_.map(programStageSection.programStageDataElements, function(dataElement) {
-						if(dataElement.valueType == 'OPTIONSET') {
-							var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
-							if(attributeValue) {
+				_.map(programStageSection.programStageDataElements, function(dataElement) {
+					if(dataElement.valueType == 'OPTIONSET') {
+						var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+						if(attributeValue.value) {
+							var isValid = isAttributeValueValid(attributeValue.value);
+							if(isValid) {
 								dataElement.displayOption = attributeValue.value;
 							}
+							else {
+								$translate('OPTIONSET_WITH_INCORRECT_OPTIONS').then(function(translatedValue) {
+									alert(translatedValue);
+								});
+							}
 						}
-					});
+					}
+				});
 				_.remove(programStageSection.programStageDataElements, function(dataElement) {
 					return dataElement.displayOption == config.DisplayOptions.none;
 				});
