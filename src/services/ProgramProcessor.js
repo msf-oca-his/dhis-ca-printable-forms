@@ -1,4 +1,4 @@
-TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Config', function(DataElement, DataSetSection, config) {
+TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Config', 'Content', 'Page', 'ContentTypes', function(DataElement, DataSetSection, config, Content, Page, contentTypes) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -256,23 +256,29 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements.push(new DataElement({name: 'Comments', type: 'TEXT'}))
+		var dataElementsPerPage = [];
 		_.map(allDataElements, function(dataElement, index) {
 			page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);
+
 			if((allDataElements.length == (index + 1)) && page.widthLeft > 0) {
-				page.contents.push(dataElement);
+				dataElementsPerPage.push(dataElement);
 			}
 			else if(((allDataElements.length - 1) == (index + 1)) && page.widthLeft > getWidthOfDataElement(allDataElements[index + 1])) {
-				page.contents.push(dataElement);
+				dataElementsPerPage.push(dataElement);
 			}
 			else if(((index + 1) < allDataElements.length - 1 ) && page.widthLeft > 0) {
-				page.contents.push(dataElement);
+				dataElementsPerPage.push(dataElement);
 			}
 			else {
+				page.contents.push(new Content(contentTypes.registerContent, dataElementsPerPage))
+				dataElementsPerPage = [];
 				page = getNewPage();
 				page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);
-				page.contents.push(dataElement);
+				dataElementsPerPage.push(dataElement);
 			}
 		});
+		if(!_.isEmpty(dataElementsPerPage))
+			page.contents.push(new Content(contentTypes.registerContent, dataElementsPerPage));
 	};
 	var getCustomAttributeForRenderingOptionSets = function(attributeValues) {
 		return _.reduce(_.filter(attributeValues, function(attributeValue) {

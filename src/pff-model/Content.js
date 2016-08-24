@@ -8,14 +8,19 @@ TallySheets.factory('Content', [function() {
 		else return "DEFAULT";
 	};
 
-	return function Content(contentType, content) {
-		if(contentType == "TITLE") {
-			this.type = contentType;
-			this.title = content;
-		}
-		else if(contentType == "SECTION") {
-			_.assignIn(this, content);
-			this.type = determineType(content.dataElements);
-		}
+	return function Content(contentType, data) {
+		this.type = contentType;
+		this.data = data;
+	}
+}]);
+
+TallySheets.factory('ContentTypes', [function() {
+	return {
+		registerContent: { type: 'REGISTER_CONTENT', renderer: 'register-content' },
+		optionSet      : { type: 'OPTIONSET', renderer: 'list' },
+		catComb        : { type: 'CATCOMB', renderer: 'category-combo' },
+		default        : { type: 'DEFAULT', renderer: 'text-field' },
+		title          : { type: 'TITLE', renderer: 'section-title' },
+		comments       : { type: 'COMMENTS', renderer: 'comments' }
 	}
 }]);

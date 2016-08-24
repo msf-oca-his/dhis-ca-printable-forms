@@ -21,7 +21,7 @@ module.exports = function(config) {
 			'../.temp/services.js',
 			'../.temp/directives.js',
 			'../.temp/pff-model.js',
-			'../tests/!(coverage)/*.js',
+			'../tests/!(coverage)/**/*.js',
 		],
 
 		// list of files to exclude

@@ -646,19 +646,22 @@ describe("ProgramProcessor", function() {
 				    type: 'program'
 			    }
 				;
-
-			it("should test regiseters page width and height and test the register which contains only comments data element", function() {
+//TODO: test names should be named more accurate as they are the source of documentation for us
+			it("should test register's page width and height and test the register which contains only comments data element", function() {
 				var expectedPages = [{
 					heightLeft: 150,
 					widthLeft: 220,
-					contents: [
+					contents: [{data: [
 						new _DataElement({name: 'Comments', type: 'TEXT'})],
+						type: { type: 'REGISTER_CONTENT', renderer: 'register-content' },
+					}],
 					programName: 'test program',
 				}];
 
 				var actualPages = programProcessor.process(testProgram, 'REGISTER');
-				expect(actualPages[0]).toEqual(expectedPages[0])
+				expect(clone(expectedPages[0])).toEqual(clone(actualPages[0]))
 			});
+
 			it("should test Orphan DataElements", function() {
 				var currentTestProgram = _.clone(testProgram);
 
@@ -673,27 +676,32 @@ describe("ProgramProcessor", function() {
 				var expectedPages = [{
 					heightLeft: 0,
 					widthLeft: 0,
-					contents: [
+					contents: [{data: [
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 					],
-					programName: 'test program',
+						type: {renderer: 'register-content', type: 'REGISTER_CONTENT'}
+					}]
 				},
 					{
 						heightLeft: 30,
-						widthLeft: 0,
-						contents: [
-							{name: "dataElement", id: "1234", valueType: "TEXT"},
-							new _DataElement({name: 'Comments', type: 'TEXT'})
-						],
-						programName: 'test program'
-					}];
+						widthLeft : 0,
+						contents  : [{
+							data: [
+								{ name: "dataElement", id: "1234", valueType: "TEXT" },
+								new _DataElement({ name: 'Comments', type: 'TEXT' })
+							],
+							type: { renderer: 'register-content', type: 'REGISTER_CONTENT' }
+						}]
+					}
+					];
+
 
 				var actualPages = programProcessor.process(testProgram, 'REGISTER');
-				expect(actualPages[0].contents).toEqual(expectedPages[0].contents)
-				expect(actualPages[1].contents).toEqual(expectedPages[1].contents)
+				expect(clone(expectedPages[0].contents)).toEqual(clone(actualPages[0].contents))
+				expect(clone(expectedPages[1].contents)).toEqual(clone(actualPages[1].contents))
 			});
 
 			it("should test the last second element can be fit into the current page or not", function() {
@@ -736,19 +744,20 @@ describe("ProgramProcessor", function() {
 				var expectedPages = [{
 					heightLeft: 0,
 					widthLeft: 0,
-					contents: [
+					contents: [ {data: [
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "OPTIONSET"},
 						{name: "dataElement", id: "1234", valueType: "OPTIONSET"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
-						new _DataElement({name: 'Comments', valueType: 'TEXT'})
+						new _DataElement({name: 'Comments', valueType: 'TEXT'})],
+						type: {renderer: 'register-content', type: 'REGISTER_CONTENT'}}
 					],
 					programName: 'test program',
 				}];
 
 				var actualPages = programProcessor.process(testProgram, 'REGISTER');
-				expect(actualPages[0].contents).toEqual(expectedPages[0].contents)
+				expect(clone(expectedPages[0].contents)).toEqual(clone(actualPages[0].contents))
 			})
 		})
 

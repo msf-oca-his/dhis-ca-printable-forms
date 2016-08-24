@@ -1,4 +1,4 @@
-TallySheets.directive('templateRegister', ['Config', function(config) {
+TallySheets.directive('templateRegister', [ function() {
 	return {
 		restrict: 'E',
 		template: require('./templateRegisterView.html'),
@@ -6,13 +6,6 @@ TallySheets.directive('templateRegister', ['Config', function(config) {
 			contents: '=',
 			programName: '=',
 			isLastPage: '='
-		},
-		link: function($scope) {
-			$scope.rowHeight = config.Register.dataEntryRowHeight;
-			$scope.rows = new Array(Math.floor((config.Register.availableHeight - config.Register.headerHeight - config.Register.labelHeight) / config.Register.dataEntryRowHeight));
-			$scope.getClass = function(dataElement) {
-				return (dataElement.valueType == 'TEXT') ? 'deField text' : 'deField general'
-			};
 		}
 	}
 }]);

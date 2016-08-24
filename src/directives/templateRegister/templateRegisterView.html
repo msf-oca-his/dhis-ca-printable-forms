@@ -24,23 +24,10 @@
         </tr>
     </table>
 
-<table border="1">
-  <tr>
-    <td class="sno-header">
-      S.NO
-    </td>
-    <td class="deLabel" ng-repeat="dataElement in contents">
-      {{dataElement.name}}
-    </td>
-  </tr>
-  <tr ng-repeat="row in rows track by $index">
-    <td class="sno-value" style="height:{{rowHeight}}mm">{{$index + 1}}</td>
-    <td ng-repeat="dataElement in contents" ng-class="getClass(dataElement)">
-    </td>
-  </tr>
-</table>
+<span ng-repeat="content in contents">
+  <content content="content"></content>
+</span>
 
-</table>
 
 <table class="footer">
   <td class="set-number-label">
