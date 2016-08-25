@@ -33,7 +33,7 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 		};
 
 		_.map(section.dataElements, function(dataElement, index) {
-			if(dataElement.valueType == 'OPTIONSET') {
+			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.DisplayOptions.list || !dataElement.displayOption)) {
 				indexOfDEWithOptions.push(index);
 			}
 		});
@@ -224,6 +224,9 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 						dataElement.displayOption = attributeValue.value;
 					}
 				}
+			});
+			_.remove(section.dataElements, function(dataElement) {
+				return dataElement.displayOption == config.DisplayOptions.none;
 			});
 		});
 		return dataset;

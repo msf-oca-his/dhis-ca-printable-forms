@@ -8,7 +8,7 @@ describe("ProgramProcessor", function() {
 		Register: {
 			availableHeight: 175,
 			availableWidth: 270,
-			labelHeight: 10,            //table header
+			labelHeight: 10,                 //table header
 			tableHeaderHeight: 10,           //page header
 			dataEntryRowHeight: 9,
 			headerHeight: 25,
@@ -36,10 +36,10 @@ describe("ProgramProcessor", function() {
 			dataSetPrefix: "DS_",
 			programPrefix: "PROG_"
 		},
-		DisplayOptions: {//TODO: make the code values string instead of numbers.
-			none: 0,
-			text: 1,
-			list: 2
+		DisplayOptions: {
+			none: '0',
+			text: '1',
+			list: '2'
 		},
 		CustomAttributes: {
 			displayOptionUID: "111"
@@ -338,7 +338,7 @@ describe("ProgramProcessor", function() {
 					}]
 			};
 
-			it("should process the section contain only one dataelement of type optionset", function() {
+			it("should process the section contain only one dataElement of type optionSet", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
 				var expectedSection = _.cloneDeep(currentTestProgram.programStages[0].programStageSections[0]);
@@ -459,7 +459,7 @@ describe("ProgramProcessor", function() {
 				expect(expectedPages[0].contents.programStageDataElements).toEqual(actualPages[0].contents.programStageDataElements);
 			});
 
-			it("should process the program which contians dataelement of type optionsets where options are overflowed", function() {
+			it("should process the program which contains dataelement of type optionSets where options are overflowed", function() {
 
 				var currentTestProgram = _.cloneDeep(testProgram);
 
@@ -519,7 +519,7 @@ describe("ProgramProcessor", function() {
 				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
 			});
 
-			it("should process the program which contains dataelements of type option set and general dataelements", function() {
+			it("should process the program which contains dataElements of type option set and general dataElements", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
 					id: "1",

@@ -22,6 +22,11 @@ describe("DataSetProcessor", function() {
 				availableWidth: 183,
 				numberOfCOCColumns: 5
 			},
+			DisplayOptions: {
+				none: '0',
+				text: '1',
+				list: '2'
+			},
 			CustomAttributes: {
 				displayOptionUID: "444"
 			}
@@ -59,7 +64,7 @@ describe("DataSetProcessor", function() {
 		httpMock.expectGET("i18n/en.json").respond(200, {});
 	}));
 
-	describe("process dataset", function() {
+	describe("process dataSet", function() {
 		it("should process the basic dataset without sections to check page width and height", function() {
 			var testDataSet = {
 				id: "123",
@@ -75,7 +80,7 @@ describe("DataSetProcessor", function() {
 			expect(expectedPages).toEqual(actualPages);
 		});
 
-		describe("sections with Only Catcombs", function() {
+		describe("sections with Only CatCombs", function() {
 			var testDataSet = {
 				id: "123",
 				name: "test dataset",
@@ -280,7 +285,7 @@ describe("DataSetProcessor", function() {
 			});
 		});
 
-		describe("sections of type Optionsets", function() {
+		describe("sections of type OptionSets", function() {
 			var testDataSet = {
 				id: "123",
 				isPrintFriendlyProcessed: true,
@@ -295,7 +300,7 @@ describe("DataSetProcessor", function() {
 						valueType: "OPTIONSET",
 						attributeValues: [
 							{
-								value: "0",
+								value: "2",
 								attribute: {
 									id: "444"
 								}
@@ -316,8 +321,7 @@ describe("DataSetProcessor", function() {
 				var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
 
 				expectedSection.dataElements[0].rows = expectedRows;
-				expectedSection.dataElements[0].displayOption = "0";
-				
+				expectedSection.dataElements[0].displayOption = "2";
 				expectedSection.isOptionSet = true;
 				expectedSection.leftSideElements = [expectedSection.dataElements[0]];
 				expectedSection.rightSideElements = [];
@@ -364,7 +368,7 @@ describe("DataSetProcessor", function() {
 
 				expectedSection1.dataElements[0].rows = expectedRows1;
 				expectedSection1.isOptionSet = true;
-				expectedSection1.dataElements[0].displayOption = "0";
+				expectedSection1.dataElements[0].displayOption = "2";
 				expectedSection1.leftSideElements = [expectedSection1.dataElements[0]];
 				expectedSection1.rightSideElements = [];
 
@@ -379,7 +383,7 @@ describe("DataSetProcessor", function() {
 
 				expectedSection2.dataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
-				expectedSection2.dataElements[0].displayOption = "0";
+				expectedSection2.dataElements[0].displayOption = "2";
 				expectedSection2.leftSideElements = [expectedSection2.dataElements[0]];
 				expectedSection2.rightSideElements = [];
 				expectedSection2.isDuplicate = false;
@@ -398,9 +402,10 @@ describe("DataSetProcessor", function() {
 				expect(expectedPages[1].contents).toEqual(acutalPages[1].contents);
 				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
 			});
-			it("should process the dataset which contains dataelements of type optionset and general dataelements", function() {
-				var currentTestDatSet = _.cloneDeep(testDataSet);
-				currentTestDatSet.sections[0].dataElements[1] = {
+			
+			it("should process the dataSet which contains dataElements of type optionSet and general dataElements", function() {
+				var currentTestDataSet = _.cloneDeep(testDataSet);
+				currentTestDataSet.sections[0].dataElements[1] = {
 					id: "1",
 					name: "general de"
 				};
@@ -410,14 +415,14 @@ describe("DataSetProcessor", function() {
 				expectedSection1.dataElements[0].rows = expectedRows1;
 				expectedSection1.isDuplicate = false;
 				expectedSection1.isOptionSet = true;
-				expectedSection1.dataElements[0].displayOption = "0";
+				expectedSection1.dataElements[0].displayOption = "2";
 				expectedSection1.leftSideElements = [expectedSection1.dataElements[0]];
 				expectedSection1.rightSideElements = [];
 
 				var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
-				expectedSection2.dataElements[0] = currentTestDatSet.sections[0].dataElements[1];
+				expectedSection2.dataElements[0] = currentTestDataSet.sections[0].dataElements[1];
 				expectedSection2.isDuplicate = true;
-				expectedSection2.leftSideElements = [currentTestDatSet.sections[0].dataElements[1]];
+				expectedSection2.leftSideElements = [currentTestDataSet.sections[0].dataElements[1]];
 				expectedSection2.rightSideElements = [];
 
 				var expectedPages = [{
@@ -428,10 +433,115 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDatSet);
+				var actualPages = dataSetProcessor.process(currentTestDataSet);
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents)
 			});
 
+			it("should process the section contain dataElement of type optionSet and displayOption text", function() {
+				var testDataSet = {
+					id: "123",
+					isPrintFriendlyProcessed: true,
+					isResolved: Promise.resolve({}),
+					name: "test dataset",
+					sections: [{
+						dataElements: [{
+							id: "1234",
+							isResolved: Promise.resolve({}),
+							name: "dataElement",
+							options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+							valueType: "OPTIONSET",
+							attributeValues: [
+								{
+									value: "1",
+									attribute: {
+										id: "444"
+									}
+								}]
+						}],
+						id: "134",
+						isResolved: Promise.resolve({}),
+						name: "section"
+					}],
+					type: 'dataset'
+				};
+				var currentTestDataSet = _.cloneDeep(testDataSet);
+				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
+				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];
+				expectedSection.rightSideElements=[];
+				expectedSection.dataElements[0].displayOption = "1";
+
+				var expectedPages = [{
+					heightLeft: 0,
+					width: 183,
+					contents: [{
+						type: 'dataSetName',
+						name: "test dataset"
+					}, {
+						type: 'section',
+						section: expectedSection
+					}],
+					datasetName: "test dataset"
+				}];
+
+				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
+			});
+
+			it("should remove dataElements from given dataElements if displayOption is none", function() {
+
+				var dataElements = [{
+					id: "123",
+					name: "de1",
+					displayName: "de1",
+					displayOption: '0'
+				},
+					{
+						id: "134",
+						name: "de2",
+						displayName: "de2",
+						displayOption: '1'
+					},
+					{
+						id: "222",
+						name: "de3",
+						displayName: "de3",
+						displayOption: '0'
+					}
+				];
+
+				var currentTestDataSet = _.cloneDeep(testDataSet);
+
+				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
+
+				currentTestDataSet.sections[0].dataElements[1] = dataElements[0];
+				currentTestDataSet.sections[0].dataElements[2] = dataElements[1];
+				currentTestDataSet.sections[0].dataElements[3] = dataElements[2];
+				var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+				expectedSection.dataElements[1] = dataElements[1];
+				expectedSection.dataElements[0].displayOption = "2";
+				expectedSection.dataElements[0].rows = expectedRows;
+				expectedSection.dataElements[1].rows = expectedRows;
+				expectedSection.isOptionSet = true;
+
+				var expectedPages = [{
+					heightLeft: 0,
+					width: 183,
+					contents: [{
+						type: 'dataSetName',
+						name: "test dataset"
+					}, {
+						type: 'section',
+						section: expectedSection
+					}],
+					datasetName: "test dataset"
+				}];
+
+				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualDataElements = [];
+				actualDataElements.push(actualPages[0].contents[1].section.dataElements);
+				actualDataElements.push(actualPages[0].contents[2].section.dataElements);
+				expect(expectedPages[0].contents[1].section.dataElements).toEqual(_.flatten(actualDataElements));
+			});
 		});
 
 		describe("data elements of type TEXT", function() {
