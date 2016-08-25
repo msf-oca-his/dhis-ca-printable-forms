@@ -1,4 +1,4 @@
-describe("templateSelector Directive", function() {
+xdescribe("templateSelector Directive", function() {
 	var $controller;
 	var queryDeferred;
 	var scope;
@@ -17,6 +17,7 @@ describe("templateSelector Directive", function() {
 	var customAttribute;
 	var customAttributes;
 	var elements;
+	var configValidationService ={};
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
 		config = {
@@ -33,6 +34,7 @@ describe("templateSelector Directive", function() {
 			$provide.value('DataSetService', dataSetService);
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
+			$provide.value('ConfigValidationService',configValidationService);
 			$translateProvider.translations('en', {
 				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator.",
 				"NO_ASSOCIATION_WITH_OPTIONSET": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
@@ -119,7 +121,7 @@ describe("templateSelector Directive", function() {
 				dataSetAttribute: true,
 				programAttribute: true
 			})
-		]
+		];
 	}));
 
 	describe("template controller", function() {
@@ -137,13 +139,16 @@ describe("templateSelector Directive", function() {
 			customAttributeService.getCustomAttribute = function() {
 				return Promise.resolve(customAttributes[0])
 			};
+			configValidationService.validate = function() {
+				return Promise.resolve({showAllTemplates:true});
+			};
 
 			scope.testRenderDataSets = jasmine.createSpy('testSpy');
 			scope.testTemplate = {};
 		});
 
-		describe("no printable uid and display option uid in config", function() {
-			it("should load all the templates when print flag uid and display option uid are not present in config", function(done) {
+		describe("validation of puid and displayoption uid", function() {
+			it("should load all the templates when showtemplates is set to true in validation object", function(done) {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
@@ -160,7 +165,7 @@ describe("templateSelector Directive", function() {
 			});
 		});
 
-		describe("printabe uid and no display option uid in config", function() {
+		xdescribe("printabe uid and no display option uid in config", function() {
 			it("should load all templates which has print uid attribute value as true and display option uid not there in config", function(done) {
 				config.CustomAttributes.printFlagUID = "1";
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
@@ -188,7 +193,7 @@ describe("templateSelector Directive", function() {
 			});
 		});
 
-		describe("no printable uid and display option uid in config", function() {
+		xdescribe("no printable uid and display option uid in config", function() {
 
 			it("should show an alert when display option attribute is not present in system", function(done) {
 				customAttributes[0] = {};

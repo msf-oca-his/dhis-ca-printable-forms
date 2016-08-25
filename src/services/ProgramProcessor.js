@@ -295,7 +295,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 				_.map(programStageSection.programStageDataElements, function(dataElement) {
 					if(dataElement.valueType == 'OPTIONSET') {
 						var attributeValue = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
-						if(attributeValue.value) {
+						if(attributeValue && attributeValue.value) {
 							var isValid = isAttributeValueValid(attributeValue.value);
 							if(isValid) {
 								dataElement.displayOption = attributeValue.value;

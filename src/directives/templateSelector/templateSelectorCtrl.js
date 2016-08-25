@@ -1,4 +1,4 @@
-TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config) {
+TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'ConfigValidationService', 'Config', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, ConfigValidationService, config) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
@@ -25,16 +25,8 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				}));
 			};
 
-			var isAttributeNotPresentInConfig = function(attributeUID) {
-				return _.isEmpty(attributeUID);
-			};
-
-			var isAttributeAssignedToTemplate = function(attribute) {
-				return attribute != undefined && (attribute.dataSetAttribute && attribute.programAttribute)
-			};
-
 			var alertForEmptyTemplates = function() {
-				if($scope.templates.length == 0 && !$scope.alertShown) {
+				if($scope.templates.length == 0 && !$scope.validObject.alertShown) {
 					// $translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
 					alert("The specified UID doesn't exist in the system. Please contact your system administrator.");
 					// });
@@ -60,127 +52,25 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 					});
 			};
 
-			//TODO:change the method name and also refactor the code
 			var showValidPrintableTemplates = function() {
-				Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.printFlagUID)])
-					.then(function(customAttribute) {
-						var attribute = _.flatten(customAttribute);
-						if(_.isEmpty(attribute[0])) {
-							$translate('NO_ATTRIBUTE_EXISTS').then(function(translatedValue) {
-								$scope.alertShown = true;
-								alert(translatedValue);
-							});
-						}
-						else {
-							if(!(isAttributeAssignedToTemplate(attribute[0]))) {
-								$translate('NO_ASSOCIATION_WITH_ATTRIBUTE').then(function(translatedValue) {
-									$scope.alertShown = true;
-									alert(translatedValue);
-								});
-							}
-							else
-								Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-									.then(function(templates) {
-										addTemplateToDisplay(templates);
-										alertForEmptyTemplates();
-
-										$rootScope.$apply();
-										refreshBootstrapSelect();
-									})
-						}
-					})
-			};
-
-			var areConfigOptionsNotEqualTo = function(systemOptions) {
-				var systemOptions = _.map(systemOptions, function(option) {
-					return option.code
-				});
-
-				var configOptions = _.map(config.DisplayOptions, function(option) {
-					return option
-				});
-				return !_.isEqual(configOptions.sort(), systemOptions.sort())
-			};
-
-			var isAttributeAssignedToDataElement = function(attribute) {
-				if(attribute.dataElementAttribute == false) {
-					$translate('NO_ASSOCIATION_WITH_DATAELEMENT').then(function(translatedValue) {
-						alert(translatedValue)
+				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+					.then(function(templates) {
+						addTemplateToDisplay(templates);
+						alertForEmptyTemplates();
+						$rootScope.$apply();
+						refreshBootstrapSelect();
 					});
-				} else {
-					return true;
-				}
 			};
 
-			var isAttributeValid = function(attribute) {
-				if(_.isEmpty(attribute.optionSet)) {
-					$translate('NO_ASSOCIATION_WITH_OPTIONSET').then(function(translatedValue) {
-						alert(translatedValue);
-					});
-				}
-
-				else if(_.isEmpty(attribute.optionSet.options)) {
-					$translate('OPTIONSET_WITHOUT_OPTIONS').then(function(translatedValue) {
-						alert(translatedValue);
-					});
-				}
-				else {
-					var yes = areConfigOptionsNotEqualTo(attribute.optionSet.options);
-					if(yes) {
-						$translate('OPTIONSET_WITH_INCORRECT_OPTIONS').then(function(translatedValue) {
-							alert(translatedValue);
-						});
-					}
-					else {
-						return isAttributeAssignedToDataElement(attribute);
-					}
-				}
-			};
-
-			var isDisplayOptionsAttributeValid = function() {
-				return Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.displayOptionUID)]).then(function(customAttribute) {
-					var attribute = _.flatten(customAttribute);
-					attribute = attribute[0];
-
-					if(_.isEmpty(attribute)) {
-						$translate('NO_ATTRIBUTE_EXISTS').then(function(translatedValue) {
-							alert(translatedValue);
-						});
-					}
-					else {
-						return isAttributeValid(attribute);
-					}
-				})
-			};
 			//TODO: UX input: How should alerts be handled ?
-			var loadTemplates = function() {
-				$scope.alertShown = false;
+			var loadTemplates = function(validationObject) {
 				$scope.templates = [];
-
-				var noDisplayOptionUID = isAttributeNotPresentInConfig(config.CustomAttributes.displayOptionUID);
-				var noPrintFlagUID = isAttributeNotPresentInConfig(config.CustomAttributes.printFlagUID);
-
-				if(noPrintFlagUID && noDisplayOptionUID) {
+				if(validationObject.showAllTemplates) {
+					console.log("hello")
 					showAllTemplates();
 				}
-
-				else if(!noPrintFlagUID && noDisplayOptionUID) {
-					showValidPrintableTemplates();
-				}
-
-				else if(noPrintFlagUID && !noDisplayOptionUID) {
-					isDisplayOptionsAttributeValid().then(function(isValid) {
-						if(isValid) {
-							showAllTemplates();
-						}
-					})
-				}
 				else {
-					isDisplayOptionsAttributeValid().then(function(isValid) {
-						if(isValid) {
-							showValidPrintableTemplates();
-						}
-					})
+					showValidPrintableTemplates();
 				}
 			};
 
@@ -190,7 +80,11 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedDataSet);
 				$scope.onSelectDataset();
 			};
-			loadTemplates();
+
+			ConfigValidationService.validate().then(function(validationObject) {
+				if(!validationObject.alertShown)
+					loadTemplates(validationObject);
+			});
 		}
 	};
 }]);
