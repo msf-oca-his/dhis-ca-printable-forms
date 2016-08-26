@@ -120,6 +120,7 @@ TallySheets.service("ConfigValidationService", ['CustomAttributeService', 'Confi
 
 		if(noPrintFlagUID && noDisplayOptionUID) {
 			validationObject.showAllTemplates = true;
+			promises.push(Promise.resolve(validationObject));
 		}
 
 		else if(!noPrintFlagUID && noDisplayOptionUID) {

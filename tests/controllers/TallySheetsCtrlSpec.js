@@ -10,6 +10,7 @@ describe("TallySheets ctrl", function() {
 	var mockedProgramService;
 	var mockedProgramProcessor;
 	var expectedPages;
+	var mockedValidationService;
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -17,7 +18,7 @@ describe("TallySheets ctrl", function() {
 		var mockDataset = "testDataSet"
 		var mockProgram = "testProgram"
 
-		expectedPages = "testPages"
+		expectedPages = "testPages";
 
 		mockedDataSetService = {
 			getReferentialDataSet: function() {
@@ -41,12 +42,19 @@ describe("TallySheets ctrl", function() {
 			}
 		};
 
+		mockedValidationService = {
+			validate: function() {
+				return Promise.resolve({});
+			}
+		};
+
 		module(function($provide) {
 			$provide.value('OptionSetFactory', Promise.resolve({}));
 			$provide.value('DataSetService', mockedDataSetService);
 			$provide.value('DataSetProcessor', mockedDataSetProcessor);
 			$provide.value('ProgramService', mockedProgramService);
 			$provide.value('ProgramProcessor', mockedProgramProcessor);
+			$provide.value('ConfigValidationService',mockedValidationService);
 
 		});
 	});

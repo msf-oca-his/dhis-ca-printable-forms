@@ -5,9 +5,11 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "ProgramProcessor", "appLoadingFailed", function($scope, DataSetService, DataSetProcessor, ProgramService, ProgramProcessor, appLoadingFailed) {
-
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "ProgramProcessor",'ConfigValidationService', "appLoadingFailed", function($scope, DataSetService, DataSetProcessor, ProgramService, ProgramProcessor, ConfigValidationService,appLoadingFailed) {
 	$scope.appLoadingFailed = appLoadingFailed;
+	$scope.result = ConfigValidationService.validate().then(function(validationObject) {
+		return validationObject;
+	});
 	$scope.spinnerShown = false;
 	$scope.dsId = 1;
 	$scope.template = {};

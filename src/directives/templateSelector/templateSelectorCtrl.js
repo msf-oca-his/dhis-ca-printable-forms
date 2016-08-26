@@ -1,10 +1,11 @@
-TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'ConfigValidationService', 'Config', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, ConfigValidationService, config) {
+TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
 		scope: {
 			onSelectDataset: '&',
-			selectedTemplate: '='
+			selectedTemplate: '=',
+			validationResult: '='
 		},
 		link: function($scope, element) {
 			$scope.selectedDataSet = {};
@@ -25,8 +26,8 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				}));
 			};
 
-			var alertForEmptyTemplates = function(validationObject) {
-				if($scope.templates.length == 0 && !validationObject.alertShown) {
+			var alertForEmptyTemplates = function(result) {
+				if($scope.templates.length == 0 && !result.alertShown) {
 					$translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
 						alert(translatedValue);
 					});
@@ -52,24 +53,25 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 					});
 			};
 
-			var showValidPrintableTemplates = function(validationObject) {
+			var showValidPrintableTemplates = function(result) {
 				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 					.then(function(templates) {
 						addTemplateToDisplay(templates);
-						alertForEmptyTemplates(validationObject);
+						alertForEmptyTemplates(result);
 						$rootScope.$apply();
 						refreshBootstrapSelect();
 					});
 			};
 
 			//TODO: UX input: How should alerts be handled ?
-			var loadTemplates = function(validationObject) {
+			var loadTemplates = function(result) {
 				$scope.templates = [];
-				if(validationObject.showAllTemplates) {
+
+				if(result.showAllTemplates) {
 					showAllTemplates();
 				}
 				else {
-					showValidPrintableTemplates(validationObject);
+					showValidPrintableTemplates(result);
 				}
 			};
 
@@ -79,12 +81,12 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedDataSet);
 				$scope.onSelectDataset();
 			};
-
-			ConfigValidationService.validate().then(function(validationObject) {
-				if(!validationObject.alertShown) {
-					loadTemplates(validationObject);
+			$scope.validationResult.then(function(result) {
+				if(!result.alertShown) {
+					loadTemplates(result);
 				}
-			});
+
+			})
 		}
 	};
 }]);

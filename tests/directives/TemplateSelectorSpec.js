@@ -5,7 +5,6 @@ describe("templateSelector Directive", function() {
 	var dataSetService = {};
 	var programService = {};
 	var customAttributeService = {};
-	var datasetCntrl;
 	var httpMock;
 	var window;
 	var _$rootScope;
@@ -17,7 +16,6 @@ describe("templateSelector Directive", function() {
 	var customAttribute;
 	var customAttributes;
 	var elements;
-	var configValidationService = {};
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
 		config = {
@@ -34,7 +32,6 @@ describe("templateSelector Directive", function() {
 			$provide.value('DataSetService', dataSetService);
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
-			$provide.value('ConfigValidationService', configValidationService);
 			$translateProvider.translations('en', {
 				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator."
 			});
@@ -135,18 +132,16 @@ describe("templateSelector Directive", function() {
 			customAttributeService.getCustomAttribute = function() {
 				return Promise.resolve(customAttributes[0])
 			};
-			configValidationService.validate = function() {
-				return Promise.resolve(validationObject);
-			};
+
 			scope.testRenderDataSets = jasmine.createSpy('testSpy');
 			scope.testTemplate = {};
+			scope.validationResult = Promise.resolve({showAllTemplates: true})
 		});
 
 		describe("validation of printable attribute and display options attribute", function() {
 			it("should load all the templates when alertShown is set to false and showAllTemplates is set to true in validation object", function(done) {
-				validationObject.alertShown = false;
-				validationObject.showAllTemplates = true;
-				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				scope.validationResult = Promise.resolve({showAllTemplates: true})
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				Promise.resolve({})
@@ -166,8 +161,9 @@ describe("templateSelector Directive", function() {
 			});
 
 			it("should load templates which has printable attribute value as true", function(done) {
+				scope.validationResult = Promise.resolve({});
 				config.CustomAttributes.printFlagUID = "1";
-				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				Promise.resolve({})
@@ -195,7 +191,8 @@ describe("templateSelector Directive", function() {
 				config.CustomAttributes.printFlagUID = "1";
 				datasets[0].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
-				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				scope.validationResult = Promise.resolve({});
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				expectedDataSets = _.clone(datasets);
@@ -226,13 +223,13 @@ describe("templateSelector Directive", function() {
 
 			it("should show an alert when printable attribute is not set in any template ", function(done) {
 				config.CustomAttributes.printFlagUID = "1";
+				scope.validationResult = Promise.resolve({});
 				datasets[0].attributeValues[0].value = "false";
 				datasets[1].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
 				programs[1].attributeValues[0].value = "false";
-				validationObject.alertShown = false;
 				spyOn(window, 'alert');
-				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				Promise.resolve({})
@@ -263,8 +260,8 @@ describe("templateSelector Directive", function() {
 			xit("should remove the hour glass icon after templates are loaded", function() {})
 
 			it("should update selectedTemplate", function(done) {
-				validationObject.showAllTemplates = true;
-				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+				scope.validationResult = Promise.resolve({showAllTemplates: true});
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				var selectElement = elements[0].querySelector('select');
