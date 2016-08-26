@@ -25,19 +25,19 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				}));
 			};
 
-			var alertForEmptyTemplates = function() {
-				if($scope.templates.length == 0 && !$scope.validObject.alertShown) {
-					// $translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
-					alert("The specified UID doesn't exist in the system. Please contact your system administrator.");
-					// });
+			var alertForEmptyTemplates = function(validationObject) {
+				if($scope.templates.length == 0 && !validationObject.alertShown) {
+					$translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
+						alert(translatedValue);
+					});
 				}
 			};
 
 			var addTemplateToDisplay = function(templates) {
-				var yes = "true";
+				var isValid = "true";
 				_.map(_.flatten(templates), function(template) {
 					var printableAttribute = getPrintableAttribute(template.attributeValues);
-					if(printableAttribute && printableAttribute.value == yes) {
+					if(printableAttribute && printableAttribute.value == isValid) {
 						$scope.templates.push(template)
 					}
 				});
@@ -52,11 +52,11 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 					});
 			};
 
-			var showValidPrintableTemplates = function() {
+			var showValidPrintableTemplates = function(validationObject) {
 				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 					.then(function(templates) {
 						addTemplateToDisplay(templates);
-						alertForEmptyTemplates();
+						alertForEmptyTemplates(validationObject);
 						$rootScope.$apply();
 						refreshBootstrapSelect();
 					});
@@ -66,11 +66,10 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			var loadTemplates = function(validationObject) {
 				$scope.templates = [];
 				if(validationObject.showAllTemplates) {
-					console.log("hello")
 					showAllTemplates();
 				}
 				else {
-					showValidPrintableTemplates();
+					showValidPrintableTemplates(validationObject);
 				}
 			};
 
@@ -82,8 +81,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			};
 
 			ConfigValidationService.validate().then(function(validationObject) {
-				if(!validationObject.alertShown)
+				if(!validationObject.alertShown) {
 					loadTemplates(validationObject);
+				}
 			});
 		}
 	};
