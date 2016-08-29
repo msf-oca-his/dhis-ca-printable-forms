@@ -20,59 +20,44 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var getPrintableAttribute = function(attributeValues) {
 				return _.reduce(_.filter(attributeValues, function(attributeValue) {
-					if(attributeValue.attribute.id === config.CustomAttributes.printFlagUID) {
+					if(attributeValue.attribute.id === config.CustomAttributes.printFlagUID.id) {
 						return attributeValue;
 					}
 				}));
 			};
 
-			var alertForEmptyTemplates = function(result) {
-				if($scope.templates.length == 0 && !result.alertShown) {
-					$translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
-						alert(translatedValue);
-					});
+			var alertForEmptyTemplates = function() {
+				if($scope.templates.length == 0) {
+					$translate('ATTRIBUTE_NOT_SET').then(alert);
 				}
 			};
 
-			var addTemplateToDisplay = function(templates) {
+			var isPrintableTemplate = function(template) {
 				var isValid = "true";
-				_.map(_.flatten(templates), function(template) {
-					var printableAttribute = getPrintableAttribute(template.attributeValues);
-					if(printableAttribute && printableAttribute.value == isValid) {
-						$scope.templates.push(template)
-					}
-				});
+				var printableAttribute = getPrintableAttribute(template.attributeValues);
+				if(printableAttribute && printableAttribute.value == isValid)
+					return true;
+				return false;
 			};
 
-			var showAllTemplates = function() {
-				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-					.then(function(templates) {
-						$scope.templates = _.flatten(templates);
-						$rootScope.$apply();
-						refreshBootstrapSelect();
-					});
-			};
-
-			var showValidPrintableTemplates = function(result) {
-				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-					.then(function(templates) {
-						addTemplateToDisplay(templates);
-						alertForEmptyTemplates(result);
-						$rootScope.$apply();
-						refreshBootstrapSelect();
+			var getAllTemplates = function() {
+				return Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+					.then(function(arrayOfTemplates) {
+						return _.flatten(arrayOfTemplates);
 					});
 			};
 
 			//TODO: UX input: How should alerts be handled ?
-			var loadTemplates = function(result) {
+			var loadTemplates = function() {
 				$scope.templates = [];
+				getAllTemplates()
+					.then(function(templates) {
+						$scope.templates = config.CustomAttributes.printFlagUID ? _.filter(templates, isPrintableTemplate) : templates;
+						alertForEmptyTemplates();
+						$rootScope.$apply();
+						refreshBootstrapSelect();
+					})
 
-				if(result.showAllTemplates) {
-					showAllTemplates();
-				}
-				else {
-					showValidPrintableTemplates(result);
-				}
 			};
 
 			$scope.changeHandler = function() {
@@ -81,12 +66,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedDataSet);
 				$scope.onSelectDataset();
 			};
-			$scope.validationResult.then(function(result) {
-				if(!result.alertShown) {
-					loadTemplates(result);
-				}
-
-			})
+			$scope.validationResult
+				.then(loadTemplates)
+				.catch(function() {});
 		}
 	};
 }]);

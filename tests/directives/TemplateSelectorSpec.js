@@ -138,9 +138,10 @@ describe("templateSelector Directive", function() {
 			scope.validationResult = Promise.resolve({showAllTemplates: true})
 		});
 
-		describe("validation of printable attribute and display options attribute", function() {
-			it("should load all the templates when alertShown is set to false and showAllTemplates is set to true in validation object", function(done) {
-				scope.validationResult = Promise.resolve({showAllTemplates: true})
+		describe("loading templates", function() {
+			it("should load all the templates when custom attribute is not present in the config", function(done) {
+				scope.validationResult = Promise.resolve({});
+				config.CustomAttributes = {};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
@@ -150,45 +151,46 @@ describe("templateSelector Directive", function() {
 							.then(function() {
 								Promise.resolve({})
 									.then(function() {
-										expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-										done();
+										Promise.resolve({})
+											.then(function() {
+												expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+												done();
+											});
+										scope.$digest();
 									});
 								scope.$digest();
 							});
 						scope.$digest();
 					});
-				scope.$digest();
 			});
 
-			it("should load templates which has printable attribute value as true", function(done) {
+			it("should load only printable templates", function(done) {
 				scope.validationResult = Promise.resolve({});
-				config.CustomAttributes.printFlagUID = "1";
+				config.CustomAttributes.printFlagUID = {id: '1'};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				Promise.resolve({})
 					.then(function() {
-						Promise.resolve()
+						Promise.resolve({})
 							.then(function() {
-								Promise.resolve().then(function() {
-									Promise.resolve().then(function() {
-										Promise.resolve().then(function() {
-											expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-											done();
-										});
+								Promise.resolve({})
+									.then(function() {
+										Promise.resolve({})
+											.then(function() {
+												expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+												done();
+											});
 										scope.$digest();
 									});
-									scope.$digest();
-								});
 								scope.$digest();
 							});
 						scope.$digest();
 					});
-				scope.$digest();
 			});
 
 			it("should not load templates which has printable attribute value as false", function(done) {
-				config.CustomAttributes.printFlagUID = "1";
+				config.CustomAttributes.printFlagUID = {id: "1"};
 				datasets[0].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
 				scope.validationResult = Promise.resolve({});
@@ -196,7 +198,7 @@ describe("templateSelector Directive", function() {
 				elements = compile(elements)(scope);
 				scope.$digest();
 				expectedDataSets = _.clone(datasets);
-				expectedPrograms = _.clone(programs)
+				expectedPrograms = _.clone(programs);
 				expectedDataSets.splice(0, 1);
 				expectedPrograms.splice(0, 1);
 
@@ -204,16 +206,15 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								Promise.resolve().then(function() {
-									Promise.resolve().then(function() {
-										Promise.resolve().then(function() {
-											expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
-											done();
-										});
+								Promise.resolve()
+									.then(function() {
+										Promise.resolve()
+											.then(function() {
+												expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
+												done();
+											});
 										scope.$digest();
 									});
-									scope.$digest();
-								});
 								scope.$digest();
 							});
 						scope.$digest();
@@ -222,7 +223,7 @@ describe("templateSelector Directive", function() {
 			});
 
 			it("should show an alert when printable attribute is not set in any template ", function(done) {
-				config.CustomAttributes.printFlagUID = "1";
+				config.CustomAttributes.printFlagUID = {id: "1"};
 				scope.validationResult = Promise.resolve({});
 				datasets[0].attributeValues[0].value = "false";
 				datasets[1].attributeValues[0].value = "false";
@@ -236,16 +237,15 @@ describe("templateSelector Directive", function() {
 					.then(function() {
 						Promise.resolve()
 							.then(function() {
-								Promise.resolve().then(function() {
-									Promise.resolve().then(function() {
-										Promise.resolve().then(function() {
-											expect(window.alert).toHaveBeenCalledWith("The specified UID is not set in any template. Please contact your system administrator.")
-											done();
-										});
+								Promise.resolve()
+									.then(function() {
+										Promise.resolve()
+											.then(function() {
+												expect(window.alert).toHaveBeenCalledWith("The specified UID is not set in any template. Please contact your system administrator.")
+												done();
+											});
 										scope.$digest();
 									});
-									scope.$digest();
-								});
 								scope.$digest();
 							});
 						scope.$digest();
@@ -260,7 +260,8 @@ describe("templateSelector Directive", function() {
 			xit("should remove the hour glass icon after templates are loaded", function() {})
 
 			it("should update selectedTemplate", function(done) {
-				scope.validationResult = Promise.resolve({showAllTemplates: true});
+				config.CustomAttributes.printFlagUID = {id: "1"};
+				scope.validationResult = Promise.resolve({});
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
@@ -271,12 +272,16 @@ describe("templateSelector Directive", function() {
 							.then(function() {
 								Promise.resolve({})
 									.then(function() {
-										selectElement.selectedIndex = 3;
-										selectElement.dispatchEvent(new Event('change'));
-										_$rootScope.$digest();
-										expect(scope.testTemplate).toEqual({id: programs[0].id, type: "PROGRAM"})
-										expect(scope.testRenderDataSets).toHaveBeenCalled();
-										done();
+										Promise.resolve({})
+											.then(function() {
+												selectElement.selectedIndex = 3;
+												selectElement.dispatchEvent(new Event('change'));
+												_$rootScope.$digest();
+												expect(scope.testTemplate).toEqual({id: programs[0].id, type: "PROGRAM"})
+												expect(scope.testRenderDataSets).toHaveBeenCalled();
+												done();
+											});
+										scope.$digest();
 									});
 								scope.$digest();
 							});
