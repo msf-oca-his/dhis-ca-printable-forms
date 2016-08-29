@@ -1,4 +1,5 @@
 TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService', 'Config', '$translate', function(CustomAttributeService, config, $translate) {
+
 	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
 		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code')
 		var configOptions = _.map(config.CustomAttributes[customAttributeNameFromConfig].options);
@@ -12,7 +13,6 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 			throw getErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig);
 		if(areConfigOptionsNotEqualTo(attributeFromDhis, attributeNameFromConfig))
 			throw getErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig);
-
 		return true;
 	};
 
@@ -36,7 +36,6 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		if(config.CustomAttributes[attributeNameFromConfig].options) {
 			return validateOptionSetOfAttribute(attributeFromDhis, attributeNameFromConfig);
 		}
-
 		return true;
 	};
 

@@ -16,6 +16,20 @@ describe("templateSelector Directive", function() {
 	var customAttribute;
 	var customAttributes;
 	var elements;
+
+	var resolvePromises = function() {
+		var promises = [];
+		for(var i = 0; i < 4; i++) {
+			promises.push(Promise.resolve({}));
+		}
+		scope.$digest();
+		return promises.reduce(function(previous) {
+			return previous.then(function() {
+				return;
+			})
+		});
+	};
+
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
 		config = {
@@ -144,24 +158,11 @@ describe("templateSelector Directive", function() {
 				config.CustomAttributes = {};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
+				resolvePromises().then(function() {
+					expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+					done();
+				});
 				scope.$digest();
-				Promise.resolve({})
-					.then(function() {
-						Promise.resolve({})
-							.then(function() {
-								Promise.resolve({})
-									.then(function() {
-										Promise.resolve({})
-											.then(function() {
-												expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-												done();
-											});
-										scope.$digest();
-									});
-								scope.$digest();
-							});
-						scope.$digest();
-					});
 			});
 
 			it("should load only printable templates", function(done) {
@@ -170,23 +171,12 @@ describe("templateSelector Directive", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
-				Promise.resolve({})
+				resolvePromises()
 					.then(function() {
-						Promise.resolve({})
-							.then(function() {
-								Promise.resolve({})
-									.then(function() {
-										Promise.resolve({})
-											.then(function() {
-												expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-												done();
-											});
-										scope.$digest();
-									});
-								scope.$digest();
-							});
-						scope.$digest();
+						expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+						done();
 					});
+				scope.$digest();
 			});
 
 			it("should not load templates which has printable attribute value as false", function(done) {
@@ -201,23 +191,10 @@ describe("templateSelector Directive", function() {
 				expectedPrograms = _.clone(programs);
 				expectedDataSets.splice(0, 1);
 				expectedPrograms.splice(0, 1);
-
-				Promise.resolve({})
+				resolvePromises()
 					.then(function() {
-						Promise.resolve()
-							.then(function() {
-								Promise.resolve()
-									.then(function() {
-										Promise.resolve()
-											.then(function() {
-												expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
-												done();
-											});
-										scope.$digest();
-									});
-								scope.$digest();
-							});
-						scope.$digest();
+						expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
+						done();
 					});
 				scope.$digest();
 			});
@@ -233,22 +210,10 @@ describe("templateSelector Directive", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" validation-result="validationResult"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
-				Promise.resolve({})
+				resolvePromises()
 					.then(function() {
-						Promise.resolve()
-							.then(function() {
-								Promise.resolve()
-									.then(function() {
-										Promise.resolve()
-											.then(function() {
-												expect(window.alert).toHaveBeenCalledWith("The specified UID is not set in any template. Please contact your system administrator.")
-												done();
-											});
-										scope.$digest();
-									});
-								scope.$digest();
-							});
-						scope.$digest();
+						expect(window.alert).toHaveBeenCalledWith("The specified UID is not set in any template. Please contact your system administrator.")
+						done();
 					});
 				scope.$digest();
 			})
@@ -266,26 +231,14 @@ describe("templateSelector Directive", function() {
 				elements = compile(elements)(scope);
 				scope.$digest();
 				var selectElement = elements[0].querySelector('select');
-				Promise.resolve({})
+				resolvePromises()
 					.then(function() {
-						Promise.resolve({})
-							.then(function() {
-								Promise.resolve({})
-									.then(function() {
-										Promise.resolve({})
-											.then(function() {
-												selectElement.selectedIndex = 3;
-												selectElement.dispatchEvent(new Event('change'));
-												_$rootScope.$digest();
-												expect(scope.testTemplate).toEqual({id: programs[0].id, type: "PROGRAM"})
-												expect(scope.testRenderDataSets).toHaveBeenCalled();
-												done();
-											});
-										scope.$digest();
-									});
-								scope.$digest();
-							});
-						scope.$digest();
+						selectElement.selectedIndex = 3;
+						selectElement.dispatchEvent(new Event('change'));
+						_$rootScope.$digest();
+						expect(scope.testTemplate).toEqual({id: programs[0].id, type: "PROGRAM"})
+						expect(scope.testRenderDataSets).toHaveBeenCalled();
+						done();
 					});
 				scope.$digest();
 			});

@@ -1,7 +1,3 @@
-/**
- * Created by durgaman on 8/25/16.
- */
-
 describe("CustomAttributeValidationService", function() {
 	var customAttributeService = {};
 	var httpMock;
@@ -9,7 +5,7 @@ describe("CustomAttributeValidationService", function() {
 	var _$rootScope;
 	var config;
 	var customAttribute;
-	var customAttributes;
+	var mockedCustomAttribute;
 	var customAttributeValidationService;
 
 	beforeEach(function() {
@@ -44,8 +40,6 @@ describe("CustomAttributeValidationService", function() {
 				"NO_ASSOCIATION_WITH_OPTIONSET": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
 				"OPTIONSET_WITHOUT_OPTIONS": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
 				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
-				"NO_ASSOCIATION_WITH_DATAELEMENT": "The specified attribute of type optionSet is not assigned to any dataElement. Please contact your system administrator",
-				"NO_ASSOCIATION_WITH_ATTRIBUTE": "The specified UID exists in the system, but is not assigned to any template. Please contact your system administrator.",
 				"NO_ASSOCIATION_WITH_ENTITY": "No association between the attribute and the specified entity in config"
 			});
 		});
@@ -59,27 +53,18 @@ describe("CustomAttributeValidationService", function() {
 		customAttribute = CustomAttribute;
 		customAttributeValidationService = CustomAttributeValidationService;
 
-		customAttributes = [
-			new customAttribute({
-				name: "displayOptions",
-				id: "1",
-				displayName: "displayOptions",
-				dataElementAttribute: true,
-				options: [{code: '0'}, {code: '1'}, {code: '2'}]
-			}),
-			new customAttribute({
-				name: "isPrintable",
-				id: "2",
-				displayName: "isPrintable",
-				dataSetAttribute: true,
-				programAttribute: true
-			})
-		]
+		mockedCustomAttribute = new customAttribute({
+			name: "displayOptions",
+			id: "1",
+			displayName: "displayOptions",
+			dataElementAttribute: true,
+			options: [{code: '0'}, {code: '1'}, {code: '2'}]
+		});
 	}));
 
 	beforeEach(function() {
 		customAttributeService.getCustomAttribute = function() {
-			return Promise.resolve(customAttributes)
+			return Promise.resolve(mockedCustomAttribute)
 		};
 	});
 
@@ -91,7 +76,7 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should show an alert when specified display custom attribute is not present in dhis", function(done) {
-			customAttributes = [];
+			mockedCustomAttribute = {};
 			spyOn(window, 'alert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
@@ -104,9 +89,8 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should show an alert when there is no association between custom attribute and any entity", function(done) {
-			customAttributes = customAttributes[0];
-			customAttributes.optionSet = undefined;
-			customAttributes.dataElementAttribute = false;
+			mockedCustomAttribute.optionSet = undefined;
+			mockedCustomAttribute.dataElementAttribute = false;
 			spyOn(window, 'alert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
@@ -119,8 +103,7 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should show an alert when the custom attribute is not associated with optionSet", function(done) {
-			customAttributes = customAttributes[0];
-			customAttributes.optionSet = undefined;
+			mockedCustomAttribute.optionSet = undefined;
 			spyOn(window, 'alert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
@@ -133,8 +116,7 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should show an alert when the optionSet of attribute doesn't have options", function(done) {
-			customAttributes = customAttributes[0];
-			customAttributes.optionSet = {id: '12'};
+			mockedCustomAttribute.optionSet = {id: '12'};
 			spyOn(window, 'alert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
@@ -147,8 +129,7 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should show an alert when the optionSet options of a custom attribute are incorrect", function(done) {
-			customAttributes = customAttributes[0];
-			customAttributes.optionSet = {id: '1', options: [{code: '8'}, {code: '9'}, {code: '10'}]};
+			mockedCustomAttribute.optionSet = {id: '1', options: [{code: '8'}, {code: '9'}, {code: '10'}]};
 			spyOn(window, 'alert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
@@ -162,8 +143,7 @@ describe("CustomAttributeValidationService", function() {
 
 		it("should be validated as true when custom attribute in dhis is same as in app config", function(done) {
 			delete config.CustomAttributes.printFlagUID;
-			customAttributes = customAttributes[0];
-			customAttributes.optionSet = {id: '1', options: [{code: '0'}, {code: '1'}, {code: '2'}]};
+			mockedCustomAttribute.optionSet = {id: '1', options: [{code: '0'}, {code: '1'}, {code: '2'}]};
 			spyOn(window, 'alert');
 			customAttributeValidationService.validate().then(function(result) {
 				expect(result).toEqual([true]);
@@ -174,7 +154,13 @@ describe("CustomAttributeValidationService", function() {
 
 		it("sholud not validate optionSet of custom attribute when it doesn't have options in config", function() {
 			delete config.CustomAttributes.displayOptionUID;
-			customAttributes = customAttributes[1];
+			mockedCustomAttribute = new customAttribute({
+				name: "isPrintable",
+				id: "2",
+				displayName: "isPrintable",
+				dataSetAttribute: true,
+				programAttribute: true
+			});
 			customAttributeValidationService.validate().then(function(result) {
 				expect(result).toEqual([true]);
 				done();
