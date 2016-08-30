@@ -61,48 +61,37 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 	};
 
 	// Initialize the app with one dataSet selector
-
-	$scope.renderDataSets = function() {
-		$scope.pages = [];
-		if($scope.template.id) {
-			$scope.spinnerShown = true;
-			if($scope.template.type == "DATASET") {
-				$scope.programMode = null;
-				return DataSetService.getReferentialDataSet($scope.template.id)
-					.then(function(dataset) {
-						$scope.pages = DataSetProcessor.process(_.cloneDeep(dataset));
-						$scope.spinnerShown = false;
-						$scope.$apply();
-					});
-
-			}
-			else if($scope.template.type == "PROGRAM" && $scope.programMode) {
-				$scope.spinnerShown = true;
+	var loadAndProcessSelectedTemplate = function() {
+		$scope.spinnerShown = true;
+		if($scope.template.type == "DATASET") {
+			$scope.programMode = null;
+			return DataSetService.getReferentialDataSet($scope.template.id)
+				.then(function(dataSet) {
+					return DataSetProcessor.process(dataSet);
+				});
+		}
+		else if($scope.template.type == "PROGRAM" && $scope.programMode) {
 				return ProgramService.getProgram($scope.template.id)
 					.then(function(program) {
-						$scope.pages = $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
-						$scope.spinnerShown = false;
-						$scope.$apply();
+						return $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
 					});
-			}
-			$scope.spinnerShown = false;
 		}
-		else return Promise.resolve(0)
+		else return Promise.resolve([]);
+	};
+	var addProcessedPagesToDOM = function(pages) {
+		$scope.pages = pages;
+		$scope.spinnerShown = false;
+		$scope.$apply();
+	};
+
+	$scope.renderTemplates = function(template) {
+		$scope.pages = [];
+		$scope.template = template ? template : $scope.template;
+		if(!$scope.template.id) return;
+		loadAndProcessSelectedTemplate()
+			.then(addProcessedPagesToDOM);
 	};
 }]);
-
-TallySheets.directive('onFinishRender', function($timeout) {
-	return {
-		restrict: 'A',
-		link: function(scope, element, attr) {
-			if(scope.$last === true) {
-				$timeout(function() {
-					scope.$emit('ngRepeatFinished');
-				});
-			}
-		}
-	}
-});
 
 TallySheets.config(function($translateProvider) {
 	$translateProvider.useSanitizeValueStrategy('escape'); //TODO: create a story to select sanitize strategy

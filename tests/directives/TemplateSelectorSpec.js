@@ -212,13 +212,13 @@ describe("templateSelector Directive", function() {
 			scope.$digest();
 		});
 
-		describe("On selecting a  template", function() {
-			//TODO: pending testcases
+		describe("On selecting a template", function() {
+			//TODO: pending testCases
 			xit("should show the hour glass icon until templates are loaded", function() {})
 			xit("should remove the hour glass icon after templates are loaded", function() {})
 
-			it("should update selectedTemplate", function(done) {
-				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
+			it("should call onSelectTemplate with selected templates", function(done) {
+				elements = angular.element('<template-selector on-select-template= "testRenderDataSets(selectedTemplate)"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				var selectElement = elements[0].querySelector('select')
@@ -229,8 +229,7 @@ describe("templateSelector Directive", function() {
 								selectElement.selectedIndex = 3;
 								selectElement.dispatchEvent(new Event('change'));
 								_$rootScope.$digest();
-								expect(scope.testTemplate).toEqual({id: programs[0].id, type: "PROGRAM"})
-								expect(scope.testRenderDataSets).toHaveBeenCalled();
+								expect(scope.testRenderDataSets).toHaveBeenCalledWith(programs[0]);
 								done();
 							});
 						_$rootScope.$digest();

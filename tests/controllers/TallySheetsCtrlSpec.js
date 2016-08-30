@@ -67,17 +67,24 @@ describe("TallySheets ctrl", function() {
 		$controller('TallySheetsController', {$scope: scope});
 	});
 
-	describe("render datasets", function() {
-		it("should not render dataset if it doesn't have template id", function() {
-			scope.template.id = undefined;
-			expect(scope.renderDataSets()).toEqual(Promise.resolve({}));
+	describe("render templates", function() {
+		it("should not render template if it doesn't have template id", function(done) {
+			scope.template= {};
+			scope.renderTemplates();
+			Promise.resolve({})
+				.then(function() {
+					expect(scope.spinnerShown).toBe(false);
+					expect(scope.pages).toEqual([]);
+					done();
+				});
 		});
 
-		it("should render the dataSets if it has template id", function(done) {
+		it("should render the templates if it has template id", function(done) {
 			scope.template.id = 123;
 			scope.template.type = "DATASET";
-			_$rootScope.$apply();
-			scope.renderDataSets().then(function() {
+			scope.renderTemplates();
+			getPromiseOfDepth(2)
+				.then(function() {
 				expect(scope.spinnerShown).toEqual(false);
 				expect(scope.pages).toEqual(expectedPages);
 				done();
@@ -90,21 +97,26 @@ describe("TallySheets ctrl", function() {
 			scope.template.type = "PROGRAM";
 			scope.programMode = "COVERSHEET";
 			_$rootScope.$apply();
-			scope.renderDataSets().then(function() {
+			scope.renderTemplates();
+			getPromiseOfDepth(2).then(function() {
 				expect(scope.spinnerShown).toEqual(false);
 				expect(scope.pages).toEqual(expectedPages);
 				done();
 			});
-
 			scope.$digest();
 		});
 
-		it("should not render the template which is neither program nor dataset if it has template id", function() {
+		it("should not render the template which is neither program nor dataset if it has template id", function(done) {
 			scope.template.id = 123;
-			scope.template.type = ""
-			scope.renderDataSets();
-			expect(scope.spinnerShown).toEqual(false);
-			expect(scope.pages).toEqual([]);
+			scope.template.type = "";
+			scope.renderTemplates();
+			Promise.resolve({})
+				.then(function() {
+					expect(scope.spinnerShown).toEqual(false);
+					expect(scope.pages).toEqual([]);
+					done();
+				});
+			scope.$digest();
 		});
 	})
 });

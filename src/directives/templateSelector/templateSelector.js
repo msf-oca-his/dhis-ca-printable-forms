@@ -3,18 +3,14 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
 		scope: {
-			onSelectDataset: '&',
-			selectedTemplate: '='
+			onSelectTemplate: '&'
 		},
 		link: function($scope, element) {
-			$scope.selectedDataSet = {};
 			$scope.selectorLoaded = false;
 
 			var refreshBootstrapSelect = function() {
 				$(element).find('.selectpicker').selectpicker('refresh');
 				$(element).find('.selectpicker').selectpicker('render');
-				$scope.selectorLoaded = true;
-				$rootScope.$apply();
 			};
 
 			var getPrintableAttribute = function(attributeValues) {
@@ -55,8 +51,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 					.then(function(templates) {
 						$scope.templates = _.flatten(templates);
-						$rootScope.$apply();
-						refreshBootstrapSelect();
+						refreshElement()
 					});
 			};
 
@@ -82,14 +77,17 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 									.then(function(templates) {
 										addTemplateToDisplay(templates);
 										alertForEmptyTemplates();
-
-										$rootScope.$apply();
-										refreshBootstrapSelect();
+										refreshElement();
 									})
 						}
 					})
 			};
 
+			var refreshElement = function(){
+				$scope.selectorLoaded = true;
+				$scope.$apply();
+				refreshBootstrapSelect();
+			};
 			//TODO: UX input: How should alerts be handled ?
 			var loadTemplates = function() {
 				$scope.alertShown = false;
@@ -104,10 +102,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			};
 
 			$scope.changeHandler = function() {
-				if($scope.selectedDataSet == null) return;
-				$scope.selectedTemplate.id = $scope.selectedDataSet.id;
-				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedDataSet);
-				$scope.onSelectDataset();
+				if($scope.selectedTemplate == null) return;
+				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedTemplate);
+				$scope.onSelectTemplate({selectedTemplate: $scope.selectedTemplate});
 			};
 			loadTemplates();
 		}
