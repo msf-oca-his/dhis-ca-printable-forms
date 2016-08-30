@@ -41,8 +41,21 @@
 }
 .separator {
     width: 10%;
-
 }
+
+.checkbox-separator {
+    margin-right: 5mm;
+}
+
+.default-section-divider {
+  @extend .separator;
+  width:1cm;
+}
+
+.default-section {
+  width:90%;
+}
+
 .deLabel{
     width: 3cm;
     padding-right: 5mm;

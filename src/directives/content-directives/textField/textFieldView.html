@@ -1,4 +1,4 @@
-<table style="width:90%">
+<table class="default-section">
 
     <tr ng-repeat="dataElement in content.section.leftSideElements">
 
@@ -6,15 +6,14 @@
             {{content.section.leftSideElements[$index].name}}
         </td>
         <td class="yesno" ng-if="content.section.leftSideElements[$index].valueType=='BOOLEAN'">
-            <input type="checkbox" class="pffcheckbox">Yes
-            <span style="margin-right: 5mm"></span>
-            <input type="checkbox" class="pffcheckbox">No
+            <input type="checkbox" class="pffcheckbox">Yes</input>
+            <span class="checkbox-separator"></span>
+            <input type="checkbox" class="pffcheckbox">No</input>
         </td>
 
         <td class="deField" ng-if="content.section.leftSideElements[$index].valueType!='BOOLEAN'"></td>
 
-        <td class="separator" style="width:1cm"></td>
-
+        <td class="default-section-divider"></td>
 
         <td class="deLabel general" ng-if="content.section.rightSideElements[$index]">
             {{content.section.rightSideElements[$index].name}}
@@ -23,7 +22,7 @@
         <span ng-if="content.section.rightSideElements[$index]">
             <td class="yesno" ng-if="content.section.rightSideElements[$index].valueType=='BOOLEAN'">
                 <input type="checkbox" class="pffcheckbox">Yes</input>
-                <span style="margin-right: 5mm"></span>
+                <span class="checkbox-separator"></span>
                 <input type="checkbox" class="pffcheckbox">No</input>
             </td>
             <td class="deField"
