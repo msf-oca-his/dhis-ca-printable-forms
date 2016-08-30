@@ -31,11 +31,6 @@ TallySheets.factory("Config", [function() {
 			dataSetPrefix: "DS_",
 			programPrefix: "PROG_"
 		},
-		DisplayOptions: {
-			none: '0',
-			text: '1',
-			list: '2'
-		},
 		CustomAttributes: {
 			displayOptionUID: {
 				id: "Fth2lxGOF4M",

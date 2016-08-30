@@ -22,13 +22,15 @@ describe("DataSetProcessor", function() {
 				availableWidth: 183,
 				numberOfCOCColumns: 5
 			},
-			DisplayOptions: {
-				none: '0',
-				text: '1',
-				list: '2'
-			},
 			CustomAttributes: {
-				displayOptionUID: "444"
+				displayOptionUID: {
+					id: "444",
+					options: {
+						none: '0',
+						text: '1',
+						list: '2'
+					}
+				}
 			}
 		},
 			optionsObject = {

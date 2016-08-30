@@ -41,7 +41,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 		};
 
 		_.map(section.programStageDataElements, function(dataElement, index) {
-			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.DisplayOptions.list || !dataElement.displayOption)) {
+			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.list || !dataElement.displayOption)) {
 				indexOfDEWithOptions.push(index);
 			}
 		});
@@ -103,7 +103,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 	var getDataElementsToSplit = function(dataElements) {
 		var dataElementsOfOptionTypeText = [];
 		_.map(dataElements, function(dataElement) {
-			if(dataElement.displayOption != config.DisplayOptions.list) {
+			if(dataElement.displayOption != config.CustomAttributes.displayOptionUID.options.list) {
 				dataElementsOfOptionTypeText.push(dataElement);
 			}
 		});
@@ -276,14 +276,14 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 	};
 	var getCustomAttributeForRenderingOptionSets = function(attributeValues) {
 		return _.reduce(_.filter(attributeValues, function(attributeValue) {
-			if(attributeValue.attribute.id === config.CustomAttributes.displayOptionUID) {
+			if(attributeValue.attribute.id === config.CustomAttributes.displayOptionUID.id) {
 				return attributeValue;
 			}
 		}));
 	};
 
 	var isAttributeValueValid = function(attributeValue) {
-		var configOptions = _.map(config.DisplayOptions, function(option) {
+		var configOptions = _.map(config.CustomAttributes.displayOptionUID.options, function(option) {
 			return option
 		});
 		return configOptions.includes(attributeValue);
@@ -309,7 +309,7 @@ TallySheets.service("ProgramProcessor", ['DataElement', 'DataSetSection', 'Confi
 					}
 				});
 				_.remove(programStageSection.programStageDataElements, function(dataElement) {
-					return dataElement.displayOption == config.DisplayOptions.none;
+					return dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.none;
 				});
 			});
 		});

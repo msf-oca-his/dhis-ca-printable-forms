@@ -36,13 +36,15 @@ describe("ProgramProcessor", function() {
 			dataSetPrefix: "DS_",
 			programPrefix: "PROG_"
 		},
-		DisplayOptions: {
-			none: '0',
-			text: '1',
-			list: '2'
-		},
 		CustomAttributes: {
-			displayOptionUID: "111"
+			displayOptionUID: {
+				id: "111",
+				options: {
+					none: '0',
+					text: '1',
+					list: '2'
+				}
+			}
 		}
 	};
 

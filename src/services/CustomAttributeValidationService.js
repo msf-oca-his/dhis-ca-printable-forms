@@ -8,11 +8,11 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 
 	var validateOptionSetOfAttribute = function(attributeFromDhis, attributeNameFromConfig) {
 		if(_.isEmpty(attributeFromDhis.optionSet))
-			throw getErrorObject("NO_ASSOCIATION_WITH_OPTIONSET", attributeNameFromConfig);
+			throw prepareErrorObject("NO_ASSOCIATION_WITH_OPTIONSET", attributeNameFromConfig);
 		if(_.isEmpty(attributeFromDhis.optionSet.options))
-			throw getErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig);
+			throw prepareErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig);
 		if(areConfigOptionsNotEqualTo(attributeFromDhis, attributeNameFromConfig))
-			throw getErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig);
+			throw prepareErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig);
 		return true;
 	};
 
@@ -20,7 +20,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		_.map(config.CustomAttributes[attributeNameFromConfig].associatedWith, function(associatedWith) {
 			if(attributeFromDhis[associatedWith + "Attribute"] == true)
 				return true;
-			throw getErrorObject("NO_ASSOCIATION_WITH_ENTITY", attributeNameFromConfig);
+			throw prepareErrorObject("NO_ASSOCIATION_WITH_ENTITY", attributeNameFromConfig);
 		});
 	};
 
@@ -28,7 +28,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		var attributeNameFromConfig = Object.keys(config.CustomAttributes)[index];
 
 		if(_.isEmpty(attributeFromDhis)) {
-			throw getErrorObject('NO_ATTRIBUTE_EXISTS', attributeNameFromConfig);
+			throw prepareErrorObject('NO_ATTRIBUTE_EXISTS', attributeNameFromConfig);
 		}
 
 		validateAttributeAssignment(attributeFromDhis, attributeNameFromConfig);
@@ -60,11 +60,11 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 
 	// var validateConfigFile = function() {
 	// 	_.map(config.CustomAttributes, function(customAttribute, customAttributeNameInConfig) {
-	// 		if(!customAttribute.id) throw getErrorObject('CUSTOM_ATTRIBUTE_HAS_NO_ID_FIELD', customAttributeNameInConfig);
+	// 		if(!customAttribute.id) throw prepareErrorObject('CUSTOM_ATTRIBUTE_HAS_NO_ID_FIELD', customAttributeNameInConfig);
 	// 	});
 	// };
 
-	var getErrorObject = function(message, additionalInfo) {
+	var prepareErrorObject = function(message, additionalInfo) {
 		var err = new Error(message);
 		err.errorSrc = additionalInfo;
 		return err;

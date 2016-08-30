@@ -33,7 +33,7 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 		};
 
 		_.map(section.dataElements, function(dataElement, index) {
-			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.DisplayOptions.list || !dataElement.displayOption)) {
+			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.list || !dataElement.displayOption)) {
 				indexOfDEWithOptions.push(index);
 			}
 		});
@@ -209,14 +209,14 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 
 	var getCustomAttributeForRenderingOptionSets = function(attributeValues) {
 		return _.reduce(_.filter(attributeValues, function(attributeValue) {
-			if(attributeValue.attribute.id === config.CustomAttributes.displayOptionUID) {
+			if(attributeValue.attribute.id === config.CustomAttributes.displayOptionUID.id) {
 				return attributeValue;
 			}
 		}));
 	};
 
 	var isAttributeValueValid = function(attributeValue) {
-		var configOptions = _.map(config.DisplayOptions, function(option) {
+		var configOptions = _.map(config.CustomAttributes.displayOptionUID.options, function(option) {
 			return option
 		});
 		return configOptions.includes(attributeValue);
@@ -241,7 +241,7 @@ TallySheets.service("DataSetProcessor", ['CustomAttributeService', 'Config', 'Pa
 				}
 			});
 			_.remove(section.dataElements, function(dataElement) {
-				return dataElement.displayOption == config.DisplayOptions.none;
+				return dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.none;
 			});
 		});
 		return dataset;
