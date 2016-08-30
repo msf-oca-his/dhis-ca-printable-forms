@@ -5,7 +5,7 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "ProgramProcessor", "appLoadingFailed", function($scope, DataSetService, DataSetProcessor, ProgramService, ProgramProcessor, appLoadingFailed) {
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "appLoadingFailed", function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, appLoadingFailed) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
@@ -80,7 +80,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 				$scope.spinnerShown = true;
 				return ProgramService.getProgram($scope.template.id)
 					.then(function(program) {
-						$scope.pages = ProgramProcessor.process(_.cloneDeep(program), $scope.programMode);
+						$scope.pages = $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
 						$scope.spinnerShown = false;
 						$scope.$apply();
 					});

@@ -5,6 +5,7 @@ module.exports = {
 		services: "./src/services.js",
 		directives: "./src/directives.js",
 		app: "./src/app.js",
+		utils: "./src/utils.js",
 		'pff-model': "./src/pff-model.js"
 	},
 	plugins: [

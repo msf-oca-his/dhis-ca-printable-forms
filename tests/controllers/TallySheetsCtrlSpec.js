@@ -46,7 +46,8 @@ describe("TallySheets ctrl", function() {
 			$provide.value('DataSetService', mockedDataSetService);
 			$provide.value('DataSetProcessor', mockedDataSetProcessor);
 			$provide.value('ProgramService', mockedProgramService);
-			$provide.value('ProgramProcessor', mockedProgramProcessor);
+			$provide.value('CoversheetProcessor', mockedProgramProcessor);
+			$provide.value('RegisterProcessor', mockedProgramProcessor);
 			$provide.value('appLoadingFailed', false);
 
 		});

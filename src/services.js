@@ -1,3 +1,4 @@
 require("./services/DataSetProcessor.js")
-require("./services/ProgramProcessor.js")
+require("./services/CoversheetProcessor.js")
+require("./services/RegisterProcessor.js")
 
