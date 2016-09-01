@@ -16,7 +16,16 @@ describe("Program controller", function() {
 				textElementWidth: 50,
 				otherElementWidth: 30
 			},
-			DisplayOptions: "testDisplayOptions"
+			CustomAttributes: {
+				displayOptionUID: {
+					id: "444",
+					options: {
+						none: '0',
+						text: '1',
+						list: '2'
+					}
+				}
+			}
 		};
 		module(function($provide) {
 			$provide.value('Config', config);
@@ -44,7 +53,7 @@ describe("Program controller", function() {
 	});
 
 	it("should get displayOptions from config", function() {
-		expect($scopeCtrl.displayOptions).toEqual(config.DisplayOptions)
+		expect($scopeCtrl.displayOptions).toEqual(config.CustomAttributes.displayOptionUID.options)
 	});
 
 	describe("get table width", function() {

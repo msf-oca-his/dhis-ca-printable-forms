@@ -3,7 +3,19 @@ describe("Dataset ctrl", function() {
 	var section;
 	var datasetCtrl;
 	var $scope = {};
-	var config = {DisplayOptions: "testDisplayOptions"}
+	var config = {
+		CustomAttributes: {
+			displayOptionUID: {
+				id: "444",
+				options: {
+					none: '0',
+					text: '1',
+					list: '2'
+				}
+			}
+		}
+	};
+
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -19,7 +31,7 @@ describe("Dataset ctrl", function() {
 	}));
 
 	it("should get displayOptions from config", function() {
-		expect($scope.displayOptions).toEqual(config.DisplayOptions)
+		expect($scope.displayOptions).toEqual(config.CustomAttributes.displayOptionUID.options)
 	});
 
 	it("should return table width as 9.5cm when section is not catcomb", function() {

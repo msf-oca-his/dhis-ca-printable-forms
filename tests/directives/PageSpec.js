@@ -1,8 +1,20 @@
 describe("Page Directive", function() {
 	var $controller;
-	var section, config = {};
+	var section;
 	var PageElement;
 	var outerScope, compile;
+	var config = {
+		CustomAttributes: {
+			displayOptionUID: {
+				id: "444",
+				options: {
+					none: '0',
+					text: '1',
+					list: '2'
+				}
+			}
+		}
+	};
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);

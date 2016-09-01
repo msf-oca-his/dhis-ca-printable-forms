@@ -12,7 +12,7 @@ TallySheets.directive('program', function() {
 });
 //TODO: no need of extra controller.. add this code to link.
 TallySheets.controller('programCtrl', ['$scope', 'Config', function($scope, config) {
-	$scope.displayOptions = config.DisplayOptions;
+	$scope.displayOptions = config.CustomAttributes.displayOptionUID.options;
 	$scope.rows = Array(Math.floor((config.Register.availableHeight - config.Register.headerHeight - config.Register.labelHeight) / config.Register.dataEntryRowHeight));
 	$scope.getClass = function(dataElement) {
 		return (dataElement.valueType == 'TEXT') ? 'deField text' : 'deField general'
