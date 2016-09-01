@@ -18,11 +18,13 @@ describe("Print Friendly Utils", function() {
 				numberOfCOCColumns: 5
 			},
 
-			DisplayOptions  : {
-				none: '0'
-			},
+
 			CustomAttributes: {
-				displayOptionUID: ""
+				displayOptionUID:{
+					options  : {
+						none: '0'
+					},
+				}
 			}
 		};
 	});

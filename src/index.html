@@ -36,7 +36,7 @@
     <div id="mainMenu" class="panel panel-default hidden-print">
       <div class="panel-body">
 				<span>
-					<template-selector on-select-template="renderTemplates(selectedTemplate)"></template-selector>
+					<template-selector on-select-template="renderTemplates(selectedTemplate)" load-after="validationProcess"></template-selector>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
 					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>

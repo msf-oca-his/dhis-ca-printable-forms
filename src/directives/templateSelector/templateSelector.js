@@ -3,6 +3,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
 		scope: {
+			loadAfter: '=',
 			onSelectTemplate: '&'
 		},
 		link: function($scope, element) {
@@ -15,72 +16,31 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var getPrintableAttribute = function(attributeValues) {
 				return _.reduce(_.filter(attributeValues, function(attributeValue) {
-					if(attributeValue.attribute.id === config.CustomAttributes.printFlagUID) {
+					if(attributeValue.attribute.id === config.CustomAttributes.printFlagUID.id) {
 						return attributeValue;
 					}
 				}));
 			};
 
-			var isAttributePresentInConfig = function(printableUID) {
-				return _.isEmpty(printableUID);
-			};
-
-			var isAttributeAssignedToTemplate = function(attribute) {
-				return attribute != undefined && (attribute.dataSetAttribute && attribute.programAttribute)
-			};
-
 			var alertForEmptyTemplates = function() {
-				if($scope.templates.length == 0 && !$scope.alertShown) {
-					$translate('ATTRIBUTE_NOT_SET').then(function(translatedValue) {
-						alert(translatedValue);
-					});
+				if($scope.templates.length == 0) {
+					$translate('ATTRIBUTE_NOT_SET').then(alert);
 				}
 			};
 
-			var addTemplateToDisplay = function(templates) {
-				var yes = "true";
-				_.map(_.flatten(templates), function(template) {
-					var printableAttribute = getPrintableAttribute(template.attributeValues);
-					if(printableAttribute && printableAttribute.value == yes) {
-						$scope.templates.push(template)
-					}
-				});
+			var isPrintableTemplate = function(template) {
+				var isValid = "true";
+				var printableAttribute = getPrintableAttribute(template.attributeValues);
+				if(printableAttribute && printableAttribute.value == isValid)
+					return true;
+				return false;
 			};
 
-			var showAllTemplates = function() {
-				Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-					.then(function(templates) {
-						$scope.templates = _.flatten(templates);
-						refreshElement()
+			var getAllTemplates = function() {
+				return Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+					.then(function(arrayOfTemplates) {
+						return _.flatten(arrayOfTemplates);
 					});
-			};
-
-			var showValidReportingTemplates = function() {
-				Promise.all([CustomAttributeService.getCustomAttribute(config.CustomAttributes.printFlagUID)])
-					.then(function(customAttribute) {
-						var attribute = _.flatten(customAttribute);
-						if(_.isEmpty(attribute[0])) {
-							$translate('NO_ATTRIBUTE_EXISTS').then(function(translatedValue) {
-								$scope.alertShown = true;
-								alert(translatedValue);
-							});
-						}
-						else {
-							if(!(isAttributeAssignedToTemplate(attribute[0]))) {
-								$translate('NO_ASSOCIATION_WITH_ATTRIBUTE').then(function(translatedValue) {
-									$scope.alertShown = true;
-									alert(translatedValue);
-								});
-							}
-							else
-								Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-									.then(function(templates) {
-										addTemplateToDisplay(templates);
-										alertForEmptyTemplates();
-										refreshElement();
-									})
-						}
-					})
 			};
 
 			var refreshElement = function(){
@@ -90,15 +50,14 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			};
 			//TODO: UX input: How should alerts be handled ?
 			var loadTemplates = function() {
-				$scope.alertShown = false;
 				$scope.templates = [];
+				getAllTemplates()
+					.then(function(templates) {
+						$scope.templates = config.CustomAttributes.printFlagUID ? _.filter(templates, isPrintableTemplate) : templates;
+						alertForEmptyTemplates();
+						refreshElement();
+					})
 
-				if(isAttributePresentInConfig(config.CustomAttributes.printFlagUID)) {
-					showAllTemplates();
-				}
-				else {
-					showValidReportingTemplates();
-				}
 			};
 
 			$scope.changeHandler = function() {
@@ -106,7 +65,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedTemplate);
 				$scope.onSelectTemplate({selectedTemplate: $scope.selectedTemplate});
 			};
-			loadTemplates();
+			$scope.loadAfter
+				.then(loadTemplates)
+				.catch(function() {});
 		}
 	};
 }]);

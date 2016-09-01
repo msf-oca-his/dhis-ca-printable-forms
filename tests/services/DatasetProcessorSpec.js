@@ -22,13 +22,15 @@ describe("DataSetProcessor", function() {
 				availableWidth: 183,
 				numberOfCOCColumns: 5
 			},
-			DisplayOptions: {
-				none: '0',
-				text: '1',
-				list: '2'
-			},
 			CustomAttributes: {
-				displayOptionUID: "444"
+				displayOptionUID: {
+					id: "444",
+					options: {
+						none: '0',
+						text: '1',
+						list: '2'
+					}
+				}
 			}
 		},
 			optionsObject = {
@@ -48,9 +50,13 @@ describe("DataSetProcessor", function() {
 				return Promise.resolve(mockedCustomAttribute);
 			}
 		}
-		module(function($provide) {
+		module(function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', mockedCustomAttributeService);
+			$translateProvider.translations('en', {
+				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator."
+			})
+
 		});
 	});
 
@@ -340,6 +346,17 @@ describe("DataSetProcessor", function() {
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
+			xit("should show an alert if value of custom attribute is not matching with config options", function() {
+				var currentTestDataSet = _.cloneDeep(testDataSet);
+				currentTestDataSet.sections[0].dataElements[0].attributeValues[0].value = '5';
+				spyOn(window, 'alert');
+				dataSetProcessor.process(currentTestDataSet);
+				Promise.resolve({}).then(function() {
+					expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
+				});
+				$rootScope.$digest();
+			});
+
 			it("should process the dataSet which contains dataElement of type optionSets where options are overflowed", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 
@@ -377,7 +394,7 @@ describe("DataSetProcessor", function() {
 
 				expectedSection2.dataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
-				expectedSection2.dataElements[0].displayOption = config.DisplayOptions.list;
+				expectedSection2.dataElements[0].displayOption = config.CustomAttributes.displayOptionUID.options.list;
 				expectedSection2.isDuplicate = false;
 
 				var expectedPages = [{
@@ -457,7 +474,7 @@ describe("DataSetProcessor", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
 				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];
-				expectedSection.rightSideElements=[];
+				expectedSection.rightSideElements = [];
 				expectedSection.dataElements[0].displayOption = "1";
 
 				var expectedPages = [{
@@ -484,21 +501,21 @@ describe("DataSetProcessor", function() {
 					name: "de1",
 					displayName: "de1",
 					valueType: 'OPTIONSET',
-					attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID}, value: '0'}]
+					attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID.id}, value: '0'}]
 				},
 					{
 						id: "134",
 						name: "de2",
 						displayName: "de2",
 						valueType: 'OPTIONSET',
-						attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID}, value: '1'}]
+						attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID.id}, value: '1'}]
 					},
 					{
 						id: "222",
 						name: "de3",
 						displayName: "de3",
 						valueType: 'OPTIONSET',
-						attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID}, value: '0'}]
+						attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID.id}, value: '0'}]
 					}
 				];
 
@@ -509,7 +526,7 @@ describe("DataSetProcessor", function() {
 				currentTestDataSet.sections[0].dataElements = dataElements;
 				var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
 				expectedSection.dataElements[0] = dataElements[1];
-				expectedSection.dataElements[0].displayOption = config.DisplayOptions.list;
+				expectedSection.dataElements[0].displayOption = config.CustomAttributes.displayOptionUID.options.list;
 				expectedSection.dataElements[0].rows = expectedRows;
 				expectedSection.isOptionSet = true;
 

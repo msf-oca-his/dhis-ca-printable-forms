@@ -33,7 +33,7 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 	var getIndexOfDEWithOptionSets = function(section, dataElementsKey){
 		var indexOfDEWithOptions = [];
 		_.map(section[dataElementsKey], function(dataElement, index) {
-			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.DisplayOptions.list || !dataElement.displayOption))
+			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.list || !dataElement.displayOption))
 				indexOfDEWithOptions.push(index);
 		});
 		return indexOfDEWithOptions;
@@ -101,14 +101,14 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 	//TODO: extract this to data model util.
 	var getCustomAttributeForRenderingOptionSets = function(customAttributes) {
 		return _.reduce(_.filter(customAttributes, function(customAttribute) {
-			if(customAttribute.attribute.id === config.CustomAttributes.displayOptionUID) {
+			if(customAttribute.attribute.id === config.CustomAttributes.displayOptionUID.id) {
 				return customAttribute;
 			}
 		}));
 	};
 
 	var isDisplayOptionNoneSelected = function(dataElement){
-		return dataElement.displayOption == config.DisplayOptions.none;
+		return dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.none;
 	};
 
 	this.applyDisplayOptionsToDataElements = function(section, dataElementsKey) {

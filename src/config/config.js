@@ -31,14 +31,20 @@ TallySheets.factory("Config", [function() {
 			dataSetPrefix: "DS_",
 			programPrefix: "PROG_"
 		},
-		DisplayOptions: {
-			none: '0',
-			text: '1',
-			list: '2'
-		},
 		CustomAttributes: {
-			displayOptionUID: "",
-			printFlagUID: ""
+			// displayOptionUID: {
+			// 	id: "Fth2lxGOF4M",
+			// 	associatedWith: ['dataElement'],
+			// 	options: {
+			// 		none: '0',
+			// 		text: '1',
+			// 		list: '2'
+			// 	}
+			// },
+			// printFlagUID: {
+			// 	id: "F6S3pRyjnSf",
+			// 	associatedWith: ['dataSet', 'program']
+			// }
 		}
 	}
 }]);

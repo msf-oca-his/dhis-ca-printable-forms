@@ -5,7 +5,6 @@ describe("templateSelector Directive", function() {
 	var dataSetService = {};
 	var programService = {};
 	var customAttributeService = {};
-	var datasetCntrl;
 	var httpMock;
 	var window;
 	var _$rootScope;
@@ -17,8 +16,8 @@ describe("templateSelector Directive", function() {
 	var customAttribute;
 	var customAttributes;
 	var elements;
+
 	beforeEach(function() {
-		module("TallySheets");
 		angular.module('d2HeaderBar', []);
 		config = {
 			Prefixes: {
@@ -27,12 +26,16 @@ describe("templateSelector Directive", function() {
 			},
 			CustomAttributes: {}
 		};
-		module(function($provide) {
+
+		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('d2', d2);
 			$provide.value('DataSetService', dataSetService);
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
+			$translateProvider.translations('en', {
+				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator."
+			});
 		});
 	});
 
@@ -112,7 +115,8 @@ describe("templateSelector Directive", function() {
 				dataSetAttribute: true,
 				programAttribute: true
 			})
-		]
+		];
+		validationObject = {}
 	}));
 
 	describe("template controller", function() {
@@ -126,90 +130,80 @@ describe("templateSelector Directive", function() {
 			customAttributeService.getAllCustomAttributes = function() {
 				return Promise.resolve(customAttributes)
 			};
-
 			customAttributeService.getCustomAttribute = function() {
 				return Promise.resolve(customAttributes[0])
 			};
 
 			scope.testRenderDataSets = jasmine.createSpy('testSpy');
 			scope.testTemplate = {};
+			scope.validationProcess = Promise.resolve({showAllTemplates: true})
 		});
 
-		it("should load all the datasets and programs when custom attribute is not specified in config", function(done) {
-			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
-			elements = compile(elements)(scope);
-			scope.$digest();
-			Promise.resolve({})
-				.then(function() {
-					Promise.resolve()
-						.then(function() {
-							expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-							done();
-						});
-					_$rootScope.$digest();
+		describe("loading templates", function() {
+			it("should load all the templates when custom attribute is not present in the config", function(done) {
+				scope.validationResult = Promise.resolve({});
+				config.CustomAttributes = {};
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				getPromiseOfDepth(2).then(function() {
+					expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+					done();
 				});
-			_$rootScope.$digest();
-		});
+				scope.$digest();
+			});
 
-		it("should load all templates which has attribute value as true", function(done) {
-			config.CustomAttributes.printFlagUID = "1";
-			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
-			elements = compile(elements)(scope);
-			scope.$digest();
-			Promise.resolve({})
-				.then(function() {
-					Promise.resolve()
-						.then(function() {
-							Promise.resolve().then(function() {
-								Promise.resolve().then(function() {
-									Promise.resolve().then(function() {
-										expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-										done();
+			it("should load only printable templates", function(done) {
+				scope.validationResult = Promise.resolve({});
+				config.CustomAttributes.printFlagUID = {id: '1'};
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				getPromiseOfDepth(3)
+					.then(function() {
+						expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+						done();
+					});
+				scope.$digest();
+			});
 
-									})
-									scope.$digest();
-								})
-								scope.$digest();
-							})
-							scope.$digest();
-						});
-					scope.$digest();
-				});
-			scope.$digest();
-		});
+			it("should not load templates which has printable attribute value as false", function(done) {
+				config.CustomAttributes.printFlagUID = {id: "1"};
+				datasets[0].attributeValues[0].value = "false";
+				programs[0].attributeValues[0].value = "false";
+				scope.validationResult = Promise.resolve({});
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				expectedDataSets = _.clone(datasets);
+				expectedPrograms = _.clone(programs);
+				expectedDataSets.splice(0, 1);
+				expectedPrograms.splice(0, 1);
+				getPromiseOfDepth(3)
+					.then(function() {
+						expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
+						done();
+					});
+				scope.$digest();
+			});
 
-		it("should not load templates which has attribute value as false", function(done) {
-			config.CustomAttributes.printFlagUID = "1";
-			datasets[0].attributeValues[0].value = "false";
-			programs[0].attributeValues[0].value = "false";
-			elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate"></template-selector>');
-			elements = compile(elements)(scope);
-			scope.$digest();
-			expectedDataSets = _.clone(datasets);
-			expectedPrograms = _.clone(programs)
-			expectedDataSets.splice(0, 1);
-			expectedPrograms.splice(0, 1);
-
-			Promise.resolve({})
-				.then(function() {
-					Promise.resolve()
-						.then(function() {
-							Promise.resolve().then(function() {
-								Promise.resolve().then(function() {
-									Promise.resolve().then(function() {
-										expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
-										done();
-
-									})
-									scope.$digest();
-								})
-								scope.$digest();
-							})
-							scope.$digest();
-						});
-					scope.$digest();
-				});
-			scope.$digest();
+			it("should show an alert when printable attribute is not set in any template ", function(done) {
+				config.CustomAttributes.printFlagUID = {id: "1"};
+				scope.validationResult = Promise.resolve({});
+				datasets[0].attributeValues[0].value = "false";
+				datasets[1].attributeValues[0].value = "false";
+				programs[0].attributeValues[0].value = "false";
+				programs[1].attributeValues[0].value = "false";
+				spyOn(window, 'alert');
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				getPromiseOfDepth(3)
+					.then(function() {
+						expect(window.alert).toHaveBeenCalledWith("The specified UID is not set in any template. Please contact your system administrator.")
+						done();
+					});
+				scope.$digest();
+			})
 		});
 
 		describe("On selecting a template", function() {
@@ -218,24 +212,18 @@ describe("templateSelector Directive", function() {
 			xit("should remove the hour glass icon after templates are loaded", function() {})
 
 			it("should call onSelectTemplate with selected templates", function(done) {
-				elements = angular.element('<template-selector on-select-template= "testRenderDataSets(selectedTemplate)"></template-selector>');
+				elements = angular.element('<template-selector on-select-template= "testRenderDataSets(selectedTemplate)" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				var selectElement = elements[0].querySelector('select')
-				Promise.resolve({})
+				getPromiseOfDepth(2)
 					.then(function() {
-						Promise.resolve({})
-							.then(function() {
-								selectElement.selectedIndex = 3;
-								selectElement.dispatchEvent(new Event('change'));
-								_$rootScope.$digest();
-								expect(scope.testRenderDataSets).toHaveBeenCalledWith(programs[0]);
-								done();
-							});
+						selectElement.selectedIndex = 3;
+						selectElement.dispatchEvent(new Event('change'));
 						_$rootScope.$digest();
-					});
-				_$rootScope.$digest();
-
+						expect(scope.testRenderDataSets).toHaveBeenCalledWith(programs[0]);
+						done();
+					})
 			});
 
 		})
