@@ -32,6 +32,10 @@ TallySheets.factory("Config", [function() {
 			programPrefix: "PROG_"
 		},
 		CustomAttributes: {
+			// printFlagUID: {
+			// 	id: "F6S3pRyjnSf",
+			// 	associatedWith: ['dataSet', 'program']
+			// },
 			// displayOptionUID: {
 			// 	id: "Fth2lxGOF4M",
 			// 	associatedWith: ['dataElement'],
@@ -40,10 +44,6 @@ TallySheets.factory("Config", [function() {
 			// 		text: '1',
 			// 		list: '2'
 			// 	}
-			// },
-			// printFlagUID: {
-			// 	id: "F6S3pRyjnSf",
-			// 	associatedWith: ['dataSet', 'program']
 			// }
 		}
 	}

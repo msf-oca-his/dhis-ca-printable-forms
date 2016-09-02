@@ -7,7 +7,8 @@ TallySheets.directive('templateDataset', ['Config', function(config) {
 			datasetName: '='
 		},
 		link: function($scope) {
-			$scope.displayOptions = config.CustomAttributes.displayOptionUID.options;
+			if(config.CustomAttributes.displayOptionUID)
+				$scope.displayOptions = config.CustomAttributes.displayOptionUID.options;
 			$scope.getTableWidth = function(section) {
 				if(section.isCatComb) {
 					return (section.dataElements[0].categoryCombo.categoryOptionCombos.length * 3 + 4) + "cm";  //TODO: magic numbers...
