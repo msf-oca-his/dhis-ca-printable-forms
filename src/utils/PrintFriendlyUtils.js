@@ -30,10 +30,18 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 			array[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
 		});
 	};
+	var isListTypeDataElement = function(dataElement) {
+		if(dataElement.valueType != 'OPTIONSET') return false;
+		if(!config.CustomAttributes.displayOptionUID) return true;
+		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+		if(displayOptionAttribute && displayOptionAttribute.value)
+				return displayOptionAttribute.value == config.CustomAttributes.displayOptionUID.options.list;
+		return true;
+	};
 	var getIndexOfDEWithOptionSets = function(section, dataElementsKey){
 		var indexOfDEWithOptions = [];
 		_.map(section[dataElementsKey], function(dataElement, index) {
-			if(dataElement.valueType == 'OPTIONSET' && (dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.list || !dataElement.displayOption))
+			if(isListTypeDataElement(dataElement))
 				indexOfDEWithOptions.push(index);
 		});
 		return indexOfDEWithOptions;
@@ -112,6 +120,7 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 	};
 
 	this.applyDisplayOptionsToDataElements = function(section, dataElementsKey) {
+		if(!config.CustomAttributes.displayOptionUID) return section[dataElementsKey];
 		return _.filter(section[dataElementsKey], function(dataElement) {
 			if(dataElement.valueType == 'OPTIONSET') {
 				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);

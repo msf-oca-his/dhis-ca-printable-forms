@@ -2,7 +2,11 @@ describe("Dataset ctrl", function() {
 	var section;
 	var compile, httpMock;
 	var $scope = {};
-	var config = {DisplayOptions: "testDisplayOptions"}
+	var config = {CustomAttributes:{
+		displayOptionUID:{
+			options: "testDisplayOptions"
+		}}
+	};
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -21,12 +25,12 @@ describe("Dataset ctrl", function() {
 
 	it("should get displayOptions from config", function() {
 		var element = angular.element('<template-dataset contents="" dataset-name="test_DataSet"></template-dataset>');
-		$scope.test_DataSet = "dataSetName"
+		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);
 		$scope.$digest();
 		elementsScope = element.scope().$$childHead;
-		expect(elementsScope.displayOptions).toEqual(config.DisplayOptions)
+		expect(elementsScope.displayOptions).toEqual(config.CustomAttributes.displayOptionUID.options)
 	});
 
 	it("should return table width as 9.5cm when section is not catcomb", function() {

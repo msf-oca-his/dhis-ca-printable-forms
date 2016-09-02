@@ -8,7 +8,7 @@ TallySheets.directive('templateCoversheet', ['Config', function(config) {
 			isLastPage: '='
 		},
 		link: function($scope) {
-			$scope.displayOptions = config.DisplayOptions;
+			$scope.displayOptions = config.CustomAttributes.displayOptionUID.options;
 		}
 	}
 }]);

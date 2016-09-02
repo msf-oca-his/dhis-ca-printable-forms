@@ -6,6 +6,9 @@ describe("Page Directive", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
+		config  = {CustomAttributes: {
+			displayOptionUID:{}
+		}};
 		module(function($provide) {
 			$provide.value('Config', config);
 		});
