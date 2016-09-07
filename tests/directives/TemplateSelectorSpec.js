@@ -145,7 +145,7 @@ describe("templateSelector Directive", function() {
 				config.CustomAttributes = {};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
-				getPromiseOfDepth(2).then(function() {
+				getPromiseOfDepth(3).then(function() {
 					expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
 					done();
 				});
@@ -216,7 +216,7 @@ describe("templateSelector Directive", function() {
 				elements = compile(elements)(scope);
 				scope.$digest();
 				var selectElement = elements[0].querySelector('select')
-				getPromiseOfDepth(2)
+				getPromiseOfDepth(3)
 					.then(function() {
 						selectElement.selectedIndex = 3;
 						selectElement.dispatchEvent(new Event('change'));
