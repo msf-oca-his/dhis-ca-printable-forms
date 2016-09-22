@@ -75,6 +75,7 @@ describe("DataSetProcessor", function() {
 			var testDataSet = {
 				id: "123",
 				name: "test dataset",
+				displayName: "test dataset",
 				sections: [],
 				type: "dataset"
 			};
@@ -90,6 +91,7 @@ describe("DataSetProcessor", function() {
 			var testDataSet = {
 				id: "123",
 				name: "test dataset",
+				displayName: "test dataset",
 				sections: [{
 					name: "section",
 					id: "134",
@@ -115,7 +117,7 @@ describe("DataSetProcessor", function() {
 				_.assignIn(expectedPage, {heightLeft: 188, contents: [{type: 'dataSetName', name: "test dataset"}, {type: 'section', section: dataSet.sections[0]}], datasetName: "test dataset"});
 				var expectedPages = [expectedPage];
 				var actualPages = dataSetProcessor.process(dataSet);
-				expect(actualPages).toEqual(expectedPages);
+				expect(expectedPages).toEqual(actualPages);
 			});
 
 			it("should process the dataset with sections of type catcomb with category option combos", function() {
@@ -411,7 +413,7 @@ describe("DataSetProcessor", function() {
 				expect(expectedPages[1].contents).toEqual(actualPages[1].contents);
 				expect(expectedPages[0].contents[1]).toEqual(actualPages[0].contents[1]);
 			});
-			
+
 			it("should process the dataSet which contains dataElements of type optionSet and general dataElements", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				currentTestDataSet.sections[0].dataElements[1] = {
@@ -501,21 +503,21 @@ describe("DataSetProcessor", function() {
 					name: "de1",
 					displayName: "de1",
 					valueType: 'OPTIONSET',
-					attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID.id}, value: '0'}]
+					attributeValues: [{attribute: {id: config.CustomAttributes.displayOptionUID.id}, value: '0'}]
 				},
 					{
 						id: "134",
 						name: "de2",
 						displayName: "de2",
 						valueType: 'OPTIONSET',
-						attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID.id}, value: '1'}]
+						attributeValues: [{attribute: {id: config.CustomAttributes.displayOptionUID.id}, value: '1'}]
 					},
 					{
 						id: "222",
 						name: "de3",
 						displayName: "de3",
 						valueType: 'OPTIONSET',
-						attributeValues:[{attribute:{id:config.CustomAttributes.displayOptionUID.id}, value: '0'}]
+						attributeValues: [{attribute: {id: config.CustomAttributes.displayOptionUID.id}, value: '0'}]
 					}
 				];
 

@@ -49,7 +49,6 @@ describe("Register Content", function() {
 		createElement()
 	});
 
-
 	xit("should apply table Header height to data element names", function() {
 		// we should write this after doing JSS
 	});
@@ -60,18 +59,21 @@ describe("Register Content", function() {
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement1",
+				displayName: "dataElement1",
 				type: "TEXT"
 			},
 			{
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement2",
+				displayName: "dataElement2",
 				type: "TEXT"
 			},
 			{
 				id: "1234",
 				isResolved: Promise.resolve({}),
 				name: "dataElement3",
+				displayName: "dataElement3",
 				type: "TEXT"
 			}
 		];
@@ -80,7 +82,7 @@ describe("Register Content", function() {
 		dataElements = element.querySelectorAll(".deLabel");
 		expect(dataElements.length).toBe(3);
 		_.map(dataElements, function(dataElement, index) {
-			expect(_.trim(dataElement.innerText)).toEqual($scope.modelContents[index].name)
+			expect(_.trim(dataElement.innerText)).toEqual($scope.modelContents[index].displayName)
 		})
 	});
 
@@ -91,20 +93,20 @@ describe("Register Content", function() {
 
 	describe("get class", function() {
 		it("should give de field text type if dataelement type is TEXT", function() {
-			var dataElement = { valueType: 'TEXT' };
+			var dataElement = {valueType: 'TEXT'};
 			$scope.$digest();
 			expect(elementScope.getClass(dataElement)).toEqual('deField text');
 		});
 
 		it("should give de general text type if dataelement type is not TEXT", function() {
-			var dataElement = { valueType: 'anything' };
+			var dataElement = {valueType: 'anything'};
 			$scope.$digest();
 			expect(elementScope.getClass(dataElement)).toEqual('deField general');
 		});
 	});
 
 	it("should be able to identify number of rows it can hold", function() {
-		config.Register.availableHeight =  100;
+		config.Register.availableHeight = 100;
 		config.Register.headerHeight = 10;
 		config.Register.labelHeight = 10;
 		config.Register.dataEntryRowHeight = 20;

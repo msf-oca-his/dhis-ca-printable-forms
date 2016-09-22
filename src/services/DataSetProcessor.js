@@ -27,7 +27,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 
 			var addSectionToNewPage = function(section, height, isFirstSectionInDataSet) {
 				page = new Page("DATASET");
-				page.datasetName = dataSet.name;
+				page.datasetName = dataSet.displayName;
 				pages[++currentPageIndex] = page;
 				section.isDuplicate = false;
 				processSection(section, isFirstSectionInDataSet);
@@ -99,7 +99,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 
 		if(!pages[currentPageIndex]) {
 			page = new Page("DATASET");
-			page.datasetName = dataSet.name;
+			page.datasetName = dataSet.displayName;
 			pages[currentPageIndex] = page;
 		}
 		else {

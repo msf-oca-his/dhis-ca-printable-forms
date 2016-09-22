@@ -7,7 +7,7 @@ TallySheets.service('RegisterProcessor', [ 'Page', 'Content', 'DataElement', 'Co
 
 		var getNewPage = function() {
 			page = new Page("REGISTER");
-			page.programName = program.name;
+			page.programName = program.displayName;
 			pages[++currentPageIndex] = page;
 			return page;
 		};

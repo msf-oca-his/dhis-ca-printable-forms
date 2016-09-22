@@ -81,7 +81,7 @@ var getTypeOfTemplate = function(template) {
 
 TallySheets.filter('addPrefix', ['Config', function(config) {  //TODO: find a good name fo this filter...
 	return function(template) {
-		var typeOfTemplate = getTypeOfTemplate(template)
+		var typeOfTemplate = getTypeOfTemplate(template);
 		if(typeOfTemplate == "DATASET")
 			return config.Prefixes.dataSetPrefix + template.displayName;
 		if(typeOfTemplate == "PROGRAM")
