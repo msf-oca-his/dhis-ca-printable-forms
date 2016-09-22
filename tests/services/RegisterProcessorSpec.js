@@ -71,7 +71,7 @@ describe('RegisterProcessor', function() {
 			widthLeft: 220,
 			contents: [{
 				data: [
-					new _DataElement({name: 'Comments', type: 'TEXT'})],
+					new _DataElement({displayName: 'Comments', type: 'TEXT'})],
 				type: {type: 'REGISTER_CONTENT', renderer: 'register-content'},
 			}],
 			programName: 'test program'
@@ -111,7 +111,7 @@ describe('RegisterProcessor', function() {
 				contents: [{
 					data: [
 						{name: "dataElement", id: "1234", valueType: "TEXT"},
-						new _DataElement({name: 'Comments', type: 'TEXT'})
+						new _DataElement({displayName: 'Comments', type: 'TEXT'})
 					],
 					type: {renderer: 'register-content', type: 'REGISTER_CONTENT'}
 				}]
@@ -170,11 +170,11 @@ describe('RegisterProcessor', function() {
 					{name: "dataElement", id: "1234", valueType: "OPTIONSET"},
 					{name: "dataElement", id: "1234", valueType: "TEXT"},
 					{name: "dataElement", id: "1234", valueType: "TEXT"},
-					new _DataElement({name: 'Comments', valueType: 'TEXT'})],
+					new _DataElement({displayName: 'Comments', valueType: 'TEXT'})],
 				type: {renderer: 'register-content', type: 'REGISTER_CONTENT'}
 			}
 			],
-			programName: 'test program',
+			programName: 'test program'
 		}];
 
 		var actualPages = registerProcessor.process(testProgram, 'REGISTER');
