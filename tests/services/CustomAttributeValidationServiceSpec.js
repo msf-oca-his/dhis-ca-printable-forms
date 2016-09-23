@@ -7,6 +7,9 @@ describe("CustomAttributeValidationService", function() {
 	var customAttribute;
 	var mockedCustomAttribute;
 	var customAttributeValidationService;
+	var _ModalAlert;
+	var _ModalAlertTypes;
+	var mockedModalAlertsService;
 
 	beforeEach(function() {
 		config = {
@@ -31,10 +34,15 @@ describe("CustomAttributeValidationService", function() {
 			}
 		};
 
+		mockedModalAlertsService = {
+			showModalAlert: function() {}
+		};
+
 		angular.module('d2HeaderBar', []);
 		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', customAttributeService);
+			$provide.value('ModalAlertsService', mockedModalAlertsService);
 			$translateProvider.translations('en', {
 				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator.",
 				"NO_ASSOCIATION_WITH_OPTIONSET": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
@@ -45,13 +53,15 @@ describe("CustomAttributeValidationService", function() {
 		});
 	});
 
-	beforeEach(inject(function($rootScope, $httpBackend, $window, CustomAttribute, CustomAttributeValidationService) {
+	beforeEach(inject(function($rootScope, $httpBackend, $window, CustomAttribute, CustomAttributeValidationService, ModalAlert, ModalAlertTypes) {
 		_$rootScope = $rootScope;
 		httpMock = $httpBackend;
 		window = $window;
 		httpMock.expectGET("i18n/en.json").respond(200, {});
 		customAttribute = CustomAttribute;
 		customAttributeValidationService = CustomAttributeValidationService;
+		_ModalAlert = ModalAlert;
+		_ModalAlertTypes = ModalAlertTypes;
 
 		mockedCustomAttribute = new customAttribute({
 			name: "displayOptions",
@@ -77,10 +87,11 @@ describe("CustomAttributeValidationService", function() {
 
 		it("should show an alert when specified display custom attribute is not present in dhis", function(done) {
 			mockedCustomAttribute = {};
-			spyOn(window, 'alert');
+			// spyOn(window, 'alert');
+			spyOn(mockedModalAlertsService, 'showModalAlert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
-					expect(window.alert).toHaveBeenCalledWith("displayOptionUID : The specified UID doesn't exist in the system. Please contact your system administrator.")
+					expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("displayOptionUID : The specified UID doesn't exist in the system. Please contact your system administrator.", _ModalAlertTypes.indismissibleError));
 					done();
 				});
 				_$rootScope.$digest();
@@ -91,10 +102,10 @@ describe("CustomAttributeValidationService", function() {
 		it("should show an alert when there is no association between custom attribute and any entity", function(done) {
 			mockedCustomAttribute.optionSet = undefined;
 			mockedCustomAttribute.dataElementAttribute = false;
-			spyOn(window, 'alert');
+			spyOn(mockedModalAlertsService, 'showModalAlert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
-					expect(window.alert).toHaveBeenCalledWith("displayOptionUID : No association between the attribute and the specified entity in config");
+					expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("displayOptionUID : No association between the attribute and the specified entity in config", _ModalAlertTypes.indismissibleError));
 					done();
 				});
 				_$rootScope.$digest();
@@ -104,10 +115,10 @@ describe("CustomAttributeValidationService", function() {
 
 		it("should show an alert when the custom attribute is not associated with optionSet", function(done) {
 			mockedCustomAttribute.optionSet = undefined;
-			spyOn(window, 'alert');
+			spyOn(mockedModalAlertsService, 'showModalAlert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
-					expect(window.alert).toHaveBeenCalledWith("displayOptionUID : The specified attribute is not associated with any optionSet. Please contact your system administrator.")
+					expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("displayOptionUID : The specified attribute is not associated with any optionSet. Please contact your system administrator.", _ModalAlertTypes.dismissibleError));
 					done();
 				});
 				_$rootScope.$digest();
@@ -117,10 +128,10 @@ describe("CustomAttributeValidationService", function() {
 
 		it("should show an alert when the optionSet of attribute doesn't have options", function(done) {
 			mockedCustomAttribute.optionSet = {id: '12'};
-			spyOn(window, 'alert');
+			spyOn(mockedModalAlertsService, 'showModalAlert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
-					expect(window.alert).toHaveBeenCalledWith("displayOptionUID : The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.")
+					expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("displayOptionUID : The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.", _ModalAlertTypes.dismissibleError));
 					done();
 				});
 				_$rootScope.$digest();
@@ -130,10 +141,10 @@ describe("CustomAttributeValidationService", function() {
 
 		it("should show an alert when the optionSet options of a custom attribute are incorrect", function(done) {
 			mockedCustomAttribute.optionSet = {id: '1', options: [{code: '8'}, {code: '9'}, {code: '10'}]};
-			spyOn(window, 'alert');
+			spyOn(mockedModalAlertsService, 'showModalAlert');
 			customAttributeValidationService.validate().catch(function() {
 				Promise.resolve({}).then(function() {
-					expect(window.alert).toHaveBeenCalledWith("displayOptionUID : The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.")
+					expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("displayOptionUID : The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.", _ModalAlertTypes.dismissibleError));
 					done();
 				});
 				_$rootScope.$digest();

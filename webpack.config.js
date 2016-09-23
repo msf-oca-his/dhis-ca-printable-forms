@@ -2,6 +2,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
 	entry: {
 		dependencies: "./src/dependencies.js",
+		factories: "./src/factories.js",
 		services: "./src/services.js",
 		directives: "./src/directives.js",
 		app: "./src/app.js",

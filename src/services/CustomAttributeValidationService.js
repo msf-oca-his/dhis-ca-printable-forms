@@ -1,4 +1,4 @@
-TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService', 'Config', '$translate', function(CustomAttributeService, config, $translate) {
+TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlert', 'ModalAlertTypes', 'ModalAlertsService', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlert, ModalAlertTypes, ModalAlertsService) {
 
 	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
 		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code')
@@ -8,11 +8,11 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 
 	var validateOptionSetOfAttribute = function(attributeFromDhis, attributeNameFromConfig) {
 		if(_.isEmpty(attributeFromDhis.optionSet))
-			throw prepareErrorObject("NO_ASSOCIATION_WITH_OPTIONSET", attributeNameFromConfig);
+			throw prepareErrorObject("NO_ASSOCIATION_WITH_OPTIONSET", attributeNameFromConfig, ModalAlertTypes.dismissibleError);
 		if(_.isEmpty(attributeFromDhis.optionSet.options))
-			throw prepareErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig);
+			throw prepareErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig, ModalAlertTypes.dismissibleError);
 		if(areConfigOptionsNotEqualTo(attributeFromDhis, attributeNameFromConfig))
-			throw prepareErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig);
+			throw prepareErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig, ModalAlertTypes.dismissibleError);
 		return true;
 	};
 
@@ -20,7 +20,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		_.map(config.CustomAttributes[attributeNameFromConfig].associatedWith, function(associatedWith) {
 			if(attributeFromDhis[associatedWith + "Attribute"] == true)
 				return true;
-			throw prepareErrorObject("NO_ASSOCIATION_WITH_ENTITY", attributeNameFromConfig);
+			throw prepareErrorObject("NO_ASSOCIATION_WITH_ENTITY", attributeNameFromConfig, ModalAlertTypes.indismissibleError);
 		});
 	};
 
@@ -28,7 +28,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		var attributeNameFromConfig = Object.keys(config.CustomAttributes)[index];
 
 		if(_.isEmpty(attributeFromDhis)) {
-			throw prepareErrorObject('NO_ATTRIBUTE_EXISTS', attributeNameFromConfig);
+			throw prepareErrorObject('NO_ATTRIBUTE_EXISTS', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
 		}
 
 		validateAttributeAssignment(attributeFromDhis, attributeNameFromConfig);
@@ -64,16 +64,18 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	// 	});
 	// };
 
-	var prepareErrorObject = function(message, additionalInfo) {
+	var prepareErrorObject = function(message, additionalInfo, type) {
 		var err = new Error(message);
 		err.errorSrc = additionalInfo;
+		err.type = type;
 		return err;
 	};
 
 	var handleError = function(err) {
-		$translate(err.message)
+		CustomAngularTranslateService.getTranslation(err.message)
 			.then(function(translatedMessage) {
-				alert(err.errorSrc + " : " + translatedMessage);
+				// alert(err.errorSrc + " : " + translatedMessage);
+				ModalAlertsService.showModalAlert(new ModalAlert(err.errorSrc + " : " + translatedMessage, err.type))
 			})
 			.catch(function(err) {console.log(err)});
 	};
