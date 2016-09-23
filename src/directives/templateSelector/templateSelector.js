@@ -43,7 +43,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 					});
 			};
 
-			var refreshElement = function(){
+			var refreshElement = function() {
 				$scope.selectorLoaded = true;
 				$scope.$apply();
 				refreshBootstrapSelect();
