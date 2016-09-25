@@ -13,5 +13,7 @@
   "CUSTOM_ATTRIBUTE_HAS_NO_ID_FIELD": "The specified custom attribute has no id field",
   "GO_TO_HOME": "Go back to DHIS",
   "ERROR": "Translatable Error",
-  "UNEXPECTED_ERROR":"unexpected error happened, contact the system administrator"
+  "UNEXPECTED_ERROR":"unexpected error happened, contact the system administrator",
+  "DOWNLOAD_DATASETS_FAILED": "Downloading dataset failed",
+  "PROCESS_DATASETS_FAILED": "Processing data sets failed"
 }

@@ -8,11 +8,11 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 
 	var validateOptionSetOfAttribute = function(attributeFromDhis, attributeNameFromConfig) {
 		if(_.isEmpty(attributeFromDhis.optionSet))
-			throw prepareErrorObject("NO_ASSOCIATION_WITH_OPTIONSET", attributeNameFromConfig, ModalAlertTypes.dismissibleError);
+			throw prepareErrorObject("NO_ASSOCIATION_WITH_OPTIONSET", attributeNameFromConfig, ModalAlertTypes.indismissibleError);
 		if(_.isEmpty(attributeFromDhis.optionSet.options))
-			throw prepareErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig, ModalAlertTypes.dismissibleError);
+			throw prepareErrorObject('OPTIONSET_WITHOUT_OPTIONS', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
 		if(areConfigOptionsNotEqualTo(attributeFromDhis, attributeNameFromConfig))
-			throw prepareErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig, ModalAlertTypes.dismissibleError);
+			throw prepareErrorObject('OPTIONSET_WITH_INCORRECT_OPTIONS', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
 		return true;
 	};
 
@@ -72,27 +72,19 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	};
 
 	var handleError = function(err) {
-		CustomAngularTranslateService.getTranslation(err.message)
+		return CustomAngularTranslateService.getTranslation(err.message)
 			.then(function(translatedMessage) {
-				// alert(err.errorSrc + " : " + translatedMessage);
-				ModalAlertsService.showModalAlert(new ModalAlert(err.errorSrc + " : " + translatedMessage, err.type))
+				return Promise.reject(new ModalAlert(err.errorSrc + " : " + translatedMessage, err.type));
 			})
-			.catch(function(err) {console.log(err)});
 	};
 
 	this.validate = function() {
-		try {
 			// validateConfigFile();
 			if(!config.CustomAttributes) return;
 			return Promise.all(getAllCustomAttributes())
 				.then(validateAllAttributes)
 				.catch(function(err) {
-					handleError(err);
-					return Promise.reject();
+					return handleError(err);
 				})
-		}
-		catch(err) {
-			return Promise.reject();
-		}
 	}
 }]);

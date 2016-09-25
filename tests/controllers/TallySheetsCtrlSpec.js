@@ -92,7 +92,7 @@ describe("TallySheets ctrl", function() {
 			scope.template.id = 123;
 			scope.template.type = "DATASET";
 			scope.renderTemplates();
-			getPromiseOfDepth(2)
+			getPromiseOfDepth(4)
 				.then(function() {
 				expect(scope.spinnerShown).toEqual(false);
 				expect(scope.pages).toEqual(expectedPages);
@@ -107,7 +107,7 @@ describe("TallySheets ctrl", function() {
 			scope.programMode = "COVERSHEET";
 			_$rootScope.$apply();
 			scope.renderTemplates();
-			getPromiseOfDepth(2).then(function() {
+			getPromiseOfDepth(3).then(function() {
 				expect(scope.spinnerShown).toEqual(false);
 				expect(scope.pages).toEqual(expectedPages);
 				done();
@@ -119,8 +119,7 @@ describe("TallySheets ctrl", function() {
 			scope.template.id = 123;
 			scope.template.type = "";
 			scope.renderTemplates();
-			Promise.resolve({})
-				.then(function() {
+			getPromiseOfDepth(2).then(function() {
 					expect(scope.spinnerShown).toEqual(false);
 					expect(scope.pages).toEqual([]);
 					done();

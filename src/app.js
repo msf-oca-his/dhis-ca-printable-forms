@@ -5,12 +5,56 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CustomAttributeValidationService, appLoadingFailed) {
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, InlineAlert, InlineAlertTypes, CustomAngularTranslateService) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
+	$scope.inlineAlert = {
+		message:'',
+		type:'',
+		shown: false
+	};
+
 	if(appLoadingFailed) return;
-	$scope.validationProcess = CustomAttributeValidationService.validate();
+
+	var showInlineAlert = function(inlineAlert) {
+		$scope.inlineAlert.message = inlineAlert.message;
+		$scope.inlineAlert.type = inlineAlert.type;
+		$scope.inlineAlert.shown = true;
+		setTimeout(function() {
+			$scope.inlineAlert.shown = false;
+			$scope.$apply();
+		}, 5000);
+	};
+
+	var handleError = function(alertObject) {
+		if(alertObject.constructor.name == 'ModalAlert')
+			ModalAlertsService.showModalAlert(alertObject);
+		else if(alertObject.constructor.name == 'InlineAlert')
+			showInlineAlert(alertObject);
+		else{
+			console.log(alertObject); //must have console
+			return CustomAngularTranslateService.getTranslation('unexpected_error').then(function(translatedMessage) {
+				return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.dismissibleError));
+			})
+		}
+		return Promise.reject();
+	};
+
+	var onValidationFail = function(alertObject) {
+		if(alertObject.constructor.name =='ModalAlert' && (alertObject.type == ModalAlertTypes.indismissibleError || alertObject.type == ModalAlertTypes.indismissibleWarning)) {
+			return handleError(alertObject);
+		}
+		else{
+			handleError(alertObject);
+			return Promise.reject(alertObject);
+		}
+	};
+
+	$scope.validationProcess = Promise.resolve({})
+		.then(CustomAttributeValidationService.validate)
+		.catch(onValidationFail);
+
 	$scope.dsId = 1;
 	$scope.template = {};
 	$scope.pages = [];
@@ -67,10 +111,20 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		$scope.spinnerShown = true;
 		if($scope.template.type == "DATASET") {
 			$scope.programMode = null;
-			return DataSetService.getReferentialDataSet($scope.template.id)
-				.then(function(dataSet) {
-					return DataSetProcessor.process(dataSet);
-				});
+			return Promise.resolve($scope.template.id)
+				.then(DataSetService.getReferentialDataSet)
+				.then(DataSetProcessor.process, function() {
+					return CustomAngularTranslateService.getTranslation('DOWNLOAD_DATASETS_FAILED')
+						.then(function(translatedMessage) {
+							return Promise.reject(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
+						})
+				})
+				.catch(function(){
+					return CustomAngularTranslateService.getTranslation('PROCESS_DATASETS_FAILED')
+						.then(function(translatedMessage) {
+							return Promise.reject(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
+						})
+				})
 		}
 		else if($scope.template.type == "PROGRAM" && $scope.programMode) {
 				return ProgramService.getProgram($scope.template.id)
@@ -90,8 +144,10 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		$scope.pages = [];
 		$scope.template = template ? template : $scope.template;
 		if(!$scope.template.id) return;
-		loadAndProcessSelectedTemplate()
-			.then(addProcessedPagesToDOM);
+		Promise.resolve()
+			.then(loadAndProcessSelectedTemplate)
+			.then(addProcessedPagesToDOM)
+			.catch(handleError);
 	};
 }]);
 

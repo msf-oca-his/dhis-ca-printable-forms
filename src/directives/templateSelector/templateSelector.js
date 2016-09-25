@@ -1,4 +1,4 @@
-TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config) {
+TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', 'ModalAlert', 'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config, ModalAlert, ModalAlertTypes, ModalAlertsService, CustomAngularTranslateService) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
@@ -24,7 +24,9 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var alertForEmptyTemplates = function() {
 				if($scope.templates.length == 0) {
-					$translate('ATTRIBUTE_NOT_SET').then(alert);
+					CustomAngularTranslateService.getTranslation('ATTRIBUTE_NOT_SET').then(function(translatedMessage){
+						ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
+					});
 				}
 			};
 

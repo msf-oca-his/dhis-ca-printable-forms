@@ -16,6 +16,9 @@ describe("templateSelector Directive", function() {
 	var customAttribute;
 	var customAttributes;
 	var elements;
+	var _ModalAlert;
+	var _ModalAlertTypes;
+	var mockedModalAlertsService;
 
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
@@ -27,19 +30,24 @@ describe("templateSelector Directive", function() {
 			CustomAttributes: {}
 		};
 
+		mockedModalAlertsService = {
+			showModalAlert: function() {}
+		};
+
 		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('d2', d2);
 			$provide.value('DataSetService', dataSetService);
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
+			$provide.value('ModalAlertsService', mockedModalAlertsService);
 			$translateProvider.translations('en', {
 				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator."
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$controller_, $q, $rootScope, $httpBackend, $window, _$timeout_, $compile, DataSet, Program, CustomAttribute) {
+	beforeEach(inject(function(_$controller_, $q, $rootScope, $httpBackend, $window, _$timeout_, $compile, DataSet, Program, CustomAttribute, ModalAlert, ModalAlertTypes) {
 		_$rootScope = $rootScope;
 		$timeout = _$timeout_;
 		$controller = _$controller_;
@@ -52,6 +60,8 @@ describe("templateSelector Directive", function() {
 		dataSet = DataSet;
 		program = Program;
 		customAttribute = CustomAttribute;
+		_ModalAlert = ModalAlert;
+		_ModalAlertTypes = ModalAlertTypes;
 		datasets = [
 			new dataSet({
 				id: 1,
@@ -193,13 +203,13 @@ describe("templateSelector Directive", function() {
 				datasets[1].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
 				programs[1].attributeValues[0].value = "false";
-				spyOn(window, 'alert');
+				spyOn(mockedModalAlertsService, 'showModalAlert');
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(window.alert).toHaveBeenCalledWith("The specified UID is not set in any template. Please contact your system administrator.")
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("The specified UID is not set in any template. Please contact your system administrator.", _ModalAlertTypes.indismissibleError));
 						done();
 					});
 				scope.$digest();
