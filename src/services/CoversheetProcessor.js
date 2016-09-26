@@ -23,7 +23,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 
 		var addSectionToNewPage = function(section, height, isFirstSectionInDataSet) {
 			page = new Page("COVERSHEET");
-			page.programName = currentProgram.name;
+			page.programName = currentProgram.displayName;
 			pages[++currentPageIndex] = page;
 			section.isDuplicate = false;
 			processSection(section, isFirstSectionInDataSet);
@@ -96,7 +96,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 
 		if(!pages[currentPageIndex]) {
 			page = new Page("COVERSHEET");
-			page.programName = program.name;
+			page.programName = program.displayName;
 			pages[++currentPageIndex] = page;
 		}
 		else {

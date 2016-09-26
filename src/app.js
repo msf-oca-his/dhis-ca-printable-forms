@@ -1,4 +1,5 @@
 require('./boot.js');
+require('./translationsSetup.js');
 TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	return function(text) {
 		return $sce.trustAsHtml(text);
@@ -127,10 +128,10 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 				})
 		}
 		else if($scope.template.type == "PROGRAM" && $scope.programMode) {
-				return ProgramService.getProgram($scope.template.id)
-					.then(function(program) {
-						return $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
-					});
+			return ProgramService.getProgram($scope.template.id)
+				.then(function(program) {
+					return $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
+				});
 		}
 		else return Promise.resolve([]);
 	};
@@ -150,42 +151,3 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 			.catch(handleError);
 	};
 }]);
-
-TallySheets.config(function($translateProvider) {
-	$translateProvider.useSanitizeValueStrategy('escape'); //TODO: create a story to select sanitize strategy
-	//#TODO: load translations preemptively in js rather than loading them at run time with a http call
-	$translateProvider.useStaticFilesLoader({
-		prefix: 'i18n/',
-		suffix: '.json'
-	});
-
-	$translateProvider.registerAvailableLanguageKeys(
-		['es', 'fr', 'en', 'pt'],
-		{
-			'en*': 'en',
-			'es*': 'es',
-			'fr*': 'fr',
-			'pt*': 'pt',
-			'*': 'en' // must be last!
-		}
-	);
-
-	$translateProvider.fallbackLanguage(['en']);
-	jQuery.ajax({ //TODO: this is a http call. if we are not using d2's translate then move this to d2
-		url: ApiUrl + '/userSettings/keyUiLocale/',
-		contentType: 'text/plain',
-		method: 'GET',
-		dataType: 'text',
-		async: false
-	}).done(function(uiLocale) {
-		if(uiLocale == '') {
-			$translateProvider.determinePreferredLanguage();
-		}
-		else {
-			$translateProvider.use(uiLocale);
-		}
-	}).fail(function() {
-		$translateProvider.determinePreferredLanguage();
-	});
-
-});

@@ -57,8 +57,9 @@ describe("Coversheet Processor", function() {
 			var testProgram = {
 				id: "123",
 				name: "test program",
+				displayName: "test program",
 				programStages: [{programStageSections: []}],
-				type: "program",
+				type: "program"
 			};
 
 			var expectedPages = [{
@@ -69,7 +70,7 @@ describe("Coversheet Processor", function() {
 			}];
 
 			var actualPages = clone(coversheetProcessor.process(testProgram));
-			expect(actualPages).toEqual(expectedPages);
+			expect(expectedPages).toEqual(actualPages);
 		});
 
 		describe("Section with option sets", function() {
@@ -393,6 +394,7 @@ describe("Coversheet Processor", function() {
 					var testProgram = {
 						id           : "123",
 						name         : "test program",
+						displayName  : "test program",
 						programStages: [{ programStageSections: [] }],
 						type         : "program",
 					};
@@ -405,7 +407,7 @@ describe("Coversheet Processor", function() {
 					}];
 
 					var actualPages = clone(coversheetProcessor.process(testProgram));
-					expect(actualPages).toEqual(expectedPages);
+					expect(expectedPages).toEqual(actualPages);
 				});
 			});
 		});

@@ -1,12 +1,12 @@
 <div>
     <table>
         <td valign=top class="deLabel optionLabel">
-            {{dataelement.name}}
+            {{dataelement.displayName}}
         </td>
         <td valign=top><table class="optionsetTable">
             <tr ng-repeat="optionRow in dataelement.rows">
                 <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer option">
-                    <input type="checkbox" class="pffcheckbox">{{option.name}}</input>
+                    <input type="checkbox" class="pffcheckbox">{{option.displayName}}</input>
                 </td>
             </tr>
         </table>

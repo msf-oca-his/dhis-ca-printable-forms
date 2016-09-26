@@ -3,7 +3,7 @@
     <tr ng-repeat="dataElement in content.section.leftSideElements">
 
         <td class="deLabel general">
-            {{content.section.leftSideElements[$index].name}}
+            {{content.section.leftSideElements[$index].displayName}}
         </td>
         <td class="yesno" ng-if="content.section.leftSideElements[$index].valueType=='BOOLEAN'">
             <input type="checkbox" class="pffcheckbox">Yes</input>
@@ -16,7 +16,7 @@
         <td class="default-section-divider"></td>
 
         <td class="deLabel general" ng-if="content.section.rightSideElements[$index]">
-            {{content.section.rightSideElements[$index].name}}
+            {{content.section.rightSideElements[$index].displayName}}
         </td>
 
         <span ng-if="content.section.rightSideElements[$index]">
