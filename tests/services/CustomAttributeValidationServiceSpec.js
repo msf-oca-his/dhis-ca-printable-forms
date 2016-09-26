@@ -91,7 +91,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(alertObject.message).toEqual("displayOptionUID : The specified UID doesn't exist in the system. Please contact your system administrator.");
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		});
 
 		it("should show an alert when there is no association between custom attribute and any entity", function(done) {
@@ -101,7 +101,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(alertObject.message).toEqual("displayOptionUID : No association between the attribute and the specified entity in config");
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		});
 
 		it("should show an alert when the custom attribute is not associated with optionSet", function(done) {
@@ -110,7 +110,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(alertObject.message).toEqual("displayOptionUID : The specified attribute is not associated with any optionSet. Please contact your system administrator.");
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		});
 
 		it("should show an alert when the optionSet of attribute doesn't have options", function(done) {
@@ -119,7 +119,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(alertObject.message).toEqual("displayOptionUID : The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.");
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		});
 
 		it("should show an alert when the optionSet options of a custom attribute are incorrect", function(done) {
@@ -128,7 +128,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(alertObject.message).toEqual("displayOptionUID : The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		});
 
 		it("should be validated as true when custom attribute in dhis is same as in app config", function(done) {
@@ -138,7 +138,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(result).toEqual([true]);
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		});
 
 		it("should not validate optionSet of custom attribute when it doesn't have options in config", function() {
@@ -154,7 +154,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(result).toEqual([true]);
 				done();
 			});
-			getAngularPromiseOfDepth(6, _$rootScope);
+			getAngularPromiseOfDepth(8, _$rootScope);
 		})
 	});
 });
