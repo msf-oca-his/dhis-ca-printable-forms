@@ -16,6 +16,7 @@ var bootStrapAngularApp = function() {
 	console.log('bootstrapping');
 	TallySheets.value('appLoadingFailed', _.isError(arguments[0]));
 	angular.bootstrap(document, ['TallySheets']);
+	document.querySelector('#app').classList.remove('hidden');
 };
 
 var initializeD2 = function(ApiUrl) {

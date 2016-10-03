@@ -9,7 +9,6 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, InlineAlert, InlineAlertTypes, CustomAngularTranslateService) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
-	document.querySelector('#app').classList.remove('hidden');
 	$scope.spinnerShown = false;
 	$scope.inlineAlert = {
 		message:'',

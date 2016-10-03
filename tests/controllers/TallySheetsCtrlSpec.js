@@ -5,7 +5,6 @@ describe("TallySheets ctrl", function() {
 	var _$rootScope;
 	var dataSetService;
 	var mockedDataSetService;
-	var httpMock;
 	var mockedDataSetProcessor;
 	var mockedProgramService;
 	var mockedProgramProcessor;
@@ -15,8 +14,8 @@ describe("TallySheets ctrl", function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
 
-		var mockDataset = "testDataSet"
-		var mockProgram = "testProgram"
+		var mockDataset = "testDataSet";
+		var mockProgram = "testProgram";
 
 		expectedPages = "testPages";
 
@@ -62,14 +61,12 @@ describe("TallySheets ctrl", function() {
 		});
 	});
 
-	beforeEach(inject(function(_$controller_, $rootScope, $q, DataSetService, $httpBackend) {
+	beforeEach(inject(function(_$controller_, $rootScope, $q, DataSetService) {
 		_$rootScope = $rootScope;
 		defer = $q.defer();
 		dataSetService = DataSetService;
 		scope = _$rootScope.$new();
 		$controller = _$controller_;
-		httpMock = $httpBackend;
-		httpMock.expectGET("i18n/en.json").respond(200, {});
 	}));
 
 	beforeEach(function() {
