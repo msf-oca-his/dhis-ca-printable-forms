@@ -56,7 +56,7 @@ describe("templateSelector Directive", function() {
 		httpMock = $httpBackend;
 		window = $window;
 		compile = $compile;
-		httpMock.expectGET("i18n/en.json").respond(200, {});
+		httpMock.expectGET("i18n/en.js").respond(200, {});
 		dataSet = DataSet;
 		program = Program;
 		customAttribute = CustomAttribute;

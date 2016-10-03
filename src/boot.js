@@ -23,7 +23,6 @@ var initializeD2 = function(ApiUrl) {
 		.then(createD2AngularModule)
 };
 
-window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar', 'DhisModel', 'DhisServices', 'D2']);
 window.dhisUrl = determineDhisUrl();
 window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 initializeD2(ApiUrl)

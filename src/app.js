@@ -1,5 +1,5 @@
-require('./boot.js');
-require('./translationsSetup.js');
+window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar', 'DhisModel', 'DhisServices', 'D2']);
+
 TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	return function(text) {
 		return $sce.trustAsHtml(text);
@@ -9,6 +9,7 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, InlineAlert, InlineAlertTypes, CustomAngularTranslateService) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
+	document.querySelector('#app').classList.remove('hidden');
 	$scope.spinnerShown = false;
 	$scope.inlineAlert = {
 		message:'',

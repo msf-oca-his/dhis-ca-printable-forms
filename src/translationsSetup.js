@@ -1,21 +1,10 @@
 TallySheets.config(function($translateProvider) {
 	$translateProvider.useSanitizeValueStrategy('escape'); //TODO: create a story to select sanitize strategy
-	//#TODO: load translations preemptively in js rather than loading them at run time with a http call
-	$translateProvider.useStaticFilesLoader({
-		prefix: 'i18n/',
-		suffix: '.json'
-	});
 
-	$translateProvider.registerAvailableLanguageKeys(
-		['es', 'fr', 'en', 'pt'],
-		{
-			'en*': 'en',
-			'es*': 'es',
-			'fr*': 'fr',
-			'pt*': 'pt',
-			'*': 'en' // must be last!
-		}
-	);
+	$translateProvider.translations('en', require('../i18n/en.js'));
+	$translateProvider.translations('es', require('../i18n/es.js'));
+	$translateProvider.translations('fr', require('../i18n/fr.js'));
+	$translateProvider.translations('pt', require('../i18n/pt.js'));
 
 	$translateProvider.fallbackLanguage(['en']);
 	jQuery.ajax({ //TODO: this is a http call. if we are not using d2's translate then move this to d2

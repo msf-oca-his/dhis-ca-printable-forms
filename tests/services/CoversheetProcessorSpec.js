@@ -47,7 +47,7 @@ describe("Coversheet Processor", function() {
 			$rootScope = _$rootScope_;
 			httpMock = $httpBackend;
 			_DataElement = DataElement
-			httpMock.expectGET("i18n/en.json").respond(200, {});
+			httpMock.expectGET("i18n/en.js").respond(200, {});
 		})
 
 	});

@@ -57,7 +57,7 @@ describe("CustomAttributeValidationService", function() {
 		_$rootScope = $rootScope;
 		httpMock = $httpBackend;
 		window = $window;
-		httpMock.expectGET("i18n/en.json").respond(200, {});
+		httpMock.expectGET("i18n/en.js").respond(200, {});
 		customAttribute = CustomAttribute;
 		customAttributeValidationService = CustomAttributeValidationService;
 		_ModalAlert = ModalAlert;

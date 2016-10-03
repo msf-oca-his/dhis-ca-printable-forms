@@ -53,8 +53,7 @@ TEMP = {
 	root: ".temp",
 	css:".temp/css",
 	all: ".temp/**/*.*",
-	resources: ".temp/resources",
-	i18n: ".temp/i18n"
+	resources: ".temp/resources"
 
 };
 
@@ -76,7 +75,6 @@ TASKS = {
 	serve: 'serve',
 	compileScss: 'compileScss',
 	copyResourcesToTemp: '_copyResourcesToTemp',
-	copyi18nToTemp: '_copyi18nToTemp',
 	setUpTemp: '_setUpTemp',
 	reload: '_reload',
 	webpack: 'webpack',
@@ -110,11 +108,6 @@ gulp.task(TASKS.compileScss, function() {
 		.pipe(gulp.dest(TEMP.css))
 });
 
-gulp.task(TASKS.copyi18nToTemp, function() {
-	return gulp.src(APP.i18n.all)
-		.pipe(gulp.dest(TEMP.i18n))
-});
-
 gulp.task(TASKS.copyResourcesToTemp, [], function() {
 	return gulp.src(APP.resources.all)
 		.pipe(gulp.dest(TEMP.resources))
@@ -125,14 +118,13 @@ gulp.task(TASKS.reload, function() {
 });
 
 gulp.task(TASKS.watchSrc, function() {
-	gulp.watch([APP.src.html, APP.src.js], gulpsync.sync([TASKS.webpack, TASKS.reload]));
+	gulp.watch([APP.src.html, APP.src.js,APP.i18n.all], gulpsync.sync([TASKS.webpack, TASKS.reload]));
 	gulp.watch(APP.src.scss, gulpsync.sync([TASKS.compileScss, TASKS.reload]));
 	gulp.watch(APP.resources.all, gulpsync.sync([TASKS.copyResourcesToTemp, TASKS.reload]))
-	gulp.watch(APP.i18n.all, gulpsync.sync([TASKS.copyi18nToTemp, TASKS.reload]));
 });
 
 
-gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack,TASKS.compileScss, TASKS.copyResourcesToTemp, TASKS.copyi18nToTemp]))
+gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack,TASKS.compileScss, TASKS.copyResourcesToTemp]))
 
 gulp.task(TASKS.serve, [TASKS.setUpTemp], function() {
 	browserSync.init({

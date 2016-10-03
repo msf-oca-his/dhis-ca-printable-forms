@@ -67,7 +67,7 @@ describe("DataSetProcessor", function() {
 		httpMock = $httpBackend;
 		timeout = $timeout;
 		_Page = Page;
-		httpMock.expectGET("i18n/en.json").respond(200, {});
+		httpMock.expectGET("i18n/en.js").respond(200, {});
 	}));
 
 	describe("process dataSet", function() {

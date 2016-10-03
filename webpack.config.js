@@ -7,7 +7,9 @@ module.exports = {
 		directives: "./src/directives.js",
 		app: "./src/app.js",
 		utils: "./src/utils.js",
-		'pff-model': "./src/pff-model.js"
+		'pff-model': "./src/pff-model.js",
+		translationsSetup: "./src/translationsSetup.js",
+		boot: "./src/boot.js"
 	},
 	plugins: [
 		new CopyWebpackPlugin([
