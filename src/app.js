@@ -73,26 +73,29 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 			return s.replace(/{(\w+)}/g, function(m, p) {
 				return c[p];
 			})
-		}
+		};
 
 		var table = $("#" + tableId).clone();
 
 		// Remove non-printable section from the table
-		table.find(".hidden-print").remove();
-
+		table.find('.hidden-print').remove();
+		table.find('.noprint').remove();
+		table.find('link').remove();
+		
 		// Replace input fields with their values (for correct excel formatting)
-		table.find("input").each(function() {
-			var value = $(this).val();
-			$(this).replaceWith(value);
-		});
+		// table.find("input").each(function() {
+		// 	var value = $(this).val();
+		// 	$(this).replaceWith(value);
+		// });
 
 		// Add border to section table (for printing in MS Excel)
-		table.find(".sectionTable").prop('border', '1');
+		// table.find(".sectionTable").prop('border', '1');
 
 		// Take the name of the first dataset as filename
-		var name = table.find("h2").first().html() + '.xls';
+		var xlsName = ($scope.pages[0].datasetName) ? $scope.pages[0].datasetName : $scope.pages[0].programName;
+		var name = xlsName + '.xls';
 
-		var ctx = {worksheet: 'MSF-OCBA HMIS' || 'Worksheet', table: table.html()}
+		var ctx = {worksheet: 'MSF-OCBA HMIS' || 'Worksheet', table: table.html()};
 
 		// Create a fake link to download the file
 		var link = angular.element('<a class="hidden" id="idlink"></a>');

@@ -23,7 +23,7 @@
 					<template-selector on-select-template="renderTemplates(selectedTemplate)" load-after="validationProcess"></template-selector>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
-					<button ng-click="exportToTable('tallysheetForm')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
+            <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
 					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
 					</span>
 					<span ng-if="template.type=='PROGRAM'">
