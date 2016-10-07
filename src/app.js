@@ -82,15 +82,6 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		table.find('.noprint').remove();
 		table.find('link').remove();
 		
-		// Replace input fields with their values (for correct excel formatting)
-		// table.find("input").each(function() {
-		// 	var value = $(this).val();
-		// 	$(this).replaceWith(value);
-		// });
-
-		// Add border to section table (for printing in MS Excel)
-		// table.find(".sectionTable").prop('border', '1');
-
 		// Take the name of the first dataset as filename
 		var xlsName = ($scope.pages[0].datasetName) ? $scope.pages[0].datasetName : $scope.pages[0].programName;
 		var name = xlsName + '.xls';
