@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "Tally Sheets",
   "main": "app.js",
-  "dependencies": {},
+  "dependencies": {
+    "d2-ui": "https://github.com/msf-oca-his/d2-ui-dist",
+    "material-ui": "^0.16.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-tap-event-plugin": "^1.0.0"
+  },
   "devDependencies": {
     "browser-sync": "^2.13.0",
     "copy-webpack-plugin": "^3.0.1",

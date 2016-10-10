@@ -1,4 +1,4 @@
-window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'd2HeaderBar', 'DhisModel', 'DhisServices', 'D2']);
+window.TallySheets = angular.module('TallySheets', ['ngResource', 'pascalprecht.translate', 'ngRoute', 'ngCookies', 'DhisModel', 'DhisServices', 'D2']);
 
 TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	return function(text) {
