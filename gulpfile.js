@@ -81,7 +81,8 @@ TASKS = {
 	webpackTest: '_webpackTest',
 	pack: 'pack',
 	test: 'test',
-	setupGitHooks: 'setupGitHooks'
+	setupGitHooks: 'setupGitHooks',
+	setProdEnv: '_setProdEnv'
 };
 
 gulp.task(TASKS.setupGitHooks, function(){
@@ -161,7 +162,11 @@ gulp.task(TASKS.test, gulpsync.sync([TASKS.setUpTemp]), function(done) {
 	}).start();
 });
 
-gulp.task(TASKS.pack, [TASKS.setUpTemp], function() {
+gulp.task(TASKS.setProdEnv, function() {
+	process.env.NODE_ENV = 'production';
+});
+
+gulp.task(TASKS.pack, [ TASKS.setProdEnv, TASKS.setUpTemp ], function() {
 	return gulp.src([TEMP.all, APP.appManifest.manifest])
 		.pipe(zip(DEST.prodZip))
 		.pipe(gulp.dest(DEST.target));
