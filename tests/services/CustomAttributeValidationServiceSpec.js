@@ -43,6 +43,7 @@ describe("CustomAttributeValidationService", function() {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', customAttributeService);
 			$provide.value('ModalAlertsService', mockedModalAlertsService);
+			$translateProvider.preferredLanguage('en');
 			$translateProvider.translations('en', {
 				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator.",
 				"NO_ASSOCIATION_WITH_OPTIONSET": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",

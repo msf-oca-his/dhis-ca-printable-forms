@@ -7,12 +7,11 @@ TallySheets.config(function($translateProvider) {
 	$translateProvider.translations('pt', require('../i18n/pt.js'));
 
 	$translateProvider.fallbackLanguage(['en']);
-	jQuery.ajax({ //TODO: this is a http call. if we are not using d2's translate then move this to d2
+	jQuery.ajax({
 		url: ApiUrl + '/userSettings/keyUiLocale/',
 		contentType: 'text/plain',
 		method: 'GET',
 		dataType: 'text',
-		async: false
 	}).done(function(uiLocale) {
 		if(uiLocale == '') {
 			$translateProvider.determinePreferredLanguage();

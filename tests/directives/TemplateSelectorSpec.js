@@ -41,9 +41,7 @@ describe("templateSelector Directive", function() {
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
 			$provide.value('ModalAlertsService', mockedModalAlertsService);
-			$translateProvider.translations('en', {
-				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator."
-			});
+			$translateProvider.translations('en', {});
 		});
 	});
 
@@ -209,7 +207,7 @@ describe("templateSelector Directive", function() {
 				scope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("The specified UID is not set in any template. Please contact your system administrator.", _ModalAlertTypes.indismissibleError));
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("ATTRIBUTE_NOT_SET", _ModalAlertTypes.indismissibleError));
 						done();
 					});
 				scope.$digest();
