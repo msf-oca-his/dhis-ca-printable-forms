@@ -1,0 +1,10 @@
+<link href="css/codesheet.css" rel="stylesheet" type="text/css">
+<div class="programName">{{programName}} - Codes </div>
+
+<div ng-repeat="dataElement in contents">
+    <b>{{dataElement.displayName}}</b>
+  <div ng-repeat="option in dataElement.options">
+    {{option.displayName}}
+  </div>
+  <br>
+</div>

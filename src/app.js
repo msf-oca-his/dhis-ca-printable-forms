@@ -6,7 +6,7 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, InlineAlert, InlineAlertTypes, CustomAngularTranslateService) {
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CodeSheetProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CodeSheetProcessor, CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, InlineAlert, InlineAlertTypes, CustomAngularTranslateService) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
@@ -18,7 +18,6 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 
 	if(appLoadingFailed) return;
 
-	
 	var showInlineAlert = function(inlineAlert) {
 		$scope.inlineAlert.message = inlineAlert.message;
 		$scope.inlineAlert.type = inlineAlert.type;
@@ -125,7 +124,11 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		else if($scope.template.type == "PROGRAM" && $scope.programMode) {
 			return ProgramService.getProgram($scope.template.id)
 				.then(function(program) {
-					return $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
+					switch($scope.programMode) {
+						case "COVERSHEET" : return CoversheetProcessor.process(_.cloneDeep(program)); break;
+						case "REGISTER": return RegisterProcessor.process(_.cloneDeep(program)); break;
+						case "CODESHEET": return  CodeSheetProcessor.process(_.cloneDeep(program)); break;
+					}
 				}).catch(function(errorObject) {
 					return CustomAngularTranslateService.getTranslation(errorObject.message)
 						.then(function(translatedMessage) {

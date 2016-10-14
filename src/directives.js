@@ -4,6 +4,7 @@ require("./directives/templateDataset/templateDataSet.js")
 require("./directives/progressBar/progressBar.js")
 require("./directives/templateCoversheet/templateCoversheet.js")
 require("./directives/templateRegister/templateRegister.js")
+require("./directives/codeSheet/codeSheet.js")
 require("./directives/content/content.js")
 
 require("./directives/content-directives/list/list.js")
