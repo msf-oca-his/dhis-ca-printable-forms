@@ -6,6 +6,7 @@ require("./directives/templateCoversheet/templateCoversheet.js")
 require("./directives/templateRegister/templateRegister.js")
 require("./directives/codeSheet/codeSheet.js")
 require("./directives/content/content.js")
+require("./directives/optionsetTable/optionsetTable.js")
 
 require("./directives/content-directives/list/list.js")
 require("./directives/content-directives/textField/textField.js")

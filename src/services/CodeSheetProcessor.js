@@ -19,9 +19,16 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'PrintFriendlyUtils
 			if(dataElement.valueType == 'OPTIONSET')
 				page.contents.push(dataElement);
 		});
+		
+		page = getNewPage();
 		page = getNewPage();
 		return pages;
 	};
+
+	var calculateRemainingHeight = function(){
+
+	}
+	
 }]);
 
 

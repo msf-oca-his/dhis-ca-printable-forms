@@ -22,6 +22,13 @@ TallySheets.factory("Config", [function() {
 			availableWidth: 183,
 			numberOfCOCColumns: 5
 		},
+		CodeSheet: {
+			heightOfDataElement: 12,
+			heightOfOption: 6,
+			heightOfProgramTitle: 10,
+			availableHeight: 237,
+			availableWidth: 183
+		},
 		OptionSet: {
 			labelPadding: 4,
 			dataElementLabel: 48,
@@ -38,19 +45,19 @@ TallySheets.factory("Config", [function() {
 			}
 		},
 		CustomAttributes: {
-			// printFlagUID: {
-			// 	id: "F6S3pRyjnSf",
-			// 	associatedWith: ['dataSet', 'program']
-			// },
-			// displayOptionUID: {
-			// 	id: "Fth2lxGOF4M",
-			// 	associatedWith: ['dataElement'],
-			// 	options: {
-			// 		none: '0',
-			// 		text: '1',
-			// 		list: '2'
-			// 	}
-			// }
+			printFlagUID: {
+				id: "F6S3pRyjnSf",
+				associatedWith: ['dataSet', 'program']
+			},
+			displayOptionUID: {
+				id: "Fth2lxGOF4M",
+				associatedWith: ['dataElement'],
+				options: {
+					none: '0',
+					text: '1',
+					list: '2'
+				}
+			}
 		}
 	}
 }]);
