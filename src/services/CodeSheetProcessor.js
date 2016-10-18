@@ -24,7 +24,6 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheet', 'Print
 		};
 
 		var modifyColumn = function(array) {
-			var someArray = _.cloneDeep(array);
 			var rows = getNumberOfRows();
 			//see if first element is gap, if so remove it from array
 			if(array[0].type == "Gap")
@@ -54,7 +53,6 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheet', 'Print
 		};
 
 		var divideIntoColumns = function(codeSheetArray) {
-			var newArray = _.cloneDeep(codeSheetArray)
 			if(_.isEmpty(codeSheetArray))
 				return;
 
@@ -92,10 +90,9 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheet', 'Print
 				})
 				codeSheetArray.push(new CodeSheet("", "", "Gap"))
 			}
-			divideIntoColumns(codeSheetArray);
 		});
 
-		console.log(codeSheetArray, "codeSheetArray");
+		divideIntoColumns(codeSheetArray);
 		console.log(pages, "pages")
 		return pages;
 
