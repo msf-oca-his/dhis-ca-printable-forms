@@ -15,3 +15,11 @@ TallySheets.factory('ContentTypes', [function() {
 		comments       : { type: 'COMMENTS', renderer: 'comments' }
 	}
 }]);
+
+TallySheets.factory('CodeSheet', [function() {
+	return function CodeSheet(code, label, type) {
+		this.code = code;
+		this.label = label;
+		this.type = type;
+	}
+}]);

@@ -23,11 +23,12 @@ TallySheets.factory("Config", [function() {
 			numberOfCOCColumns: 5
 		},
 		CodeSheet: {
-			heightOfDataElement: 12,
-			heightOfOption: 6,
-			heightOfProgramTitle: 10,
 			availableHeight: 237,
-			availableWidth: 183
+			availableWidth: 183,
+			graceHeight: 10,
+			heightOfProgramTitle: 10,
+			columnWidth: 50,
+			rowHeight: 6
 		},
 		OptionSet: {
 			labelPadding: 4,

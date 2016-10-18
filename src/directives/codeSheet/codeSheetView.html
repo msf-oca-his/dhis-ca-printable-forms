@@ -2,11 +2,17 @@
 <div class="programName">{{programName}} - Codes </div>
 
 <div>
-  <table>
-    <tr>
-      <td ng-repeat="dataElement in contents|limitTo:3:$index">
-        <optionset-table dataelement="dataElement"></optionset-table>
-      </td>
-    </tr>
-  </table>
+  <!--<table>-->
+    <!--<tr>-->
+      <!--<td ng-repeat="dataElement in contents">-->
+        <!--<optionset-table dataelement="dataElement"></optionset-table>-->
+      <!--</td>-->
+    <!--</tr>-->
+  <!--</table>-->
+
+  <div class="columns">
+    <div ng-repeat="dataElement in contents">
+      <optionset-table dataelement="dataElement"></optionset-table>
+    </div>
+  </div>
 </div>
