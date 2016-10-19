@@ -28,7 +28,8 @@ TallySheets.factory("Config", [function() {
 			graceHeight: 10,
 			heightOfProgramTitle: 10,
 			columnWidth: 50,
-			rowHeight: 6
+			rowHeight: 6,
+			numberOfColumns: 3
 		},
 		OptionSet: {
 			labelPadding: 4,

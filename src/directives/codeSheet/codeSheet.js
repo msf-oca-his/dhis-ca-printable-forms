@@ -3,18 +3,20 @@ TallySheets.directive('codeSheet', ['Config', function(config) {
 		restrict: 'E',
 		template: require('./codeSheetView.html'),
 		scope: {
-			contents: '=',
-			programName: '=',
-			isLastPage: '='
+			columns: '=',
+			programName: '='
 		},
-		link: function($scope){
-			$scope.getClass = function(codesheet) {
-				if (codesheet.type == 'Heading') 
-					return 'explainerHeading';
-				else if (codesheet.type == 'Label')
-					return 'explainerLabel';
-				else if (codesheet.type == 'Gap')
-					return 'explainerGap';
+		link: function($scope) {
+			$scope.rowHeight = config.CodeSheet.rowHeight;
+			$scope.getClass = function(codesheetElement) {
+				switch(codesheetElement.type) {
+					case 'HEADING':
+						return 'optionHeading'; break;
+					case 'LABEL':
+						return 'optionLabel'; break;
+					default:
+						return 'optionGap'; break;
+				}
 			};
 		}
 	}

@@ -1,39 +1,15 @@
 <link href="css/codesheet.css" rel="stylesheet" type="text/css">
-<div class="programName">{{programName}} - Codes </div>
+<div class="programName">{{ programName }} - Codes</div>
 
 <table class="container">
   <tr>
-    <td valign="top">
+    <td valign="top" ng-repeat="column in columns track by $index">
       <table class="container">
-        <tr ng-repeat="codesheet in contents[0]" ng-class="getClass(codesheet)">
-          <td>{{codesheet.code}}</td>
-          <td>{{codesheet.label}}</td>
-        </tr>
-      </table>
-    </td>
-    <td valign="top">
-      <table class="container">
-        <tr ng-repeat="codesheet in contents[1]" ng-class="getClass(codesheet)">
-          <td>{{codesheet.code}}</td>
-          <td>{{codesheet.label}}</td>
-        </tr>
-      </table>
-    </td>
-    <td valign="top">
-      <table class="container">
-        <tr ng-repeat="codesheet in contents[2]" ng-class="getClass(codesheet)">
-          <td>{{codesheet.code}}</td>
-          <td>{{codesheet.label}}</td>
+        <tr ng-repeat="codesheetElement in column" ng-class="getClass(codesheetElement)">
+          <td style="height:{{ rowHeight }}mm">{{codesheetElement.code}}</td>
+          <td>{{codesheetElement.label}}</td>
         </tr>
       </table>
     </td>
   </tr>
 </table>
-<!--<tr ng-repeat="row in totalrows by index">-->
-<!--<td>-->
-<!--<explainer-heading ng-if="array1[index].type==='heading'"></explainer-heading>-->
-<!--<explainer ng-if="array1[index].type=='heading'"></explainer>-->
-<!--</td>-->
-<!--<td></td>-->
-<!--<td></td>-->
-<!--</tr>-->
