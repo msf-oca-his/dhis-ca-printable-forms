@@ -8,8 +8,14 @@ TallySheets.directive('codeSheet', ['Config', function(config) {
 			isLastPage: '='
 		},
 		link: function($scope){
-			// $scope.rowHeight = config.CodeSheet.heightOfOption;
-			// $scope.rows = new Array(Math.floor((config.CodeSheet.availableHeight - config.CodeSheet.heightOfProgramTitle - config.CodeSheet.heightOfDataElement) / config.CodeSheet.heightOfOption));
+			$scope.getClass = function(codesheet) {
+				if (codesheet.type == 'Heading') 
+					return 'explainerHeading';
+				else if (codesheet.type == 'Label')
+					return 'explainerLabel';
+				else if (codesheet.type == 'Gap')
+					return 'explainerGap';
+			};
 		}
 	}
 }]);

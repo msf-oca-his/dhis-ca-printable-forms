@@ -60,18 +60,21 @@
   }
 }
 
-//.table, th , td {
-//   border: 1px solid grey;
-//   border-collapse: collapse;
-//   padding: 5px;
-// }
-//.table tr:nth-child(odd) {
-//  background-color: #f1f1f1;
-//}
-//.table tr:nth-child(even) {
-//  background-color: #ffffff;
-//}
+.table, th, td {
+   //border: 1px solid grey;
+   //border-style: dashed;
+   //border-bottom-style: dashed;
+   border-width: 0.1mm;
+   padding: 5px;
+   height: 6mm;
+ }
 
-.columns {
-  columns: 3;
+.container {
+  width: 100%;
+  padding: 0px;
+}
+
+.explainerHeading {
+  font-weight: 900;
+  font-size: small;
 }

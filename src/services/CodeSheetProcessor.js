@@ -19,34 +19,32 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheet', 'Print
 			return page;
 		};
 
-		var getLastDataElementHeader = function(array) {
-			return _.last(_.filter(array, ['type', "Heading"]));
+		var getLastHeader = function(array) {
+			return _.last(_.filter(array, ['type', 'Heading']));
 		};
 
 		var modifyColumn = function(array) {
 			var rows = getNumberOfRows();
 			//see if first element is gap, if so remove it from array
-			if(array[0].type == "Gap")
+			if(array[0].type == 'Gap')
 				array.splice(0, 1);
 			var modifiedArray = array.splice(0, rows);
 
-			console.log(modifiedArray, "mm")
-			console.log(_.cloneDeep(array), "aa")
-
 			//orphan heading
-			if(modifiedArray[modifiedArray.length - 1].type == "Heading") {
-				array.unshift(modifiedArray[modifiedArray.length - 1]);
-				modifiedArray.splice(modifiedArray.length - 1, 1)
+			if(_.last(modifiedArray).type == 'Heading') {
+				array.unshift(_.last(modifiedArray));
+				modifiedArray = _.initial(modifiedArray);
+				// modifiedArray.splice(modifiedArray.length - 1, 1)
 			}
 			//orphan option
-			else if(modifiedArray[modifiedArray.length - 2].type == "Heading") {
-				array.unshift(modifiedArray[modifiedArray.length - 1]);
+			else if(modifiedArray[modifiedArray.length - 2].type == 'Heading') {
+				array.unshift(_.last(modifiedArray));
 				array.unshift(modifiedArray[modifiedArray.length - 2]);
 				modifiedArray.splice(modifiedArray.length - 2, 2)
 			}
 			//add heading to remaining array
-			else if(!_.isEmpty(_.filter(array, ['type', "Label"]))) {
-				array.unshift(getLastDataElementHeader(modifiedArray)); //loop from backwards and get first data element
+			else if(_.last(modifiedArray).type != 'Gap' && !_.isEmpty(_.filter(array, ['type', 'Label']))) {
+				array.unshift(getLastHeader(modifiedArray)); //loop from backwards and get first data element
 			}
 
 			return modifiedArray;
@@ -75,8 +73,6 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheet', 'Print
 					}
 				}
 			}
-			console.log(codeSheetArray, "codeSheetArray");
-			console.log(page, "page")
 		};
 
 		page = getNewPage();
