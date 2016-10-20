@@ -9,6 +9,6 @@ module.exports = {
 	"NO_ASSOCIATION_WITH_OPTIONSET":"L'attribut spécifié est associé à aucun optionSet . Veuillez contacter votre administrateur système.",
 	"OPTIONSET_WITHOUT_OPTIONS": "L'attribut spécifié le type optionSet ne possède pas d'options . Veuillez contacter votre administrateur système.",
 	"OPTIONSET_WITH_INCORRECT_OPTIONS": "Les options de l'attribut spécifié sont incorrects. Veuillez contacter votre administrateur système.",
-	"tally_":"frtally_",
-	"perPt_":"frperPt_"
+	"DATASET_PREFIX":"frtally_",
+	"PROGRAM_PREFIX":"frperPt_"
 };

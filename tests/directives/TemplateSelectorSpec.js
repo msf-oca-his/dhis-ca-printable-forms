@@ -24,8 +24,12 @@ describe("templateSelector Directive", function() {
 		angular.module('d2HeaderBar', []);
 		config = {
 			Prefixes: {
-				dataSetPrefix: "test_DS",
-				programPrefix: "test_PROG"
+				dataSetPrefix: {
+				translationKey:"DATASET_PREFIX"	
+				},
+				programPrefix:{
+					translationKey:"PROGRAM_PREFIX"
+				}
 			},
 			CustomAttributes: {}
 		};
@@ -42,7 +46,9 @@ describe("templateSelector Directive", function() {
 			$provide.value('CustomAttributeService', customAttributeService);
 			$provide.value('ModalAlertsService', mockedModalAlertsService);
 			$translateProvider.translations('en', {
-				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator."
+				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator.",
+				"DATASET_PREFIX":"testtally_",
+				"PROGRAM_PREFIX":"testperpt_"
 			});
 		});
 	});
@@ -217,12 +223,12 @@ describe("templateSelector Directive", function() {
 		});
 
 		describe("prefixes", function() {
-			it("should get the prefixes", function() {
+			fit("should get the prefixes", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
-				expect(scope.$$childHead.dataSetPrefix).toEqual("test_DS")
-				expect(scope.$$childHead.programPrefix).toEqual("test_PROG");
+				expect(scope.$$childHead.dataSetPrefix).toEqual("testtally_")
+				expect(scope.$$childHead.programPrefix).toEqual("testperpt_");
 				
 			});
 		});

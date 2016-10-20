@@ -13,6 +13,6 @@ module.exports = {
   "CUSTOM_ATTRIBUTE_HAS_NO_ID_FIELD": "The specified custom attribute has no id field",
   "APP_LOADING_FAILED": "Could not load the app, Please refresh the page.",
   "SPINNER_LOADING": "Loading...",
-  "tally_":"tally_",
-  "perPt":"perPt_",
+  "DATASET_PREFIX":"tally_",
+  "PROGRAM_PREFIX":"perPt_"
 };

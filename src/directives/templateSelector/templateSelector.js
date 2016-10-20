@@ -7,17 +7,15 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			onSelectTemplate: '&'
 		},
 		link: function($scope, element) {
-			$scope.dataSetPrefix = config.Prefixes.dataSetPrefix;
-			$scope.programPrefix = config.Prefixes.programPrefix;
-
+		
 			var dataSetPrefixTranslater = function() {
-				return CustomAngularTranslateService.getTranslation(config.Prefixes.dataSetPrefix).then(function(prefix) {
+				return CustomAngularTranslateService.getTranslation(config.Prefixes.dataSetPrefix.translationKey).then(function(prefix) {
 					$scope.dataSetPrefix = prefix;
 				});
 			};
 
 			var programPrefixTranslater = function() {
-				return CustomAngularTranslateService.getTranslation(config.Prefixes.programPrefix).then(function(prefix) {
+				return CustomAngularTranslateService.getTranslation(config.Prefixes.programPrefix.translationKey).then(function(prefix) {
 					$scope.programPrefix = prefix;
 				});
 			};
