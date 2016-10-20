@@ -3,7 +3,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTy
 	var column1, column2, column3, lastColumn, maxOptionsPerColumn;
 
 	var getNumberOfRows = function() {
-		return Math.round((config.CodeSheet.availableHeight - config.CodeSheet.heightOfProgramTitle - config.CodeSheet.graceHeight) / config.CodeSheet.rowHeight);
+		return Math.round((config.PageTypes.A4.Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes.A4.Portrait.graceHeight) / config.CodeSheet.rowHeight);
 	};
 	var totalRows = getNumberOfRows();
 	lastColumn = config.CodeSheet.numberOfColumns - 1;

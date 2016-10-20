@@ -15,9 +15,15 @@ describe("Register Content", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
+			PageTypes: {
+				A4: {
+					LandScape: {
+						availableHeight: 100,
+						availableWidth: 270
+					}
+				}
+			},
 			Register: {
-				availableHeight: 100,
-				availableWidth: 270,
 				labelHeight: 10,                 //table header
 				tableHeaderHeight: 10,           //page header
 				dataEntryRowHeight: 20,
@@ -106,7 +112,7 @@ describe("Register Content", function() {
 	});
 
 	it("should be able to identify number of rows it can hold", function() {
-		config.Register.availableHeight = 100;
+		config.PageTypes.A4.LandScape.availableHeight = 100;
 		config.Register.headerHeight = 10;
 		config.Register.labelHeight = 10;
 		config.Register.dataEntryRowHeight = 20;

@@ -5,9 +5,15 @@ describe('RegisterProcessor', function() {
 	var timeout;
 	var p;
 	var config = {
+		PageTypes: {
+			A4: {
+				LandScape: {
+					availableHeight: 175,
+					availableWidth: 270
+				}
+			}
+		},
 		Register: {
-			availableHeight: 175,
-			availableWidth: 270,
 			labelHeight: 10,                 //table header
 			tableHeaderHeight: 10,           //page header
 			dataEntryRowHeight: 9,
@@ -15,7 +21,6 @@ describe('RegisterProcessor', function() {
 			textElementWidth: 50,
 			otherElementWidth: 30
 		},
-
 		OptionSet: {
 			labelPadding: 4,
 			dataElementLabel: 48,
@@ -45,7 +50,7 @@ describe('RegisterProcessor', function() {
 		$rootScope = _$rootScope_;
 		httpMock = $httpBackend;
 		timeout = $timeout;
-		_DataElement = DataElement
+		_DataElement = DataElement;
 		httpMock.expectGET("i18n/en.json").respond(200, {});
 	}));
 

@@ -64,7 +64,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 
 		var sectionHeight = (sectionIndex == 0) ? getHeightForSection(section) + config.DataSet.heightOfDataSetTitle : getHeightForSection(section);
 		var overflow = sectionHeight - page.heightLeft;
-		if(overflow < 0 || overflow < config.DataSet.graceHeight)
+		if(overflow < 0 || overflow < config.PageTypes.A4.Portrait.graceHeight)
 			addSectionToPage(section, sectionHeight);
 		else {
 			var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section);

@@ -1,8 +1,19 @@
 TallySheets.factory("Config", [function() {
 	return {
+		PageTypes: {
+			A4: {
+				Portrait: {
+					availableHeight: 237,
+					availableWidth: 183,
+					graceHeight: 10
+				},
+				LandScape: {
+					availableHeight: 175,
+					availableWidth: 270
+				}
+			}
+		},
 		Register: {
-			availableHeight: 175,
-			availableWidth: 270,
 			labelHeight: 10,                 //table header
 			tableHeaderHeight: 10,           //page header
 			dataEntryRowHeight: 9,
@@ -17,17 +28,10 @@ TallySheets.factory("Config", [function() {
 			heightOfSectionTitle: 7,
 			heightOfDataSetTitle: 10,
 			gapBetweenSections: 5,
-			graceHeight: 10,
-			availableHeight: 237,
-			availableWidth: 183,
 			numberOfCOCColumns: 5
 		},
 		CodeSheet: {
-			availableHeight: 237,
-			availableWidth: 183,
-			graceHeight: 10,
 			heightOfProgramTitle: 10,
-			columnWidth: 50,
 			rowHeight: 6,
 			numberOfColumns: 3
 		},
