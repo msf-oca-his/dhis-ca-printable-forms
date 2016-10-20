@@ -57,7 +57,6 @@ describe("TallySheets ctrl", function() {
 			$provide.value('CoversheetProcessor', mockedProgramProcessor);
 			$provide.value('RegisterProcessor', mockedProgramProcessor);
 			$provide.value('appLoadingFailed', false);
-
 		});
 	});
 

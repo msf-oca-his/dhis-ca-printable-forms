@@ -12,5 +12,7 @@ module.exports = {
   "OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute's options are incorrect. Please contact your system administrator.",
   "CUSTOM_ATTRIBUTE_HAS_NO_ID_FIELD": "The specified custom attribute has no id field",
   "APP_LOADING_FAILED": "Could not load the app, Please refresh the page.",
-  "SPINNER_LOADING": "Loading..."
+  "SPINNER_LOADING": "Loading...",
+  "tally_":"tally_",
+  "perPt":"perPt_",
 };

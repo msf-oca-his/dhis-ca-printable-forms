@@ -28,8 +28,8 @@ TallySheets.factory("Config", [function() {
 			optionsPadding: 12
 		},
 		Prefixes: {
-			dataSetPrefix: "DS_",
-			programPrefix: "PROG_"
+			dataSetPrefix: "tally_",
+			programPrefix: "perPt_"
 		},
 		CustomAttributes: {
 			// printFlagUID: {

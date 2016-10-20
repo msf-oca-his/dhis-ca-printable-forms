@@ -1,6 +1,6 @@
 <span>
     <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" ng-change="changeHandler()" ng-model="selectedTemplate"
-            ng-options="template | addPrefix  for template in templates ">
+            ng-options="template | addPrefix:this  for template in templates ">
       <option value=""><i>{{ 'SELECT_TEMPLATE' | translate }}</i></option>
     </select>
     <span ng-show="!selectorLoaded" class="loading-icon">

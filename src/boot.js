@@ -26,7 +26,26 @@ var initializeD2 = function(ApiUrl) {
 
 window.dhisUrl = determineDhisUrl();
 window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
-initializeD2(ApiUrl)
+
+var getUiLocale = function(){
+	return new Promise(function(resolve){
+		jQuery.ajax({
+			url: ApiUrl + '/userSettings/keyUiLocale/',
+			contentType: 'text/plain',
+			method: 'GET',
+			dataType: 'text',
+		}).done(function(uiLocale) {
+			resolve(uiLocale);
+			TallySheets.value('uiLocale', uiLocale)
+		}).fail(function() {
+			resolve('');
+			TallySheets.value('uiLocale', '')
+		});
+	})
+};
+
+
+Promise.all([initializeD2(ApiUrl), getUiLocale()])
 	.then(bootStrapAngularApp)
 	.catch(function(err) {
 		createD2AngularModule({});
