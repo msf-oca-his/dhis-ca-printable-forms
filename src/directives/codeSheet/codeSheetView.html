@@ -6,8 +6,8 @@
     <td valign="top" ng-repeat="column in columns track by $index">
       <table class="container">
         <tr ng-repeat="codesheetElement in column" ng-class="getClass(codesheetElement)">
-          <td style="height:{{ rowHeight }}mm">{{codesheetElement.code}}</td>
-          <td>{{codesheetElement.label}}</td>
+          <td class="codeSheetCode" style="height:{{ rowHeight }}mm">{{codesheetElement.code}}</td>
+          <td class="codeSheetLabel">{{codesheetElement.label}}</td>
         </tr>
       </table>
     </td>

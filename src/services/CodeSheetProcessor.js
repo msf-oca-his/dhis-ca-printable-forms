@@ -2,10 +2,10 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTy
 	var page, currentPageIndex, currentColumnIndex, pages, codeSheetArray, currentRowIndex;
 	var column1, column2, column3, lastColumn, maxOptionsPerColumn;
 
-	var getNumberOfRows = function() {
+	this.getNumberOfRows = function() {
 		return Math.round((config.PageTypes.A4.Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes.A4.Portrait.graceHeight) / config.CodeSheet.rowHeight);
 	};
-	var totalRows = getNumberOfRows();
+	var totalRows = this.getNumberOfRows();
 	lastColumn = config.CodeSheet.numberOfColumns - 1;
 	maxOptionsPerColumn = totalRows - 3;
 
