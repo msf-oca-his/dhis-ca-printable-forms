@@ -17,7 +17,7 @@ module.exports = function(config) {
 			'../dependencies/bower_components/angular-mocks/angular-mocks.js',
 			'../../custom_app_commons/js/angular-commons/tests/test-utility/*.js',
 			'../tests/test-utility/*.js',
-			'../.temp/!(config).js',
+			'../.temp/!(config|boot|translationsSetup).js',
 			'../tests/!(coverage)/**/*.js',
 		],
 
@@ -53,7 +53,7 @@ module.exports = function(config) {
 
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-		browsers: ['Chrome'],
+		browsers: ['Firefox'],
 
 		// Continuous Integration mode
 		// if true, Karma captures browsers, runs the tests and exits
