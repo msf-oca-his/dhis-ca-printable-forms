@@ -18,10 +18,12 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 
 	if(appLoadingFailed) return;
 
+	
 	var showInlineAlert = function(inlineAlert) {
 		$scope.inlineAlert.message = inlineAlert.message;
 		$scope.inlineAlert.type = inlineAlert.type;
 		$scope.inlineAlert.shown = true;
+		$scope.$apply();
 		setTimeout(function() {
 			$scope.inlineAlert.shown = false;
 			$scope.$apply();
@@ -51,7 +53,6 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 			return Promise.reject(alertObject);
 		}
 	};
-
 	$scope.validationProcess = Promise.resolve({})
 		.then(CustomAttributeValidationService.validate)
 		.catch(onValidationFail);
