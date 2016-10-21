@@ -56,7 +56,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 				.value()
 		}
 		catch(err) {
-			return Promise.reject(new ModalAlert(err.message, ModalAlertTypes.dismissibleError.alertType));
+			return Promise.reject(new ModalAlert(err.message, ModalAlertTypes.dismissibleError));
 		}
 	};
 
@@ -76,7 +76,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	var handleError = function(err) {
 		return CustomAngularTranslateService.getTranslation(err.message)
 			.then(function(translatedMessage) {
-				var type = err.type || ModalAlertTypes.dismissibleError.alertType;
+				var type = err.type || ModalAlertTypes.dismissibleError;
 				return Promise.reject(new ModalAlert(translatedMessage, type));
 			})
 	};
