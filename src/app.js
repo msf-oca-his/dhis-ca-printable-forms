@@ -125,6 +125,11 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 			return ProgramService.getProgram($scope.template.id)
 				.then(function(program) {
 					return $scope.programMode == "COVERSHEET" ? CoversheetProcessor.process(_.cloneDeep(program)) : RegisterProcessor.process(_.cloneDeep(program));
+				}).catch(function(errorObject) {
+					return CustomAngularTranslateService.getTranslation(errorObject.message)
+						.then(function(translatedMessage) {
+						return Promise.reject(new InlineAlert(translatedMessage, InlineAlertTypes.error));
+					});
 				});
 		}
 		else return Promise.resolve([]);

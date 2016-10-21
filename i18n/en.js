@@ -14,5 +14,6 @@ module.exports = {
   "APP_LOADING_FAILED": "Could not load the app, Please refresh the page.",
   "SPINNER_LOADING": "Loading...",
   "DATASET_PREFIX":"tally_",
-  "PROGRAM_PREFIX":"perPt_"
+  "PROGRAM_PREFIX":"perPt_",
+  "service_failed_generic_message":"Something went wrong, please try again"
 };
