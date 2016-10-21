@@ -17,6 +17,18 @@ APP = {
 		js: "src/**/*.js",
 		scss:"src/scss/*.scss"
 	},
+	dependencies: {
+		root: 'dependencies',
+		bower_components: {
+			root: 'dependencies/bower_components',
+			all: 'dependencies/bower_components/**/*.*',
+			bootstrap:{
+				fonts: {
+					all: "dependencies/bower_components/bootstrap/dist/fonts/*.*"
+				}
+			}
+		}
+	},
 	resources: {
 		root: "resources",
 		all: "resources/**/*.*",
@@ -53,7 +65,8 @@ TEMP = {
 	root: ".temp",
 	css:".temp/css",
 	all: ".temp/**/*.*",
-	resources: ".temp/resources"
+	resources: ".temp/resources",
+	fonts: ".temp/fonts"
 
 };
 
@@ -104,9 +117,14 @@ gulp.task(TASKS.cleanTarget, function() {
 });
 
 gulp.task(TASKS.compileScss, function() {
+	gulp.src([APP.dependencies.bower_components.bootstrap.fonts.all])
+		.pipe(gulp.dest(TEMP.fonts));
 	return gulp.src([APP.src.scss])
 		.pipe(sass())
 		.pipe(gulp.dest(TEMP.css))
+		.on('error', function(error) {
+			console.log(error);
+		});
 });
 
 gulp.task(TASKS.copyResourcesToTemp, [], function() {
