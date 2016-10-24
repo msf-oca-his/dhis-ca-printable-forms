@@ -152,9 +152,8 @@ describe("CodeSheet Processor", function() {
 					{code: 1, label: "option1", type: "LABEL"},
 					{code: 2, label: "option2", type: "LABEL"},
 					{code: '', label: '', type: "GAP"}
-				]]
+				], null, null]
 			}];
-
 			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
 			expect(expectedPages[0].columns[0]).toEqual(actualPages[0].columns[0]);
 		});
@@ -164,7 +163,7 @@ describe("CodeSheet Processor", function() {
 
 			for(var i = 0; i < 4; i++) {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
-					id: 1,
+					id: i + 1,
 					displayName: "option1"
 				};
 			}
@@ -185,10 +184,9 @@ describe("CodeSheet Processor", function() {
 
 		it("should repeat data element heading in next column after breaking labels in previous column", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
-
-			for(var i = 0; i < 5; i++) {
+			for(var i = 0; i < 6; i++) {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
-					id: 1,
+					id: i + 1,
 					displayName: "option1"
 				};
 			}
@@ -205,6 +203,7 @@ describe("CodeSheet Processor", function() {
 					[
 						{code: "Code", label: "dataElement", type: "HEADING"},
 						{code: 5, label: "option1", type: "LABEL"},
+						{code: 6, label: "option1", type: "LABEL"},
 						{code: '', label: '', type: "GAP"}
 					], null]
 			}];
@@ -219,7 +218,7 @@ describe("CodeSheet Processor", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options = [{id: 1, displayName: "option1"}];
-				var dataElement = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0]
+				var dataElement = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0];
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
 
 				var expectedPages = [{
@@ -232,6 +231,35 @@ describe("CodeSheet Processor", function() {
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
 							{code: 1, label: "option1", type: "LABEL"},
+							{code: '', label: '', type: "GAP"}
+						], null]
+				}];
+
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns).toEqual(actualPages[0].columns);
+			});
+			it("should add last two options to the new column, if only one option is left to be added in the new column", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
+
+				for(var i = 0; i < 5; i++) {
+					currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
+						id: i + 1,
+						displayName: "option1"
+					};
+				}
+
+				var expectedPages = [{
+					columns: [
+						[
+							{code: "Code", label: "dataElement", type: "HEADING"},
+							{code: 1, label: "option1", type: "LABEL"},
+							{code: 2, label: "option1", type: "LABEL"},
+							{code: 3, label: "option1", type: "LABEL"}
+						],
+						[
+							{code: "Code", label: "dataElement", type: "HEADING"},
+							{code: 4, label: "option1", type: "LABEL"},
+							{code: 5, label: "option1", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						], null]
 				}];
@@ -272,9 +300,9 @@ describe("CodeSheet Processor", function() {
 		it("should get a new page when all columns of previous page are filled", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 
-			for(var i = 0; i < 13; i++) {
+			for(var i = 0; i < 14; i++) {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
-					id: 1,
+					id: i + 1,
 					displayName: "option1"
 				};
 			}
@@ -310,6 +338,7 @@ describe("CodeSheet Processor", function() {
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
 							{code: 13, label: "option1", type: "LABEL"},
+							{code: 14, label: "option1", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						], null, null],
 					programName: "test program"

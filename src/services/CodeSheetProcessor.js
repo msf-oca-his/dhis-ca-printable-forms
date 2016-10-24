@@ -1,13 +1,13 @@
 TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTypes', 'PrintFriendlyUtils', function(config, Page, CodeSheetElementTypes, printFriendlyUtils) {
-	var page, currentPageIndex, currentColumnIndex, pages, codeSheetArray, currentRowIndex;
-	var column1, column2, column3, lastColumn, maxOptionsPerColumn;
+	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
+	var lastColumn, maxOptionsPerColumn;
 
 	this.getNumberOfRows = function() {
 		return Math.round((config.PageTypes.A4.Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes.A4.Portrait.graceHeight) / config.CodeSheet.rowHeight);
 	};
 	var totalRows = this.getNumberOfRows();
 	lastColumn = config.CodeSheet.numberOfColumns - 1;
-	maxOptionsPerColumn = totalRows - 3;
+	maxOptionsPerColumn = totalRows - 2;
 
 	var gotoNextColumn = function() {
 		if(currentColumnIndex == lastColumn)
@@ -25,12 +25,12 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTy
 		currentRowIndex++;
 	};
 
-	var addNewCodeSheetLabel = function(dataElementName, label, code) {
-		if(currentRowIndex >= totalRows) {
+	var addNewCodeSheetLabel = function(dataElement, label, code) {
+		if((currentRowIndex == totalRows - 1) && (label.id == dataElement.options[dataElement.options.length - 2].id) || (currentRowIndex >= totalRows)) {
 			gotoNextColumn();
-			addNewCodeSheetHeading(dataElementName)
+			addNewCodeSheetHeading(dataElement.displayName);
 		}
-		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetLabel(code, label));
+		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetLabel(code, label.displayName));
 		currentRowIndex++;
 	};
 
@@ -48,7 +48,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTy
 			if(dataElement.valueType == 'OPTIONSET') {
 				addNewCodeSheetHeading(dataElement.displayName);
 				_.map(dataElement.options, function(option, index) {
-					addNewCodeSheetLabel(dataElement.displayName, option.displayName, index + 1);
+					addNewCodeSheetLabel(dataElement, option, index + 1);
 				});
 				addNewCodeSheetGap();
 			}
@@ -57,11 +57,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTy
 
 	this.process = function(program) {
 		pages = [];
-		codeSheetArray = [];
 		currentPageIndex = -1;
-		column1 = column2 = column3 = [];
-		currentColumnIndex = 0;
-		currentRowIndex = 0;
 
 		getNewPage = function() {
 			page = new Page('CODESHEET');
