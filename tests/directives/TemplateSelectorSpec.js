@@ -24,8 +24,12 @@ describe("templateSelector Directive", function() {
 		angular.module('d2HeaderBar', []);
 		config = {
 			Prefixes: {
-				dataSetPrefix: "test_DS",
-				programPrefix: "test_PROG_"
+				dataSetPrefix: {
+				translationKey:"DATASET_PREFIX"	
+				},
+				programPrefix:{
+					translationKey:"PROGRAM_PREFIX"
+				}
 			},
 			CustomAttributes: {}
 		};
@@ -41,7 +45,11 @@ describe("templateSelector Directive", function() {
 			$provide.value('ProgramService', programService);
 			$provide.value('CustomAttributeService', customAttributeService);
 			$provide.value('ModalAlertsService', mockedModalAlertsService);
-			$translateProvider.translations('en', {});
+			$translateProvider.translations('en', {
+				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator.",
+				"DATASET_PREFIX":"testtally_",
+				"PROGRAM_PREFIX":"testperpt_"
+			});
 		});
 	});
 
@@ -207,11 +215,22 @@ describe("templateSelector Directive", function() {
 				scope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("ATTRIBUTE_NOT_SET", _ModalAlertTypes.indismissibleError));
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("The specified UID is not set in any template. Please contact your system administrator.", _ModalAlertTypes.indismissibleError));
 						done();
 					});
 				scope.$digest();
 			})
+		});
+
+		describe("prefixes", function() {
+			fit("should get the prefixes", function() {
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$digest();
+				expect(scope.$$childHead.dataSetPrefix).toEqual("testtally_")
+				expect(scope.$$childHead.programPrefix).toEqual("testperpt_");
+				
+			});
 		});
 
 		describe("On selecting a template", function() {

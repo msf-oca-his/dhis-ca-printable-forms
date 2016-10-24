@@ -57,7 +57,6 @@ describe("TallySheets ctrl", function() {
 			$provide.value('CoversheetProcessor', mockedProgramProcessor);
 			$provide.value('RegisterProcessor', mockedProgramProcessor);
 			$provide.value('appLoadingFailed', false);
-
 		});
 	});
 
@@ -104,7 +103,7 @@ describe("TallySheets ctrl", function() {
 			scope.programMode = "COVERSHEET";
 			_$rootScope.$apply();
 			scope.renderTemplates();
-			getPromiseOfDepth(3).then(function() {
+			getPromiseOfDepth(4).then(function() {
 				expect(scope.spinnerShown).toEqual(false);
 				expect(scope.pages).toEqual(expectedPages);
 				done();

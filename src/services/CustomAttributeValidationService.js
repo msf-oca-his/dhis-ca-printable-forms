@@ -1,4 +1,4 @@
-TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlert', 'ModalAlertTypes', 'ModalAlertsService', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlert, ModalAlertTypes, ModalAlertsService) {
+TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlert', 'ModalAlertTypes', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlert, ModalAlertTypes) {
 
 	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
 		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code')
@@ -55,7 +55,9 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 				.map(CustomAttributeService.getCustomAttribute)
 				.value()
 		}
-		catch(err) {return Promise.reject(err);}
+		catch(err) {
+			return Promise.reject(new ModalAlert(err.message, ModalAlertTypes.dismissibleError));
+		}
 	};
 
 	// var validateConfigFile = function() {
@@ -74,17 +76,18 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	var handleError = function(err) {
 		return CustomAngularTranslateService.getTranslation(err.message)
 			.then(function(translatedMessage) {
-				return Promise.reject(new ModalAlert(err.errorSrc + " : " + translatedMessage, err.type));
+				var type = err.type || ModalAlertTypes.dismissibleError;
+				return Promise.reject(new ModalAlert(translatedMessage, type));
 			})
 	};
 
 	this.validate = function() {
-			// validateConfigFile();
-			if(!config.CustomAttributes) return;
-			return Promise.all(getAllCustomAttributes())
-				.then(validateAllAttributes)
-				.catch(function(err) {
-					return handleError(err);
-				})
+		// validateConfigFile();
+		if(!config.CustomAttributes) return;
+		return Promise.all(getAllCustomAttributes())
+			.then(validateAllAttributes)
+			.catch(function(err) {
+				return handleError(err);
+			})
 	}
 }]);

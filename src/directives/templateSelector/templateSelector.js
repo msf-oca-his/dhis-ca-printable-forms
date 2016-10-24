@@ -1,4 +1,4 @@
-TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', 'ModalAlert', 'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config, ModalAlert, ModalAlertTypes, ModalAlertsService, CustomAngularTranslateService) {
+TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', 'ModalAlert', 'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config, ModalAlert, ModalAlertTypes, ModalAlertsService, CustomAngularTranslateService, $q) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
@@ -7,6 +7,26 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			onSelectTemplate: '&'
 		},
 		link: function($scope, element) {
+		
+			var dataSetPrefixTranslater = function() {
+				return CustomAngularTranslateService.getTranslation(config.Prefixes.dataSetPrefix.translationKey).then(function(prefix) {
+					$scope.dataSetPrefix = prefix;
+				});
+			};
+
+			var programPrefixTranslater = function() {
+				return CustomAngularTranslateService.getTranslation(config.Prefixes.programPrefix.translationKey).then(function(prefix) {
+					$scope.programPrefix = prefix;
+				});
+			};
+
+			var getTranslatedPrefixes = function() {
+				dataSetPrefixTranslater();
+				programPrefixTranslater();
+			};
+
+			getTranslatedPrefixes();
+
 			$scope.selectorLoaded = false;
 
 			var refreshBootstrapSelect = function() {
@@ -50,6 +70,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.$apply();
 				refreshBootstrapSelect();
 			};
+
 			//TODO: UX input: How should alerts be handled ?
 			var loadTemplates = function() {
 				$scope.templates = [];
@@ -81,13 +102,13 @@ var getTypeOfTemplate = function(template) {
 		return "PROGRAM";
 };
 
-TallySheets.filter('addPrefix', ['Config', function(config) {  //TODO: find a good name fo this filter...
-	return function(template) {
+TallySheets.filter('addPrefix', [function() {  //TODO: find a good name fo this filter...
+	return function(template, $scope) {
 		var typeOfTemplate = getTypeOfTemplate(template);
 		if(typeOfTemplate == "DATASET")
-			return config.Prefixes.dataSetPrefix + template.displayName;
+			return $scope.dataSetPrefix + template.displayName;
 		if(typeOfTemplate == "PROGRAM")
-			return config.Prefixes.programPrefix + template.displayName;
+			return $scope.programPrefix + template.displayName;
 		else
 			return template;
 	}
