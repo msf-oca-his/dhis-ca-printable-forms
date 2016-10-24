@@ -77,7 +77,8 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		return CustomAngularTranslateService.getTranslation(err.message)
 			.then(function(translatedMessage) {
 				var type = err.type || ModalAlertTypes.dismissibleError;
-				return Promise.reject(new ModalAlert(translatedMessage, type));
+				var message = err.errorSrc ? err.errorSrc + " : " + translatedMessage: translatedMessage;
+				return Promise.reject(new ModalAlert(message, type));
 			})
 	};
 

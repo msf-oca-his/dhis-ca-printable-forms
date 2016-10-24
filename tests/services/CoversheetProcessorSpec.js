@@ -4,17 +4,21 @@ describe("Coversheet Processor", function() {
 	var $rootScope;
 	var p;
 	var config = {
+		PageTypes: {
+			A4: {
+				Portrait: {
+					availableHeight: 237,
+					availableWidth: 183,
+					graceHeight: 10
+				}
+			}
+		},
 		DataSet: {
-			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
 			heightOfDataElementInGeneralDataElement: 9,
 			heightOfSectionTitle: 7,
 			heightOfDataSetTitle: 10,
-			gapBetweenSections: 5,
-			graceHeight: 10,
-			availableHeight: 237,
-			availableWidth: 183,
-			numberOfCOCColumns: 5
+			gapBetweenSections: 5
 		},
 		OptionSet: {
 			labelPadding: 4,
@@ -29,7 +33,7 @@ describe("Coversheet Processor", function() {
 					none: '0',
 					text: '1',
 					list: '2'
-				},
+				}
 			}
 		}
 	};
@@ -46,7 +50,7 @@ describe("Coversheet Processor", function() {
 			p = $q;
 			$rootScope = _$rootScope_;
 			httpMock = $httpBackend;
-			_DataElement = DataElement
+			_DataElement = DataElement;
 			httpMock.expectGET("i18n/en.js").respond(200, {});
 		})
 
@@ -63,8 +67,8 @@ describe("Coversheet Processor", function() {
 			};
 
 			var expectedPages = [{
-				heightLeft: config.DataSet.availableHeight,
-				widthLeft: config.DataSet.availableWidth,
+				heightLeft: config.PageTypes.A4.Portrait.availableHeight,
+				widthLeft: config.PageTypes.A4.Portrait.availableWidth,
 				contents: [{type: 'comments'}],
 				programName: "test program"
 			}];
@@ -254,7 +258,7 @@ describe("Coversheet Processor", function() {
 
 				var expectedRows2 = [];
 				expectedRows2[0] = [];
-				expectedRows2[1] = []
+				expectedRows2[1] = [];
 				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"});
 
 				expectedRows2[1].push({id: 1, name: "option"}, {id: 1, name: "option"});
@@ -396,12 +400,12 @@ describe("Coversheet Processor", function() {
 						name         : "test program",
 						displayName  : "test program",
 						programStages: [{ programStageSections: [] }],
-						type         : "program",
+						type         : "program"
 					};
 
 					var expectedPages = [{
-						heightLeft : config.DataSet.availableHeight,
-						widthLeft  : config.DataSet.availableWidth,
+						heightLeft : config.PageTypes.A4.Portrait.availableHeight,
+						widthLeft  : config.PageTypes.A4.Portrait.availableWidth,
 						contents   : [{ type: 'comments' }],
 						programName: "test program"
 					}];

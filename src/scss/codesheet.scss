@@ -1,0 +1,83 @@
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  /*padding: 5mm;*/
+  /*border: 0.5px #D3D3D3  solid;*/
+  /*border-radius: 5px;*/
+  background: white;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  font-family: inherit;
+}
+
+.programName {
+  text-align:center;
+  border:none;
+  font-size: 6mm;
+  margin-bottom: 5mm;
+}
+
+.subpage {
+  margin: 2mm auto;
+  padding: 2mm;
+  width: 200mm;
+  border: 0.7mm red solid;
+  height: 278mm;
+  page-break-after: always;
+  position: relative;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+.page-number {
+  text-align: right;
+  position: absolute;
+  bottom: 5px;
+  width: 95%;
+}
+
+@media print {
+  html, body {
+    height: 297mm;
+    width: 210mm;
+  }
+
+  .page {
+    margin: 0;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
+  }
+  .subpage{
+    border: none;
+    margin: 8mm;
+  }
+}
+
+.table, th, td {
+   //border: 1px solid grey;
+   //border-style: dashed;
+   //border-bottom-style: dashed;
+   border-width: 0.1mm;
+   padding: 5px;
+   height: 6mm;
+ }
+
+.container {
+  width: 100%;
+  padding: 0px;
+}
+
+.optionHeading {
+  font-weight: 900;
+  font-size: small;
+}
+
+.codeSheetCode {
+  text-align : center;
+}

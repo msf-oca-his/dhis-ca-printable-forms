@@ -10,6 +10,15 @@ describe("DataSetProcessor", function() {
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
 		config = {
+			PageTypes: {
+				A4: {
+					Portrait: {
+						availableHeight: 237,
+						availableWidth: 183,
+						graceHeight: 10
+					}
+				}
+			},
 			DataSet: {
 				heightOfTableHeader: 15,
 				heightOfDataElementInCatCombTable: 12,
@@ -17,9 +26,6 @@ describe("DataSetProcessor", function() {
 				heightOfSectionTitle: 7,
 				heightOfDataSetTitle: 10,
 				gapBetweenSections: 5,
-				graceHeight: 10,
-				availableHeight: 237,
-				availableWidth: 183,
 				numberOfCOCColumns: 5
 			},
 			CustomAttributes: {
@@ -32,11 +38,11 @@ describe("DataSetProcessor", function() {
 					}
 				}
 			}
-		},
-			optionsObject = {
-				123: {id: "123", name: "male", options: {name: "option1"}},
-				12: {id: "12", name: "female", options: {name: "option2"}}
-			};
+		};
+		optionsObject = {
+			123: {id: "123", name: "male", options: {name: "option1"}},
+			12: {id: "12", name: "female", options: {name: "option2"}}
+		};
 
 		var mockedCustomAttribute = {
 			value: "0",
@@ -49,7 +55,7 @@ describe("DataSetProcessor", function() {
 			getCustomAttribute: function() {
 				return Promise.resolve(mockedCustomAttribute);
 			}
-		}
+		};
 		module(function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', mockedCustomAttributeService);
@@ -173,7 +179,7 @@ describe("DataSetProcessor", function() {
 					}],
 					isCatComb: true,
 					isDuplicate: true
-				}
+				};
 
 				var expectedPages = [
 					{

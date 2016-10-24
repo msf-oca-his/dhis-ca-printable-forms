@@ -1,8 +1,19 @@
 TallySheets.factory("Config", [function() {
 	return {
+		PageTypes: {
+			A4: {
+				Portrait: {
+					availableHeight: 237,
+					availableWidth: 183,
+					graceHeight: 10
+				},
+				LandScape: {
+					availableHeight: 175,
+					availableWidth: 270
+				}
+			}
+		},
 		Register: {
-			availableHeight: 175,
-			availableWidth: 270,
 			labelHeight: 10,                 //table header
 			tableHeaderHeight: 10,           //page header
 			dataEntryRowHeight: 9,
@@ -17,10 +28,12 @@ TallySheets.factory("Config", [function() {
 			heightOfSectionTitle: 7,
 			heightOfDataSetTitle: 10,
 			gapBetweenSections: 5,
-			graceHeight: 10,
-			availableHeight: 237,
-			availableWidth: 183,
 			numberOfCOCColumns: 5
+		},
+		CodeSheet: {
+			heightOfProgramTitle: 10,
+			rowHeight: 6,
+			numberOfColumns: 3
 		},
 		OptionSet: {
 			labelPadding: 4,
@@ -38,19 +51,19 @@ TallySheets.factory("Config", [function() {
 			}
 		},
 		CustomAttributes: {
-			// printFlagUID: {
-			// 	id: "F6S3pRyjnSf",
-			// 	associatedWith: ['dataSet', 'program']
-			// },
-			// displayOptionUID: {
-			// 	id: "Fth2lxGOF4M",
-			// 	associatedWith: ['dataElement'],
-			// 	options: {
-			// 		none: '0',
-			// 		text: '1',
-			// 		list: '2'
-			// 	}
-			// }
+			printFlagUID: {
+				id: "F6S3pRyjnSf",
+				associatedWith: ['dataSet', 'program']
+			},
+			displayOptionUID: {
+				id: "Fth2lxGOF4M",
+				associatedWith: ['dataElement'],
+				options: {
+					none: '0',
+					text: '1',
+					list: '2'
+				}
+			}
 		}
 	}
 }]);
