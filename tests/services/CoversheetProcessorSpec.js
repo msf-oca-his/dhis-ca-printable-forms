@@ -13,12 +13,17 @@ describe("Coversheet Processor", function() {
 				}
 			}
 		},
-		DataSet: {
+		Coversheet: {
+			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
 			heightOfDataElementInGeneralDataElement: 9,
 			heightOfSectionTitle: 7,
-			heightOfDataSetTitle: 10,
-			gapBetweenSections: 5
+			heightOfProgramTitle: 10,
+			gapBetweenSections: 5,
+			graceHeight: 10,
+			availableHeight: 237,
+			availableWidth: 183,
+			numberOfCOCColumns: 5
 		},
 		OptionSet: {
 			labelPadding: 4,
@@ -70,6 +75,7 @@ describe("Coversheet Processor", function() {
 				heightLeft: config.PageTypes.A4.Portrait.availableHeight,
 				widthLeft: config.PageTypes.A4.Portrait.availableWidth,
 				contents: [{type: 'comments'}],
+				type: 'COVERSHEET',
 				programName: "test program"
 			}];
 
@@ -236,9 +242,9 @@ describe("Coversheet Processor", function() {
 				assignOptionsToDe(currentTestProgram.programStages[0].programStageSections[0], 76);//75 options will overflow to the new page
 
 				var expectedSection1 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
-				assignOptionsToDe(expectedSection1, 72);
+				assignOptionsToDe(expectedSection1, 69);
 				var expectedRows1 = [];
-				for(var i = 0; i < 24; i++) {
+				for(var i = 0; i < 23; i++) {
 					var j = 0;
 					while(j < 3) {
 						if(j == 0)
@@ -254,14 +260,16 @@ describe("Coversheet Processor", function() {
 				expectedSection1.programStageDataElements[0].displayOption = "2";
 
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
-				assignOptionsToDe(expectedSection2, 4);
+				assignOptionsToDe(expectedSection2, 7);
 
 				var expectedRows2 = [];
 				expectedRows2[0] = [];
 				expectedRows2[1] = [];
-				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[2] = [];
+				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"}, {id: 1, name: "option"});
 
 				expectedRows2[1].push({id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[2].push({id: 1, name: "option"}, {id: 1, name: "option"});
 
 				expectedSection2.programStageDataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
@@ -281,7 +289,7 @@ describe("Coversheet Processor", function() {
 				}];
 				var acutalPages = coversheetProcessor.process(currentTestProgram);
 				expect(expectedPages[1].contents).toEqual(acutalPages[1].contents);
-				// expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
+				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
 			});
 
 			it("should process the program which contains dataElements of type option set and general dataElements", function() {
@@ -392,27 +400,6 @@ describe("Coversheet Processor", function() {
 				var actualPages = coversheetProcessor.process(currentTestProgram);
 				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
 				expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
-			});
-			describe("process program of type coversheet", function() {
-				it("should process the basic program without stage sections to check page width and height", function() {
-					var testProgram = {
-						id           : "123",
-						name         : "test program",
-						displayName  : "test program",
-						programStages: [{ programStageSections: [] }],
-						type         : "program"
-					};
-
-					var expectedPages = [{
-						heightLeft : config.PageTypes.A4.Portrait.availableHeight,
-						widthLeft  : config.PageTypes.A4.Portrait.availableWidth,
-						contents   : [{ type: 'comments' }],
-						programName: "test program"
-					}];
-
-					var actualPages = clone(coversheetProcessor.process(testProgram));
-					expect(expectedPages).toEqual(actualPages);
-				});
 			});
 		});
 	})

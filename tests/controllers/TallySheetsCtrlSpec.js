@@ -1,7 +1,7 @@
 describe("TallySheets ctrl", function() {
 	var $controller;
 	var scope;
-	var defer;
+	var defer, $q, $provide;
 	var _$rootScope;
 	var dataSetService;
 	var mockedDataSetService;
@@ -13,7 +13,12 @@ describe("TallySheets ctrl", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
-
+		module(function(_$provide_) {
+			$provide = _$provide_;
+		});
+		inject(function(_$q_){
+			$q = _$q_;
+		});
 		var mockDataset = "testDataSet";
 		var mockProgram = "testProgram";
 
@@ -21,47 +26,49 @@ describe("TallySheets ctrl", function() {
 
 		mockedDataSetService = {
 			getReferentialDataSet: function() {
-				return Promise.resolve(mockDataset);
+				return $q.when(mockDataset);
 			}
 		};
 		mockedProgramService = {
 			getProgram: function() {
-				return Promise.resolve(mockProgram);
+				return $q.when(mockProgram);
 			}
 		};
 		mockedDataSetProcessor = {
 			process: function() {
+				if(_.isEmpty(arguments[0]))
+					return [];
 				return expectedPages;
 			}
 		};
 
 		mockedProgramProcessor = {
 			process: function() {
+				if(_.isEmpty(arguments[0]))
+					return [];
 				return expectedPages;
 			}
 		};
 
 		mockedValidationService = {
 			validate: function() {
-				return Promise.resolve({});
+				return $q.when({});
 			}
 		};
 
-		module(function($provide) {
-			$provide.value('OptionSetFactory', Promise.resolve({}));
-			$provide.value('DataSetService', mockedDataSetService);
-			$provide.value('DataSetProcessor', mockedDataSetProcessor);
-			$provide.value('ProgramService', mockedProgramService);
-			$provide.value('ProgramProcessor', mockedProgramProcessor);
-			$provide.value('CustomAttributeValidationService',mockedValidationService);
-			$provide.value('CoversheetProcessor', mockedProgramProcessor);
-			$provide.value('RegisterProcessor', mockedProgramProcessor);
-			$provide.value('CodeSheetProcessor', mockedProgramProcessor);
-			$provide.value('appLoadingFailed', false);
-		});
+		$provide.value('OptionSetFactory', $q.when({}));
+		$provide.value('DataSetService', mockedDataSetService);
+		$provide.value('DataSetProcessor', mockedDataSetProcessor);
+		$provide.value('ProgramService', mockedProgramService);
+		$provide.value('ProgramProcessor', mockedProgramProcessor);
+		$provide.value('CustomAttributeValidationService',mockedValidationService);
+		$provide.value('CoversheetProcessor', mockedProgramProcessor);
+		$provide.value('CodeSheetProcessor', mockedProgramProcessor);
+		$provide.value('RegisterProcessor', mockedProgramProcessor);
+		$provide.value('appLoadingFailed', false);
 	});
 
-	beforeEach(inject(function(_$controller_, $rootScope, $q, DataSetService) {
+	beforeEach(inject(function(_$controller_, $rootScope, DataSetService) {
 		_$rootScope = $rootScope;
 		defer = $q.defer();
 		dataSetService = DataSetService;
@@ -74,54 +81,42 @@ describe("TallySheets ctrl", function() {
 	});
 
 	describe("render templates", function() {
-		it("should not render template if it doesn't have template id", function(done) {
-			scope.template= {};
+		it("should not render template if it doesn't have template id", function() {
+			var template = {};
+			scope.templates = [template];
+			scope.selectedTemplatesType = 'DATASET';
 			scope.renderTemplates();
-			Promise.resolve({})
-				.then(function() {
-					expect(scope.spinnerShown).toBe(false);
-					expect(scope.pages).toEqual([]);
-					done();
-				});
+			scope.$apply();
+			expect(scope.spinnerShown).toBe(false);
+			expect(scope.pages).toEqual([]);
 		});
 
-		it("should render the templates if it has template id", function(done) {
-			scope.template.id = 123;
-			scope.template.type = "DATASET";
+		it("should render the templates if it there is a valid template selected", function() {
+			var template = {id: '134'};
+			scope.templates = [template];
+			scope.selectedTemplatesType = 'DATASET';
 			scope.renderTemplates();
-			getPromiseOfDepth(4)
-				.then(function() {
-				expect(scope.spinnerShown).toEqual(false);
-				expect(scope.pages).toEqual(expectedPages);
-				done();
-			});
-			scope.$digest();
+			scope.$apply();
+			expect(scope.spinnerShown).toEqual(false);
+			expect(scope.pages).toEqual(expectedPages);
 		});
 
-		it("should render the programs if it has template id", function(done) {
-			scope.template.id = 123;
-			scope.template.type = "PROGRAM";
+		it("should render the programs if it has template id", function() {
+			scope.templates = [{id:'blah'}]
+			scope.selectedTemplatesType = "PROGRAM";
 			scope.programMode = "COVERSHEET";
-			_$rootScope.$apply();
 			scope.renderTemplates();
-			getPromiseOfDepth(4).then(function() {
-				expect(scope.spinnerShown).toEqual(false);
-				expect(scope.pages).toEqual(expectedPages);
-				done();
-			});
-			scope.$digest();
+			scope.$apply();
+			expect(scope.spinnerShown).toEqual(false);
+			expect(scope.pages).toEqual(expectedPages);
 		});
 
-		it("should not render the template which is neither program nor dataset if it has template id", function(done) {
-			scope.template.id = 123;
-			scope.template.type = "";
+		it("should not render the template which is neither program nor dataset", function() {
+			scope.selectedTemplatesType = "testType";
 			scope.renderTemplates();
-			getPromiseOfDepth(2).then(function() {
-					expect(scope.spinnerShown).toEqual(false);
-					expect(scope.pages).toEqual([]);
-					done();
-				});
-			scope.$digest();
+			scope.$apply();
+			expect(scope.spinnerShown).toEqual(false);
+			expect(scope.pages).toEqual([]);
 		});
 	})
 });

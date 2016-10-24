@@ -1,9 +1,14 @@
-<span>
-    <select id="{{id}}" class="selectpicker hidden-print" data-live-search="true" ng-change="changeHandler()" ng-model="selectedTemplate"
-            ng-options="template | addPrefix:this  for template in templates ">
-      <option value=""><i>{{ 'SELECT_TEMPLATE' | translate }}</i></option>
-    </select>
-    <span ng-show="!selectorLoaded" class="loading-icon">
-        <span class="glyphicon glyphicon-hourglass"></span>
+<span class="hidden-print">
+    <span ng-if="!showMultipleTemplates">
+      <dropdown-list  selected-item="$parent.selectedTemplates[0]" items="templates" placeHolder="{{'SELECT_TEMPLATE' | translate}}" on-select="select()"></dropdown-list>
     </span>
+    <span ng-if="showMultipleTemplates">
+        <span ng-repeat="template in $parent.selectedTemplates track by $index">
+          <dropdown-list  selected-item="$parent.selectedTemplates[$index]" items="dataSetTemplates" placeHolder="{{'SELECT_TEMPLATE' | translate}}" on-select="select()"></dropdown-list>
+          <button ng-click="removeTemplate($index)" class="btn btn-default hidden-print">
+              <span class="glyphicon glyphicon-remove"></span>
+          </button>
+        </span>
+    </span>
+    <button ng-click="addForm()" ng-hide="selectedTemplatesType != 'DATASET'" class="btn btn-success hidden-print">{{ 'ADD_FORM' | translate}}</button>
 </span>

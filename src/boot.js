@@ -24,6 +24,14 @@ var initializeD2 = function(ApiUrl) {
 		.then(createD2AngularModule)
 };
 
+var createDummyD2DependentAngularComponents = function(){
+	createD2AngularModule({});
+	TallySheets.directive('d2HeaderBar', function(){return {}});
+};
+var loadD2UIComponents = function(){
+	require('./d2-ui-components.js');
+};
+window.d2Lib = require("../../custom_app_commons/js/utils/d2-export.js");
 window.dhisUrl = determineDhisUrl();
 window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 
@@ -34,9 +42,12 @@ var getUiLocale = function(){
 			contentType: 'text/plain',
 			method: 'GET',
 			dataType: 'text',
-		}).done(function(uiLocale) {
-			resolve(uiLocale);
-			TallySheets.value('uiLocale', uiLocale)
+		}).done(function(data, statusText, response) {
+			if(response.getResponseHeader('content-type').includes('html') || data == '')
+				TallySheets.value('uiLocale', '');
+			else
+				TallySheets.value('uiLocale', data);
+			resolve();
 		}).fail(function() {
 			resolve('');
 			TallySheets.value('uiLocale', '')
@@ -46,9 +57,10 @@ var getUiLocale = function(){
 
 
 Promise.all([initializeD2(ApiUrl), getUiLocale()])
+	.then(loadD2UIComponents)
 	.then(bootStrapAngularApp)
 	.catch(function(err) {
-		createD2AngularModule({});
+		createDummyD2DependentAngularComponents();
 		bootStrapAngularApp(new Error("d2 failed to load"));
 		console.log(err)
 	});

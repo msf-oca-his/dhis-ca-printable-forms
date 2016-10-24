@@ -29,10 +29,17 @@ describe("CodeSheet Processor", function() {
 				}
 			}
 		};
+		CodeSheetPage = function(){
+			var codeSheetPage = {};
+			codeSheetPage.heightLeft = config.Register.availableHeight - config.Register.headerHeight;
+			codeSheetPage.widthLeft = config.Register.availableWidth;
+			codeSheetPage.type = "CODESHEET";
+			codeSheetPage.columns = new Array(config.CodeSheet.numberOfColumns);
+			return new Page(codeSheetPage)
+		};
 		module(function($provide) {
 			$provide.value('Config', config);
 		});
-
 		inject(function(CodeSheetProcessor, $rootScope) {
 			$scope = $rootScope.$new();
 			codeSheetProcessor = CodeSheetProcessor;
@@ -52,6 +59,8 @@ describe("CodeSheet Processor", function() {
 			heightLeft: config.PageTypes.A4.Portrait.availableHeight,
 			widthLeft: config.PageTypes.A4.Portrait.availableWidth,
 			columns: [[], null, null],
+			contents: [],
+			type: 'CODESHEET',
 			programName: "test program"
 		}];
 
@@ -103,6 +112,8 @@ describe("CodeSheet Processor", function() {
 			};
 
 			var expectedPages = [{
+				contents: [],
+				type: 'CODESHEET',
 				columns: [[
 					{code: "Code", label: "dataElement", type: "HEADING"},
 					{code: 1, label: "option1", type: "LABEL"},
@@ -123,6 +134,8 @@ describe("CodeSheet Processor", function() {
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1].attributeValues.value = config.CustomAttributes.displayOptionUID.options.none;
 
 			var expectedPages = [{
+				contents: [],
+				type: 'CODESHEET',
 				columns: [[
 					{code: "Code", label: "dataElement", type: "HEADING"},
 					{code: 1, label: "option1", type: "LABEL"},
@@ -192,6 +205,8 @@ describe("CodeSheet Processor", function() {
 			}
 
 			var expectedPages = [{
+				contents: [],
+				type: 'CODESHEET',
 				columns: [
 					[
 						{code: "Code", label: "dataElement", type: "HEADING"},
@@ -222,6 +237,8 @@ describe("CodeSheet Processor", function() {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
 
 				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
@@ -249,6 +266,8 @@ describe("CodeSheet Processor", function() {
 				}
 
 				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
@@ -275,6 +294,8 @@ describe("CodeSheet Processor", function() {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
 
 				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
@@ -308,6 +329,8 @@ describe("CodeSheet Processor", function() {
 			}
 			var expectedPages = [
 				{
+					contents: [],
+					type: 'CODESHEET',
 					heightLeft: 50,
 					widthLeft: 183,
 					columns: [[
@@ -332,6 +355,8 @@ describe("CodeSheet Processor", function() {
 					programName: "test program"
 				},
 				{
+					contents: [],
+					type: 'CODESHEET',
 					heightLeft: 50,
 					widthLeft: 183,
 					columns: [

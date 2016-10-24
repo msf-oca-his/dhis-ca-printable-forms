@@ -14,3 +14,4 @@ require("./directives/content-directives/sectionTitle/sectionTitle.js");
 require("./directives/content-directives/registerContent/registerContent.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/directives/modal-alert/modalAlert.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/directives/inline-alert/inlineAlert.js");
+require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/directives/dropdown-list/dropdownList.js");

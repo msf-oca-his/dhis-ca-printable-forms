@@ -1,4 +1,4 @@
-TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Page', 'Content', 'PrintFriendlyUtils', function(CustomAttributeService, config, Page, Content, printFriendlyUtils) {
+TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'DataSetPage', 'Content', 'PrintFriendlyUtils', function(CustomAttributeService, config, DataSetPage, Content, printFriendlyUtils) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -20,28 +20,30 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 
 			var addSectionToPage = function(section, height) {
 				var isFirstSection = Number.isInteger(sectionIndex) ? ( sectionIndex == 0 ) : sectionIndex;
-				if(isFirstSection == true && !section.isDuplicate) page.contents.push({type: 'dataSetName', name: dataSet.name});
+				if(_.isEmpty(page.contents)) page.contents.push({type: 'dataSetName', name: dataSet.name});
 				page.contents.push({type: 'section', section: section});
 				page.heightLeft = page.heightLeft - height;
 			};
 
 			var addSectionToNewPage = function(section, height, isFirstSectionInDataSet) {
-				page = new Page("DATASET");
-				page.datasetName = dataSet.displayName;
+				page = new DataSetPage();
 				pages[++currentPageIndex] = page;
 				section.isDuplicate = false;
 				processSection(section, isFirstSectionInDataSet);
 			};
-
+			var getNumberOfOptionsThatCanFit = function(section){
+				var overFlow = sectionHeight - page.heightLeft;
+				return section.dataElements[0].options.length - Math.ceil(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
+			};
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
 				if(section.isCatComb) {
-					var numberOfOrphanDataElements = Math.floor(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
+					var numberOfOrphanDataElements = Math.ceil(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
 					var numberOfDataElements = section.dataElements.length;
 					return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
 				}
 				else if(section.isOptionSet)
-					return section.dataElements[0].options.length - Math.round(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
+					return 0;
 				else
 					return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.heightOfDataElementInGeneralDataElement));
 			};
@@ -58,9 +60,14 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 				}
 				else if(section.isOptionSet) {
 					var newSection = _.cloneDeep(section);
-					if(numberOfElementsThatCanFit % 3 > 0)
-						numberOfElementsThatCanFit = numberOfElementsThatCanFit + (3 - numberOfElementsThatCanFit % 3);
-					newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfElementsThatCanFit);
+					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
+					if(numberOfOptionsThatCanFit <= 3){
+						addSectionToNewPage(section, getHeightForSection(section), false);
+						return;
+					}
+					if(numberOfOptionsThatCanFit % 3 > 0)
+						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (3 - numberOfOptionsThatCanFit % 3);
+					newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfOptionsThatCanFit);
 					printFriendlyUtils.createOptionSetSection(section, "dataElements");
 					printFriendlyUtils.createOptionSetSection(newSection, "dataElements");
 					newSection.isDuplicate = true;
@@ -80,15 +87,17 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 				}
 			};
 
-			var sectionHeight = (sectionIndex == 0) ? getHeightForSection(section) + config.DataSet.heightOfDataSetTitle : getHeightForSection(section);
+			var sectionHeight = (sectionIndex == 0 || (page.contents.length == 0)) ? getHeightForSection(section) + config.DataSet.heightOfDataSetTitle : getHeightForSection(section);
 			var overflow = sectionHeight - page.heightLeft;
-			if(overflow < 0 || overflow < config.PageTypes.A4.Portrait.graceHeight)
+			if(overflow < 0 )
 				addSectionToPage(section, sectionHeight);
 			else {
 				var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)
 				if(numberOfElementsThatCanFit == section.dataElements.length){
 					addSectionToPage(section, sectionHeight);}
 				else if(numberOfElementsThatCanFit > 1)
+					breakAndAddSection(section, numberOfElementsThatCanFit);
+				else if (section.isOptionSet)
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
 					var isFirstSectionInDataSet = sectionIndex == 0;
@@ -98,7 +107,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 		};
 
 		if(!pages[currentPageIndex]) {
-			page = new Page("DATASET");
+			page = new DataSetPage();
 			page.datasetName = dataSet.displayName;
 			pages[currentPageIndex] = page;
 		}
@@ -109,10 +118,11 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Pa
 		dataSet.isPrintFriendlyProcessed = true;
 	};
 
-	this.process = function(dataSet) {
+	this.process = function(dataSets) {
 		pages = [];
 		currentPageIndex = 0;
-		_.map([dataSet], function(dataSet) {
+		_.map(dataSets, function(dataSet) {
+			dataSet = _.cloneDeep(dataSet);
 			for(var i = 0; i < dataSet.sections.length; i++) {
 				if(dataSet.sections[i].isCatComb) {
 					printFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, i, "dataElements");

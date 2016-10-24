@@ -15,5 +15,6 @@ module.exports = {
   "SPINNER_LOADING": "Loading...",
   "DATASET_PREFIX":"tally_",
   "PROGRAM_PREFIX":"perPt_",
-  "service_failed_generic_message":"Something went wrong, please try again"
+  "service_failed_generic_message":"Something went wrong, please try again",
+	"ADD_FORM": "Add form"
 };

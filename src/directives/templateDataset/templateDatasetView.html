@@ -1,5 +1,4 @@
 <link href="css/dataset.css" rel="stylesheet" type="text/css">
-<div class="datasetName">{{datasetName}}</div>
     <table class="header">
     <tr>
         <td class="headerLabel">
@@ -23,7 +22,7 @@
     </table>
 
 <div ng-repeat="content in contents">
-
+    <div ng-if="content.type=='dataSetName'" class="datasetName">{{content.name}}</div>
     <div ng-if="content.type == 'section' && content.section.isCatComb " class="section">
        <section-title content="content"></section-title>
         <category-combo content="content"></category-combo>

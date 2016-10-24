@@ -1,23 +1,19 @@
 <div class="subpage">
-  <template-dataset ng-if="type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></template-dataset>
+  <template-dataset ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></template-dataset>
 
-  <div ng-if="programMode == 'COVERSHEET'">
-    <template-coversheet contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-coversheet>
-  </div>
+  <template-coversheet ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-coversheet>
 
-  <div ng-if="programMode == 'REGISTER'">
-    <template-register contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-register>
-  </div>
+  <template-register ng-if="page.type == 'REGISTER'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-register>
 
-  <div ng-if="programMode == 'CODESHEET'">
+  <div ng-if="page.type == 'CODESHEET'">
     <code-sheet columns="page.columns" program-name="page.programName"></code-sheet>
   </div>
 
 
-  <div class="page-number" ng-if="programMode!='REGISTER'">
+  <div class="page-number" ng-if="page.type!='REGISTER'">
     Page {{pageNumber}} of {{totalPages}}
   </div>
-  <div class="page-number" ng-if="programMode=='REGISTER'">
+  <div class="page-number" ng-if="page.type=='REGISTER'">
     Part {{pageNumber}} of {{totalPages}}
   </div>
 

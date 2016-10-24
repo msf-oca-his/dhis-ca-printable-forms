@@ -1,6 +1,6 @@
 describe("templateSelector Directive", function() {
 	var $controller;
-	var queryDeferred;
+	var queryDeferred, $q, $provide;
 	var scope;
 	var dataSetService = {};
 	var programService = {};
@@ -25,7 +25,7 @@ describe("templateSelector Directive", function() {
 		config = {
 			Prefixes: {
 				dataSetPrefix: {
-				translationKey:"DATASET_PREFIX"	
+				translationKey:"DATASET_PREFIX"
 				},
 				programPrefix:{
 					translationKey:"PROGRAM_PREFIX"
@@ -38,26 +38,18 @@ describe("templateSelector Directive", function() {
 			showModalAlert: function() {}
 		};
 
-		module("TallySheets", function($provide, $translateProvider) {
-			$provide.value('Config', config);
-			$provide.value('d2', d2);
-			$provide.value('DataSetService', dataSetService);
-			$provide.value('ProgramService', programService);
-			$provide.value('CustomAttributeService', customAttributeService);
-			$provide.value('ModalAlertsService', mockedModalAlertsService);
-			$translateProvider.translations('en', {
-				"ATTRIBUTE_NOT_SET": "The specified UID is not set in any template. Please contact your system administrator.",
-				"DATASET_PREFIX":"testtally_",
-				"PROGRAM_PREFIX":"testperpt_"
-			});
+		module("TallySheets", function(_$provide_, $translateProvider) {
+			$translateProvider.translations('en', {});
+			$provide = _$provide_;
 		});
+
 	});
 
-	beforeEach(inject(function(_$controller_, $q, $rootScope, $httpBackend, $window, _$timeout_, $compile, DataSet, Program, CustomAttribute, ModalAlert, ModalAlertTypes) {
+	beforeEach(inject(function(_$controller_, _$q_, $rootScope, $httpBackend, $window, _$timeout_, $compile, DataSet, Program, CustomAttribute, ModalAlert, ModalAlertTypes) {
 		_$rootScope = $rootScope;
 		$timeout = _$timeout_;
 		$controller = _$controller_;
-		queryDeferred = $q.defer();
+		queryDeferred = _$q_.defer();
 		scope = _$rootScope.$new();
 		httpMock = $httpBackend;
 		window = $window;
@@ -65,9 +57,16 @@ describe("templateSelector Directive", function() {
 		httpMock.expectGET("i18n/en.js").respond(200, {});
 		dataSet = DataSet;
 		program = Program;
+		$q = _$q_;
 		customAttribute = CustomAttribute;
 		_ModalAlert = ModalAlert;
 		_ModalAlertTypes = ModalAlertTypes;
+		$provide.value('Config', config);
+		$provide.value('d2', d2);
+		$provide.value('DataSetService', dataSetService);
+		$provide.value('ProgramService', programService);
+		$provide.value('CustomAttributeService', customAttributeService);
+		$provide.value('ModalAlertsService', mockedModalAlertsService);
 		datasets = [
 			new dataSet({
 				id: 1,
@@ -138,38 +137,35 @@ describe("templateSelector Directive", function() {
 	describe("template controller", function() {
 		beforeEach(function() {
 			dataSetService.getAllDataSets = function() {
-				return Promise.resolve(datasets);
+				return $q.when(datasets);
 			};
 			programService.getAllPrograms = function() {
-				return Promise.resolve(programs);
+				return $q.when(programs);
 			};
 			customAttributeService.getAllCustomAttributes = function() {
-				return Promise.resolve(customAttributes)
+				return $q.when(customAttributes)
 			};
 			customAttributeService.getCustomAttribute = function() {
-				return Promise.resolve(customAttributes[0])
+				return $q.when(customAttributes[0])
 			};
 
 			scope.testRenderDataSets = jasmine.createSpy('testSpy');
 			scope.testTemplate = {};
-			scope.validationProcess = Promise.resolve({showAllTemplates: true})
+			scope.validationProcess = $q.when({showAllTemplates: true})
 		});
 
 		describe("loading templates", function() {
-			it("should load all the templates when custom attribute is not present in the config", function(done) {
-				scope.validationResult = Promise.resolve({});
+			it("should load all the templates when custom attribute is not present in the config", function() {
+				scope.validationResult = $q.when({});
 				config.CustomAttributes = {};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
-				getPromiseOfDepth(3).then(function() {
-					expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
-					done();
-				});
-				scope.$digest();
+				scope.$apply();
+				expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
 			});
 
 			it("should load only printable templates", function(done) {
-				scope.validationResult = Promise.resolve({});
+				scope.validationResult = $q.when({});
 				config.CustomAttributes.printFlagUID = {id: '1'};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
@@ -186,7 +182,7 @@ describe("templateSelector Directive", function() {
 				config.CustomAttributes.printFlagUID = {id: "1"};
 				datasets[0].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
-				scope.validationResult = Promise.resolve({});
+				scope.validationResult = $q.when({});
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
@@ -204,7 +200,7 @@ describe("templateSelector Directive", function() {
 
 			it("should show an alert when printable attribute is not set in any template ", function(done) {
 				config.CustomAttributes.printFlagUID = {id: "1"};
-				scope.validationResult = Promise.resolve({});
+				scope.validationResult = $q.when({});
 				datasets[0].attributeValues[0].value = "false";
 				datasets[1].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
@@ -215,22 +211,21 @@ describe("templateSelector Directive", function() {
 				scope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("The specified UID is not set in any template. Please contact your system administrator.", _ModalAlertTypes.indismissibleError));
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("ATTRIBUTE_NOT_SET", _ModalAlertTypes.indismissibleError));
 						done();
 					});
 				scope.$digest();
 			})
 		});
 
-		describe("prefixes", function() {
-			it("should get the prefixes", function() {
+		describe("when template is dataset", function() {
+			it("should prefix templates with appropriate prefix", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
-				scope.$digest();
-				expect(scope.$$childHead.dataSetPrefix).toEqual("testtally_")
-				expect(scope.$$childHead.programPrefix).toEqual("testperpt_");
-				
-			});
+				scope.$apply();
+				expect(scope.$$childHead.dataSetTemplates[0].displayName.includes("DATASET_PREFIX")).toEqual(true)
+				expect(scope.$$childHead.programTemplates[0].displayName.includes("PROGRAM_PREFIX")).toEqual(true)
+			})
 		});
 
 		describe("On selecting a template", function() {
@@ -238,19 +233,19 @@ describe("templateSelector Directive", function() {
 			xit("should show the hour glass icon until templates are loaded", function() {})
 			xit("should remove the hour glass icon after templates are loaded", function() {})
 
-			it("should call onSelectTemplate with selected templates", function(done) {
-				elements = angular.element('<template-selector on-select-template= "testRenderDataSets(selectedTemplate)" load-after="validationProcess"></template-selector>');
+			it("should call onChange with selected templates", function(done) {
+				scope.selectedTemplatesType = 'testType';
+				elements = angular.element('<template-selector selected-templates-type="testType" on-change="testRenderDataSets(selectedTemplates)" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
-				scope.$digest();
+				scope.$apply();
 				var selectElement = elements[0].querySelector('select')
-				getPromiseOfDepth(3)
-					.then(function() {
-						selectElement.selectedIndex = 3;
-						selectElement.dispatchEvent(new Event('change'));
-						_$rootScope.$digest();
-						expect(scope.testRenderDataSets).toHaveBeenCalledWith(programs[0]);
-						done();
-					})
+				selectElement.selectedIndex = 3;
+				selectElement.dispatchEvent(new Event('change'));
+				scope.$apply();
+				setTimeout(function(){
+					expect(scope.testRenderDataSets).toHaveBeenCalledWith([programs[0]]);
+					done();
+				}, 1);
 			});
 
 		})

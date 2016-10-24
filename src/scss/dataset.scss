@@ -1,5 +1,5 @@
 .section{
-    margin-bottom: 5mm;
+    margin-bottom: 3mm;
 }
 
 .page {
@@ -10,7 +10,6 @@
     /*border-radius: 5px;*/
     background: white;
     box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
-    font-family: inherit;
 }
 
 .subpage {
@@ -84,14 +83,14 @@
 }
 .header{
     font-weight: 600;
-    font-size: 4mm;
-    margin-bottom: 8mm
+    font-size: 3.8mm;
+    margin-bottom: 5mm
 }
 .datasetName {
-    text-align:center;
     border:none;
-    font-size: 6mm;
-    margin-bottom: 5mm;
+    font-size: 3.5mm;
+    font-weight: 700;
+    height: 5.5mm;
 }
 
 table {
@@ -103,7 +102,9 @@ td {
 }
 
 .sectionName {
-    font-size: 4mm;
+  font-size: 3mm;
+  height: 5mm;
+  font-weight: 600;
 }
 @page {
     size: A4;

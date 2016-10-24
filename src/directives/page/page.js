@@ -5,9 +5,7 @@ TallySheets.directive('page', function() {
 		scope: {
 			page: '=',
 			pageNumber: '=',
-			totalPages: '=',
-			type: '=',
-			programMode: '='
+			totalPages: '='
 		}
 	};
 });

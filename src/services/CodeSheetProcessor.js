@@ -1,4 +1,4 @@
-TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTypes', 'PrintFriendlyUtils', function(config, Page, CodeSheetElementTypes, printFriendlyUtils) {
+TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElementTypes', 'PrintFriendlyUtils', function(config, CodeSheetPage, CodeSheetElementTypes, printFriendlyUtils) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
 
@@ -60,7 +60,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'Page', 'CodeSheetElementTy
 		currentPageIndex = -1;
 
 		getNewPage = function() {
-			page = new Page('CODESHEET');
+			page = new CodeSheetPage();
 			page.programName = program.displayName;
 			pages[++currentPageIndex] = page;
 			currentColumnIndex = 0;

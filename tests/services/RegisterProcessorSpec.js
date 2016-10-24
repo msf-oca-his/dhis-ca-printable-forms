@@ -74,6 +74,7 @@ describe('RegisterProcessor', function() {
 		var expectedPages = [{
 			heightLeft: 150,
 			widthLeft: 220,
+			type: 'REGISTER',
 			contents: [{
 				data: [
 					new _DataElement({displayName: 'Comments', type: 'TEXT'})],

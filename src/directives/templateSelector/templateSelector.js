@@ -1,13 +1,19 @@
-TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate', 'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', 'ModalAlert', 'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService, CustomAttributeService, config, ModalAlert, ModalAlertTypes, ModalAlertsService, CustomAngularTranslateService, $q) {
+TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate',
+	'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', 'ModalAlert',
+	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q',
+	function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService,
+	         CustomAttributeService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
+	         CustomAngularTranslateService, $q) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
 		scope: {
 			loadAfter: '=',
-			onSelectTemplate: '&'
+			onChange: '&',
+			selectedTemplatesType: '='
 		},
 		link: function($scope, element) {
-		
+
 			var dataSetPrefixTranslater = function() {
 				return CustomAngularTranslateService.getTranslation(config.Prefixes.dataSetPrefix.translationKey).then(function(prefix) {
 					$scope.dataSetPrefix = prefix;
@@ -28,10 +34,16 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			getTranslatedPrefixes();
 
 			$scope.selectorLoaded = false;
+			$scope.removeTemplate = function(index){
+				$scope.selectedTemplates.splice(index, 1);
+				if($scope.selectedTemplates.length == 1)
+					$scope.showMultipleTemplates = false;
+				setTimeout(handleUpdate, 1);
+			};
 
-			var refreshBootstrapSelect = function() {
-				$(element).find('.selectpicker').selectpicker('refresh');
-				$(element).find('.selectpicker').selectpicker('render');
+			$scope.addForm = function() {
+				$scope.showMultipleTemplates = true;
+				$scope.selectedTemplates.push("");
 			};
 
 			var getPrintableAttribute = function(attributeValues) {
@@ -58,17 +70,24 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				return false;
 			};
 
-			var getAllTemplates = function() {
-				return Promise.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
-					.then(function(arrayOfTemplates) {
-						return _.flatten(arrayOfTemplates);
-					});
+			var addDataSetPrefix = function(dataSet){
+				dataSet.displayName = $scope.dataSetPrefix + dataSet.displayName;
+				return dataSet;
 			};
 
-			var refreshElement = function() {
-				$scope.selectorLoaded = true;
-				$scope.$apply();
-				refreshBootstrapSelect();
+			var addProgramPrefix = function(program){
+				program.displayName = $scope.programPrefix + program.displayName;
+				return program;
+			};
+			var getAllTemplates = function() {
+				return $q.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+					.then(function(arrayOfTemplates) {
+						var dataSetTemplates = config.CustomAttributes.printFlagUID ? _.filter(arrayOfTemplates[0], isPrintableTemplate) : arrayOfTemplates[0];
+						var programTemplates = config.CustomAttributes.printFlagUID ? _.filter(arrayOfTemplates[1], isPrintableTemplate) : arrayOfTemplates[1];
+						$scope.dataSetTemplates = _.map(dataSetTemplates, addDataSetPrefix);
+						$scope.programTemplates = _.map(programTemplates, addProgramPrefix);
+						return _.flatten([$scope.dataSetTemplates, $scope.programTemplates]);
+					});
 			};
 
 			//TODO: UX input: How should alerts be handled ?
@@ -76,40 +95,39 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.templates = [];
 				getAllTemplates()
 					.then(function(templates) {
-						$scope.templates = config.CustomAttributes.printFlagUID ? _.filter(templates, isPrintableTemplate) : templates;
+						$scope.templates = templates;
 						alertForEmptyTemplates();
-						refreshElement();
 					})
-
 			};
 
-			$scope.changeHandler = function() {
-				if($scope.selectedTemplate == null) return;
-				$scope.selectedTemplate.type = getTypeOfTemplate($scope.selectedTemplate);
-				$scope.onSelectTemplate({selectedTemplate: $scope.selectedTemplate});
+			var handleUpdate = function(){
+				if(!$scope.onChange) return;
+				if(!$scope.showMultipleTemplates)
+					$scope.selectedTemplatesType = getTypeOfTemplate($scope.selectedTemplates[0]);
+				$scope.$apply();
+				$scope.onChange({selectedTemplates: $scope.selectedTemplates});
 			};
+
+			$scope.select = function() {
+				handleUpdate();
+			};
+
 			$scope.loadAfter
 				.then(loadTemplates)
 				.catch(function() {});
+			$scope.showMultipleTemplates = false;
+			$scope.selectedTemplates = [""];
 		}
+
 	};
 }]);
 
+
 var getTypeOfTemplate = function(template) {
+	if(_.isEmpty(template))
+		return;
 	if(template.constructor.name == "DataSet")
 		return "DATASET";
 	else if(template.constructor.name == "Program")
 		return "PROGRAM";
 };
-
-TallySheets.filter('addPrefix', [function() {  //TODO: find a good name fo this filter...
-	return function(template, $scope) {
-		var typeOfTemplate = getTypeOfTemplate(template);
-		if(typeOfTemplate == "DATASET")
-			return $scope.dataSetPrefix + template.displayName;
-		if(typeOfTemplate == "PROGRAM")
-			return $scope.programPrefix + template.displayName;
-		else
-			return template;
-	}
-}]);

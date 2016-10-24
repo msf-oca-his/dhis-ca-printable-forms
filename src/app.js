@@ -6,10 +6,16 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor", "RegisterProcessor", "CodeSheetProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor, CodeSheetProcessor, CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, InlineAlert, InlineAlertTypes, CustomAngularTranslateService) {
+TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor",
+	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
+	'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', "CodeSheetProcessor",
+	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
+	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
+	         InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
+	$scope.templatesType = '';
 	$scope.inlineAlert = {
 		message:'',
 		type:'',
@@ -22,13 +28,16 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		$scope.inlineAlert.message = inlineAlert.message;
 		$scope.inlineAlert.type = inlineAlert.type;
 		$scope.inlineAlert.shown = true;
-		$scope.$apply();
 		setTimeout(function() {
 			$scope.inlineAlert.shown = false;
 			$scope.$apply();
 		}, 5000);
 	};
-
+	var throwError = function(message, type){
+		return CustomAngularTranslateService.getTranslation(message).then(function(translatedMessage) {
+			return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, type));
+		})
+	};
 	var handleError = function(alertObject) {
 		if(alertObject.constructor.name == 'ModalAlert')
 			ModalAlertsService.showModalAlert(alertObject);
@@ -36,11 +45,9 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 			showInlineAlert(alertObject);
 		else{
 			console.log(alertObject); //must have console
-			return CustomAngularTranslateService.getTranslation('unexpected_error').then(function(translatedMessage) {
-				return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.dismissibleError));
-			})
+			return throwError('unexpected_error', ModalAlertTypes.dismissibleError);
 		}
-		return Promise.reject();
+		return $q.reject();
 	};
 
 	var onValidationFail = function(alertObject) {
@@ -49,15 +56,16 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		}
 		else{
 			handleError(alertObject);
-			return Promise.reject(alertObject);
+			return $q.reject(alertObject);
 		}
 	};
-	$scope.validationProcess = Promise.resolve({})
+
+	$scope.validationProcess = $q.when({})
 		.then(CustomAttributeValidationService.validate)
 		.catch(onValidationFail);
 
 	$scope.dsId = 1;
-	$scope.template = {};
+	$scope.templates = [];
 	$scope.pages = [];
 	$scope.exportToTable = function(tableId) {
 		var uri      = 'data:application/vnd.ms-excel;base64,'
@@ -101,55 +109,56 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 
 	};
 
-	// Initialize the app with one dataSet selector
-	var loadAndProcessSelectedTemplate = function() {
+	var processDataSets = function(){
 		$scope.spinnerShown = true;
-		if($scope.template.type == "DATASET") {
-			$scope.programMode = null;
-			return Promise.resolve($scope.template.id)
-				.then(DataSetService.getReferentialDataSet)
-				.then(DataSetProcessor.process, function() {
-					return CustomAngularTranslateService.getTranslation('DOWNLOAD_DATASETS_FAILED')
-						.then(function(translatedMessage) {
-							return Promise.reject(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
-						})
-				})
-				.catch(function(){
-					return CustomAngularTranslateService.getTranslation('PROCESS_DATASETS_FAILED')
-						.then(function(translatedMessage) {
-							return Promise.reject(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
-						})
-				})
-		}
-		else if($scope.template.type == "PROGRAM" && $scope.programMode) {
-			return ProgramService.getProgram($scope.template.id)
-				.then(function(program) {
-					switch($scope.programMode) {
-						case "COVERSHEET" : return CoversheetProcessor.process(_.cloneDeep(program)); break;
-						case "REGISTER": return RegisterProcessor.process(_.cloneDeep(program)); break;
-						case "CODESHEET": return  CodeSheetProcessor.process(_.cloneDeep(program)); break;
-					}
-				}).catch(function(errorObject) {
-					return CustomAngularTranslateService.getTranslation(errorObject.message)
-						.then(function(translatedMessage) {
-						return Promise.reject(new InlineAlert(translatedMessage, InlineAlertTypes.error));
-					});
-				});
-		}
-		else return Promise.resolve([]);
+		$scope.programMode = null;
+		return $q.all(_($scope.templates)
+			              .map('id')
+			              .filter(_.negate(_.isEmpty))
+			              .map(DataSetService.getReferentialDataSet)
+			              .value())
+						.then(DataSetProcessor.process)
 	};
+	var processPrograms = function(){
+		if($scope.programMode == null)
+			return;
+		$scope.spinnerShown = true;
+		return $q.all(_($scope.templates)
+			       .map('id')
+             .filter(_.negate(_.isEmpty))
+             .map(ProgramService.getProgram)
+             .value())
+						.then(_.cloneDeep)
+						.then(function(programs){
+							switch($scope.programMode) {
+								case "COVERSHEET" : return CoversheetProcessor.process(_.cloneDeep(programs[0])); break;
+								case "REGISTER": return RegisterProcessor.process(_.cloneDeep(programs[0])); break;
+								case "CODESHEET": return  CodeSheetProcessor.process(_.cloneDeep(programs[0])); break;
+							}
+						})
+	};
+
 	var addProcessedPagesToDOM = function(pages) {
 		$scope.pages = pages;
 		$scope.spinnerShown = false;
-		$scope.$apply();
+		setTimeout(function(){
+			$scope.$apply();
+		},1)
 	};
 
-	$scope.renderTemplates = function(template) {
+	var processTemplates = function() {
+		if($scope.selectedTemplatesType == 'DATASET')
+			return $q.when().then(processDataSets);
+		else if($scope.selectedTemplatesType == 'PROGRAM')
+			return $q.when().then(processPrograms);
+		else return $q.when([]);
+	};
+
+	$scope.renderTemplates = function(templates) {
 		$scope.pages = [];
-		$scope.template = template ? template : $scope.template;
-		if(!$scope.template.id) return;
-		Promise.resolve()
-			.then(loadAndProcessSelectedTemplate)
+		$scope.templates = templates ? templates : $scope.templates;
+		$q.when()
+			.then(processTemplates)
 			.then(addProcessedPagesToDOM)
 			.catch(handleError);
 	};

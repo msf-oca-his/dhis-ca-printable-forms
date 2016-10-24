@@ -5,7 +5,7 @@ describe("DataSetProcessor", function() {
 	var timeout;
 	var p;
 	var config;
-	var _Page;
+	var DataSetPage;
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
@@ -21,6 +21,8 @@ describe("DataSetProcessor", function() {
 			},
 			DataSet: {
 				heightOfTableHeader: 15,
+				availableHeight: 237,
+				availableWidth: 183,
 				heightOfDataElementInCatCombTable: 12,
 				heightOfDataElementInGeneralDataElement: 9,
 				heightOfSectionTitle: 7,
@@ -66,13 +68,13 @@ describe("DataSetProcessor", function() {
 		});
 	});
 
-	beforeEach(inject(function(DataSetProcessor, $httpBackend, $q, _$rootScope_, $timeout, Page) {
+	beforeEach(inject(function(DataSetProcessor, $httpBackend, $q, _$rootScope_, $timeout, _DataSetPage_) {
 		dataSetProcessor = DataSetProcessor;
 		p = $q;
 		$rootScope = _$rootScope_;
 		httpMock = $httpBackend;
+		DataSetPage = _DataSetPage_;
 		timeout = $timeout;
-		_Page = Page;
 		httpMock.expectGET("i18n/en.js").respond(200, {});
 	}));
 
@@ -86,43 +88,46 @@ describe("DataSetProcessor", function() {
 				type: "dataset"
 			};
 
-			var expectedPage = new _Page();
-			_.assignIn(expectedPage, {contents: [], datasetName: "test dataset"});
+			var expectedPage = new DataSetPage();
+			_.assignIn(expectedPage, {contents: [], datasetName: "test dataset", type: 'DATASET'});
 			var expectedPages = [expectedPage];
-			var actualPages = dataSetProcessor.process(testDataSet);
+			var actualPages = dataSetProcessor.process([testDataSet]);
 			expect(expectedPages).toEqual(actualPages);
 		});
 
 		describe("sections with Only CatCombs", function() {
-			var testDataSet = {
-				id: "123",
-				name: "test dataset",
-				displayName: "test dataset",
-				sections: [{
-					name: "section",
-					id: "134",
-					dataElements: [{
-						name: "dataElement",
-						id: "1234",
-						valueType: "TEXT",
-						categoryCombo: {
-							id: "154",
-							categoryOptionCombos: ["female<br><12", "male<br><10"],
-							name: "catcomb"
-						}
+			var testDataSet;
+			beforeEach(function(){
+				testDataSet = {
+					id: "123",
+					name: "test dataset",
+					displayName: "test dataset",
+					sections: [{
+						name: "section",
+						id: "134",
+						dataElements: [{
+							name: "dataElement",
+							id: "1234",
+							valueType: "TEXT",
+							categoryCombo: {
+								id: "154",
+								categoryOptionCombos: ["female<br><12", "male<br><10"],
+								name: "catcomb"
+							}
+						}],
+						isCatComb: true
 					}],
-					isCatComb: true
-				}],
-				type: "dataset"
-			};
+					type: "dataset"
+				};
+			})
 
 			it("should process the dataset with sections of type catcomb without category optionCombos", function() {
 				var dataSet = _.clone(testDataSet);
 				//section height would be 32 and dataset title would be 10 and datasection title would be 7 total height is 237-49=188
-				var expectedPage = new _Page("DATASET");
-				_.assignIn(expectedPage, {heightLeft: 188, contents: [{type: 'dataSetName', name: "test dataset"}, {type: 'section', section: dataSet.sections[0]}], datasetName: "test dataset"});
+				var expectedPage = new DataSetPage();
+				_.assignIn(expectedPage, {heightLeft: 188, contents: [{type: 'dataSetName', name: "test dataset"}, {type: 'section', section: dataSet.sections[0]}], datasetName: "test dataset", type: 'DATASET'});
 				var expectedPages = [expectedPage];
-				var actualPages = dataSetProcessor.process(dataSet);
+				var actualPages = dataSetProcessor.process([dataSet]);
 				expect(expectedPages).toEqual(actualPages);
 			});
 
@@ -146,10 +151,11 @@ describe("DataSetProcessor", function() {
 						contents: [
 							{type: 'dataSetName', name: "test dataset"},
 							{type: 'section', section: expectedSection}],
-						datasetName: "test dataset"
+						datasetName: "test dataset",
+						type: 'DATASET',
 					}
 				];
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(clone(actualPages)).toEqual(expectedPages);
 			});
 
@@ -174,7 +180,6 @@ describe("DataSetProcessor", function() {
 							id: "154",
 							categoryOptionCombos: ["female<br><12", "male<br><10"],
 							name: "catcomb",
-							categories: [{id: '123', name: 'Gender'}]
 						}
 					}],
 					isCatComb: true,
@@ -192,7 +197,7 @@ describe("DataSetProcessor", function() {
 						datasetName: "test dataset"
 					}
 				];
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(actualPages[0].contents[2]).toEqual(expectedPages[0].contents[2]);
 
 			});
@@ -209,10 +214,10 @@ describe("DataSetProcessor", function() {
 				assignCOCToSection(currentTestDataSet.sections[0], 20);
 
 				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
-				assignCOCToSection(expectedSection1, 17); //because 17 elements will fit into the first page
+				assignCOCToSection(expectedSection1, 16); //because 17 elements will fit into the first page
 
 				var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
-				assignCOCToSection(expectedSection2, 3);
+				assignCOCToSection(expectedSection2, 4);
 				expectedSection2.isDuplicate = false;
 				var expectedPages = [{
 					heightLeft: 0,
@@ -226,40 +231,15 @@ describe("DataSetProcessor", function() {
 						heightLeft: 164,
 						width: 183,
 						contents: [
+							{type: 'dataSetName', name: "test dataset"},
 							{type: 'section', section: expectedSection2}],
 						datasetName: "test dataset"
 					}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 
 				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
 				expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
-			});
-
-			it("should process the dataset with overflowed section height is less than grace height", function() {
-				var currentTestDataSet = _.cloneDeep(testDataSet);
-
-				var assignCOCToSection = function(section, numofDe) {
-					for(var index = 0; index < numofDe; index++) {
-						section.dataElements[index] = _.cloneDeep(testDataSet.sections[0].dataElements[0]);
-					}
-				};
-
-				assignCOCToSection(currentTestDataSet.sections[0], 17);
-
-				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
-				assignCOCToSection(expectedSection1, 17); //because 17 elements will fit into the first page
-				var expectedPages = [{
-					heightLeft: 0,
-					width: 183,
-					contents: [
-						{type: 'dataSetName', name: "test dataset"},
-						{type: 'section', section: expectedSection1}],
-					datasetName: "test dataset"
-				}];
-
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
-				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
 			});
 
 			it("should process the dataset with overflowed elements are exactly one", function() {
@@ -289,11 +269,12 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}, {
 					contents: [
+						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection2}
 					]
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
 				expect(actualPages[1].contents).toEqual(expectedPages[1].contents)
 			});
@@ -350,7 +331,7 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
@@ -358,7 +339,7 @@ describe("DataSetProcessor", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				currentTestDataSet.sections[0].dataElements[0].attributeValues[0].value = '5';
 				spyOn(window, 'alert');
-				dataSetProcessor.process(currentTestDataSet);
+				dataSetProcessor.process([currentTestDataSet]);
 				Promise.resolve({}).then(function() {
 					expect(window.alert).toHaveBeenCalledWith("The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
 				});
@@ -376,9 +357,9 @@ describe("DataSetProcessor", function() {
 				assignOptionsToDE(currentTestDataSet.sections[0], 76);   //75 options will overflow to the new page
 
 				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
-				assignOptionsToDE(expectedSection1, 72);
+				assignOptionsToDE(expectedSection1, 69);
 				var expectedRows1 = [];
-				for(var i = 0; i < 24; i++) {
+				for(var i = 0; i < 23; i++) {
 					var j = 0;
 					while(j < 3) {
 						if(j == 0)
@@ -393,12 +374,14 @@ describe("DataSetProcessor", function() {
 				expectedSection1.dataElements[0].displayOption = "2";
 
 				var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
-				assignOptionsToDE(expectedSection2, 4);
+				assignOptionsToDE(expectedSection2, 7);
 				var expectedRows2 = [];
 				expectedRows2[0] = [];
 				expectedRows2[1] = [];
-				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"});
-				expectedRows2[1].push({id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[2] = [];
+				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[1].push({id: 1, name: "option"}, {id: 1, name: "option"} );
+				expectedRows2[2].push({id: 1, name: "option"}, {id: 1, name: "option"});
 
 				expectedSection2.dataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
@@ -412,10 +395,11 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}, {
 					contents: [
+						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection2}],
 					datasetName: "test dataset"
 				}];
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages[1].contents).toEqual(actualPages[1].contents);
 				expect(expectedPages[0].contents[1]).toEqual(actualPages[0].contents[1]);
 			});
@@ -448,7 +432,7 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents)
 			});
 
@@ -481,8 +465,9 @@ describe("DataSetProcessor", function() {
 				};
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
-				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];
+				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];				expectedSection.leftSideElements[0].displayOption = "1";
 				expectedSection.rightSideElements = [];
+				expectedSection.leftSideElements[0].displayOption = "1";
 				expectedSection.dataElements[0].displayOption = "1";
 
 				var expectedPages = [{
@@ -498,7 +483,7 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
 
@@ -534,7 +519,7 @@ describe("DataSetProcessor", function() {
 				currentTestDataSet.sections[0].dataElements = dataElements;
 				var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
 				expectedSection.dataElements[0] = dataElements[1];
-				expectedSection.dataElements[0].displayOption = config.CustomAttributes.displayOptionUID.options.list;
+				expectedSection.dataElements[0].displayOption = config.CustomAttributes.displayOptionUID.options.text;
 				expectedSection.dataElements[0].rows = expectedRows;
 				expectedSection.isOptionSet = true;
 
@@ -551,7 +536,7 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages[0].contents[1].section.dataElements).toEqual(actualPages[0].contents[1].section.dataElements);
 			});
 		});
@@ -622,11 +607,12 @@ describe("DataSetProcessor", function() {
 					datasetName: "test dataset"
 				}, {
 					contents: [
+						{type: 'dataSetName', name: "test dataset"},
 						{type: 'section', section: expectedSection2}
 					]
 				}];
 
-				var actualPages = dataSetProcessor.process(currentTestDataSet);
+				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
 				expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
 			});

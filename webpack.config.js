@@ -10,7 +10,6 @@ module.exports = {
 		utils: "./src/utils.js",
 		'pff-model': "./src/pff-model.js",
 		translationsSetup: "./src/translationsSetup.js",
-		'd2-ui-components': "./src/d2-ui-components.js",
 		boot: "./src/boot.js"
 	},
 	plugins: [

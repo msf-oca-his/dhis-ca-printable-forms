@@ -54,14 +54,13 @@ describe("Page Directive", function() {
 	describe("when page type is dataset", function() {
 
 		beforeEach(function() {
-			outerScope.testTemplateType = "DATASET";
-			outerScope.testProgramMode = "";
-			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages" type="testTemplateType" program-mode="testProgramMode"></page>')(outerScope)
+			outerScope.testPage = {type: 'DATASET'};
+			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages"></page>')(outerScope)
 			outerScope.$apply();
 		});
 
 		it("should render dataset and not program", function() {
-			expect(_.isEmpty(PageElement[0].querySelector('template-dataset'))).toBe(false)
+			expect(_.isEmpty(PageElement[0].querySelector('template-dataset'))).toBe(false);
 			expect(_.isEmpty(PageElement[0].querySelector('template-program'))).toBe(true)
 		});
 
@@ -79,9 +78,8 @@ describe("Page Directive", function() {
 	describe("when page type is program", function() {
 
 		beforeEach(function() {
-			outerScope.testTemplateType = "PROGRAM";
-			outerScope.testProgramMode = "COVERSHEET";
-			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages" type="testTemplateType" program-mode="testProgramMode"></page>')(outerScope)
+			outerScope.testPage = {type: "COVERSHEET"};
+			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages"></page>')(outerScope)
 			outerScope.$apply();
 		});
 
