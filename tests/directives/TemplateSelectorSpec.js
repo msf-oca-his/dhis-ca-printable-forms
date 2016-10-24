@@ -223,7 +223,7 @@ describe("templateSelector Directive", function() {
 		});
 
 		describe("prefixes", function() {
-			fit("should get the prefixes", function() {
+			it("should get the prefixes", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$digest();
