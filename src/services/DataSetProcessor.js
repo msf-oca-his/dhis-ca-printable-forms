@@ -20,14 +20,13 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 
 			var addSectionToPage = function(section, height) {
 				var isFirstSection = Number.isInteger(sectionIndex) ? ( sectionIndex == 0 ) : sectionIndex;
-				if(_.isEmpty(page.contents)) page.contents.push({type: 'dataSetName', name: dataSet.name});
+				if(_.isEmpty(page.contents) || isFirstSection) page.contents.push({type: 'dataSetName', name: dataSet.name});
 				page.contents.push({type: 'section', section: section});
 				page.heightLeft = page.heightLeft - height;
 			};
 
 			var addSectionToNewPage = function(section, height, isFirstSectionInDataSet) {
 				page = new DataSetPage();
-				page.datasetName = dataSet.displayName;
 				pages[++currentPageIndex] = page;
 				section.isDuplicate = false;
 				processSection(section, isFirstSectionInDataSet);

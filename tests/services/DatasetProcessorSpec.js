@@ -619,7 +619,7 @@ describe("DataSetProcessor", function() {
 		});
 		
 		describe("multiple datasets", function(){
-			it("should give the dataset name along with its contents", function(){
+			fit("should give the dataset name along with its contents", function(){
 				var testDataSet = {
 					id: "123",
 					name: "test dataset",
@@ -654,8 +654,8 @@ describe("DataSetProcessor", function() {
 				_.assignIn(expectedPage, {contents: [], datasetName: "test dataset", type: 'DATASET'});
 				var expectedPages = [expectedPage];
 				var actualPages = dataSetProcessor.process([testDataSet,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2]);
-				expect(testDataSet.displayName).toEqual(actualPages[0].datasetName);
-				expect(testDataSet2.displayName).toEqual(actualPages[1].datasetName);
+				expect(testDataSet.displayName).toEqual(actualPages[0].contents[0].name);
+				expect(testDataSet2.displayName).toEqual(actualPages[1].contents[0].name);
 			});
 		})
 	})
