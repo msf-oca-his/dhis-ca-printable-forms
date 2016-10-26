@@ -227,15 +227,84 @@ describe("templateSelector Directive", function() {
 				expect(scope.$$childHead.programTemplates[0].displayName.includes("PROGRAM_PREFIX")).toEqual(true)
 			})
 		});
+		
+		describe("Add form button", function() {
+			it("should disable the add form button when nothing selected", function(){
+				scope.change = jasmine.createSpy("change");
+				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.showAllTemplates = false;
+				scope.$apply();
+				var button = elements[0].getElementsByTagName('button');
+				expect(button[0].classList.contains('ng-hide')).toBe(true);
+			});
+			it("should disable the add form button when program is selected", function() {
+				scope.change = jasmine.createSpy("change");
+				scope.showAllTemplates = false;
+				scope.testTemplate = "PROGRAM";
+				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$apply();
+				var button = elements[0].getElementsByTagName('button');
+				expect(button[0].classList.contains('ng-hide')).toBe(true);
+			});
+			
+			it("should enable the add form button when a dataset is selected", function() {
+				scope.change = jasmine.createSpy("change");
+				scope.showAllTemplates = false;
+				scope.testTemplate = "DATASET";
+				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$apply();
+				var button = elements[0].getElementsByTagName('button');
+				expect(button[0].classList.contains('ng-hide')).toBe(false);
+			});
+
+			it("should able to add form when a dataset is selected", function() {
+				scope.change = jasmine.createSpy("change");
+				scope.showMultipleTemplates = true;
+				scope.testTemplate = "DATASET";
+				// scope.selectedTemplates = [{id:"123"}];
+				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$apply();
+				var selectElement = elements[0].querySelector('select');
+				selectElement.selectedIndex = 1;
+				selectElement.dispatchEvent(new Event('change'));
+				scope.$apply();
+				var button = elements[0].getElementsByTagName('button');
+				button[0].click();
+				expect(scope.$$childHead.selectedTemplates.length).toBe(2);
+			});
+			
+			it("should able to remove the form from multiple datasets selected", function() {
+				scope.change = jasmine.createSpy("change");
+				scope.showMultipleTemplates = true;
+				scope.testTemplate = "DATASET";
+				// scope.selectedTemplates = [{id:"123"}];
+				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(scope);
+				scope.$apply();
+				var selectElement = elements[0].querySelector('select');
+				selectElement.selectedIndex = 1;
+				selectElement.dispatchEvent(new Event('change'));
+				scope.$apply();
+				var button = elements[0].getElementsByTagName('button');
+				button[0].click();
+				scope.$apply();
+				var remove = elements[0].getElementsByClassName('glyphicon glyphicon-remove');
+				remove[1].click();
+				expect(scope.$$childHead.selectedTemplates.length).toBe(1);
+				expect(scope.$$childHead.showMultipleTemplates).toBe(false);
+			});
+
+		});
 
 		describe("On selecting a template", function() {
-			//TODO: pending testCases
-			xit("should show the hour glass icon until templates are loaded", function() {})
-			xit("should remove the hour glass icon after templates are loaded", function() {})
-
 			it("should call onChange with selected templates", function(done) {
 				scope.selectedTemplatesType = 'testType';
-				elements = angular.element('<template-selector selected-templates-type="testType" on-change="testRenderDataSets(selectedTemplates)" load-after="validationProcess"></template-selector>');
+				scope.change = jasmine.createSpy("changespy");
+				elements = angular.element('<template-selector on-change= "change(selectedTemplates)" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$apply();
 				var selectElement = elements[0].querySelector('select')
@@ -243,7 +312,8 @@ describe("templateSelector Directive", function() {
 				selectElement.dispatchEvent(new Event('change'));
 				scope.$apply();
 				setTimeout(function(){
-					expect(scope.testRenderDataSets).toHaveBeenCalledWith([programs[0]]);
+					scope.$apply();
+					expect(scope.change).toHaveBeenCalledWith([programs[0]]);
 					done();
 				}, 1);
 			});

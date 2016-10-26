@@ -617,6 +617,47 @@ describe("DataSetProcessor", function() {
 				expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
 			});
 		});
+		
+		describe("multiple datasets", function(){
+			it("should give the dataset name along with its contents", function(){
+				var testDataSet = {
+					id: "123",
+					name: "test dataset",
+					displayName: "test dataset",
+					sections: [{
+						name: "section",
+						id: "134",
+						dataElements: [{
+							name: "dataElement",
+							id: "1234",
+						}]
+					}],
+					type: "dataset"
+				};
+				
+				var testDataSet2 = {
+					id: "124",
+					name: "test dataset2",
+					displayName: "test dataset2",
+					sections: [{
+						name: "section1",
+						id: "135",
+						dataElements: [{
+							name: "dataElement1",
+							id: "1235",
+						}]
+					}],
+					type: "dataset"
+				};
+
+				var expectedPage = new DataSetPage();
+				_.assignIn(expectedPage, {contents: [], datasetName: "test dataset", type: 'DATASET'});
+				var expectedPages = [expectedPage];
+				var actualPages = dataSetProcessor.process([testDataSet,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2]);
+				expect(testDataSet.displayName).toEqual(actualPages[0].datasetName);
+				expect(testDataSet2.displayName).toEqual(actualPages[1].datasetName);
+			});
+		})
 	})
 });
 // todo: Are these test cases enough for DatasetProcessor

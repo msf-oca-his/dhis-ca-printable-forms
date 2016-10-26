@@ -27,6 +27,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 
 			var addSectionToNewPage = function(section, height, isFirstSectionInDataSet) {
 				page = new DataSetPage();
+				page.datasetName = dataSet.displayName;
 				pages[++currentPageIndex] = page;
 				section.isDuplicate = false;
 				processSection(section, isFirstSectionInDataSet);
