@@ -15,8 +15,11 @@ var createD2AngularModule = function(d2) {
 var bootStrapAngularApp = function() {
 	console.log('bootstrapping');
 	TallySheets.value('appLoadingFailed', _.isError(arguments[0]));
-	angular.bootstrap(document, ['TallySheets']);
-	document.querySelector('#app').classList.remove('hidden');
+	return uiLocalePromise.then(function(uiLocale){
+		TallySheets.value('uiLocale', uiLocale);
+		angular.bootstrap(document, ['TallySheets']);
+		document.querySelector('#app').classList.remove('hidden');
+	})
 };
 
 var initializeD2 = function(ApiUrl) {
@@ -27,13 +30,13 @@ var initializeD2 = function(ApiUrl) {
 var createDummyD2DependentAngularComponents = function(){
 	createD2AngularModule({});
 	TallySheets.directive('d2HeaderBar', function(){return {}});
+	return new Error('d2 failed to load')
 };
+
+
 var loadD2UIComponents = function(){
 	require('./d2-ui-components.js');
 };
-window.d2Lib = require("../../custom_app_commons/js/utils/d2-export.js");
-window.dhisUrl = determineDhisUrl();
-window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 
 var getUiLocale = function(){
 	return new Promise(function(resolve){
@@ -44,25 +47,27 @@ var getUiLocale = function(){
 			dataType: 'text',
 		}).done(function(data, statusText, response) {
 			if(response.getResponseHeader('content-type').includes('html') || data == '')
-				TallySheets.value('uiLocale', '');
+				resolve('');
 			else
-				TallySheets.value('uiLocale', data);
-			resolve();
+				resolve(data);
 		}).fail(function() {
 			resolve('');
-			TallySheets.value('uiLocale', '')
 		});
 	})
 };
 
+window.d2Lib = require("../../custom_app_commons/js/utils/d2-export.js");
+window.dhisUrl = determineDhisUrl();
+window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 
-Promise.all([initializeD2(ApiUrl), getUiLocale()])
-	.then(loadD2UIComponents)
+var uiLocalePromise = getUiLocale();
+Promise.resolve(ApiUrl)
+	.then(initializeD2)
+	.then(loadD2UIComponents, createDummyD2DependentAngularComponents)
 	.then(bootStrapAngularApp)
 	.catch(function(err) {
-		createDummyD2DependentAngularComponents();
-		bootStrapAngularApp(new Error("d2 failed to load"));
-		console.log(err)
+		console.log(err);
+		document.body.innerHTML = "<h4>App loading failed... Contact Administrator.</h4>";
 	});
 
 
