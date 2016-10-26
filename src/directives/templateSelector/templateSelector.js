@@ -102,8 +102,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var handleUpdate = function(){
 				if(!$scope.onChange) return;
-				if(!$scope.showMultipleTemplates)
-					$scope.selectedTemplatesType = getTypeOfTemplate($scope.selectedTemplates[0]);
+				$scope.selectedTemplatesType = getTypeOfTemplate($scope.selectedTemplates[0]);
 				$scope.$apply();
 				$scope.onChange({selectedTemplates: $scope.selectedTemplates});
 			};
