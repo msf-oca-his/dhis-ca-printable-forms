@@ -619,7 +619,7 @@ describe("DataSetProcessor", function() {
 		});
 		
 		describe("multiple datasets", function(){
-			fit("should give the dataset name along with its contents", function(){
+			it("should give the dataset name along with its contents", function(){
 				var testDataSet = {
 					id: "123",
 					name: "test dataset",
