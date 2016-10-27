@@ -18,7 +18,7 @@
     <div id="mainMenu" class="panel panel-default hidden-print">
       <div class="panel-body">
 				<span>
-					<template-selector on-change="renderTemplates(selectedTemplates)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector>
+					<span id="template-selector-container"><template-selector on-change="renderTemplates(selectedTemplates)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector></span>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
             <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
