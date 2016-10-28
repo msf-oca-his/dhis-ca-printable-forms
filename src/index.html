@@ -18,13 +18,9 @@
     <div id="mainMenu" class="panel panel-default hidden-print">
       <div class="panel-body">
 				<span>
-					<span id="template-selector-container"><template-selector on-change="renderTemplates(selectedTemplates)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector></span>
-					<span>&nbsp;&nbsp;</span>
-					<span class="pull-right">
-            <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
-					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
-					</span>
-					<span ng-if="selectedTemplatesType=='PROGRAM'">
+					<span id="template-selector-container">
+            <template-selector on-change="renderTemplates(selectedTemplates)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector>
+            <span ng-if="selectedTemplatesType=='PROGRAM'">
 						<label class="radio-inline">
               <input ng-model="$parent.$parent.programMode" value="COVERSHEET" type="radio" ng-click="renderTemplates()"> CoverSheet
             </label>
@@ -35,7 +31,12 @@
               <input ng-model="$parent.$parent.programMode" value="CODESHEET" type="radio" ng-click="renderTemplates()"> Code Sheet
             </label>
 					</span>
-
+          </span>
+					<span>&nbsp;&nbsp;</span>
+					<span class="pull-right">
+            <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
+					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+					</span>
 				</span>
       </div>
     </div>
