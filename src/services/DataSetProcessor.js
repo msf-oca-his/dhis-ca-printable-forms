@@ -1,4 +1,4 @@
-TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'DataSetPage', 'Content', 'PrintFriendlyUtils', function(CustomAttributeService, config, DataSetPage, Content, printFriendlyUtils) {
+TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'DataSetPage', 'Content', 'PrintFriendlyUtils', 'CommonUtils', function(CustomAttributeService, config, DataSetPage, Content, printFriendlyUtils, commonUtils) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -133,7 +133,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 					printFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, i, "dataElements");
 					_.map(dataSet.sections[i].dataElements, function(dataElement) {
 						_.map(dataElement.options, function(option) {
-							option.displayName = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
+							option.displayName = commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter);  //TODO: Use PFF-model for transformation
 						});
 					});
 					if(!dataSet.sections[i].isOptionSet)

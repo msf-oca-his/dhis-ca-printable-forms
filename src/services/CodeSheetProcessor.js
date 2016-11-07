@@ -48,7 +48,6 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 			if(dataElement.valueType == 'OPTIONSET') {
 				addNewCodeSheetHeading(dataElement.displayName);
 				_.map(dataElement.options, function(option) {
-					option.displayName = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
 					addNewCodeSheetLabel(dataElement, option);
 				});
 				addNewCodeSheetGap();

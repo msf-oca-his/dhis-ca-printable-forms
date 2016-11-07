@@ -1,9 +1,5 @@
 TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
-
-	this.getFilteredOptionLabel = function(optionLabel) {
-		return optionLabel.slice(optionLabel.indexOf(config.Delimiters.OptionLabelDelimiter) + 1);
-	};
-
+	
 	this.createOptionSetSection = function(section, dataElementsKey) {
 		var dataElement = (section[dataElementsKey])[0];
 		dataElement.rows = [];

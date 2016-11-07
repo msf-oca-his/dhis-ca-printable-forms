@@ -8,9 +8,6 @@ describe("Print Friendly Utils", function() {
 			DataSet: {
 				numberOfCOCColumns: 5
 			},
-			Delimiters: {
-				OptionLabelDelimiter: " "
-			},
 			CustomAttributes: {
 				displayOptionUID: {
 					options: {
@@ -27,30 +24,6 @@ describe("Print Friendly Utils", function() {
 			printFriendlyUtils = PrintFriendlyUtils;
 			httpMock = $httpBackend;
 			httpMock.expectGET("i18n/en.json").respond(200, {});
-		});
-	});
-
-	describe("getFilteredOptionLabel", function() {
-		it("should filter Option label by elimination codes based on delimiter provided", function() {
-			var option = {
-				id: 123,
-				displayName: "[123] Label",
-				code: 123
-			};
-			var actualLabel = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
-			var expectedLabel = "Label";
-			expect(actualLabel).toEqual(expectedLabel);
-		});
-
-		it("should split the label at the first delimiter only", function() {
-			var option = {
-				id: 123,
-				displayName: "[123] Label Label",
-				code: 123
-			};
-			var actualLabel = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
-			var expectedLabel = "Label Label";
-			expect(actualLabel).toEqual(expectedLabel);
 		});
 	});
 
