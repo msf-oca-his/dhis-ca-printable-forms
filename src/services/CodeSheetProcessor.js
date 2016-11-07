@@ -25,12 +25,12 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		currentRowIndex++;
 	};
 
-	var addNewCodeSheetLabel = function(dataElement, label, code) {
-		if((currentRowIndex == totalRows - 1) && (label.id == dataElement.options[dataElement.options.length - 2].id) || (currentRowIndex >= totalRows)) {
+	var addNewCodeSheetLabel = function(dataElement, option) {
+		if((currentRowIndex == totalRows - 1) && (option.id == dataElement.options[dataElement.options.length - 2].id) || (currentRowIndex >= totalRows)) {
 			gotoNextColumn();
 			addNewCodeSheetHeading(dataElement.displayName);
 		}
-		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetLabel(code, label.displayName));
+		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetLabel(option.code, option.displayName));
 		currentRowIndex++;
 	};
 
@@ -47,8 +47,9 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		_.map(allDataElements, function(dataElement) {
 			if(dataElement.valueType == 'OPTIONSET') {
 				addNewCodeSheetHeading(dataElement.displayName);
-				_.map(dataElement.options, function(option, index) {
-					addNewCodeSheetLabel(dataElement, option, index + 1);
+				_.map(dataElement.options, function(option) {
+					option.displayName = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
+					addNewCodeSheetLabel(dataElement, option);
 				});
 				addNewCodeSheetGap();
 			}

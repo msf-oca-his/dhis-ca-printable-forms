@@ -131,6 +131,11 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				else {
 					dataSet.sections[i].dataElements = printFriendlyUtils.applyDisplayOptionsToDataElements(dataSet.sections[i], "dataElements");
 					printFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, i, "dataElements");
+					_.map(dataSet.sections[i].dataElements, function(dataElement) {
+						_.map(dataElement.options, function(option) {
+							option.displayName = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
+						});
+					});
 					if(!dataSet.sections[i].isOptionSet)
 						printFriendlyUtils.splitLeftAndRightElements(dataSet.sections[i], "dataElements");
 				}

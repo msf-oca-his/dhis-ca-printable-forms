@@ -30,6 +30,9 @@ describe("DataSetProcessor", function() {
 				gapBetweenSections: 5,
 				numberOfCOCColumns: 5
 			},
+			Delimiters: {
+				OptionLabelDelimiter: " "
+			},
 			CustomAttributes: {
 				displayOptionUID: {
 					id: "444",
@@ -291,7 +294,7 @@ describe("DataSetProcessor", function() {
 						id: "1234",
 						isResolved: Promise.resolve({}),
 						name: "dataElement",
-						options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+						options: [{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}],
 						valueType: "OPTIONSET",
 						attributeValues: [
 							{
@@ -313,7 +316,7 @@ describe("DataSetProcessor", function() {
 
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
 
-				var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+				var expectedRows = [[{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}]];
 
 				expectedSection.dataElements[0].rows = expectedRows;
 				expectedSection.dataElements[0].displayOption = "2";
@@ -351,7 +354,7 @@ describe("DataSetProcessor", function() {
 
 				var assignOptionsToDE = function(section, numberOfOptions) {
 					for(var index = 0; index < numberOfOptions; index++) {
-						section.dataElements[0].options[index] = {id: 1, name: "option"};
+						section.dataElements[0].options[index] = {id: 1, displayName: "option"};
 					}
 				};
 				assignOptionsToDE(currentTestDataSet.sections[0], 76);   //75 options will overflow to the new page
@@ -363,9 +366,9 @@ describe("DataSetProcessor", function() {
 					var j = 0;
 					while(j < 3) {
 						if(j == 0)
-							expectedRows1.push([{id: 1, name: "option"}]);
+							expectedRows1.push([{id: 1, displayName: "option"}]);
 						else
-							expectedRows1[i].push({id: 1, name: "option"});
+							expectedRows1[i].push({id: 1, displayName: "option"});
 						j++;
 					}
 				}
@@ -379,9 +382,9 @@ describe("DataSetProcessor", function() {
 				expectedRows2[0] = [];
 				expectedRows2[1] = [];
 				expectedRows2[2] = [];
-				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"}, {id: 1, name: "option"});
-				expectedRows2[1].push({id: 1, name: "option"}, {id: 1, name: "option"} );
-				expectedRows2[2].push({id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[0].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"}, {id: 1, displayName: "option"});
+				expectedRows2[1].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"} );
+				expectedRows2[2].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
 
 				expectedSection2.dataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
@@ -412,7 +415,7 @@ describe("DataSetProcessor", function() {
 				};
 
 				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
-				var expectedRows1 = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+				var expectedRows1 = [[{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}]];
 				expectedSection1.dataElements[0].rows = expectedRows1;
 				expectedSection1.isDuplicate = false;
 				expectedSection1.isOptionSet = true;
@@ -447,7 +450,7 @@ describe("DataSetProcessor", function() {
 							id: "1234",
 							isResolved: Promise.resolve({}),
 							name: "dataElement",
-							options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+							options: [{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}],
 							valueType: "OPTIONSET",
 							attributeValues: [
 								{
@@ -465,7 +468,8 @@ describe("DataSetProcessor", function() {
 				};
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
-				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];				expectedSection.leftSideElements[0].displayOption = "1";
+				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];				
+				expectedSection.leftSideElements[0].displayOption = "1";
 				expectedSection.rightSideElements = [];
 				expectedSection.leftSideElements[0].displayOption = "1";
 				expectedSection.dataElements[0].displayOption = "1";

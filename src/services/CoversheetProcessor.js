@@ -126,6 +126,11 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 				if(Program.programStages[0].programStageSections.length == 0) return;
 				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.applyDisplayOptionsToDataElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
 				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
+				_.map(Program.programStages[0].programStageSections[i].programStageDataElements, function(dataElement) {
+					_.map(dataElement.options, function(option) {
+						option.displayName = printFriendlyUtils.getFilteredOptionLabel(option.displayName);
+					});
+				});
 				if(!Program.programStages[0].programStageSections[i].isOptionSet)
 					printFriendlyUtils.splitLeftAndRightElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
 			}

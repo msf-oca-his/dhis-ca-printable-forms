@@ -73,6 +73,9 @@ TallySheets.factory("Config", [function() {
 				translationKey:"PROGRAM_PREFIX"
 			}
 		};
+		config.Delimiters = {
+			OptionLabelDelimiter: " "
+	};
 		config.CustomAttributes = {
 			// printFlagUID: {
 			// 	id: "F6S3pRyjnSf",
