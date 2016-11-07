@@ -1,34 +1,14 @@
 TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 
-	this.createOptionSetSection = function(section, dataElementsKey) {
-		var dataElement = (section[dataElementsKey])[0];
-		dataElement.rows = [];
-		var numberOfRows = Math.ceil(dataElement.options.length / 3);
-		for(var i = 0; i < numberOfRows; i++) {
-			var j = 0;
-			while(j < dataElement.options.length) {
-				if(j == 0)
-					dataElement.rows.push([dataElement.options[i]])
-				else if(dataElement.options[i + j] != undefined)
-					dataElement.rows[i].push(dataElement.options[i + j])
-				j = j + numberOfRows;
-			}
-		}
-		section.isOptionSet = true;
-		return section;
-	};
-
 	this.createNewSectionUsing = function(section, dataElements, dataElementsKey){
 		var newSection = _.cloneDeep(section);
-		newSection.isDuplicate = true;
 		newSection[dataElementsKey] = dataElements;
 		return newSection;
 	};
 
-	this.addLineBreakAfterEachCategoryOption = function(section, dataElementsKey) {
-		_.map((section[dataElementsKey])[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, array) {
-			array[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
-		});
+	this.isDuplicateSection = function(sectionIndex, sections) {
+		if(sectionIndex == 0) return false;
+		return sections[sectionIndex].id == sections[sectionIndex - 1].id;
 	};
 	var isListTypeDataElement = function(dataElement) {
 		if(dataElement.valueType != 'OPTIONSET') return false;
@@ -38,6 +18,15 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 				return displayOptionAttribute.value == config.CustomAttributes.displayOptionUID.options.list;
 		return true;
 	};
+	var isListTypeDataElement = function(dataElement) {
+		if(dataElement.valueType != 'OPTIONSET') return false;
+		if(!config.CustomAttributes.displayOptionUID) return true;
+		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+		if(displayOptionAttribute && displayOptionAttribute.value)
+			return displayOptionAttribute.value == config.CustomAttributes.displayOptionUID.options.list;
+		return true;
+	};
+
 	var getIndexOfDEWithOptionSets = function(section, dataElementsKey){
 		var indexOfDEWithOptions = [];
 		_.map(section[dataElementsKey], function(dataElement, index) {
@@ -55,7 +44,7 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 		var indexOfDEWithOptions = getIndexOfDEWithOptionSets(section, dataElementsKey);
 		if(indexOfDEWithOptions.length == 0) return;
 		if((indexOfDEWithOptions.length == 1) && (section[dataElementsKey].length == 1)) {
-			section = this.createOptionSetSection(section, dataElementsKey);
+			// section = this.createOptionSetSection(section, dataElementsKey);
 			return;
 		}
 
@@ -67,8 +56,7 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 			newSection = this.createNewSectionUsing(section, _.slice(section[dataElementsKey], currentIndex, indexOfDE), dataElementsKey);
 			pushSection(newSection, dataElementsKey);
 			newSection = this.createNewSectionUsing(section, [(section[dataElementsKey])[indexOfDE]], dataElementsKey);
-			newSection = this.createOptionSetSection(newSection, dataElementsKey);
-			newSection.isOptionSet = true;
+			// newSection = this.createOptionSetSection(newSection, dataElementsKey);
 			pushSection(newSection, dataElementsKey);
 			currentIndex = indexOfDE + 1;
 		}).bind(this));
@@ -76,7 +64,7 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 		newSection = this.createNewSectionUsing(section, _.slice(section[dataElementsKey], currentIndex, section[dataElementsKey].length), dataElementsKey);
 		pushSection(newSection, dataElementsKey);
 		sections.splice(index, 1);
-		sections[index].isDuplicate = false;
+		// sections[index].isDuplicate = false;
 	};
 
 	this.divideCatCombsIfNecessary = function(sections, index, dataElementsKey) {
@@ -88,45 +76,35 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 			var overflow = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
 			var numberOfColumnsThatCanFitInThisSection = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
 			var newDataElements = [];
-			_.map(section[dataElementsKey], function(dataElement) {
+			_.map(section[dataElementsKey], function(dataElement) {//TODO: extract this out as function???
 				var newDataElement = _.cloneDeep(dataElement);
 				newDataElement.categoryCombo.categoryOptionCombos.splice(0, numberOfColumnsThatCanFitInThisSection);
 				newDataElements.push(newDataElement);
 				dataElement.categoryCombo.categoryOptionCombos.splice(numberOfColumnsThatCanFitInThisSection);
 			});
 			var newSection = _.cloneDeep(section)
-			newSection.isDuplicate = true;
 			newSection[dataElementsKey] = newDataElements;
 			sections.splice(index + 1, 0, newSection)
 		}
 	};
 
-	this.splitLeftAndRightElements = function(section, dataElementsKey) {
-		section.leftSideElements = _.slice(section[dataElementsKey], 0, Math.ceil(section[dataElementsKey].length / 2));
-		section.rightSideElements = _.slice(section[dataElementsKey], Math.ceil(section[dataElementsKey].length / 2));
-	};
-
 	//TODO: extract this to data model util.
 	var getCustomAttributeForRenderingOptionSets = function(customAttributes) {
 		return _.reduce(_.filter(customAttributes, function(customAttribute) {
-			if(customAttribute.attribute.id === config.CustomAttributes.displayOptionUID.id) {
+			if(customAttribute.attribute.id == config.CustomAttributes.displayOptionUID.id) {
 				return customAttribute;
 			}
 		}));
 	};
-
-	var isDisplayOptionNoneSelected = function(dataElement){
-		return dataElement.displayOption == config.CustomAttributes.displayOptionUID.options.none;
-	};
-
-	this.applyDisplayOptionsToDataElements = function(section, dataElementsKey) {
+	this.getDataElementsToDisplay = function(section, dataElementsKey) {
+		if(!config.CustomAttributes.displayOptionUID) return section[dataElementsKey];
 		if(!config.CustomAttributes.displayOptionUID) return section[dataElementsKey];
 		return _.filter(section[dataElementsKey], function(dataElement) {
 			if(dataElement.valueType == 'OPTIONSET') {
 				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 				if(displayOptionAttribute) {
-					dataElement.displayOption = displayOptionAttribute.value;
-					return !isDisplayOptionNoneSelected(dataElement)
+					// dataElement.displayOption = displayOptionAttribute.value;
+					return displayOptionAttribute.value != config.CustomAttributes.displayOptionUID.options.none;
 				}
 			}
 			return true;
