@@ -79,8 +79,6 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 				addSectionToPage(section, sectionHeight);
 			else if(numberOfElementsThatCanFit > 1)
 				breakAndAddSection(section);
-			else if (section.isOptionSet)
-				breakAndAddSection(section, numberOfElementsThatCanFit);
 			else {
 				var isFirstSectionInDataSet = (sectionIndex == 0);
 				addSectionToNewPage(section, sectionHeight, isFirstSectionInDataSet)

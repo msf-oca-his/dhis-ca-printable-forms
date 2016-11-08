@@ -65,6 +65,10 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 						addSectionToNewPage(section, getHeightForSection(section), false);
 						return;
 					}
+					if((section.dataElements[0].options.length - numberOfOptionsThatCanFit) < 3) {
+						addSectionToPage(section, page.heightLeft);
+						return;
+					}
 					if(numberOfOptionsThatCanFit % 3 > 0)
 						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (3 - numberOfOptionsThatCanFit % 3);
 					newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfOptionsThatCanFit);
