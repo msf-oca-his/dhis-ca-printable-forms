@@ -1,4 +1,4 @@
-TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Config', 'Content', 'CoverSheetPage', 'PrintFriendlyUtils', function(DataElement, DataSetSection, config, Content, CoverSheetPage, printFriendlyUtils) {
+TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Config', 'Content', 'CoverSheetPage', 'PrintFriendlyUtils', 'CommonUtils', function(DataElement, DataSetSection, config, Content, CoverSheetPage, printFriendlyUtils, commonUtils) {
 	var pages = [];
 	var currentPageIndex;
 	var page, currentProgram;
@@ -124,6 +124,11 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 				if(Program.programStages[0].programStageSections.length == 0) return;
 				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.applyDisplayOptionsToDataElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
 				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
+				_.map(Program.programStages[0].programStageSections[i].programStageDataElements, function(dataElement) {
+					_.map(dataElement.options, function(option) {
+						option.displayName = commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter); //TODO: Use PFF-model for transformation
+					});
+				});
 				if(!Program.programStages[0].programStageSections[i].isOptionSet)
 					printFriendlyUtils.splitLeftAndRightElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
 			}

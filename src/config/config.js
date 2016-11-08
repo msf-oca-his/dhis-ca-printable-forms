@@ -73,13 +73,16 @@ TallySheets.factory("Config", [function() {
 				translationKey:"PROGRAM_PREFIX"
 			}
 		};
+		config.Delimiters = {
+			OptionLabelDelimiter: ":"
+	};
 		config.CustomAttributes = {
 			// printFlagUID: {
-			// 	id: "F6S3pRyjnSf",
+			// 	id: "J9G2ukuxv66",
 			// 	associatedWith: ['dataSet', 'program']
 			// },
 			// displayOptionUID: {
-			// 	id: "Fth2lxGOF4M",
+			// 	id: "Z6A0WUSqmxh",
 			// 	associatedWith: ['dataElement'],
 			// 	options: {
 			// 		none: '0',

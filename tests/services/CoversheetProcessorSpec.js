@@ -30,7 +30,9 @@ describe("Coversheet Processor", function() {
 			dataElementLabel: 48,
 			optionsPadding: 12
 		},
-
+		Delimiters: {
+			OptionLabelDelimiter: ":"
+		},
 		CustomAttributes: {
 			displayOptionUID: {
 				id: "111",
@@ -93,7 +95,7 @@ describe("Coversheet Processor", function() {
 							programStageDataElements: [{
 								id: "1234",
 								name: "dataElement",
-								options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+								options: [{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}],
 								valueType: "OPTIONSET",
 								attributeValues: [
 									{
@@ -114,7 +116,7 @@ describe("Coversheet Processor", function() {
 
 				var expectedSection = _.cloneDeep(currentTestProgram.programStages[0].programStageSections[0]);
 
-				var expectedRows = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+				var expectedRows = [[{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}]];
 
 				expectedSection.programStageDataElements[0].rows = expectedRows;
 				expectedSection.isOptionSet = true;
@@ -144,7 +146,7 @@ describe("Coversheet Processor", function() {
 								programStageDataElements: [{
 									id: "1234",
 									name: "dataElement",
-									options: [{id: 1, name: "option1"}, {id: 2, name: "option2"}],
+									options: [{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}],
 									valueType: "OPTIONSET",
 									attributeValues: [
 										{
@@ -236,7 +238,7 @@ describe("Coversheet Processor", function() {
 
 				var assignOptionsToDe = function(section, numberOfOptions) {
 					for(var index = 0; index < numberOfOptions; index++) {
-						section.programStageDataElements[0].options[index] = {id: 1, name: "option"};
+						section.programStageDataElements[0].options[index] = {id: 1, displayName: "option"};
 					}
 				};
 				assignOptionsToDe(currentTestProgram.programStages[0].programStageSections[0], 76);//75 options will overflow to the new page
@@ -248,9 +250,9 @@ describe("Coversheet Processor", function() {
 					var j = 0;
 					while(j < 3) {
 						if(j == 0)
-							expectedRows1.push([{id: 1, name: "option"}]);
+							expectedRows1.push([{id: 1, displayName: "option"}]);
 						else
-							expectedRows1[i].push({id: 1, name: "option"});
+							expectedRows1[i].push({id: 1, displayName: "option"});
 						j++;
 					}
 				}
@@ -266,10 +268,10 @@ describe("Coversheet Processor", function() {
 				expectedRows2[0] = [];
 				expectedRows2[1] = [];
 				expectedRows2[2] = [];
-				expectedRows2[0].push({id: 1, name: "option"}, {id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[0].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"}, {id: 1, displayName: "option"});
 
-				expectedRows2[1].push({id: 1, name: "option"}, {id: 1, name: "option"});
-				expectedRows2[2].push({id: 1, name: "option"}, {id: 1, name: "option"});
+				expectedRows2[1].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
+				expectedRows2[2].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
 
 				expectedSection2.programStageDataElements[0].rows = expectedRows2;
 				expectedSection2.isOptionSet = true;
@@ -300,7 +302,7 @@ describe("Coversheet Processor", function() {
 				};
 
 				var expectedSection1 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
-				var expectedRows1 = [[{id: 1, name: "option1"}, {id: 2, name: "option2"}]];
+				var expectedRows1 = [[{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}]];
 				expectedSection1.programStageDataElements[0].rows = expectedRows1;
 				expectedSection1.isDuplicate = false;
 				expectedSection1.isOptionSet = true;
@@ -404,4 +406,5 @@ describe("Coversheet Processor", function() {
 		});
 	})
 });
-// todo: Are these test cases enough for ProgramProcessor
+
+// TODO: Are these test cases enough for ProgramProcessor

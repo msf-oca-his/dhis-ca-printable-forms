@@ -1,8 +1,8 @@
-TallySheets.factory('CodeSheetElementTypes', [function() {
+TallySheets.factory('CodeSheetElementTypes', ['Config', 'CommonUtils', function(config, commonUtils) {
 	return {
 		CodeSheetLabel: function(code, label) {
 			this.code = code;
-			this.label = label;
+			this.label = _.trim(commonUtils.getRightPartOfSplit(label, config.Delimiters.OptionLabelDelimiter));
 			this.type = 'LABEL';
 		},
 		CodeSheetHeading: function(heading) {
