@@ -31,7 +31,7 @@ describe("DataSetProcessor", function() {
 				numberOfCOCColumns: 5
 			},
 			Delimiters: {
-				OptionLabelDelimiter: ":"
+				OptionLabelDelimiter: "]"
 			},
 			CustomAttributes: {
 				displayOptionUID: {
