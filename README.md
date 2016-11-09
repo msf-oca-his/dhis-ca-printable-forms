@@ -2,7 +2,7 @@
 
 As well as this repo, you will need to also clone the custom_app_commons repository as a sibling to this project.
 
-#Installing dependencies for local developement:
+#Installing dependencies for local development:
 Dependencies - use brew, apt-get or any package manager to install the following dependencies:
 - nodejs
 - bower
@@ -17,8 +17,8 @@ To install dependencies, use these commands:
 
 #Running the app
 Run `gulp`. This will start compiling the app and launch it in a browser (localhost:8000). The app will not be usable until logging into DHIS2.
-- open a new browser tab to URL locahost:8080, log in to DHIS2
-- open a new broswer tab to localhost:8000
+- open a new browser tab to URL localhost:8080, log in to DHIS2
+- open a new browser tab to localhost:8000
 - the app should now be running
 
 #Running unit tests
@@ -33,7 +33,7 @@ running `gulp pack` will pack the app as a .zip file, and place it in the target
 
 1. `printFlagUID`: this is a Yes-only custom attribute. It can be associated with datasets and programs. Any datasets or programs that have this attribute set, will be made available for printing in this app. Place the custom attribute ID in the id field, and its associations in associatedWith, as shown in the example below.  
 
-2. `displayOptionUID`: this is an option list custom attribute, and can only be associated with data elements. Note that setting this custom attribute will only affect rendering of data elementsof type option set (rendering of data elements of other types will not be affected).  Currently, this attribute allows three rendering options: NONE, LIST and TEXT. If NONE is selected, the data element will not be shown on the print form. If TEXT is selected, it will be rendered as text. If LIST is selected, it will be rendered as a list. If nothing is selected, the data element will be rendered as a list.  To use this custom attribute, place its ID in the id field (Fth2lxGOF4M in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to the options list (0, 1, 2 in the example).  
+2. `displayOptionUID`: this is an option list custom attribute, and can only be associated with data elements. Note that setting this custom attribute will only affect rendering of data elements of type option set (rendering of data elements of other types will not be affected).  Currently, this attribute allows three rendering options: NONE, LIST and TEXT. If NONE is selected, the data element will not be shown on the print form. If TEXT is selected, it will be rendered as text. If LIST is selected, it will be rendered as a list. If nothing is selected, the data element will be rendered as a list.  To use this custom attribute, place its ID in the id field (Fth2lxGOF4M in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to the options list (0, 1, 2 in the example).  
 
 #####Example:
 ```javascript
@@ -77,7 +77,7 @@ The configuration options are explained below.
   4. `textElementWidth`: width of columns containing data elements of type text.
   5. `otherElementWidth`: width of columns containing data elements of all other types (e.g. option sets, number).
 3. `Coversheet`: config related to printing patient file cover sheets
-  1. `defaultHeightOfDataElementLabel`: displayed height of a data element field if rendering us used. This rendering is in two columns, and allows the user to fill in each data element in free text.
+  1. `defaultHeightOfDataElementLabel`: displayed height of a data element field if default rendering is used. This rendering is in two columns, and allows the user to fill in each data element in free text.
   2. `gapBetweenSections`: white space left between two adjacent sections on a page.
   3. `heightOfSectionTitle`: height (length) of section titles, present at the top of each new section. 
   4. `heightOfProgramTitle`: height (length) of program title, present at the top of each new page.
@@ -99,11 +99,11 @@ The configuration options are explained below.
   1. `labelPadding`: the gap between the checkbox and the option name (option label)
   2. `dataElementLabel`: the space (width) assigned for data element names. Longer names without spaces will not word wrap.
   3. `numberOfColumns`: the number of columns for displaying options in an option set.
-7. `Prefixes`: Prefixes can be added to any objects, for example printable form types, section names, or options sets. All prefixes usd in this app are configured here. Value keys contain the prefix values; the translationKey has to be the same as what is set in the i18n files.
+7. `Prefixes`: Prefixes can be added to any objects, for example printable form types, section names, or options sets. All prefixes used in this app are configured here. Value keys contain the prefix values; the translationKey has to be the same as what is set in the i18n files.
   1. `dataSetPrefix`: prefix for each data set, prepended to the data set name, seen in the template selection dropdown box.
   2. `programPrefix`: prefix for each program, prepended to the program name, seen in the template selection dropdown box.
 8. `Delimiters`: contains all usable delimiters. Any number of white spaces may be added around delimiters during configuration as these will be trimmed by the app.
-  1. `OptionLabelDelimiter`: separates the option code from the option label, In the following example, closing square brace ']' is the delimiter, and the app would only display the LABEL.  
+  1. `OptionLabelDelimiter`: separates the option code from the option label, In the following example, closing square bracket ']' is the delimiter, and the app would only display the LABEL.  
   
 #####Example:
 Each of the following examples will be considered valid by the app  
