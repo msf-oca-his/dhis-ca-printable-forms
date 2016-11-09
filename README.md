@@ -104,9 +104,11 @@ The configuration options are explained below.
   1. `dataSetPrefix`: prefix for each data set, prepended to the data set name, seen in the template selection dropdown box.
   2. `programPrefix`: prefix for each program, prepended to the program name, seen in the template selection dropdown box.
 8. `Delimiters`: contains all usable delimiters. Any number of white spaces may be added around delimiters during configuration as these will be trimmed by the app.
-  1. `OptionLabelDelimiter`: separates the option code from the option label, In the following example, closing square brace ']' is the delimiter, and the app would only display the LABEL.
-####Example: Each of the following examples will be considered valid by the app 
-[CODE]LABEL
-[  CODE  ]               LABEL
-[  CODE] LABEL  
+  1. `OptionLabelDelimiter`: separates the option code from the option label, In the following example, closing square brace ']' is the delimiter, and the app would only display the LABEL.  
+  
+#####Example:
+Each of the following examples will be considered valid by the app  
+[CODE]LABEL  
+[  CODE  ]               LABEL  
+[  CODE] LABEL    
   
