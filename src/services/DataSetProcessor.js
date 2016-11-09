@@ -137,7 +137,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 					printFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, i, "dataElements");
 					_.map(dataSet.sections[i].dataElements, function(dataElement) {
 						_.map(dataElement.options, function(option) {
-							option.displayName = commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter);  //TODO: Use PFF-model for transformation
+							option.displayName = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter));  //TODO: Use PFF-model for transformation
 						});
 					});
 					if(!dataSet.sections[i].isOptionSet)

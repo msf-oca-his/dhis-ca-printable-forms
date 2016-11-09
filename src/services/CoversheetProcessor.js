@@ -126,7 +126,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
 				_.map(Program.programStages[0].programStageSections[i].programStageDataElements, function(dataElement) {
 					_.map(dataElement.options, function(option) {
-						option.displayName = commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter); //TODO: Use PFF-model for transformation
+						option.displayName = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter)); //TODO: Use PFF-model for transformation
 					});
 				});
 				if(!Program.programStages[0].programStageSections[i].isOptionSet)
