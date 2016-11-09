@@ -77,7 +77,7 @@ The configuration options are explained below.
   4. `textElementWidth`: width of columns containing data elements of type text.
   5. `otherElementWidth`: width of columns containing data elements of all other types (e.g. option sets, number).
 3. `Coversheet`: config related to printing patient file cover sheets
-  1. `heightOfDataElementInGeneralDataElement`: displayed height of a data element field if rendering us used. This rendering is in two columns, and allows the user to fill in each data element in free text.
+  1. `defaultHeightOfDataElementLabel`: displayed height of a data element field if rendering us used. This rendering is in two columns, and allows the user to fill in each data element in free text.
   2. `gapBetweenSections`: white space left between two adjacent sections on a page.
   3. `heightOfSectionTitle`: height (length) of section titles, present at the top of each new section. 
   4. `heightOfProgramTitle`: height (length) of program title, present at the top of each new page.
@@ -85,7 +85,7 @@ The configuration options are explained below.
 4. `DataSet`: configuration options for printing tally sheets
   1. `heightOfTableHeader`: height (length) of table column label row, when data elements are rendered as CatCombs (category combinations) .
   2. `heightOfDataElementInCatCombTable`: height (length) of rows rendered as CatCombs
-  3. `heightOfDataElementInGeneralDataElement`: height (length) of data element when data elements are rendered as default. This rendering is in two columns, allowing the user to fill in each data element in free text.
+  3. `defaultHeightOfDataElementLabel`: height (length) of data element when data elements are rendered as default. This rendering is in two columns, allowing the user to fill in each data element in free text.
   4. `heightOfSectionTitle`: height (length) of section titles, present at the top of each new section. 
   5. `heightOfDataSetTitle`: height (length)  of data set titles, present at the start of each data set and at start of each page.
   6. `gapBetweenSections`: white space left between two adjacent sections on a page.
@@ -95,11 +95,10 @@ The configuration options are explained below.
   1. `heightOfProgramTitle`: height (length) of program title present at top of the sheet
 	2. `rowHeight`: height (length) of each row
 	3. `numberOfColumns`: number of columns to fit in a page.
-6. `OptionSet`: configuration related to rendering option sets, in both tally sheets and cover sheets (note: changing the values of labelPadding, dataElementLabel and optionsPadding will not affect printing, as these options will not come into use until JSS is introduced).
+6. `OptionSet`: configuration related to rendering option sets, in both tally sheets and cover sheets (note: changing the values of labelPadding and dataElementLabel will not affect printing, as these options will not come into use until JSS is introduced).
   1. `labelPadding`: the gap between the checkbox and the option name (option label)
-	2. `dataElementLabel`: the space (width) assigned for data element names. Longer names without spaces will not word wrap.
-  3. `optionsPadding`: the width of  columns containing a data element's options.
-  4. `numberOfColumns`: the number of columns for displaying options in an option set.
+  2. `dataElementLabel`: the space (width) assigned for data element names. Longer names without spaces will not word wrap.
+  3. `numberOfColumns`: the number of columns for displaying options in an option set.
 7. `Prefixes`: Prefixes can be added to any objects, for example printable form types, section names, or options sets. All prefixes usd in this app are configured here. Value keys contain the prefix values; the translationKey has to be the same as what is set in the i18n files.
   1. `dataSetPrefix`: prefix for each data set, prepended to the data set name, seen in the template selection dropdown box.
   2. `programPrefix`: prefix for each program, prepended to the program name, seen in the template selection dropdown box.
