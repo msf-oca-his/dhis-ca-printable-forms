@@ -13,6 +13,8 @@ TallySheets.factory("Config", [function() {
 					borderRight: 15,
 					availableHeight: 237,
 					availableWidth: 183,
+					widthAfterRemovingDefaultBorders: 'will be calculated',
+					heightAfterRemovingDefaultBorders: 'will be calculated',
 					graceHeight: 10
 				},
 				LandScape: {
@@ -22,17 +24,14 @@ TallySheets.factory("Config", [function() {
 			}
 		};
 		config.Register = {
-			availableHeight: 175,
-			availableWidth: 270,
 			labelHeight: 10,                 //table header
-			tableHeaderHeight: 10,           //page header
 			dataEntryRowHeight: 9,
 			headerHeight: 25,
 			textElementWidth: 50,
 			otherElementWidth: 30
 		};
 		config.Coversheet = {
-			heightOfDataElementInGeneralDataElement: 9,
+			defaultHeightOfDataElementLabel: 9,
 			gapBetweenSections: 5,
 			heightOfSectionTitle: 7,
 			heightOfProgramTitle:10,
@@ -41,15 +40,15 @@ TallySheets.factory("Config", [function() {
 			availableWidth:183
 		};
 		config.DataSet = {
+			defaultHeightOfDataElementLabel: 9,
 			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
-			heightOfDataElementInGeneralDataElement: 9,
 			heightOfSectionTitle: 5,
 			heightOfDataSetTitle: 5.5,
 			gapBetweenSections: 3,
 			headerHeight: 9,
 			graceHeight: 5,
-			availableHeight: 0,
+			availableHeight: 'will be calculated',
 			availableWidth: config.PageTypes.A4.widthAfterRemovingDefaultBorders,
 			numberOfCOCColumns: 5
 		};
@@ -61,7 +60,7 @@ TallySheets.factory("Config", [function() {
 		config.OptionSet = {
 			labelPadding: 4,
 			dataElementLabel: 48,
-			optionsPadding: 12
+			numberOfColumns: 3,
 		};
 		config.Prefixes = {
 			dataSetPrefix: {
@@ -96,8 +95,9 @@ TallySheets.factory("Config", [function() {
 			config.PageTypes.A4.Portrait.widthAfterRemovingDefaultBorders = config.PageTypes.A4.Portrait.width - config.PageTypes.A4.Portrait.borderLeft - config.PageTypes.A4.Portrait.borderRight;
 		};
 		var updateDataSetWithCalculatedValues = function(){
-		config.DataSet.availableHeight = config.PageTypes.A4.Portrait.heightAfterRemovingDefaultBorders - config.DataSet.headerHeight;
-	};
+			config.DataSet.availableHeight = config.PageTypes.A4.Portrait.heightAfterRemovingDefaultBorders - config.DataSet.headerHeight;
+			config.DataSet.availableWidth = config.PageTypes.A4.Portrait.widthAfterRemovingDefaultBorders;
+		};
 	updatePageA4withCalculatedValues();
 	updateDataSetWithCalculatedValues();
 	return config;

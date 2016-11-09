@@ -7,9 +7,9 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 		var getHeightForSection = function(section) {
 			var height;
 			if(section.isOptionSet)
-				height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements[0].rows.length)) + config.Coversheet.gapBetweenSections;
+				height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].rows.length)) + config.Coversheet.gapBetweenSections;
 			else
-				height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements.length / 2)) + config.Coversheet.gapBetweenSections;
+				height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / 2)) + config.Coversheet.gapBetweenSections;
 
 			return section.isDuplicate ? height : height + config.Coversheet.heightOfSectionTitle;
 		};
@@ -32,14 +32,14 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 		var getNumberOfElementsThatCanFit = function(section) {
 			var overFlow = sectionHeight - page.heightLeft;
 			if(section.isOptionSet)
-				return section.programStageDataElements[0].options.length - Math.round(overFlow * 3 / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+				return section.programStageDataElements[0].options.length - Math.round(overFlow * 3 / (config.Coversheet.defaultHeightOfDataElementLabel));
 			else
-				return section.programStageDataElements.length - Math.round(overFlow * 2 / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+				return section.programStageDataElements.length - Math.round(overFlow * 2 / (config.Coversheet.defaultHeightOfDataElementLabel));
 		};
 
 		var getNumberOfOptionsThatCanFit = function(section){
 			var overFlow = sectionHeight - page.heightLeft;
-			return section.programStageDataElements[0].options.length - Math.ceil(overFlow * 3 / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+			return section.programStageDataElements[0].options.length - Math.ceil(overFlow * 3 / (config.Coversheet.defaultHeightOfDataElementLabel));
 		};
 
 		var breakAndAddSection = function(section) {

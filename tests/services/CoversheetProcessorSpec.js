@@ -16,7 +16,7 @@ describe("Coversheet Processor", function() {
 		Coversheet: {
 			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
-			heightOfDataElementInGeneralDataElement: 9,
+			defaultHeightOfDataElementLabel: 9,
 			heightOfSectionTitle: 7,
 			heightOfProgramTitle: 10,
 			gapBetweenSections: 5,

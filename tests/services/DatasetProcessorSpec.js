@@ -24,7 +24,7 @@ describe("DataSetProcessor", function() {
 				availableHeight: 237,
 				availableWidth: 183,
 				heightOfDataElementInCatCombTable: 12,
-				heightOfDataElementInGeneralDataElement: 9,
+				defaultHeightOfDataElementLabel: 9,
 				heightOfSectionTitle: 7,
 				heightOfDataSetTitle: 10,
 				gapBetweenSections: 5,

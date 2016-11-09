@@ -11,9 +11,9 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				if(section.isCatComb)
 					height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
 				else if(section.isOptionSet)
-					height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements[0].options.length / 3)) + config.DataSet.gapBetweenSections;
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / 3)) + config.DataSet.gapBetweenSections;
 				else
-					height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
 
 				return section.isDuplicate ? height : height + config.DataSet.heightOfSectionTitle;
 			};
@@ -33,7 +33,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 			};
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.dataElements[0].options.length - Math.ceil(overFlow * 3 / (config.DataSet.heightOfDataElementInGeneralDataElement));
+				return section.dataElements[0].options.length - Math.ceil(overFlow * 3 / (config.DataSet.defaultHeightOfDataElementLabel));
 			};
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
@@ -45,7 +45,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				else if(section.isOptionSet)
 					return 0;
 				else
-					return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.heightOfDataElementInGeneralDataElement));
+					return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section, numberOfElementsThatCanFit) {
