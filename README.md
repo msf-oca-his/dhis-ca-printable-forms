@@ -112,7 +112,7 @@ Each of the following examples will be considered valid by the app
 [  CODE] LABEL    
 
 #Calculated Config:
-some parts of config is calculated when the app starts. So, this part will contain the formulae in order to calculate the values. This part is present at the end of config.js
+Some values used for configuration are calculated on the fly when the app starts. The formulae for these values are found at the end of config.js. See below for an example.
 ####Example:
 ```javascript
 var updateDataSetWithCalculatedValues = function(){
