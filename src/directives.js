@@ -1,7 +1,6 @@
 require("./directives/templateSelector/templateSelector.js");
 require("./directives/page/page.js");
 require("./directives/templateDataset/templateDataSet.js");
-require("./directives/progressBar/progressBar.js");
 require("./directives/templateCoversheet/templateCoversheet.js");
 require("./directives/templateRegister/templateRegister.js");
 require("./directives/codeSheet/codeSheet.js");

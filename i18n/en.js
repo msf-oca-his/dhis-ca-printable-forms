@@ -1,5 +1,4 @@
 module.exports = {
-  "IN_PROGRESS": "IN PROGRESS",
   "HOME": "Home",
   "PRINT": "Print",
   "EXPORT_EXCEL": "Export to MS Excel",
