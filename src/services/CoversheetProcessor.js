@@ -3,7 +3,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 	var pages = [];
 	var currentPageIndex;
 	var page;
-
+	var noOfDefaultTypeColumns = 2;
 
 
 	var processProgram = function(program) {
@@ -14,7 +14,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				if(section.isOptionSet)
 					height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements[0].rows.length)) + config.Coversheet.gapBetweenSections;
 				else
-					height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements.length / 2)) + config.Coversheet.gapBetweenSections;
+					height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + config.Coversheet.gapBetweenSections;
 
 				return section.isDuplicate ? height : height + config.Coversheet.heightOfSectionTitle;
 			};
@@ -39,34 +39,34 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.programStageDataElements[0].options.length - Math.ceil(overFlow * 3 / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+				return section.programStageDataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.heightOfDataElementInGeneralDataElement));
 			};
 
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
-				if(isOptionSetSection(section))
-					return section.programStageDataElements[0].options.length - Math.round(overFlow * 3 / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+				if(section.isOptionSet)
+					return section.programStageDataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 				else
-					return section.programStageDataElements.length - Math.round(overFlow * 2 / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+					return section.programStageDataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section) {
 				if(isOptionSetSection(section)) {
 					var newSection = _.cloneDeep(section);
 					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
-					if(numberOfOptionsThatCanFit <= 3){
+					if(numberOfOptionsThatCanFit <= config.OptionSet.numberOfColumns){
 						addSectionToNewPage(section, getHeightForSection(section), false);
 						return
 					}
-					if(numberOfOptionsThatCanFit % 3 > 0)
-						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (3 - numberOfOptionsThatCanFit % 3);
+					if(numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns > 0)
+						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (config.OptionSet.numberOfColumns - numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns);
 					newSection.programStageDataElements[0].options = section.programStageDataElements[0].options.splice(numberOfOptionsThatCanFit);
 					addSectionToPage(section, page.heightLeft);
 					addSectionToNewPage(newSection, getHeightForSection(newSection), false);
 				}
 				else {
 					var newSection = _.cloneDeep(section);
-					(numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
+					(numberOfElementsThatCanFit % noOfDefaultTypeColumns == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
 					addSectionToPage(section, page.heightLeft);
 					var isFirstSectionInProgram = false;
@@ -95,7 +95,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 		var addComments = function() {
 			var lastPage = pages[pages.length - 1];
-			if(lastPage.heightLeft > 30)
+			if(lastPage.heightLeft > config.Coversheet.commentsHeight)
 				lastPage.contents.push({ type: 'comments' });
 			else {
 				var newPage = new CoverSheetPage("COVERSHEET");
@@ -131,6 +131,8 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				if(Program.programStages[0].programStageSections.length == 0) return;
 				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(Program.programStages[0].programStageSections[i], "programStageDataElements");
 				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
+				if(!Program.programStages[0].programStageSections[i].isOptionSet)
+					printFriendlyUtils.splitLeftAndRightElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
 			}
 			processProgram(Program)
 		});

@@ -30,7 +30,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 					dataElementsPerPage.push(dataElement);
 				}
 				else {
-					page.contents.push(new Content(contentTypes.registerContent, dataElementsPerPage))
+					page.contents.push(new Content(contentTypes.registerContent, dataElementsPerPage));
 					dataElementsPerPage = [];
 					page = getNewPage();
 					page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);

@@ -1,4 +1,4 @@
-TallySheets.directive('sectionTitle', function() {
+TallySheets.directive('sectionTitle', [ function() {
 	return {
 		restrict: 'E',
 		template: require('./sectionTitleView.html'),
@@ -6,4 +6,4 @@ TallySheets.directive('sectionTitle', function() {
 			title: '='
 		}
 	}
-});
+}]);

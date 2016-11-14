@@ -1,11 +1,18 @@
-describe("Dataset ctrl", function() {
+describe("Dataset Template", function() {
 	var section;
 	var compile, httpMock;
 	var $scope = {};
-	var config = {CustomAttributes:{
-		displayOptionUID:{
-			options: "testDisplayOptions"
-		}}
+	var config = {
+		DataSet: {
+			widthOfCategoryOptionCombo: 3,
+			widthOfDataElement: 4,
+			availableWidthForDefaultSection: 9.5
+		},
+		CustomAttributes: {
+			displayOptionUID: {
+				options: "testDisplayOptions"
+			}
+		}
 	};
 	beforeEach(function() {
 		module("TallySheets");
@@ -24,7 +31,7 @@ describe("Dataset ctrl", function() {
 	}));
 
 	it("should get displayOptions from config", function() {
-		var element = angular.element('<template-dataset contents="" dataset-name="test_DataSet"></template-dataset>');
+		var element = angular.element('<template-dataset contents = "" dataset-name = "test_DataSet"></template-dataset>');
 		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);
@@ -35,7 +42,7 @@ describe("Dataset ctrl", function() {
 
 	it("should return table width as 9.5cm when section is not catcomb", function() {
 		var element = angular.element('<template-dataset contents="" dataset-name="test_DataSet"></template-dataset>');
-		$scope.test_DataSet = "dataSetName"
+		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);
 		$scope.$digest();
@@ -48,7 +55,7 @@ describe("Dataset ctrl", function() {
 		currentSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male,5", "female,7"]
 		currentSection.isCatComb = true;
 		var element = angular.element('<template-dataset contents="modelContents" dataset-name="test_DataSet"></template-dataset>');
-		$scope.test_DataSet = "dataSetName"
+		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);
 		$scope.$digest();

@@ -8,12 +8,18 @@ describe("Print Friendly Utils", function() {
 			DataSet: {
 				numberOfCOCColumns: 5
 			},
+			OptionSet: {
+				numberOfColumns: 3
+			},
 			CustomAttributes: {
-				displayOptionUID:{
-					options  : {
+				displayOptionUID: {
+					options: {
 						none: '0'
-					},
+					}
 				}
+			},
+			Delimiters: {
+				categoryOptionComboDelimiter: "<br>"
 			}
 		};
 		module(function($provide) {
@@ -43,7 +49,6 @@ describe("Print Friendly Utils", function() {
 			var actualSection = printFriendlyUtils.createNewSectionUsing(testSection, "testDataElements", "testDataElements");
 			expect(actualSection.testKey1).toEqual('testValue1');
 			expect(actualSection.testKey2).toEqual('testValue2');
-			console.log(actualSection, testSection)
 			expect(Object.keys(actualSection).length).toBe(Object.keys(testSection).length);
 		});
 	});
@@ -57,7 +62,7 @@ describe("Print Friendly Utils", function() {
 					testKey: [
 						{
 							valueType: 'OPTIONSET',
-							options  : []
+							options: []
 						}
 					]
 				}
@@ -194,7 +199,7 @@ describe("Print Friendly Utils", function() {
 		var testSections;
 		beforeEach(function() {
 			testSections = [{
-				testKey  : []
+				testKey: []
 			}];
 		});
 

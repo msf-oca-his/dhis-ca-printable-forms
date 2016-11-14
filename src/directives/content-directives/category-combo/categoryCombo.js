@@ -1,4 +1,4 @@
-TallySheets.directive('categoryCombo', function() {
+TallySheets.directive('categoryCombo', ['Config', function(config) {
 	return {
 		restrict: 'E',
 		template: require('./categoryComboView.html'),
@@ -7,8 +7,8 @@ TallySheets.directive('categoryCombo', function() {
 		},
 		link: function($scope) {
 			$scope.getTableWidth = function(categoryOptionCombos) {
-				return (categoryOptionCombos.length * 3 + 4) + "cm";  //TODO: magic numbers...
+				return (categoryOptionCombos.length * config.DataSet.widthOfCategoryOptionCombo + config.DataSet.widthOfDataElement) + "cm";
 			}
 		}
 	};
-});
+}]);

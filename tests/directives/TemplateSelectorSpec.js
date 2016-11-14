@@ -25,10 +25,10 @@ describe("templateSelector Directive", function() {
 		config = {
 			Prefixes: {
 				dataSetPrefix: {
-				translationKey:"DATASET_PREFIX"
+				translationKey:"dataset_prefix"
 				},
 				programPrefix:{
-					translationKey:"PROGRAM_PREFIX"
+					translationKey:"program_prefix"
 				}
 			},
 			CustomAttributes: {}
@@ -211,7 +211,7 @@ describe("templateSelector Directive", function() {
 				scope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("ATTRIBUTE_NOT_SET", _ModalAlertTypes.indismissibleError));
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("attribute_not_set", _ModalAlertTypes.indismissibleError));
 						done();
 					});
 				scope.$digest();
@@ -223,8 +223,8 @@ describe("templateSelector Directive", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(scope);
 				scope.$apply();
-				expect(scope.$$childHead.dataSetTemplates[0].displayName.includes("DATASET_PREFIX")).toEqual(true)
-				expect(scope.$$childHead.programTemplates[0].displayName.includes("PROGRAM_PREFIX")).toEqual(true)
+				expect(scope.$$childHead.dataSetTemplates[0].displayName.includes("dataset_prefix")).toEqual(true)
+				expect(scope.$$childHead.programTemplates[0].displayName.includes("program_prefix")).toEqual(true)
 			})
 		});
 		
