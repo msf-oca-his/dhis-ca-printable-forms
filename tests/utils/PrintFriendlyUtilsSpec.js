@@ -14,6 +14,9 @@ describe("Print Friendly Utils", function() {
 						none: '0'
 					}
 				}
+			},
+			Delimiters: {
+				categoryOptionComboDelimiter: "<br>"
 			}
 		};
 		module(function($provide) {

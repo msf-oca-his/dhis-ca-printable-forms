@@ -31,7 +31,8 @@ describe("DataSetProcessor", function() {
 				numberOfCOCColumns: 5
 			},
 			Delimiters: {
-				OptionLabelDelimiter: "]"
+				optionLabelDelimiter: "]",
+				categoryOptionComboDelimiter: "<br>"
 			},
 			CustomAttributes: {
 				displayOptionUID: {
@@ -155,7 +156,7 @@ describe("DataSetProcessor", function() {
 							{type: 'dataSetName', name: "test dataset"},
 							{type: 'section', section: expectedSection}],
 						datasetName: "test dataset",
-						type: 'DATASET',
+						type: 'DATASET'
 					}
 				];
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);

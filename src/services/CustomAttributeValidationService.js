@@ -1,7 +1,7 @@
 TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlert', 'ModalAlertTypes', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlert, ModalAlertTypes) {
 
 	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
-		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code')
+		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code');
 		var configOptions = _.map(config.CustomAttributes[customAttributeNameFromConfig].options);
 		return !_.isEqual(configOptions.sort(), optionsFromDhis.sort())
 	};

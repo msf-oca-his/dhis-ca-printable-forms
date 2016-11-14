@@ -73,7 +73,8 @@ TallySheets.factory("Config", [ function() {
 			}
 		};
 		config.Delimiters = {
-			OptionLabelDelimiter: "]"
+			optionLabelDelimiter: "]",
+			categoryOptionComboDelimiter: "<br>"
 	};
 		config.CustomAttributes = {
 			// printFlagUID: {

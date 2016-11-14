@@ -2,7 +2,7 @@ TallySheets.factory('CodeSheetElementTypes', ['Config', 'CommonUtils', function(
 	return {
 		CodeSheetLabel: function(code, label) {
 			this.code = code;
-			this.label = _.trim(commonUtils.getRightPartOfSplit(label, config.Delimiters.OptionLabelDelimiter));
+			this.label = _.trim(commonUtils.getRightPartOfSplit(label, config.Delimiters.optionLabelDelimiter));
 			this.type = 'LABEL';
 		},
 		CodeSheetHeading: function(heading) {

@@ -21,7 +21,7 @@ describe("CodeSheet Processor", function() {
 				numberOfColumns: 3
 			},
 			Delimiters: {
-				OptionLabelDelimiter: "]"
+				optionLabelDelimiter: "]"
 			},
 			CustomAttributes: {
 				displayOptionUID: {

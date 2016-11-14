@@ -27,7 +27,7 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
 
 	this.addLineBreakAfterEachCategoryOption = function(section, dataElementsKey) {
 		_.map((section[dataElementsKey])[0].categoryCombo.categoryOptionCombos, function(categoryOptionCombo, index, array) {
-			array[index] = categoryOptionCombo.toString().replace(/,/g, "<br>");
+			array[index] = categoryOptionCombo.toString().replace(/,/g, config.Delimiters.categoryOptionComboDelimiter);
 		});
 	};
 	var isListTypeDataElement = function(dataElement) {

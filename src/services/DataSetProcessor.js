@@ -96,7 +96,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 			if(overflow < 0 )
 				addSectionToPage(section, sectionHeight);
 			else {
-				var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)
+				var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section);
 				if(numberOfElementsThatCanFit == section.dataElements.length){
 					addSectionToPage(section, sectionHeight);}
 				else if(numberOfElementsThatCanFit > 1)
@@ -137,7 +137,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 					printFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, i, "dataElements");
 					_.map(dataSet.sections[i].dataElements, function(dataElement) {
 						_.map(dataElement.options, function(option) {
-							option.displayName = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.OptionLabelDelimiter));  //TODO: Use PFF-model for transformation
+							option.displayName = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.optionLabelDelimiter));  //TODO: Use PFF-model for transformation
 						});
 					});
 					if(!dataSet.sections[i].isOptionSet)
