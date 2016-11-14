@@ -23,12 +23,14 @@ describe("Coversheet Processor", function() {
 			graceHeight: 10,
 			availableHeight: 237,
 			availableWidth: 183,
-			numberOfCOCColumns: 5
+			numberOfCOCColumns: 5,
+			commentsHeight: 30
 		},
 		OptionSet: {
 			labelPadding: 4,
 			dataElementLabel: 48,
-			optionsPadding: 12
+			optionsPadding: 12,
+			numberOfColumns: 3
 		},
 		Delimiters: {
 			optionLabelDelimiter: "]"
@@ -248,7 +250,7 @@ describe("Coversheet Processor", function() {
 				var expectedRows1 = [];
 				for(var i = 0; i < 23; i++) {
 					var j = 0;
-					while(j < 3) {
+					while(j < config.OptionSet.numberOfColumns) {
 						if(j == 0)
 							expectedRows1.push([{id: 1, displayName: "option"}]);
 						else

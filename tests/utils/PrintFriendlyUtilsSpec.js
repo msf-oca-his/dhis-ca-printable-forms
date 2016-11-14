@@ -8,6 +8,9 @@ describe("Print Friendly Utils", function() {
 			DataSet: {
 				numberOfCOCColumns: 5
 			},
+			OptionSet: {
+				numberOfColumns: 3
+			},
 			CustomAttributes: {
 				displayOptionUID: {
 					options: {
@@ -83,7 +86,7 @@ describe("Print Friendly Utils", function() {
 			var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()./>?:;'|\]}[{')\",";
 			testSection.testKey[0].categoryCombo.categoryOptionCombos.push(testString);
 			printFriendlyUtils.addLineBreakAfterEachCategoryOption(testSection, "testKey");
-			expect(testSection.testKey[0].categoryCombo.categoryOptionCombos[3]).toEqual(testString.replace(",", "<br>"));
+			expect(testSection.testKey[0].categoryCombo.categoryOptionCombos[3]).toEqual(testString.replace(",", config.Delimiters.categoryOptionComboDelimiter));
 		})
 	});
 
@@ -99,7 +102,7 @@ describe("Print Friendly Utils", function() {
 			};
 		});
 		it("should add empty array as rows when there are no options", function() {
-			var actualSection = printFriendlyUtils.createOptionSetSection(testSection, "testKey")
+			var actualSection = printFriendlyUtils.createOptionSetSection(testSection, "testKey");
 			expect(actualSection.testKey[0].rows).toEqual([]);
 		});
 
@@ -115,7 +118,7 @@ describe("Print Friendly Utils", function() {
 			for(var i = 0; i < 98; i++)
 				testSection.testKey[0].options.push(i)
 			var actualSection = printFriendlyUtils.createOptionSetSection(testSection, "testKey");
-			var val = Math.floor(98 / 3) + 1;
+			var val = Math.floor(98 / config.OptionSet.numberOfColumns) + 1;
 			for(var i = 0; i < 98; i++) {
 				expect((actualSection.testKey[0].rows[Math.floor(i / 3)])[i % 3]).toBe(val * (i % 3) + Math.floor(i / 3));
 			}

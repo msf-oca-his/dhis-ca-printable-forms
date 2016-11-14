@@ -2,6 +2,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 	var pages = [];
 	var currentPageIndex;
 	var page, currentProgram;
+	var noOfDefaultTypeColumns = 2;
 
 	var processSection = function(section, sectionIndex) {
 		var getHeightForSection = function(section) {
@@ -9,7 +10,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 			if(section.isOptionSet)
 				height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].rows.length)) + config.Coversheet.gapBetweenSections;
 			else
-				height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / 2)) + config.Coversheet.gapBetweenSections;
+				height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + config.Coversheet.gapBetweenSections;
 
 			return section.isDuplicate ? height : height + config.Coversheet.heightOfSectionTitle;
 		};
@@ -32,22 +33,22 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 		var getNumberOfElementsThatCanFit = function(section) {
 			var overFlow = sectionHeight - page.heightLeft;
 			if(section.isOptionSet)
-				return section.programStageDataElements[0].options.length - Math.round(overFlow * 3 / (config.Coversheet.defaultHeightOfDataElementLabel));
+				return section.programStageDataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 			else
-				return section.programStageDataElements.length - Math.round(overFlow * 2 / (config.Coversheet.defaultHeightOfDataElementLabel));
+				return section.programStageDataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 		};
 
-		var getNumberOfOptionsThatCanFit = function(section){
+		var getNumberOfOptionsThatCanFit = function(section) {
 			var overFlow = sectionHeight - page.heightLeft;
-			return section.programStageDataElements[0].options.length - Math.ceil(overFlow * 3 / (config.Coversheet.defaultHeightOfDataElementLabel));
+			return section.programStageDataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 		};
 
 		var breakAndAddSection = function(section) {
 			if(section.isOptionSet) {
 				var newSection = _.cloneDeep(section);
 				var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
-				if(numberOfOptionsThatCanFit % 3 > 0)
-					numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (3 - numberOfOptionsThatCanFit % 3);
+				if(numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns > 0)
+					numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (config.OptionSet.numberOfColumns - numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns);
 				newSection.programStageDataElements[0].options = section.programStageDataElements[0].options.splice(numberOfOptionsThatCanFit);
 				printFriendlyUtils.createOptionSetSection(section, "programStageDataElements");
 				printFriendlyUtils.createOptionSetSection(newSection, "programStageDataElements");
@@ -57,7 +58,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 			}
 			else {
 				var newSection = _.cloneDeep(section);
-				(numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
+				(numberOfElementsThatCanFit % noOfDefaultTypeColumns == 0) ? 0 : ++numberOfElementsThatCanFit;
 				newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
 				printFriendlyUtils.splitLeftAndRightElements(section, "programStageDataElements");
 				printFriendlyUtils.splitLeftAndRightElements(newSection, "programStageDataElements");
@@ -90,7 +91,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 
 		var addComments = function() {
 			var lastPage = pages[pages.length - 1];
-			if(lastPage.heightLeft > 30)
+			if(lastPage.heightLeft > config.Coversheet.commentsHeight)
 				lastPage.contents.push({ type: 'comments' });
 			else {
 				var newPage = new CoverSheetPage("COVERSHEET");

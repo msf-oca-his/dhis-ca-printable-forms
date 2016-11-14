@@ -2,6 +2,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 	var pages = [];
 	var currentPageIndex;
 	var page;
+	var noOfDefaultTypeColumns = 2;
 
 	var processDataSet = function(dataSet) {
 		var processSection = function(section, sectionIndex) {
@@ -11,9 +12,9 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				if(section.isCatComb)
 					height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
 				else if(section.isOptionSet)
-					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / 3)) + config.DataSet.gapBetweenSections;
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.DataSet.gapBetweenSections;
 				else
-					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / 2)) + config.DataSet.gapBetweenSections;
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + config.DataSet.gapBetweenSections;
 
 				return section.isDuplicate ? height : height + config.DataSet.heightOfSectionTitle;
 			};
@@ -33,7 +34,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 			};
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.dataElements[0].options.length - Math.ceil(overFlow * 3 / (config.DataSet.defaultHeightOfDataElementLabel));
+				return section.dataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.defaultHeightOfDataElementLabel));
 			};
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
@@ -45,7 +46,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				else if(section.isOptionSet)
 					return 0;
 				else
-					return section.dataElements.length - Math.round(overFlow * 2 / (config.DataSet.defaultHeightOfDataElementLabel));
+					return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.DataSet.defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section, numberOfElementsThatCanFit) {
@@ -61,16 +62,16 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				else if(section.isOptionSet) {
 					var newSection = _.cloneDeep(section);
 					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
-					if(numberOfOptionsThatCanFit <= 3){
+					if(numberOfOptionsThatCanFit <= config.OptionSet.numberOfColumns){
 						addSectionToNewPage(section, getHeightForSection(section), false);
 						return;
 					}
-					if((section.dataElements[0].options.length - numberOfOptionsThatCanFit) < 3) {
+					if((section.dataElements[0].options.length - numberOfOptionsThatCanFit) < config.OptionSet.numberOfColumns) {
 						addSectionToPage(section, page.heightLeft);
 						return;
 					}
-					if(numberOfOptionsThatCanFit % 3 > 0)
-						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (3 - numberOfOptionsThatCanFit % 3);
+					if(numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns > 0)
+						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (config.OptionSet.numberOfColumns - numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns);
 					newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfOptionsThatCanFit);
 					printFriendlyUtils.createOptionSetSection(section, "dataElements");
 					printFriendlyUtils.createOptionSetSection(newSection, "dataElements");
@@ -80,7 +81,7 @@ TallySheets.service('DataSetProcessor', ['CustomAttributeService', 'Config', 'Da
 				}
 				else {
 					var newSection = _.cloneDeep(section);
-					(numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
+					(numberOfElementsThatCanFit % noOfDefaultTypeColumns == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
 					printFriendlyUtils.splitLeftAndRightElements(section, "dataElements");
 					printFriendlyUtils.splitLeftAndRightElements(newSection, "dataElements");

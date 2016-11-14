@@ -11,9 +11,9 @@ TallySheets.directive('templateDataset', ['Config', function(config) {
 				$scope.displayOptions = config.CustomAttributes.displayOptionUID.options;
 			$scope.getTableWidth = function(section) {
 				if(section.isCatComb) {
-					return (section.dataElements[0].categoryCombo.categoryOptionCombos.length * 3 + 4) + "cm";  //TODO: magic numbers...
+					return (section.dataElements[0].categoryCombo.categoryOptionCombos.length * config.DataSet.widthOfCategoryOptionCombo + config.DataSet.widthOfDataElement) + "cm";
 				}
-				else return "9.5cm";
+				else return config.DataSet.availableWidthForDefaultSection + "cm";
 			}
 		}
 	};

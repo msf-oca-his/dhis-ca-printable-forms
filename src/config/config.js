@@ -36,8 +36,9 @@ TallySheets.factory("Config", [ function() {
 			heightOfSectionTitle: 7,
 			heightOfProgramTitle:10,
 			graceHeight:10,
-			availableHeight:237,
-			availableWidth:183
+			availableHeight: 237,
+			availableWidth: 183,
+			commentsHeight: 30
 		};
 		config.DataSet = {
 			defaultHeightOfDataElementLabel: 9,
@@ -50,7 +51,10 @@ TallySheets.factory("Config", [ function() {
 			graceHeight: 5,
 			availableHeight: 'will be calculated',
 			availableWidth: config.PageTypes.A4.widthAfterRemovingDefaultBorders,
-			numberOfCOCColumns: 5
+			numberOfCOCColumns: 5,
+			widthOfCategoryOptionCombo: 3,
+			widthOfDataElement: 4,
+			availableWidthForDefaultSection: 9.5
 		};
 		config.CodeSheet = {
 			heightOfProgramTitle: 10,

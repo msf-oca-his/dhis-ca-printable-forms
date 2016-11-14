@@ -1,9 +1,11 @@
 TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
-	
+
+	var noOfDefaultTypeColumns = 2;
+
 	this.createOptionSetSection = function(section, dataElementsKey) {
 		var dataElement = (section[dataElementsKey])[0];
 		dataElement.rows = [];
-		var numberOfRows = Math.ceil(dataElement.options.length / 3);
+		var numberOfRows = Math.ceil(dataElement.options.length / config.OptionSet.numberOfColumns);
 		for(var i = 0; i < numberOfRows; i++) {
 			var j = 0;
 			while(j < dataElement.options.length) {
@@ -102,8 +104,8 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
 	};
 
 	this.splitLeftAndRightElements = function(section, dataElementsKey) {
-		section.leftSideElements = _.slice(section[dataElementsKey], 0, Math.ceil(section[dataElementsKey].length / 2));
-		section.rightSideElements = _.slice(section[dataElementsKey], Math.ceil(section[dataElementsKey].length / 2));
+		section.leftSideElements = _.slice(section[dataElementsKey], 0, Math.ceil(section[dataElementsKey].length / noOfDefaultTypeColumns));
+		section.rightSideElements = _.slice(section[dataElementsKey], Math.ceil(section[dataElementsKey].length / noOfDefaultTypeColumns));
 	};
 
 	//TODO: extract this to data model util.

@@ -30,6 +30,9 @@ describe("DataSetProcessor", function() {
 				gapBetweenSections: 5,
 				numberOfCOCColumns: 5
 			},
+			OptionSet: {
+				numberOfColumns: 3
+			},
 			Delimiters: {
 				optionLabelDelimiter: "]",
 				categoryOptionComboDelimiter: "<br>"
