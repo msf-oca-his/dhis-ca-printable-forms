@@ -1,0 +1,34 @@
+<section-title title="content.title"></section-title>
+<table class="default-section">
+
+    <tr ng-repeat="name in content.leftSideDataElements">
+
+        <td class="deLabel general">
+            {{content.leftSideDataElements[$index].name}}
+        </td>
+        <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType=='BOOLEAN'">
+            <input type="checkbox" class="pffcheckbox">Yes</input>
+            <span class="checkbox-separator"></span>
+            <input type="checkbox" class="pffcheckbox">No</input>
+        </td>
+
+        <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!='BOOLEAN'"></td>
+
+        <td class="default-section-divider"></td>
+
+        <td class="deLabel general" ng-if="content.rightSideDataElements[$index]">
+            {{content.rightSideDataElements[$index].name}}
+        </td>
+
+        <span ng-if="content.rightSideDataElements[$index]">
+            <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType=='BOOLEAN'">
+                <input type="checkbox" class="pffcheckbox">Yes</input>
+                <span class="checkbox-separator"></span>
+                <input type="checkbox" class="pffcheckbox">No</input>
+            </td>
+            <td class="deField"
+                ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!='BOOLEAN'">
+            </td>
+        </span>
+    </tr>
+</table>

@@ -104,7 +104,7 @@ describe("DataSetProcessor", function() {
 
 		describe("sections with Only CatCombs", function() {
 			var testDataSet;
-			beforeEach(function(){
+			beforeEach(function() {
 				testDataSet = {
 					id: "123",
 					name: "test dataset",
@@ -132,10 +132,15 @@ describe("DataSetProcessor", function() {
 				var dataSet = _.clone(testDataSet);
 				//section height would be 32 and dataset title would be 10 and datasection title would be 7 total height is 237-49=188
 				var expectedPage = new DataSetPage();
-				_.assignIn(expectedPage, {heightLeft: 188, contents: [{type: 'dataSetName', name: "test dataset"}, {type: 'section', section: dataSet.sections[0]}], datasetName: "test dataset", type: 'DATASET'});
+				_.assignIn(expectedPage, {
+					contents: [{type: {type: 'DATASET_TITLE', renderer: 'dataset-title'}, data: {title: 'test dataset'}}, {
+						type: Object({type: 'CATCOMB', renderer: 'category-combo'}),
+						data: {title: 'section', categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
+					}], heightLeft: 188, widthLeft: 183, type: 'DATASET', datasetName: 'test dataset'
+				});
 				var expectedPages = [expectedPage];
 				var actualPages = dataSetProcessor.process([dataSet]);
-				expect(expectedPages).toEqual(actualPages);
+				expect(clone(expectedPages)).toEqual(clone(actualPages));
 			});
 
 			it("should process the dataset with sections of type catcomb with category option combos", function() {
@@ -151,19 +156,38 @@ describe("DataSetProcessor", function() {
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
 
 				expectedSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male<br>5", "female<br>7"];
+
 				var expectedPages = [
 					{
-						heightLeft: 188,
-						widthLeft: 183,
 						contents: [
-							{type: 'dataSetName', name: "test dataset"},
-							{type: 'section', section: expectedSection}],
-						datasetName: "test dataset",
-						type: 'DATASET'
-					}
-				];
-				var actualPages = dataSetProcessor.process([currentTestDataSet]);
-				expect(clone(actualPages)).toEqual(expectedPages);
+							{
+								type: {
+									type: 'DATASET_TITLE',
+									renderer: 'dataset-title'
+								},
+								data: {
+									title: 'test dataset'
+								}
+							},
+							{
+								type: {
+									type: 'CATCOMB',
+									renderer: 'category-combo'
+								},
+								data: {
+									title: 'section',
+									categoryOptionCombos: ['male<br>5', 'female<br>7'],
+									dataElementNames: ['dataElement']
+								}
+							}],
+							heightLeft: 188,
+							widthLeft: 183,
+							type: 'DATASET',
+							datasetName: 'test dataset'
+					} ];
+
+				actualPages = dataSetProcessor.process([currentTestDataSet]);
+				expect(expectedPages).toEqual(clone(actualPages));
 			});
 
 			it("should process the dataset with sections of type catcomb with catgory option combos are overflowed", function() {
@@ -186,7 +210,7 @@ describe("DataSetProcessor", function() {
 						categoryCombo: {
 							id: "154",
 							categoryOptionCombos: ["female<br><12", "male<br><10"],
-							name: "catcomb",
+							name: "catcomb"
 						}
 					}],
 					isCatComb: true,
@@ -315,7 +339,7 @@ describe("DataSetProcessor", function() {
 				type: 'dataset'
 			};
 
-			it("should process the section contain only one dataElement of type optionSet", function() {
+			fit("should process the section contain only one dataElement of type optionSet", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
@@ -337,7 +361,6 @@ describe("DataSetProcessor", function() {
 					}],
 					datasetName: "test dataset"
 				}];
-
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
 			});
@@ -387,7 +410,7 @@ describe("DataSetProcessor", function() {
 				expectedRows2[1] = [];
 				expectedRows2[2] = [];
 				expectedRows2[0].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"}, {id: 1, displayName: "option"});
-				expectedRows2[1].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"} );
+				expectedRows2[1].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
 				expectedRows2[2].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
 
 				expectedSection2.dataElements[0].rows = expectedRows2;
@@ -472,7 +495,7 @@ describe("DataSetProcessor", function() {
 				};
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
-				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];				
+				expectedSection.leftSideElements = [currentTestDataSet.sections[0].dataElements[0]];
 				expectedSection.leftSideElements[0].displayOption = "1";
 				expectedSection.rightSideElements = [];
 				expectedSection.leftSideElements[0].displayOption = "1";
@@ -625,9 +648,9 @@ describe("DataSetProcessor", function() {
 				expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
 			});
 		});
-		
-		describe("multiple datasets", function(){
-			it("should give the dataset name along with its contents", function(){
+
+		describe("multiple datasets", function() {
+			it("should give the dataset name along with its contents", function() {
 				var testDataSet = {
 					id: "123",
 					name: "test dataset",
@@ -642,7 +665,7 @@ describe("DataSetProcessor", function() {
 					}],
 					type: "dataset"
 				};
-				
+
 				var testDataSet2 = {
 					id: "124",
 					name: "test dataset2",
@@ -661,7 +684,7 @@ describe("DataSetProcessor", function() {
 				var expectedPage = new DataSetPage();
 				_.assignIn(expectedPage, {contents: [], datasetName: "test dataset", type: 'DATASET'});
 				var expectedPages = [expectedPage];
-				var actualPages = dataSetProcessor.process([testDataSet,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2,testDataSet2]);
+				var actualPages = dataSetProcessor.process([testDataSet, testDataSet2, testDataSet2, testDataSet2, testDataSet2, testDataSet2, testDataSet2, testDataSet2, testDataSet2]);
 				expect(testDataSet.displayName).toEqual(actualPages[0].contents[0].name);
 				expect(testDataSet2.displayName).toEqual(actualPages[1].contents[0].name);
 			});

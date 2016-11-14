@@ -9,11 +9,6 @@
     <code-sheet columns="page.columns" program-name="page.programName"></code-sheet>
   </div>
 
-  <div ng-if="programMode == 'CODESHEET'">
-    <code-sheet contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></code-sheet>
-  </div>
-
-
   <div class="page-number" ng-if="page.type!='REGISTER'">
     Page {{pageNumber}} of {{totalPages}}
   </div>

@@ -30,7 +30,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 					dataElementsPerPage.push(dataElement);
 				}
 				else {
-					page.contents.push(new Content(contentTypes.registerContent, dataElementsPerPage))
+					page.contents.push(new Content(contentTypes.registerContent, dataElementsPerPage));
 					dataElementsPerPage = [];
 					page = getNewPage();
 					page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);
@@ -41,7 +41,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
-		allDataElements = printFriendlyUtils.applyDisplayOptionsToDataElements({programStageDataElements: allDataElements}, "programStageDataElements");
+		allDataElements = printFriendlyUtils.getDataElementsToDisplay({programStageDataElements: allDataElements}, "programStageDataElements");
 		allDataElements.push(new DataElement({displayName: 'Comments', type: 'TEXT'}));
 		var dataElementsPerPage = [];
 		distributeDataElementsToPages(allDataElements);

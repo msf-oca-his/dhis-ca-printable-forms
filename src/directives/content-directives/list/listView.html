@@ -2,9 +2,10 @@
     <table>
         <td valign=top class="deLabel optionLabel">
             {{dataelement.displayName}}
+            {{content.dataElementName}}
         </td>
         <td valign=top><table class="optionsetTable">
-            <tr ng-repeat="optionRow in dataelement.rows">
+            <tr ng-repeat="optionRow in content.rows">
                 <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer option">
                     <input type="checkbox" class="pffcheckbox">{{option.displayName}}</input>
                 </td>

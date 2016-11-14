@@ -3,7 +3,7 @@ TallySheets.directive('sectionTitle', [ function() {
 		restrict: 'E',
 		template: require('./sectionTitleView.html'),
 		scope: {
-			content: '='
+			title: '='
 		}
 	}
 }]);

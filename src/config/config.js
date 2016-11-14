@@ -41,9 +41,9 @@ TallySheets.factory("Config", [ function() {
 			commentsHeight: 30
 		};
 		config.DataSet = {
-			defaultHeightOfDataElementLabel: 9,
 			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
+			heightOfDataElementInGeneralDataElement: 9,
 			heightOfSectionTitle: 5,
 			heightOfDataSetTitle: 5.5,
 			gapBetweenSections: 3,
@@ -53,8 +53,7 @@ TallySheets.factory("Config", [ function() {
 			availableWidth: config.PageTypes.A4.widthAfterRemovingDefaultBorders,
 			numberOfCOCColumns: 5,
 			widthOfCategoryOptionCombo: 3,
-			widthOfDataElement: 4,
-			availableWidthForDefaultSection: 9.5
+			widthOfDataElement: 4
 		};
 		config.CodeSheet = {
 			heightOfProgramTitle: 10,

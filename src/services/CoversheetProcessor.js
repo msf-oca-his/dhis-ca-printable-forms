@@ -123,7 +123,7 @@ TallySheets.service('CoversheetProcessor', ['DataElement', 'DataSetSection', 'Co
 			if(Program.programStages.length == 0) return;
 			for(var i = 0; i < Program.programStages[0].programStageSections.length; i++) {
 				if(Program.programStages[0].programStageSections.length == 0) return;
-				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.applyDisplayOptionsToDataElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
+				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(Program.programStages[0].programStageSections[i], "programStageDataElements");
 				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
 				_.map(Program.programStages[0].programStageSections[i].programStageDataElements, function(dataElement) {
 					_.map(dataElement.options, function(option) {
