@@ -7,6 +7,7 @@ xdescribe("createOptionSetSection", function() {
 					options: []
 				}
 			]
+
 		};
 	});
 	it("should add empty array as rows when there are no options", function() {

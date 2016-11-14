@@ -24,9 +24,6 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 			var addSectionToPage = function(section, height) {
 				var isFirstSection = Number.isInteger(sectionIndex) ? ( sectionIndex == 0 ) : sectionIndex;
 				if(_.isEmpty(page.contents) || isFirstSection) page.contents.push(new Content(ContentTypes.datasetTitle, new DatasetTitle(dataSet.name)));
-				// page.contents.push({type: 'section', section: section});
-
-
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, dataSet.sections)
 				if(isDuplicate) section.name = "";
 				if(isCatCombSection(section))
@@ -87,9 +84,6 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					var newSection = _.cloneDeep(section);
 					(numberOfElementsThatCanFit % 2 == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
-					// printFriendlyUtils.splitLeftAndRightElements(section, "dataElements");
-					// printFriendlyUtils.splitLeftAndRightElements(newSection, "dataElements");
-					// newSection.isDuplicate = true;
 					addSectionToPage(section, page.heightLeft);
 					var isFirstSectionInDataSet = false;
 					addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInDataSet);
@@ -98,7 +92,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 
 			var sectionHeight = (sectionIndex == 0 || (page.contents.length == 0)) ? getHeightForSection(section) + config.DataSet.heightOfDataSetTitle : getHeightForSection(section);
 			var overflow = sectionHeight - page.heightLeft;
-			if(overflow < 0 )
+			if(overflow < 0)
 				addSectionToPage(section, sectionHeight);
 			else {
 				var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section)
@@ -106,7 +100,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					addSectionToPage(section, sectionHeight);}
 				else if(numberOfElementsThatCanFit > 1)
 					breakAndAddSection(section, numberOfElementsThatCanFit);
-				else if (section.isOptionSet)
+				else if (isOptionSetSection(section))
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
 					var isFirstSectionInDataSet = sectionIndex == 0;

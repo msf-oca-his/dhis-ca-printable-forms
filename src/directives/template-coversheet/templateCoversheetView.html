@@ -22,21 +22,6 @@
 
         </tr>
     </table>
-
-<div ng-repeat="content in contents">
-  <div class="section" ng-if="content.type=='section' && content.section.isOptionSet">
-    <section-title content="content"></section-title>
-    <div  ng-if="content.section.programStageDataElements[0].displayOption == displayOptions.list || !content.section.programStageDataElements[0].displayOption">
-      <list dataelement="content.section.programStageDataElements[0]"></list>
-    </div>
+  <div ng-repeat="content in contents">
+    <div page-content content="content" class="content"></div>
   </div>
-
-  <div class="section" ng-if="content.type=='section' && !content.section.isOptionSet">
-    <section-title content="content"></section-title>
-    <text-field content="content"></text-field>
-  </div>
-
-  <span ng-if="content.type=='comments'">
-      Comments: <hr id="comments-line1" class="comments-line"> <hr class="comments-line"/>
-  </span>
-</div>
