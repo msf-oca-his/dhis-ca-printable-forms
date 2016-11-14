@@ -56,7 +56,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var alertForEmptyTemplates = function() {
 				if($scope.templates.length == 0) {
-					CustomAngularTranslateService.getTranslation('ATTRIBUTE_NOT_SET').then(function(translatedMessage){
+					CustomAngularTranslateService.getTranslation('attribute_not_set').then(function(translatedMessage){
 						ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
 					});
 				}

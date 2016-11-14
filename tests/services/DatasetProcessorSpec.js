@@ -65,7 +65,7 @@ describe("DataSetProcessor", function() {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', mockedCustomAttributeService);
 			$translateProvider.translations('en', {
-				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator."
+				"optionset_with_incorrect_options": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator."
 			})
 
 		});
@@ -122,7 +122,7 @@ describe("DataSetProcessor", function() {
 					}],
 					type: "dataset"
 				};
-			})
+			});
 
 			it("should process the dataset with sections of type catcomb without category optionCombos", function() {
 				var dataSet = _.clone(testDataSet);

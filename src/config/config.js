@@ -1,4 +1,4 @@
-TallySheets.factory("Config", [function() {
+TallySheets.factory("Config", [ function() {
 
 	var config = {};
 
@@ -60,16 +60,16 @@ TallySheets.factory("Config", [function() {
 		config.OptionSet = {
 			labelPadding: 4,
 			dataElementLabel: 48,
-			numberOfColumns: 3,
+			numberOfColumns: 3
 		};
 		config.Prefixes = {
 			dataSetPrefix: {
 				value:"tally_",
-				translationKey:"DATASET_PREFIX"
+				translationKey:"dataset_prefix"
 			},
 			programPrefix: {
 				value:"perPt_",
-				translationKey:"PROGRAM_PREFIX"
+				translationKey:"program_prefix"
 			}
 		};
 		config.Delimiters = {
@@ -77,11 +77,11 @@ TallySheets.factory("Config", [function() {
 	};
 		config.CustomAttributes = {
 			// printFlagUID: {
-			// 	id: "J9G2ukuxv66",
+			// 	id: "F6S3pRyjnSf",
 			// 	associatedWith: ['dataSet', 'program']
 			// },
 			// displayOptionUID: {
-			// 	id: "Z6A0WUSqmxh",
+			// 	id: "Fth2lxGOF4M",
 			// 	associatedWith: ['dataElement'],
 			// 	options: {
 			// 		none: '0',
