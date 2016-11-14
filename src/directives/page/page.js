@@ -1,4 +1,4 @@
-TallySheets.directive('page', function() {
+TallySheets.directive('page', [ function() {
 	return {
 		restrict: 'E',
 		template: require('./pageView.html'),
@@ -8,4 +8,4 @@ TallySheets.directive('page', function() {
 			totalPages: '='
 		}
 	};
-});
+}]);

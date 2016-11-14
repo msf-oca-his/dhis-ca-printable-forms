@@ -1,4 +1,4 @@
-TallySheets.directive('textField', function() {
+TallySheets.directive('textField', [ function() {
 	return {
 		restrict: 'E',
 		template: require('./textFieldView.html'),
@@ -6,4 +6,4 @@ TallySheets.directive('textField', function() {
 			content: '='
 		}
 	}
-});
+}]);

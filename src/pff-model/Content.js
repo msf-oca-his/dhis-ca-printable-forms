@@ -1,4 +1,4 @@
-TallySheets.factory('Content', [function() {
+TallySheets.factory('Content', [ function() {
 	return function Content(contentType, data) {
 		this.type = contentType;
 		this.data = data;

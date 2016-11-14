@@ -1,4 +1,4 @@
-TallySheets.directive('categoryCombo', function() {
+TallySheets.directive('categoryCombo', [ function() {
 	return {
 		restrict: 'E',
 		template: require('./categoryComboView.html'),
@@ -6,4 +6,4 @@ TallySheets.directive('categoryCombo', function() {
 			content: '='
 		}
 	};
-});
+}]);
