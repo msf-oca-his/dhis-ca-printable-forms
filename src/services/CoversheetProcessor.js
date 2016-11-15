@@ -131,8 +131,6 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				if(Program.programStages[0].programStageSections.length == 0) return;
 				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(Program.programStages[0].programStageSections[i], "programStageDataElements");
 				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
-				if(!Program.programStages[0].programStageSections[i].isOptionSet)
-					printFriendlyUtils.splitLeftAndRightElements(Program.programStages[0].programStageSections[i], "programStageDataElements");
 			}
 			processProgram(Program)
 		});
