@@ -14,10 +14,9 @@ describe('RegisterProcessor', function() {
 			}
 		},
 		Register: {
-			labelHeight: 10,                 //table header
-			tableHeaderHeight: 10,           //page header
+			tableHeaderHeight: 10,              
 			dataEntryRowHeight: 9,
-			headerHeight: 25,
+			pageHeaderHeight: 25,
 			textElementWidth: 50,
 			otherElementWidth: 30
 		},
@@ -42,17 +41,17 @@ describe('RegisterProcessor', function() {
 		module(function($provide) {
 			$provide.value('Config', config);
 		});
-	});
 
-	beforeEach(inject(function(RegisterProcessor, $httpBackend, $q, _$rootScope_, $timeout, DataElement) {
-		registerProcessor = RegisterProcessor;
-		p = $q;
-		$rootScope = _$rootScope_;
-		httpMock = $httpBackend;
-		timeout = $timeout;
-		_DataElement = DataElement;
-		httpMock.expectGET("i18n/en.json").respond(200, {});
-	}));
+		inject(function(RegisterProcessor, $httpBackend, $q, _$rootScope_, $timeout, DataElement) {
+			registerProcessor = RegisterProcessor;
+			p = $q;
+			$rootScope = _$rootScope_;
+			httpMock = $httpBackend;
+			timeout = $timeout;
+			_DataElement = DataElement;
+			httpMock.expectGET("i18n/en.json").respond(200, {});
+		})
+	});
 
 	var testProgram = {
 		    id: "123",
@@ -78,7 +77,7 @@ describe('RegisterProcessor', function() {
 			contents: [{
 				data: [
 					new _DataElement({displayName: 'Comments', type: 'TEXT'})],
-				type: {type: 'REGISTER_CONTENT', renderer: 'register-content'},
+				type: {type: 'REGISTER_CONTENT', renderer: 'register-content'}
 			}],
 			programName: 'test program'
 		}];

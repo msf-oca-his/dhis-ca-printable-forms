@@ -24,10 +24,9 @@ describe("Register Content", function() {
 				}
 			},
 			Register: {
-				labelHeight: 10,                 //table header
-				tableHeaderHeight: 10,           //page header
+				tableHeaderHeight: 10,              
 				dataEntryRowHeight: 20,
-				headerHeight: 10,
+				pageHeaderHeight: 10,
 				textElementWidth: 50,
 				otherElementWidth: 30
 			},
@@ -113,8 +112,8 @@ describe("Register Content", function() {
 
 	it("should be able to identify number of rows it can hold", function() {
 		config.PageTypes.A4.LandScape.availableHeight = 100;
-		config.Register.headerHeight = 10;
-		config.Register.labelHeight = 10;
+		config.Register.pageHeaderHeight = 10;
+		config.Register.tableHeaderHeight = 10;
 		config.Register.dataEntryRowHeight = 20;
 		$scope.programName = "programName";
 		$scope.modelContents = [];

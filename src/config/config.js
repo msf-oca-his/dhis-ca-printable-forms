@@ -24,9 +24,9 @@ TallySheets.factory("Config", [ function() {
 			}
 		};
 		config.Register = {
-			labelHeight: 10,                 //table header
+			tableHeaderHeight: 10,              
 			dataEntryRowHeight: 9,
-			headerHeight: 25,
+			pageHeaderHeight: 25,
 			textElementWidth: 50,
 			otherElementWidth: 30
 		};
@@ -47,7 +47,7 @@ TallySheets.factory("Config", [ function() {
 			heightOfSectionTitle: 5,
 			heightOfDataSetTitle: 5.5,
 			gapBetweenSections: 3,
-			headerHeight: 9,
+			pageHeaderHeight: 9,
 			graceHeight: 5,
 			availableHeight: 'will be calculated',
 			availableWidth: config.PageTypes.A4.widthAfterRemovingDefaultBorders,
@@ -99,7 +99,7 @@ TallySheets.factory("Config", [ function() {
 			config.PageTypes.A4.Portrait.widthAfterRemovingDefaultBorders = config.PageTypes.A4.Portrait.width - config.PageTypes.A4.Portrait.borderLeft - config.PageTypes.A4.Portrait.borderRight;
 		};
 		var updateDataSetWithCalculatedValues = function(){
-			config.DataSet.availableHeight = config.PageTypes.A4.Portrait.heightAfterRemovingDefaultBorders - config.DataSet.headerHeight;
+			config.DataSet.availableHeight = config.PageTypes.A4.Portrait.heightAfterRemovingDefaultBorders - config.DataSet.pageHeaderHeight;
 			config.DataSet.availableWidth = config.PageTypes.A4.Portrait.widthAfterRemovingDefaultBorders;
 		};
 	updatePageA4withCalculatedValues();

@@ -34,7 +34,7 @@ describe("CodeSheet Processor", function() {
 		};
 		CodeSheetPage = function(){
 			var codeSheetPage = {};
-			codeSheetPage.heightLeft = config.Register.availableHeight - config.Register.headerHeight;
+			codeSheetPage.heightLeft = config.Register.availableHeight - config.Register.pageHeaderHeight;
 			codeSheetPage.widthLeft = config.Register.availableWidth;
 			codeSheetPage.type = "CODESHEET";
 			codeSheetPage.columns = new Array(config.CodeSheet.numberOfColumns);

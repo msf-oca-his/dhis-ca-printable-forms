@@ -339,7 +339,7 @@ describe("DataSetProcessor", function() {
 				type: 'dataset'
 			};
 
-			fit("should process the section contain only one dataElement of type optionSet", function() {
+			it("should process the section contain only one dataElement of type optionSet", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
 
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
@@ -675,7 +675,7 @@ describe("DataSetProcessor", function() {
 						id: "135",
 						dataElements: [{
 							name: "dataElement1",
-							id: "1235",
+							id: "1235"
 						}]
 					}],
 					type: "dataset"
