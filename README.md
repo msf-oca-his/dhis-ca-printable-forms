@@ -129,5 +129,6 @@ var updateDataSetWithCalculatedValues = function(){
 
 #BootConfig.js
 This file contains configuration specific to the running and behaviour of the application, not app features.
+
 1. `localAppUrl`: the URL of the machine being used for local development of the application. Do not change this value unless you plan to change the application’s code (not configuration settings). 
 2. `apiVersion`: the version of DHIS2 API used in the app, for example: 22, 23.
