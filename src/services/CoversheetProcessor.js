@@ -22,7 +22,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 			var addSectionToPage = function(section, height) {
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections)
 				if(isDuplicate) section.name = "";
-				else if(isOptionSetSection(section))
+				if(isOptionSetSection(section))
 					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, 'programStageDataElements')));
 				else
 					page.contents.push(new Content(ContentTypes.default, new DefaultContent(section, 'programStageDataElements')));
