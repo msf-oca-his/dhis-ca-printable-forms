@@ -1,5 +1,5 @@
-TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
-
+TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
+	
 	this.createNewSectionUsing = function(section, dataElements, dataElementsKey){
 		var newSection = _.cloneDeep(section);
 		newSection[dataElementsKey] = dataElements;
@@ -15,19 +15,10 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 		if(!config.CustomAttributes.displayOptionUID) return true;
 		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 		if(displayOptionAttribute && displayOptionAttribute.value)
-				return displayOptionAttribute.value == config.CustomAttributes.displayOptionUID.options.list;
-		return true;
-	};
-	var isListTypeDataElement = function(dataElement) {
-		if(dataElement.valueType != 'OPTIONSET') return false;
-		if(!config.CustomAttributes.displayOptionUID) return true;
-		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
-		if(displayOptionAttribute && displayOptionAttribute.value)
 			return displayOptionAttribute.value == config.CustomAttributes.displayOptionUID.options.list;
 		return true;
 	};
-
-	var getIndexOfDEWithOptionSets = function(section, dataElementsKey){
+	var getIndexOfDEWithOptionSets = function(section, dataElementsKey) {
 		var indexOfDEWithOptions = [];
 		_.map(section[dataElementsKey], function(dataElement, index) {
 			if(isListTypeDataElement(dataElement))
@@ -36,7 +27,7 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 		return indexOfDEWithOptions;
 	};
 
-	this.divideOptionSetsIntoNewSections = function(sections, index, dataElementsKey ) {
+	this.divideOptionSetsIntoNewSections = function(sections, index, dataElementsKey) {
 		var section = sections[index];
 		var currentIndex = 0;
 		var pushIndex = 0;
@@ -76,13 +67,13 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 			var overflow = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
 			var numberOfColumnsThatCanFitInThisSection = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
 			var newDataElements = [];
-			_.map(section[dataElementsKey], function(dataElement) {//TODO: extract this out as function???
+			_.map(section[dataElementsKey], function(dataElement) {   //TODO: extract this out as function???
 				var newDataElement = _.cloneDeep(dataElement);
 				newDataElement.categoryCombo.categoryOptionCombos.splice(0, numberOfColumnsThatCanFitInThisSection);
 				newDataElements.push(newDataElement);
 				dataElement.categoryCombo.categoryOptionCombos.splice(numberOfColumnsThatCanFitInThisSection);
 			});
-			var newSection = _.cloneDeep(section)
+			var newSection = _.cloneDeep(section);
 			newSection[dataElementsKey] = newDataElements;
 			sections.splice(index + 1, 0, newSection)
 		}
@@ -96,8 +87,8 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 			}
 		}));
 	};
+
 	this.getDataElementsToDisplay = function(section, dataElementsKey) {
-		if(!config.CustomAttributes.displayOptionUID) return section[dataElementsKey];
 		if(!config.CustomAttributes.displayOptionUID) return section[dataElementsKey];
 		return _.filter(section[dataElementsKey], function(dataElement) {
 			if(dataElement.valueType == 'OPTIONSET') {
@@ -110,5 +101,5 @@ TallySheets.factory('PrintFriendlyUtils', [ 'Config', function(config) {
 			return true;
 		});
 	};
-return this;
+	return this;
 }]);

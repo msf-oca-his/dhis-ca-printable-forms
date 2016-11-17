@@ -34,20 +34,24 @@
           </span>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
-            <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'EXPORT_EXCEL' | translate}}</button>
-					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'PRINT' | translate }}</button>
+            <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'export_excel' | translate}}</button>
+					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'print' | translate }}</button>
 					</span>
 				</span>
       </div>
     </div>
     <inline-alert class="noprint" message="{{inlineAlert.message}}" type="{{inlineAlert.type}}" ng-if="inlineAlert.shown" on-close="onInlineAlertClose()"></inline-alert>
+    <link href="css/dataset.css" rel="stylesheet" type="text/css" ng-if="selectedTemplatesType == 'DATASET'">
+    <link href="css/coversheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'COVERSHEET'">
+    <link href="css/register.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'REGISTER'">
+    <link href="css/codesheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'CODESHEET'">
     <page class="page print-content" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length"></page>
     <div class="spinner-wrapper noprint" ng-show="spinnerShown">
-      <img src="resources/img/spinner.gif" alt={{'SPINNER_LOADING' | translate }}/>
+      <img src="resources/img/spinner.gif" alt={{'spinner_loading' | translate }}/>
     </div>
   </div>
   <div ng-if="appLoadingFailed" class="noprint">
-    <h2 class="error">{{ 'APP_LOADING_FAILED' | translate }}</h2>
+    <h2 class="error">{{ 'app_loading_failed' | translate }}</h2>
   </div>
 </span>
   <modal-alert></modal-alert>

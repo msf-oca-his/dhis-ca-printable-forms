@@ -26,7 +26,7 @@ TallySheets.factory('CoverSheetPage', ['Config','PageTypes', function(config,Pag
 TallySheets.factory('RegisterPage', ['Config','PageTypes', function(config,PageTypes) {
 	return function RegisterPage() {
 		var registerPage = {};
-		registerPage.heightLeft = config.PageTypes.A4.LandScape.availableHeight - config.Register.headerHeight;
+		registerPage.heightLeft = config.PageTypes.A4.LandScape.availableHeight - config.Register.pageHeaderHeight;
 		registerPage.widthLeft = config.PageTypes.A4.LandScape.availableWidth;
 		registerPage.type = PageTypes.REGISTER;
 		return new Page(registerPage)

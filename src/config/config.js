@@ -1,4 +1,4 @@
-TallySheets.factory("Config", [function() {
+TallySheets.factory("Config", [ function() {
 
 	var config = {};
 
@@ -13,6 +13,8 @@ TallySheets.factory("Config", [function() {
 					borderRight: 15,
 					availableHeight: 237,
 					availableWidth: 183,
+					widthAfterRemovingDefaultBorders: 'will be calculated',
+					heightAfterRemovingDefaultBorders: 'will be calculated',
 					graceHeight: 10
 				},
 				LandScape: {
@@ -22,36 +24,36 @@ TallySheets.factory("Config", [function() {
 			}
 		};
 		config.Register = {
-			availableHeight: 175,
-			availableWidth: 270,
-			labelHeight: 10,                 //table header
-			tableHeaderHeight: 10,           //page header
+			tableHeaderHeight: 10,              
 			dataEntryRowHeight: 9,
-			headerHeight: 25,
+			pageHeaderHeight: 25,
 			textElementWidth: 50,
 			otherElementWidth: 30
 		};
 		config.Coversheet = {
-			heightOfDataElementInGeneralDataElement: 9,
+			defaultHeightOfDataElementLabel: 9,
 			gapBetweenSections: 5,
 			heightOfSectionTitle: 7,
 			heightOfProgramTitle:10,
 			graceHeight:10,
-			availableHeight:237,
-			availableWidth:183
+			availableHeight: 237,
+			availableWidth: 183,
+			commentsHeight: 30
 		};
 		config.DataSet = {
 			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
-			heightOfDataElementInGeneralDataElement: 9,
+			defaultHeightOfDataElementLabel: 9,
 			heightOfSectionTitle: 5,
 			heightOfDataSetTitle: 5.5,
 			gapBetweenSections: 3,
-			headerHeight: 9,
+			pageHeaderHeight: 9,
 			graceHeight: 5,
-			availableHeight: 0,
+			availableHeight: 'will be calculated',
 			availableWidth: config.PageTypes.A4.widthAfterRemovingDefaultBorders,
-			numberOfCOCColumns: 5
+			numberOfCOCColumns: 5,
+			widthOfCategoryOptionCombo: 3,
+			widthOfDataElement: 4
 		};
 		config.CodeSheet = {
 			heightOfProgramTitle: 10,
@@ -61,18 +63,22 @@ TallySheets.factory("Config", [function() {
 		config.OptionSet = {
 			labelPadding: 4,
 			dataElementLabel: 48,
-			optionsPadding: 12
+			numberOfColumns: 3
 		};
 		config.Prefixes = {
 			dataSetPrefix: {
 				value:"tally_",
-				translationKey:"DATASET_PREFIX"
+				translationKey:"dataset_prefix"
 			},
 			programPrefix: {
 				value:"perPt_",
-				translationKey:"PROGRAM_PREFIX"
+				translationKey:"program_prefix"
 			}
 		};
+		config.Delimiters = {
+			optionLabelDelimiter: "]",
+			categoryOptionComboDelimiter: "<br>"
+	};
 		config.CustomAttributes = {
 			// printFlagUID: {
 			// 	id: "F6S3pRyjnSf",
@@ -93,8 +99,9 @@ TallySheets.factory("Config", [function() {
 			config.PageTypes.A4.Portrait.widthAfterRemovingDefaultBorders = config.PageTypes.A4.Portrait.width - config.PageTypes.A4.Portrait.borderLeft - config.PageTypes.A4.Portrait.borderRight;
 		};
 		var updateDataSetWithCalculatedValues = function(){
-		config.DataSet.availableHeight = config.PageTypes.A4.Portrait.heightAfterRemovingDefaultBorders - config.DataSet.headerHeight;
-	};
+			config.DataSet.availableHeight = config.PageTypes.A4.Portrait.heightAfterRemovingDefaultBorders - config.DataSet.pageHeaderHeight;
+			config.DataSet.availableWidth = config.PageTypes.A4.Portrait.widthAfterRemovingDefaultBorders;
+		};
 	updatePageA4withCalculatedValues();
 	updateDataSetWithCalculatedValues();
 	return config;

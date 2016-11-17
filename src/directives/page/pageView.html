@@ -1,11 +1,11 @@
 <div class="subpage">
-  <template-dataset ng-if="page.type==$parent.PageTypes.DATASET" contents="page.contents" dataset-name="page.datasetName"></template-dataset>
+  <template-dataset ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></template-dataset>
 
-  <template-coversheet ng-if="page.type == $parent.PageTypes.COVERSHEET" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-coversheet>
+  <template-coversheet ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-coversheet>
 
-  <template-register ng-if="page.type == $parent.PageTypes.REGISTER" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-register>
+  <template-register ng-if="page.type == 'REGISTER'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-register>
 
-  <div ng-if="page.type == $parent.PageTypes.CODESHEET">
+  <div ng-if="page.type == 'CODESHEET'">
     <code-sheet columns="page.columns" program-name="page.programName"></code-sheet>
   </div>
 

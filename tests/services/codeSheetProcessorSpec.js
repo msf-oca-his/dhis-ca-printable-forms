@@ -20,6 +20,9 @@ describe("CodeSheet Processor", function() {
 				rowHeight: 6,
 				numberOfColumns: 3
 			},
+			Delimiters: {
+				optionLabelDelimiter: "]"
+			},
 			CustomAttributes: {
 				displayOptionUID: {
 					id: "111",
@@ -31,7 +34,7 @@ describe("CodeSheet Processor", function() {
 		};
 		CodeSheetPage = function(){
 			var codeSheetPage = {};
-			codeSheetPage.heightLeft = config.Register.availableHeight - config.Register.headerHeight;
+			codeSheetPage.heightLeft = config.Register.availableHeight - config.Register.pageHeaderHeight;
 			codeSheetPage.widthLeft = config.Register.availableWidth;
 			codeSheetPage.type = "CODESHEET";
 			codeSheetPage.columns = new Array(config.CodeSheet.numberOfColumns);
@@ -78,7 +81,7 @@ describe("CodeSheet Processor", function() {
 					programStageDataElements: [{
 						id: "1234",
 						displayName: "dataElement",
-						options: [{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}],
+						options: [{id: 1, code: 1, displayName: "option1"}, {id: 2, code: 2, displayName: "option2"}],
 						valueType: "OPTIONSET",
 						attributeValues: [
 							{
@@ -177,6 +180,7 @@ describe("CodeSheet Processor", function() {
 			for(var i = 0; i < 4; i++) {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
+					code: i + 1,
 					displayName: "option1"
 				};
 			}
@@ -200,6 +204,7 @@ describe("CodeSheet Processor", function() {
 			for(var i = 0; i < 6; i++) {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
+					code: i + 1,
 					displayName: "option1"
 				};
 			}
@@ -232,7 +237,7 @@ describe("CodeSheet Processor", function() {
 			it("should add options along with header to a new column if only one option fits in the previous column", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
-				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options = [{id: 1, displayName: "option1"}];
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options = [{id: 1, code: 1, displayName: "option1"}];
 				var dataElement = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0];
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
 
@@ -261,6 +266,7 @@ describe("CodeSheet Processor", function() {
 				for(var i = 0; i < 5; i++) {
 					currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 						id: i + 1,
+						code: i + 1,
 						displayName: "option1"
 					};
 				}
@@ -324,6 +330,7 @@ describe("CodeSheet Processor", function() {
 			for(var i = 0; i < 14; i++) {
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
+					code: i + 1,
 					displayName: "option1"
 				};
 			}

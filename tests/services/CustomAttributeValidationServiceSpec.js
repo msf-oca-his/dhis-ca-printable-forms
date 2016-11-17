@@ -45,11 +45,11 @@ describe("CustomAttributeValidationService", function() {
 			$provide.value('ModalAlertsService', mockedModalAlertsService);
 			$translateProvider.preferredLanguage('en');
 			$translateProvider.translations('en', {
-				"NO_ATTRIBUTE_EXISTS": "The specified UID doesn't exist in the system. Please contact your system administrator.",
-				"NO_ASSOCIATION_WITH_OPTIONSET": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
-				"OPTIONSET_WITHOUT_OPTIONS": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
-				"OPTIONSET_WITH_INCORRECT_OPTIONS": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
-				"NO_ASSOCIATION_WITH_ENTITY": "No association between the attribute and the specified entity in config"
+				"no_attribute_exists": "The specified UID doesn't exist in the system. Please contact your system administrator.",
+				"no_association_with_optionset": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
+				"optionset_without_options": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
+				"optionset_with_incorrect_options": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
+				"no_association_with_entity": "No association between the attribute and the specified entity in config"
 			});
 		});
 	});
