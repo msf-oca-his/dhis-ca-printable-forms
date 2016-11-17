@@ -1,7 +1,3 @@
-.section{
-    margin-bottom: 5mm;
-}
-
 .page {
     width: 210mm;
     min-height: 297mm;
@@ -50,6 +46,10 @@
     height: 278mm;
     page-break-after: always;
     position: relative;
+}
+
+.content{
+    margin-bottom: 2mm;
 }
 
 .comments-line {
