@@ -102,7 +102,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var handleUpdate = function(){
 				if(!$scope.onChange) return;
-				$scope.selectedTemplatesType = getTypeOfTemplate($scope.selectedTemplates[0]);
+				$scope.selectedTemplatesType = getTypeOfTemplate($scope.selectedTemplates[0],$scope.$parent.PageTypes);
 				$scope.$apply();
 				$scope.onChange({selectedTemplates: $scope.selectedTemplates});
 			};
@@ -122,11 +122,11 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 }]);
 
 
-var getTypeOfTemplate = function(template) {
+var getTypeOfTemplate = function(template,PageTypes) {
 	if(_.isEmpty(template))
 		return;
 	if(template.constructor.name == "DataSet")
-		return "DATASET";
+		return PageTypes.DATASET;
 	else if(template.constructor.name == "Program")
-		return "PROGRAM";
+		return PageTypes.PROGRAM;
 };

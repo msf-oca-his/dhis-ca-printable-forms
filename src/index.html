@@ -20,15 +20,15 @@
 				<span>
 					<span id="template-selector-container">
             <template-selector on-change="renderTemplates(selectedTemplates)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector>
-            <span ng-if="selectedTemplatesType=='PROGRAM'">
+            <span ng-if="selectedTemplatesType==PageTypes.PROGRAM">
 						<label class="radio-inline">
-              <input ng-model="$parent.$parent.programMode" value="COVERSHEET" type="radio" ng-click="renderTemplates()"> CoverSheet
+              <input ng-model="$parent.$parent.programMode" value="{{PageTypes.COVERSHEET}}" type="radio" ng-click="renderTemplates()"> CoverSheet
             </label>
 						<label class="radio-inline">
-              <input ng-model="$parent.$parent.programMode" value="REGISTER" type="radio" ng-click="renderTemplates()"> Register
+              <input ng-model="$parent.$parent.programMode" value="{{PageTypes.REGISTER}}" type="radio" ng-click="renderTemplates()"> Register
             </label>
             <label class="radio-inline">
-              <input ng-model="$parent.$parent.programMode" value="CODESHEET" type="radio" ng-click="renderTemplates()"> Code Sheet
+              <input ng-model="$parent.$parent.programMode" value="{{PageTypes.CODESHEET}}" type="radio" ng-click="renderTemplates()"> Code Sheet
             </label>
 					</span>
           </span>

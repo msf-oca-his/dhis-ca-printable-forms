@@ -8,13 +8,14 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor",
 	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
-	'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', "CodeSheetProcessor",
+	'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', "CodeSheetProcessor","PageTypes",
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
-	         InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor) {
+	         InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor,PageTypes) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
+		$scope.PageTypes = PageTypes;
 	$scope.templatesType = '';
 	$scope.inlineAlert = {
 		message:'',
@@ -131,9 +132,9 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 						.then(_.cloneDeep)
 						.then(function(programs){
 							switch($scope.programMode) {
-								case "COVERSHEET" : return CoversheetProcessor.process(_.cloneDeep(programs[0])); break;
-								case "REGISTER": return RegisterProcessor.process(_.cloneDeep(programs[0])); break;
-								case "CODESHEET": return  CodeSheetProcessor.process(_.cloneDeep(programs[0])); break;
+								case PageTypes.COVERSHEET : return CoversheetProcessor.process(_.cloneDeep(programs[0])); break;
+								case PageTypes.REGISTER: return RegisterProcessor.process(_.cloneDeep(programs[0])); break;
+								case PageTypes.CODESHEET: return  CodeSheetProcessor.process(_.cloneDeep(programs[0])); break;
 							}
 						})
 	};
@@ -147,9 +148,9 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 	};
 
 	var processTemplates = function() {
-		if($scope.selectedTemplatesType == 'DATASET')
+		if($scope.selectedTemplatesType == PageTypes.DATASET)
 			return $q.when().then(processDataSets);
-		else if($scope.selectedTemplatesType == 'PROGRAM')
+		else if($scope.selectedTemplatesType == PageTypes.PROGRAM)
 			return $q.when().then(processPrograms);
 		else return $q.when([]);
 	};

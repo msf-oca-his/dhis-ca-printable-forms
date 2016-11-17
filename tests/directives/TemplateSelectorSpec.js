@@ -19,6 +19,7 @@ describe("templateSelector Directive", function() {
 	var _ModalAlert;
 	var _ModalAlertTypes;
 	var mockedModalAlertsService;
+	var childScope;
 
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
@@ -51,6 +52,13 @@ describe("templateSelector Directive", function() {
 		$controller = _$controller_;
 		queryDeferred = _$q_.defer();
 		scope = _$rootScope.$new();
+		scope.PageTypes = {
+			COVERSHEET: "COVERSHEET",
+			REGISTER:"REGISTER",
+			CODESHEET:"CODESHEET",
+			DATASET:"DATASET",
+			PROGRAM:"PROGRAM"};
+		childScope = scope.$new();
 		httpMock = $httpBackend;
 		window = $window;
 		compile = $compile;
@@ -149,171 +157,171 @@ describe("templateSelector Directive", function() {
 				return $q.when(customAttributes[0])
 			};
 
-			scope.testRenderDataSets = jasmine.createSpy('testSpy');
-			scope.testTemplate = {};
-			scope.validationProcess = $q.when({showAllTemplates: true})
+			childScope.testRenderDataSets = jasmine.createSpy('testSpy');
+			childScope.testTemplate = {};
+			childScope.validationProcess = $q.when({showAllTemplates: true})
 		});
 
 		describe("loading templates", function() {
 			it("should load all the templates when custom attribute is not present in the config", function() {
-				scope.validationResult = $q.when({});
+				childScope.validationResult = $q.when({});
 				config.CustomAttributes = {};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
-				expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+				elements = compile(elements)(childScope);
+				childScope.$apply();
+				expect(childScope.$$childHead.templates).toEqual(datasets.concat(programs));
 			});
 
 			it("should load only printable templates", function(done) {
-				scope.validationResult = $q.when({});
+				childScope.validationResult = $q.when({});
 				config.CustomAttributes.printFlagUID = {id: '1'};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$digest();
+				elements = compile(elements)(childScope);
+				childScope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(scope.$$childHead.templates).toEqual(datasets.concat(programs));
+						expect(childScope.$$childHead.templates).toEqual(datasets.concat(programs));
 						done();
 					});
-				scope.$digest();
+				childScope.$digest();
 			});
 
 			it("should not load templates which has printable attribute value as false", function(done) {
 				config.CustomAttributes.printFlagUID = {id: "1"};
 				datasets[0].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
-				scope.validationResult = $q.when({});
+				childScope.validationResult = $q.when({});
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$digest();
+				elements = compile(elements)(childScope);
+				childScope.$digest();
 				expectedDataSets = _.clone(datasets);
 				expectedPrograms = _.clone(programs);
 				expectedDataSets.splice(0, 1);
 				expectedPrograms.splice(0, 1);
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(scope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
+						expect(childScope.$$childHead.templates).toEqual(expectedDataSets.concat(expectedPrograms));
 						done();
 					});
-				scope.$digest();
+				childScope.$digest();
 			});
 
 			it("should show an alert when printable attribute is not set in any template ", function(done) {
 				config.CustomAttributes.printFlagUID = {id: "1"};
-				scope.validationResult = $q.when({});
+				childScope.validationResult = $q.when({});
 				datasets[0].attributeValues[0].value = "false";
 				datasets[1].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
 				programs[1].attributeValues[0].value = "false";
 				spyOn(mockedModalAlertsService, 'showModalAlert');
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$digest();
+				elements = compile(elements)(childScope);
+				childScope.$digest();
 				getPromiseOfDepth(3)
 					.then(function() {
 						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("ATTRIBUTE_NOT_SET", _ModalAlertTypes.indismissibleError));
 						done();
 					});
-				scope.$digest();
+				childScope.$digest();
 			})
 		});
 
 		describe("when template is dataset", function() {
 			it("should prefix templates with appropriate prefix", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
-				expect(scope.$$childHead.dataSetTemplates[0].displayName.includes("DATASET_PREFIX")).toEqual(true)
-				expect(scope.$$childHead.programTemplates[0].displayName.includes("PROGRAM_PREFIX")).toEqual(true)
+				elements = compile(elements)(childScope);
+				childScope.$apply();
+				expect(childScope.$$childHead.dataSetTemplates[0].displayName.includes("DATASET_PREFIX")).toEqual(true)
+				expect(childScope.$$childHead.programTemplates[0].displayName.includes("PROGRAM_PREFIX")).toEqual(true)
 			})
 		});
 		
 		describe("Add form button", function() {
 			it("should disable the add form button when nothing selected", function(){
-				scope.change = jasmine.createSpy("change");
+				childScope.change = jasmine.createSpy("change");
 				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.showAllTemplates = false;
-				scope.$apply();
+				elements = compile(elements)(childScope);
+				childScope.showAllTemplates = false;
+				childScope.$apply();
 				var button = elements[0].getElementsByTagName('button');
 				expect(button[0].classList.contains('ng-hide')).toBe(true);
 			});
 			it("should disable the add form button when program is selected", function() {
-				scope.change = jasmine.createSpy("change");
-				scope.showAllTemplates = false;
-				scope.testTemplate = "PROGRAM";
+				childScope.change = jasmine.createSpy("change");
+				childScope.showAllTemplates = false;
+				childScope.testTemplate = "PROGRAM";
 				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
+				elements = compile(elements)(childScope);
+				childScope.$apply();
 				var button = elements[0].getElementsByTagName('button');
 				expect(button[0].classList.contains('ng-hide')).toBe(true);
 			});
 			
 			it("should enable the add form button when a dataset is selected", function() {
-				scope.change = jasmine.createSpy("change");
-				scope.showAllTemplates = false;
-				scope.testTemplate = "DATASET";
+				childScope.change = jasmine.createSpy("change");
+				childScope.showAllTemplates = false;
+				childScope.testTemplate = "DATASET";
 				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
+				elements = compile(elements)(childScope);
+				childScope.$apply();
 				var button = elements[0].getElementsByTagName('button');
 				expect(button[0].classList.contains('ng-hide')).toBe(false);
 			});
 
 			it("should able to add form when a dataset is selected", function() {
-				scope.change = jasmine.createSpy("change");
-				scope.showMultipleTemplates = true;
-				scope.testTemplate = "DATASET";
-				// scope.selectedTemplates = [{id:"123"}];
+				childScope.change = jasmine.createSpy("change");
+				childScope.showMultipleTemplates = true;
+				childScope.testTemplate = "DATASET";
+				// childScope.selectedTemplates = [{id:"123"}];
 				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
+				elements = compile(elements)(childScope);
+				childScope.$apply();
 				var selectElement = elements[0].querySelector('select');
 				selectElement.selectedIndex = 1;
 				selectElement.dispatchEvent(new Event('change'));
-				scope.$apply();
+				childScope.$apply();
 				var button = elements[0].getElementsByTagName('button');
 				button[0].click();
-				expect(scope.$$childHead.selectedTemplates.length).toBe(2);
+				expect(childScope.$$childHead.selectedTemplates.length).toBe(2);
 			});
 			
 			it("should able to remove the form from multiple datasets selected", function() {
-				scope.change = jasmine.createSpy("change");
-				scope.showMultipleTemplates = true;
-				scope.testTemplate = "DATASET";
-				// scope.selectedTemplates = [{id:"123"}];
+				childScope.change = jasmine.createSpy("change");
+				childScope.showMultipleTemplates = true;
+				childScope.testTemplate = "DATASET";
+				// childScope.selectedTemplates = [{id:"123"}];
 				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
+				elements = compile(elements)(childScope);
+				childScope.$apply();
 				var selectElement = elements[0].querySelector('select');
 				selectElement.selectedIndex = 1;
 				selectElement.dispatchEvent(new Event('change'));
-				scope.$apply();
+				childScope.$apply();
 				var button = elements[0].getElementsByTagName('button');
 				button[0].click();
-				scope.$apply();
+				childScope.$apply();
 				var remove = elements[0].getElementsByClassName('glyphicon glyphicon-remove');
 				remove[1].click();
-				expect(scope.$$childHead.selectedTemplates.length).toBe(1);
-				expect(scope.$$childHead.showMultipleTemplates).toBe(false);
+				expect(childScope.$$childHead.selectedTemplates.length).toBe(1);
+				expect(childScope.$$childHead.showMultipleTemplates).toBe(false);
 			});
 
 		});
 
 		describe("On selecting a template", function() {
 			it("should call onChange with selected templates", function(done) {
-				scope.selectedTemplatesType = 'testType';
-				scope.change = jasmine.createSpy("changespy");
+				childScope.selectedTemplatesType = 'testType';
+				childScope.change = jasmine.createSpy("changespy");
 				elements = angular.element('<template-selector on-change= "change(selectedTemplates)" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
-				elements = compile(elements)(scope);
-				scope.$apply();
+				elements = compile(elements)(childScope);
+				childScope.$apply();
 				var selectElement = elements[0].querySelector('select')
 				selectElement.selectedIndex = 3;
 				selectElement.dispatchEvent(new Event('change'));
-				scope.$apply();
+				childScope.$apply();
 				setTimeout(function(){
-					scope.$apply();
-					expect(scope.change).toHaveBeenCalledWith([programs[0]]);
+					childScope.$apply();
+					expect(childScope.change).toHaveBeenCalledWith([programs[0]]);
 					done();
 				}, 1);
 			});

@@ -2,7 +2,8 @@ describe("Page Directive", function() {
 	var $controller;
 	var section;
 	var PageElement;
-	var outerScope, compile;
+	var outerScope, compile,childScope;
+	var pageTypes;
 	var config = {
 		CustomAttributes: {
 			displayOptionUID: {
@@ -30,6 +31,13 @@ describe("Page Directive", function() {
 		$httpBackend.expectGET("i18n/en.json").respond(200, {});
 		$controller = _$controller_;
 		outerScope = $rootScope.$new();
+		outerScope.PageTypes = {
+			COVERSHEET: "COVERSHEET",
+			REGISTER:"REGISTER",
+			CODESHEET:"CODESHEET",
+			DATASET:"DATASET",
+			PROGRAM:"PROGRAM"};
+		childScope = outerScope.$new();
 		compile = $compile;
 		outerScope.testPage = "testPage"
 		outerScope.testIndex = 5;
@@ -54,9 +62,9 @@ describe("Page Directive", function() {
 	describe("when page type is dataset", function() {
 
 		beforeEach(function() {
-			outerScope.testPage = {type: 'DATASET'};
-			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages"></page>')(outerScope)
-			outerScope.$apply();
+			childScope.testPage = {type: 'DATASET'};
+			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages"></page>')(childScope)
+			childScope.$apply();
 		});
 
 		it("should render dataset and not program", function() {
@@ -79,8 +87,8 @@ describe("Page Directive", function() {
 
 		beforeEach(function() {
 			outerScope.testPage = {type: "COVERSHEET"};
-			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages"></page>')(outerScope)
-			outerScope.$apply();
+			PageElement = compile('<page class="page" page="testPage" page-number="testIndex" total-pages="testTotalPages"></page>')(childScope)
+			childScope.$apply();
 		});
 
 		it("should render coversheet only", function() {
