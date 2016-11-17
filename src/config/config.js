@@ -43,7 +43,7 @@ TallySheets.factory("Config", [ function() {
 		config.DataSet = {
 			heightOfTableHeader: 15,
 			heightOfDataElementInCatCombTable: 12,
-			heightOfDataElementInGeneralDataElement: 9,
+			defaultHeightOfDataElementLabel: 9,
 			heightOfSectionTitle: 5,
 			heightOfDataSetTitle: 5.5,
 			gapBetweenSections: 3,

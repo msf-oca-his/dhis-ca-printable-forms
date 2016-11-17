@@ -14,9 +14,9 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				if(isCatCombSection(section))
 					height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
 				else if(isOptionSetSection(section))
-					height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.DataSet.gapBetweenSections;
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.DataSet.gapBetweenSections;
 				else
-					height = config.DataSet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + config.DataSet.gapBetweenSections;
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + config.DataSet.gapBetweenSections;
 
 				return printFriendlyUtils.isDuplicateSection(sectionIndex, dataSet.sections) ? height : height + config.DataSet.heightOfSectionTitle;
 			};
@@ -43,7 +43,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 			};
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.dataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.heightOfDataElementInGeneralDataElement));
+				return section.dataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.defaultHeightOfDataElementLabel));
 			};
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
@@ -53,9 +53,9 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
 				}
 				else if(isOptionSetSection(section))
-					return section.dataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.heightOfDataElementInGeneralDataElement));
+					return section.dataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.defaultHeightOfDataElementLabel));
 				else
-					return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.DataSet.heightOfDataElementInGeneralDataElement));
+					return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.DataSet.defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section, numberOfElementsThatCanFit) {

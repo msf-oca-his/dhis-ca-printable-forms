@@ -11,12 +11,12 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		var processSection = function(section, sectionIndex) {
 			var getHeightForSection = function(section) {
 				var height;
-				if(section.isOptionSet)
-					height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements[0].rows.length)) + config.Coversheet.gapBetweenSections;
+				if (isOptionSetSection(section))
+					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.DataSet.gapBetweenSections;
 				else
-					height = config.Coversheet.heightOfDataElementInGeneralDataElement * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + config.Coversheet.gapBetweenSections;
+					height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + config.Coversheet.gapBetweenSections;
 
-				return section.isDuplicate ? height : height + config.Coversheet.heightOfSectionTitle;
+				return printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections) ? height : height + config.Coversheet.heightOfSectionTitle;
 			};
 
 			var addSectionToPage = function(section, height) {
@@ -39,12 +39,12 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.programStageDataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.heightOfDataElementInGeneralDataElement));
+				return section.programStageDataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 			};
 
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
-				if(section.isOptionSet)
+				if(isOptionSetSection(section))
 					return section.programStageDataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 				else
 					return section.programStageDataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
@@ -74,7 +74,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				}
 			};
 
-			var sectionHeight = (sectionIndex == 0) ? getHeightForSection(section) + config.Coversheet.heightOfProgramTitle : getHeightForSection(section);
+			var sectionHeight = getHeightForSection(section);
 			var overflow = sectionHeight - page.heightLeft;
 			if(overflow < 0)
 				addSectionToPage(section, sectionHeight);
@@ -84,7 +84,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 					addSectionToPage(section, sectionHeight);
 				else if(numberOfElementsThatCanFit > 1)
 					breakAndAddSection(section, numberOfElementsThatCanFit);
-				else if (section.isOptionSet)
+				else if (isOptionSetSection(section))
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
 					var isFirstSectionInProgram = (sectionIndex == 0);
