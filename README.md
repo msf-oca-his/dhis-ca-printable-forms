@@ -13,8 +13,20 @@ To install dependencies, use these commands:
 - `npm install`
 - `bower install (inside dependencies folder)`
 
-Pre-requisite:
-- dhis2 instance should be running on 8080 port.
+####Pre-requisite:
+  DHIS2 instance should be running on 8080 port.
+  
+If the app is zipped and deployed on DHIS, it does not matter which port DHIS2 is working on. However, if we’re using gulp to run the application, by default, the app expects DHIS2 to be running on port 8080 on the localhost. This can however be changed in `gulpfile.js` - `serve` TASK as shown below. The URL set for the `target`property should be changed.
+
+```
+gulp.task(TASKS.serve, [TASKS.setUpTemp], function() {
+	browserSync.init({
+		server: {
+			middleware: [proxy(['/api', '/dhis-web-commons', '/icons'], {target: 'http://localhost:8080'})]
+		}
+	});
+});
+```
 
 
 #Running the app
