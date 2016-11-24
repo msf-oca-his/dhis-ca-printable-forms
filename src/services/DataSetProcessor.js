@@ -1,5 +1,5 @@
-TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'ContentTypes', 'PrintFriendlyUtils', 'CommonUtils', 'DefaultContent',
-	'OptionSetContent', 'CatCombContent', 'DatasetTitle', function(config, DataSetPage, Content, ContentTypes, printFriendlyUtils, commonUtils, DefaultContent,
+TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'ContentTypes', 'PrintFriendlyUtils', 'DefaultContent',
+	'OptionSetContent', 'CatCombContent', 'DatasetTitle', function(config, DataSetPage, Content, ContentTypes, printFriendlyUtils,DefaultContent,
 	                                               OptionSetContent, CatCombContent, DatasetTitle) {
 	var pages = [];
 	var currentPageIndex;
