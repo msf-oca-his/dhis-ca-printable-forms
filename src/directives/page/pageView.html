@@ -1,9 +1,9 @@
 <div class="subpage">
-  <template-dataset ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></template-dataset>
+  <dataset-template ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset-template>
 
-  <template-coversheet ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-coversheet>
+  <coversheet-template ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></coversheet-template>
 
-  <template-register ng-if="page.type == 'REGISTER'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></template-register>
+  <register-template ng-if="page.type == 'REGISTER'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></register-template>
 
   <div ng-if="page.type == 'CODESHEET'">
     <code-sheet columns="page.columns" program-name="page.programName"></code-sheet>

@@ -1,7 +1,7 @@
-TallySheets.directive('templateCoversheet', ['Config', function(config) {
+TallySheets.directive('coversheetTemplate', ['Config', function(config) {
 	return {
 		restrict: 'E',
-		template: require('./templateCoversheetView.html'),
+		template: require('./coversheetTemplateView.html'),
 		scope: {
 			contents: '=',
 			programName: '=',

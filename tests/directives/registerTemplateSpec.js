@@ -6,7 +6,7 @@ describe("Register Template", function() {
 	var dataElements;
 
 	function createElement() {
-		element = angular.element('<template-register contents="modelContents" program-name="programName"></template-register>');
+		element = angular.element('<register-template contents="modelContents" program-name="programName"></register-template>');
 		element = compile(element)($scope);
 		elementScope = element.scope().$$childHead;
 		element = element[0];
