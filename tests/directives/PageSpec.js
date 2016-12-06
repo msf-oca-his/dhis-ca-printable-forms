@@ -68,7 +68,7 @@ describe("Page Directive", function() {
 		});
 
 		it("should render dataset and not program", function() {
-			expect(_.isEmpty(PageElement[0].querySelector('template-dataset'))).toBe(false);
+			expect(_.isEmpty(PageElement[0].querySelector('dataset-template'))).toBe(false);
 			expect(_.isEmpty(PageElement[0].querySelector('template-program'))).toBe(true)
 		});
 
@@ -77,7 +77,7 @@ describe("Page Directive", function() {
 		});
 
 		it("should assign page.content and page.datasetName to dataset directive", function() {
-			datasetElement = PageElement[0].querySelector('template-dataset');
+			datasetElement = PageElement[0].querySelector('dataset-template');
 			expect(datasetElement.getAttribute('contents')).toBe("page.contents");
 			expect(datasetElement.getAttribute('dataset-name')).toBe("page.datasetName")
 		})
@@ -92,9 +92,9 @@ describe("Page Directive", function() {
 		});
 
 		it("should render coversheet only", function() {
-			expect(_.isEmpty(PageElement.find('template-dataset'))).toBe(true)
-			expect(_.isEmpty(PageElement.find('template-register'))).toBe(true)
-			expect(_.isEmpty(PageElement.find('template-coversheet'))).toBe(false)
+			expect(_.isEmpty(PageElement.find('dataset-template'))).toBe(true)
+			expect(_.isEmpty(PageElement.find('register-template'))).toBe(true)
+			expect(_.isEmpty(PageElement.find('coversheet-template'))).toBe(false)
 		});
 
 		it("should render page number", function() {
@@ -103,7 +103,7 @@ describe("Page Directive", function() {
 		});
 
 		it("should assign page.content, page.programName and programMode to coversheet directive", function() {
-			datasetElement = PageElement[0].querySelector('template-coversheet');
+			datasetElement = PageElement[0].querySelector('coversheet-template');
 			expect(datasetElement.getAttribute('contents')).toBe("page.contents");
 			expect(datasetElement.getAttribute('program-name')).toBe("page.programName");
 			//  write expect for programMode

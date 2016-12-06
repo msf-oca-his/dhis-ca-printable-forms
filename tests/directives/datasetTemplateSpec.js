@@ -31,7 +31,7 @@ describe("Dataset Template", function() {
 	}));
 
 	it("should get displayOptions from config", function() {
-		var element = angular.element('<template-dataset contents = "" dataset-name = "test_DataSet"></template-dataset>');
+		var element = angular.element('<dataset-template contents = "" dataset-name = "test_DataSet"></dataset-template>');
 		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);
@@ -41,7 +41,7 @@ describe("Dataset Template", function() {
 	});
 
 	it("should return table width as 9.5cm when section is not catcomb", function() {
-		var element = angular.element('<template-dataset contents="" dataset-name="test_DataSet"></template-dataset>');
+		var element = angular.element('<dataset-template contents="" dataset-name="test_DataSet"></dataset-template>');
 		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);
@@ -54,7 +54,7 @@ describe("Dataset Template", function() {
 		var currentSection = _.cloneDeep(section);
 		currentSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male,5", "female,7"]
 		currentSection.isCatComb = true;
-		var element = angular.element('<template-dataset contents="modelContents" dataset-name="test_DataSet"></template-dataset>');
+		var element = angular.element('<dataset-template contents="modelContents" dataset-name="test_DataSet"></dataset-template>');
 		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
 		element = compile(element)($scope);

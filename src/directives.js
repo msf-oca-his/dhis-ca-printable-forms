@@ -1,8 +1,8 @@
 require("./directives/template-selector/templateSelector.js");
 require("./directives/page/page.js");
-require("./directives/template-dataset/templateDataSet.js");
-require("./directives/template-coversheet/templateCoversheet.js");
-require("./directives/template-register/templateRegister.js");
+require("./directives/dataset-template/dataSetTemplate.js");
+require("./directives/coversheet-template/coversheetTemplate.js");
+require("./directives/register-template/registerTemplate.js");
 require("./directives/codeSheet/codeSheet.js");
 require("./directives/page-content/pageContent.js");
 

@@ -7,7 +7,7 @@ describe("Coversheet Template", function() {
 	var httpMock;
 
 	function createElement() {
-		element = angular.element('<template-coversheet contents="modelContents" program-name="programName"></template-coversheet>');
+		element = angular.element('<coversheet-template contents="modelContents" program-name="programName"></coversheet-template>');
 		element = compile(element)($scope);
 		elementScope = element.scope().$$childHead;
 		element = element[0];

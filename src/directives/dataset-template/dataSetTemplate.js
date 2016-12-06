@@ -1,7 +1,7 @@
-TallySheets.directive('templateDataset', ['Config', function(config) {
+TallySheets.directive('datasetTemplate', ['Config', function(config) {
 	return {
 		restrict: 'E',
-		template: require('./templateDatasetView.html'),
+		template: require('./datasetTemplateView.html'),
 		scope: {
 			contents: '=',
 			datasetName: '='
