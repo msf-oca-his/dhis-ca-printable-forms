@@ -58,6 +58,10 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
 		// sections[index].isDuplicate = false;
 	};
 
+	this.isOptionSetSection = function(section, dataElementsKey) {
+		return section[dataElementsKey][0] && isListTypeDataElement(section[dataElementsKey][0]);
+	};
+
 	this.divideCatCombsIfNecessary = function(sections, index, dataElementsKey) {
 		var section = sections[index];
 		var dataElement = (section[dataElementsKey])[0];

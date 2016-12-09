@@ -1,5 +1,5 @@
 describe("Coversheet Processor", function() {
-	var coversheetProcessor, _DataElement;
+	var coversheetProcessor, _DataElement, DefaultContent, OptionSetContent;
 	var httpMock;
 	var $rootScope;
 	var p;
@@ -48,10 +48,14 @@ describe("Coversheet Processor", function() {
 	};
 
 	beforeEach(function() {
+		DefaultContent = function(section){ section.mockedBy = 'DefaultContent'; return section; };
+		OptionSetContent = function(section){ section.mockedBy = 'OptionSetContent'; return section; };
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
 		module(function($provide) {
 			$provide.value('Config', config);
+			$provide.value('DefaultContent', DefaultContent);
+			$provide.value('OptionSetContent', OptionSetContent);
 		});
 
 		inject(function(CoversheetProcessor, $httpBackend, $q, _$rootScope_, DataElement) {
@@ -117,13 +121,7 @@ describe("Coversheet Processor", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
 				var expectedSection = _.cloneDeep(currentTestProgram.programStages[0].programStageSections[0]);
-
-				var expectedRows = [[{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}]];
-
-				expectedSection.programStageDataElements[0].rows = expectedRows;
-				expectedSection.isOptionSet = true;
 				expectedSection.programStageDataElements[0].displayOption = "2";
-
 				var expectedPages = [{
 					heightLeft: 0,
 					width: 183,
@@ -135,7 +133,7 @@ describe("Coversheet Processor", function() {
 				}];
 
 				var actualPages = clone(coversheetProcessor.process(currentTestProgram, 'COVERSHEET'));
-				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
+				expect(actualPages[0].contents[0].type.type).toBe('OPTIONSET')
 			});
 
 			it("should process the section containing dataElement of type optionset and displayOption text", function() {
@@ -164,23 +162,9 @@ describe("Coversheet Processor", function() {
 						}]
 				};
 				var currentTestProgram = _.cloneDeep(testProgram);
-				var expectedSection = _.cloneDeep(currentTestProgram.programStages[0].programStageSections[0]);
-				expectedSection.leftSideElements = [currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0]];
-				expectedSection.rightSideElements=[];
-				expectedSection.programStageDataElements[0].displayOption = "1";
-
-				var expectedPages = [{
-					heightLeft: 0,
-					width: 183,
-					contents: [
-						{type: 'programName', name: "test program"},
-						{type: 'section', section: expectedSection},
-						{type: 'comments'}],
-					datasetName: "test program"
-				}];
-
 				var actualPages = coversheetProcessor.process(currentTestProgram, 'COVERSHEET');
-				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
+				expect(actualPages[0].contents[0].type.renderer).toEqual('default-content');
+				expect(actualPages[0].contents[0].data.programStageDataElements[0]).toEqual(testProgram.programStages[0].programStageSections[0].programStageDataElements[0]);
 			});
 
 			it("should remove dataElements from given dataElements if displayOption is none", function() {
@@ -247,74 +231,22 @@ describe("Coversheet Processor", function() {
 
 				var expectedSection1 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				assignOptionsToDe(expectedSection1, 69);
-				var expectedRows1 = [];
-				for(var i = 0; i < 23; i++) {
-					var j = 0;
-					while(j < config.OptionSet.numberOfColumns) {
-						if(j == 0)
-							expectedRows1.push([{id: 1, displayName: "option"}]);
-						else
-							expectedRows1[i].push({id: 1, displayName: "option"});
-						j++;
-					}
-				}
-
-				expectedSection1.programStageDataElements[0].rows = expectedRows1;
-				expectedSection1.isOptionSet = true;
-				expectedSection1.programStageDataElements[0].displayOption = "2";
-
-				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
-				assignOptionsToDe(expectedSection2, 7);
-
-				var expectedRows2 = [];
-				expectedRows2[0] = [];
-				expectedRows2[1] = [];
-				expectedRows2[2] = [];
-				expectedRows2[0].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"}, {id: 1, displayName: "option"});
-
-				expectedRows2[1].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
-				expectedRows2[2].push({id: 1, displayName: "option"}, {id: 1, displayName: "option"});
-
-				expectedSection2.programStageDataElements[0].rows = expectedRows2;
-				expectedSection2.isOptionSet = true;
-				expectedSection2.programStageDataElements[0].displayOption = "2";
-				expectedSection2.isDuplicate = false;
-
-				var expectedPages = [{
-					contents: [
-						{type: 'dataSetName', name: "test program"},
-						{type: 'section', section: expectedSection1}],
-					datasetName: "test program"
-				}, {
-					contents: [
-						{type: 'section', section: expectedSection2},
-						{type: 'comments'}],
-					datasetName: "test program"
-				}];
 				var acutalPages = coversheetProcessor.process(currentTestProgram);
-				expect(expectedPages[1].contents).toEqual(acutalPages[1].contents);
-				expect(expectedPages[0].contents[1]).toEqual(acutalPages[0].contents[1]);
+				expect(acutalPages[0].contents[0].data.programStageDataElements[0].options.length).toEqual(75);
+				expect(acutalPages[1].contents[0].data.programStageDataElements[0].options.length).toEqual(1);
 			});
 
-			it("should process the program which contains dataElements of type option set and general dataElements", function() {
+			it("should process the program which contains dataElements of type option set and general (default) dataElements", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
 					id: "1",
 					name: "general de"
 				};
-
 				var expectedSection1 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
-				var expectedRows1 = [[{id: 1, displayName: "option1"}, {id: 2, displayName: "option2"}]];
-				expectedSection1.programStageDataElements[0].rows = expectedRows1;
-				expectedSection1.isDuplicate = false;
-				expectedSection1.isOptionSet = true;
 				expectedSection1.programStageDataElements[0].displayOption = "2";
-
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				expectedSection2.programStageDataElements[0] = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1];
 				expectedSection2.isDuplicate = true;
-				expectedSection2.leftSideElements = [currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1]];
-				expectedSection2.rightSideElements = [];
 
 				var expectedPages = [{
 					contents: [
@@ -326,7 +258,9 @@ describe("Coversheet Processor", function() {
 				}];
 
 				var actualPages = coversheetProcessor.process(currentTestProgram);
-				expect(expectedPages[0].contents).toEqual(actualPages[0].contents);
+				expect(actualPages[0].contents[0].type.type).toBe('OPTIONSET');
+				expect(actualPages[0].contents[0].data, expectedSection1);
+				expect(actualPages[0].contents[1].data, expectedSection2);
 			});
 
 		});
@@ -357,53 +291,16 @@ describe("Coversheet Processor", function() {
 					for(var i = 0; i < numberOfDe; i++) {
 						section.programStageDataElements[i] = _.cloneDeep(testProgram.programStages[0].programStageSections[0].programStageDataElements[0]);
 					}
-				}
-				assignDeToSections(currentTestProgram.programStages[0].programStageSections[0], 50);
-
+				};
+				assignDeToSections(currentTestProgram.programStages[0].programStageSections[0], 52);
 				var expectedSection1 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
-				var expectedNumberOfElements = 48;
+				var expectedNumberOfElements = 50;
 				assignDeToSections(expectedSection1, expectedNumberOfElements);
-				expectedSection1.leftSideElements = [];
-				expectedSection1.rightSideElements = [];
-				for(var i = 0; i < expectedNumberOfElements; i++) {
-					if(i < (expectedNumberOfElements / 2))
-						expectedSection1.leftSideElements.push(currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[i]);
-					else
-						expectedSection1.rightSideElements.push(currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[i]);
-				}
-				;
-
 				var expectedSection2 = _.cloneDeep(testProgram.programStages[0].programStageSections[0]);
 				assignDeToSections(expectedSection2, 2);//expected would be 2
-				expectedSection2.leftSideElements = [{
-					id: "1234",
-					isResolved: Promise.resolve({}),
-					name: "dataElement",
-					type: "TEXT"
-				}];
-				expectedSection2.rightSideElements = [{
-					id: "1234",
-					isResolved: Promise.resolve({}),
-					name: "dataElement",
-					type: "TEXT"
-				}];
-				expectedSection2.isDuplicate = false;
-
-				var expectedPages = [{
-					contents: [
-						{type: 'programName', name: "test program"},
-						{type: 'section', section: expectedSection1}],
-					datasetName: "test program"
-				}, {
-					contents: [
-						{type: 'section', section: expectedSection2},
-						{type: "comments"}
-					]
-				}];
-
 				var actualPages = coversheetProcessor.process(currentTestProgram);
-				expect(actualPages[0].contents).toEqual(expectedPages[0].contents);
-				expect(actualPages[1].contents).toEqual(expectedPages[1].contents);
+				expect(actualPages[0].contents[0].data.programStageDataElements.length).toEqual(50);
+				expect(actualPages[1].contents[0].data.programStageDataElements.length).toEqual(2);
 			});
 		});
 	})

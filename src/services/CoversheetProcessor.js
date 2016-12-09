@@ -11,8 +11,8 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		var processSection = function(section, sectionIndex) {
 			var getHeightForSection = function(section) {
 				var height;
-				if (isOptionSetSection(section))
-					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.DataSet.gapBetweenSections;
+				if (printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
+					height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.Coversheet.gapBetweenSections;
 				else
 					height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + config.Coversheet.gapBetweenSections;
 
@@ -22,7 +22,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 			var addSectionToPage = function(section, height) {
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections)
 				if(isDuplicate) section.name = "";
-				if(isOptionSetSection(section))
+				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
 					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, 'programStageDataElements')));
 				else
 					page.contents.push(new Content(ContentTypes.default, new DefaultContent(section, 'programStageDataElements')));
@@ -44,14 +44,14 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
-				if(isOptionSetSection(section))
+				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
 					return section.programStageDataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 				else
 					return section.programStageDataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section) {
-				if(isOptionSetSection(section)) {
+				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements')) {
 					var newSection = _.cloneDeep(section);
 					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
 					if(numberOfOptionsThatCanFit <= config.OptionSet.numberOfColumns){
@@ -84,7 +84,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 					addSectionToPage(section, sectionHeight);
 				else if(numberOfElementsThatCanFit > 1)
 					breakAndAddSection(section, numberOfElementsThatCanFit);
-				else if (isOptionSetSection(section))
+				else if (printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
 					var isFirstSectionInProgram = (sectionIndex == 0);
@@ -118,9 +118,6 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		addComments();
 	};
 
-	var isOptionSetSection = function(section) {
-		return section.programStageDataElements[0] && section.programStageDataElements[0].valueType == 'OPTIONSET';
-	};
 
 	this.process = function(program) {
 		pages = [];
