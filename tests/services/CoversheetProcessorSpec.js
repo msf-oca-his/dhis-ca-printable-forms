@@ -82,7 +82,7 @@ describe("Coversheet Processor", function() {
 			var expectedPages = [{
 				heightLeft: config.PageTypes.A4.Portrait.availableHeight,
 				widthLeft: config.PageTypes.A4.Portrait.availableWidth,
-				contents: [{type: 'comments'}],
+				contents: [{type: { type: 'COMMENTS', renderer: 'comments' }}],
 				type: 'COVERSHEET',
 				programName: "test program"
 			}];

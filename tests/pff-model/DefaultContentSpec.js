@@ -1,6 +1,12 @@
-xdescribe("splitLeftAndRightElements", function() {
+describe("DefaultContent", function() {
 	var testSections;
+	var DefaultContent;
 	beforeEach(function() {
+		module("TallySheets");
+		inject(function(_DefaultContent_) {
+			DefaultContent = _DefaultContent_;
+		});
+
 		testSections = [{
 			testKey: []
 		}];
@@ -8,30 +14,40 @@ xdescribe("splitLeftAndRightElements", function() {
 
 	describe(" when number of data elements are zero", function() {
 		it("should have empty left and right side elements", function(){
-			printFriendlyUtils.splitLeftAndRightElements(testSections[0], "testKey");
-			expect(testSections[0].leftSideElements).toEqual([]);
-			expect(testSections[0].rightSideElements).toEqual([]);
+			var actualContent = new DefaultContent(testSections[0], "testKey");
+			expect(actualContent.leftSideDataElements).toEqual([]);
+			expect(actualContent.rightSideDataElements).toEqual([]);
 		});
 	});
 
 	describe("when number of data elements are even", function() {
 		it("should split data elements into left and right side elements equally ", function(){
-			testSections[0].testKey = [1, 2, 3, 4];
-			printFriendlyUtils.splitLeftAndRightElements(testSections[0], "testKey");
-			expect(testSections[0].leftSideElements.length).toEqual(testSections[0].rightSideElements.length);
-			expect(testSections[0].leftSideElements).toEqual([1, 2]);
-			expect(testSections[0].rightSideElements).toEqual([3, 4]);
+			var de1 = {name:'de1',valueType:'value1'};
+			var de2 = {name:'de2',valueType:'value2'};
+			var de3 = {name:'de3',valueType:'value3'};
+			var de4 = {name:'de4',valueType:'value4'};
+			testSections[0].testKey = [de1,de2,de3,de4];
+			var actualContent = new DefaultContent(testSections[0], "testKey");
+			expect(actualContent.leftSideDataElements.length).toEqual(2);
+			expect(actualContent.rightSideDataElements.length).toEqual(2);
+			expect(actualContent.leftSideDataElements[0]).toEqual(de1,de2);
+			expect(actualContent.rightSideDataElements[0]).toEqual(de3,de4);
 		});
 	});
 
 	describe("when number of data elements are odd", function() {
 		it("should have left side elements more than right side elements ", function(){
-			testSections[0].testKey = [1, 2, 3, 4, 5];
-			printFriendlyUtils.splitLeftAndRightElements(testSections[0], "testKey");
-			expect(testSections[0].leftSideElements.length).toBe(3);
-			expect(testSections[0].rightSideElements.length).toBe(2);
-			expect(testSections[0].leftSideElements).toEqual([1, 2, 3]);
-			expect(testSections[0].rightSideElements).toEqual([4, 5]);
+			var de1 = {name:'de1',valueType:'value1'};
+			var de2 = {name:'de2',valueType:'value2'};
+			var de3 = {name:'de3',valueType:'value3'};
+			var de4 = {name:'de4',valueType:'value4'};
+			var de5 = {name:'de5',valueType:'value5'};
+			testSections[0].testKey = [de1,de2,de3,de4,de5];
+			var actualContent = new DefaultContent(testSections[0], "testKey");
+			expect(actualContent.leftSideDataElements.length).toBe(3);
+			expect(actualContent.rightSideDataElements.length).toBe(2);
+			expect(actualContent.leftSideDataElements[0]).toEqual(de1,de2,de3);
+			expect(actualContent.rightSideDataElements[0]).toEqual(de4,de5);
 		});
 	});
 });

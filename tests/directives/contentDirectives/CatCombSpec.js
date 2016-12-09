@@ -1,4 +1,4 @@
-describe("Dataset Template", function() {
+describe("CatComb", function() {
 	var section;
 	var compile, httpMock;
 	var $scope = {};
@@ -29,8 +29,8 @@ describe("Dataset Template", function() {
 		httpMock.expectGET("i18n/en.json").respond(200, {});
 		section = {dataElements: [{categoryCombo: {}}]}
 	}));
-
-	it("should get displayOptions from config", function() {
+//TODO: write tests here.
+	xit("should get displayOptions from config", function() {
 		var element = angular.element('<dataset-template contents = "" dataset-name = "test_DataSet"></dataset-template>');
 		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
@@ -40,7 +40,7 @@ describe("Dataset Template", function() {
 		expect(elementsScope.displayOptions).toEqual(config.CustomAttributes.displayOptionUID.options)
 	});
 
-	it("should return table width as 9.5cm when section is not catcomb", function() {
+	xit("should return table width as 9.5cm when section is not catcomb", function() {
 		var element = angular.element('<dataset-template contents="" dataset-name="test_DataSet"></dataset-template>');
 		$scope.test_DataSet = "dataSetName";
 		$scope.modelContents = [];
@@ -50,7 +50,7 @@ describe("Dataset Template", function() {
 		expect(elementsScope.getTableWidth(section)).toEqual("9.5cm");
 	});
 
-	it("should return calculated table width when section is catcomb", function() {
+	xit("should return calculated table width when section is catcomb", function() {
 		var currentSection = _.cloneDeep(section);
 		currentSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male,5", "female,7"]
 		currentSection.isCatComb = true;

@@ -21,7 +21,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			var addSectionToPage = function(section, height) {
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections)
-				if(isDuplicate) section.name = "";
+				if(isDuplicate && !_.isEmpty(page.contents)) section.name = "";
 				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
 					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, 'programStageDataElements')));
 				else
@@ -30,11 +30,11 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				page.heightLeft = page.heightLeft - height;
 			};
 
-			var addSectionToNewPage = function(section, height, isFirstSectionInProgram) {
+			var addSectionToNewPage = function(section, height) {
 				page = new CoverSheetPage();
 				page.programName = program.displayName;
 				pages[++currentPageIndex] = page;
-				processSection(section, isFirstSectionInProgram);
+				processSection(section, sectionIndex);
 			};
 
 			var getNumberOfOptionsThatCanFit = function(section){
@@ -69,8 +69,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 					(numberOfElementsThatCanFit % noOfDefaultTypeColumns == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.programStageDataElements = section.programStageDataElements.splice(numberOfElementsThatCanFit);
 					addSectionToPage(section, page.heightLeft);
-					var isFirstSectionInProgram = false;
-					addSectionToNewPage(newSection, getHeightForSection(newSection), isFirstSectionInProgram);
+					addSectionToNewPage(newSection, getHeightForSection(newSection));
 				}
 			};
 
@@ -87,8 +86,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				else if (printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
-					var isFirstSectionInProgram = (sectionIndex == 0);
-					addSectionToNewPage(section, sectionHeight, isFirstSectionInProgram)
+					addSectionToNewPage(section, sectionHeight)
 				}
 			}
 		};
@@ -96,10 +94,10 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		var addComments = function() {
 			var lastPage = pages[pages.length - 1];
 			if(lastPage.heightLeft > config.Coversheet.commentsHeight)
-				lastPage.contents.push({ type: 'comments' });
+				lastPage.contents.push(new Content(ContentTypes.comments));
 			else {
 				var newPage = new CoverSheetPage("COVERSHEET");
-				newPage.contents.push({ type: 'comments' });
+				newPage.contents.push(new Content(ContentTypes.comments));
 				pages.push(newPage);
 			}
 

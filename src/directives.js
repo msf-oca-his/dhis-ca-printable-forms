@@ -12,6 +12,7 @@ require("./directives/content-directives/category-combo/categoryCombo.js");
 require("./directives/content-directives/section-title/sectionTitle.js");
 require("./directives/content-directives/dataset-title/datasetTitle.js");
 require("./directives/content-directives/register-content/registerContent.js");
+require("./directives/content-directives/comments/comments.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/directives/modal-alert/modalAlert.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/directives/inline-alert/inlineAlert.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/directives/dropdown-list/dropdownList.js");
