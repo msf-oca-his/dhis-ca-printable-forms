@@ -39,6 +39,7 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		if(config.CustomAttributes[attributeNameFromConfig].options) {
 			return validateOptionSetOfAttribute(attributeFromDhis, attributeNameFromConfig);
 		}
+		return true
 	};
 
 	var validateAllAttributes = function(allCustomAttributesFromDhis) {
