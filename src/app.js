@@ -7,10 +7,10 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 }]);
 
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor",
-	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
+	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes','AlertTypes',
 	'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', "CodeSheetProcessor","PageTypes",
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
-	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
+	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, AlertTypes,
 	         InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor,PageTypes) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
@@ -40,10 +40,12 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		})
 	};
 	var handleError = function(alertObject) {
-		if(alertObject.constructor.name == 'ModalAlert')
-			ModalAlertsService.showModalAlert(alertObject);
-		else if(alertObject.constructor.name == 'InlineAlert')
-			showInlineAlert(alertObject);
+
+		if(alertObject.severity == Severity.FATAL || alertObject.severity == Severity.ERROR) {
+			ModalAlertsService.showModalAlert(AlertTypes.renderModelAlert(alertObject));
+		}
+		else if(alertObject.severity == Severity.INFO || alertObject.severity == Severity.WARN)
+			showInlineAlert(AlertTypes.renderInlineAlert(alertObject));
 		else{
 			console.log(alertObject); //must have console
 			return throwError('unexpected_error', ModalAlertTypes.dismissibleError);
@@ -52,18 +54,13 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 	};
 
 	var onValidationFail = function(alertObject) {
-		if(alertObject.constructor.name =='ModalAlert' && (alertObject.type == ModalAlertTypes.indismissibleError || alertObject.type == ModalAlertTypes.indismissibleWarning)) {
 			return handleError(alertObject);
-		}
-		else{
-			handleError(alertObject);
-			return $q.reject(alertObject);
-		}
 	};
 
 	$scope.validationProcess = $q.when({})
 		.then(CustomAttributeValidationService.validate)
-		.catch(onValidationFail);
+		.catch(onValidationFail)
+		.catch(handleError);
 
 	$scope.dsId = 1;
 	$scope.templates = [];

@@ -16,7 +16,7 @@ describe("Coversheet Template", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
-			CustomAttributes: {
+			customAttributes: {
 				displayOptionUID  : {}
 		}
 		};

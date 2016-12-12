@@ -8,8 +8,8 @@ TallySheets.directive('coversheetTemplate', ['Config', function(config) {
 			isLastPage: '='
 		},
 		link: function($scope) {
-			if(config.CustomAttributes.displayOptionUID)
-				$scope.displayOptions = config.CustomAttributes.displayOptionUID.options;
+			if(config.customAttributes.displayOptionUID)
+				$scope.displayOptions = config.customAttributes.displayOptionUID.options;
 		}
 	}
 }]);

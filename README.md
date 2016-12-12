@@ -43,7 +43,7 @@ running `gulp pack` will pack the app as a .zip file, and place it in the target
 
 #DHIS data model aspects in the app
 
-##config.CustomAttributes depends on DHIS2 custom attributes  
+##config.customAttributes depends on DHIS2 custom attributes  
 
 1. `printFlagUID`: A custom attribute of type “Yes only” needs to be created in DHIS2 and associated with dataSets and programs. Any dataSets or programs that have this attribute set to Yes, will be made available for printing through this app. Place the custom attribute UID in the id field, and its associations in associatedWith, as shown in the example below.  
 

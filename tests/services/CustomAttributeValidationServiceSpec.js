@@ -17,7 +17,7 @@ describe("CustomAttributeValidationService", function() {
 				dataSetPrefix: "test_DS",
 				programPrefix: "test_PROG_"
 			},
-			CustomAttributes: {
+			customAttributes: {
 				displayOptionUID: {
 					id: "1",
 					associatedWith: ['dataElement'],
@@ -81,7 +81,7 @@ describe("CustomAttributeValidationService", function() {
 
 	describe("validation of all custom attributes", function() {
 		it("should be undefined when no custom attributes in config", function() {
-			config.CustomAttributes = undefined;
+			config.customAttributes = undefined;
 			expect(customAttributeValidationService.validate()).toEqual(undefined);
 			_$rootScope.$digest();
 		});
@@ -133,7 +133,7 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should be validated as true when custom attribute in dhis is same as in app config", function(done) {
-			delete config.CustomAttributes.printFlagUID;
+			delete config.customAttributes.printFlagUID;
 			mockedCustomAttribute.optionSet = {id: '1', options: [{code: '0'}, {code: '1'}, {code: '2'}]};
 			customAttributeValidationService.validate().then(function(result) {
 				expect(result).toEqual([true]);
@@ -143,7 +143,7 @@ describe("CustomAttributeValidationService", function() {
 		});
 
 		it("should not validate optionSet of custom attribute when it doesn't have options in config", function() {
-			delete config.CustomAttributes.displayOptionUID;
+			delete config.customAttributes.displayOptionUID;
 			mockedCustomAttribute = new customAttribute({
 				name: "isPrintable",
 				id: "2",

@@ -35,7 +35,7 @@ describe("Coversheet Processor", function() {
 		Delimiters: {
 			optionLabelDelimiter: "]"
 		},
-		CustomAttributes: {
+		customAttributes: {
 			displayOptionUID: {
 				id: "111",
 				options: {

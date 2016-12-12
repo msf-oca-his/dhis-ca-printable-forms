@@ -48,7 +48,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 
 			var getPrintableAttribute = function(attributeValues) {
 				return _.reduce(_.filter(attributeValues, function(attributeValue) {
-					if(attributeValue.attribute.id === config.CustomAttributes.printFlagUID.id) {
+					if(attributeValue.attribute.id === config.customAttributes.printFlagUID.id) {
 						return attributeValue;
 					}
 				}));
@@ -82,8 +82,8 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			var getAllTemplates = function() {
 				return $q.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 					.then(function(arrayOfTemplates) {
-						var dataSetTemplates = config.CustomAttributes.printFlagUID ? _.filter(arrayOfTemplates[0], isPrintableTemplate) : arrayOfTemplates[0];
-						var programTemplates = config.CustomAttributes.printFlagUID ? _.filter(arrayOfTemplates[1], isPrintableTemplate) : arrayOfTemplates[1];
+						var dataSetTemplates = config.customAttributes.printFlagUID ? _.filter(arrayOfTemplates[0], isPrintableTemplate) : arrayOfTemplates[0];
+						var programTemplates = config.customAttributes.printFlagUID ? _.filter(arrayOfTemplates[1], isPrintableTemplate) : arrayOfTemplates[1];
 						$scope.dataSetTemplates = _.map(dataSetTemplates, addDataSetPrefix);
 						$scope.programTemplates = _.map(programTemplates, addProgramPrefix);
 						return _.flatten([$scope.dataSetTemplates, $scope.programTemplates]);

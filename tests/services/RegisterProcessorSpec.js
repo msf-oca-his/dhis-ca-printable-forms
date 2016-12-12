@@ -30,7 +30,7 @@ describe('RegisterProcessor', function() {
 			text: '1',
 			list: '2'
 		},
-		CustomAttributes: {
+		customAttributes: {
 			displayOptionUID: "111"
 		}
 	};

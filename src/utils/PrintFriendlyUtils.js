@@ -12,10 +12,10 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
 	};
 	var isListTypeDataElement = function(dataElement) {
 		if(dataElement.valueType != 'OPTIONSET') return false;
-		if(!config.CustomAttributes.displayOptionUID) return true;
+		if(!config.customAttributes.displayOptionUID) return true;
 		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 		if(displayOptionAttribute && displayOptionAttribute.value)
-			return displayOptionAttribute.value == config.CustomAttributes.displayOptionUID.options.list;
+			return displayOptionAttribute.value == config.customAttributes.displayOptionUID.options.list;
 		return true;
 	};
 	var getIndexOfDEWithOptionSets = function(section, dataElementsKey) {
@@ -86,20 +86,20 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', function(config) {
 	//TODO: extract this to data model util.
 	var getCustomAttributeForRenderingOptionSets = function(customAttributes) {
 		return _.reduce(_.filter(customAttributes, function(customAttribute) {
-			if(customAttribute.attribute.id == config.CustomAttributes.displayOptionUID.id) {
+			if(customAttribute.attribute.id == config.customAttributes.displayOptionUID.id) {
 				return customAttribute;
 			}
 		}));
 	};
 
 	this.getDataElementsToDisplay = function(section, dataElementsKey) {
-		if(!config.CustomAttributes.displayOptionUID) return section[dataElementsKey];
+		if(!config.customAttributes.displayOptionUID) return section[dataElementsKey];
 		return _.filter(section[dataElementsKey], function(dataElement) {
 			if(dataElement.valueType == 'OPTIONSET') {
 				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 				if(displayOptionAttribute) {
 					// dataElement.displayOption = displayOptionAttribute.value;
-					return displayOptionAttribute.value != config.CustomAttributes.displayOptionUID.options.none;
+					return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;
 				}
 			}
 			return true;

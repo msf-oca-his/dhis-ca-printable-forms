@@ -11,7 +11,7 @@ describe("Print Friendly Utils", function() {
 			OptionSet: {
 				numberOfColumns: 3
 			},
-			CustomAttributes: {
+			customAttributes: {
 				displayOptionUID: {
 					options: {
 						none: '0'

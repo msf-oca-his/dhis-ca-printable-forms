@@ -5,7 +5,7 @@ describe("Page Directive", function() {
 	var outerScope, compile,childScope;
 	var pageTypes;
 	var config = {
-		CustomAttributes: {
+		customAttributes: {
 			displayOptionUID: {
 				id: "444",
 				options: {
@@ -19,7 +19,7 @@ describe("Page Directive", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
-		config  = {CustomAttributes: {
+		config  = {customAttributes: {
 			displayOptionUID:{}
 		}};
 		module(function($provide) {

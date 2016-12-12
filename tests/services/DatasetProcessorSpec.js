@@ -37,7 +37,7 @@ describe("DataSetProcessor", function() {
 				optionLabelDelimiter: "]",
 				categoryOptionComboDelimiter: "<br>"
 			},
-			CustomAttributes: {
+			customAttributes: {
 				displayOptionUID: {
 					id: "444",
 					options: {
@@ -307,7 +307,7 @@ describe("DataSetProcessor", function() {
 					displayName    : "de1",
 					valueType      : 'OPTIONSET',
 					options        : ['hello'],
-					attributeValues: [{ attribute: { id: config.CustomAttributes.displayOptionUID.id }, value: '0' }]
+					attributeValues: [{ attribute: { id: config.customAttributes.displayOptionUID.id }, value: '0' }]
 				}];
 				dataElements.push(clone(dataElements[0]));
 				dataElements.push(clone(dataElements[0]));

@@ -23,7 +23,7 @@ describe("CodeSheet Processor", function() {
 			Delimiters: {
 				optionLabelDelimiter: "]"
 			},
-			CustomAttributes: {
+			customAttributes: {
 				displayOptionUID: {
 					id: "111",
 					options: {
@@ -134,7 +134,7 @@ describe("CodeSheet Processor", function() {
 
 			var dataElement = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0];
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1].attributeValues.value = config.CustomAttributes.displayOptionUID.options.none;
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1].attributeValues.value = config.customAttributes.displayOptionUID.options.none;
 
 			var expectedPages = [{
 				contents: [],

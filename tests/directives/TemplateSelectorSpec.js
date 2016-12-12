@@ -32,7 +32,7 @@ describe("templateSelector Directive", function() {
 					translationKey:"program_prefix"
 				}
 			},
-			CustomAttributes: {}
+			customAttributes: {}
 		};
 
 		mockedModalAlertsService = {
@@ -165,7 +165,7 @@ describe("templateSelector Directive", function() {
 		describe("loading templates", function() {
 			it("should load all the templates when custom attribute is not present in the config", function() {
 				childScope.validationResult = $q.when({});
-				config.CustomAttributes = {};
+				config.customAttributes = {};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(childScope);
 				childScope.$apply();
@@ -174,7 +174,7 @@ describe("templateSelector Directive", function() {
 
 			it("should load only printable templates", function(done) {
 				childScope.validationResult = $q.when({});
-				config.CustomAttributes.printFlagUID = {id: '1'};
+				config.customAttributes.printFlagUID = {id: '1'};
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(childScope);
 				childScope.$digest();
@@ -187,7 +187,7 @@ describe("templateSelector Directive", function() {
 			});
 
 			it("should not load templates which has printable attribute value as false", function(done) {
-				config.CustomAttributes.printFlagUID = {id: "1"};
+				config.customAttributes.printFlagUID = {id: "1"};
 				datasets[0].attributeValues[0].value = "false";
 				programs[0].attributeValues[0].value = "false";
 				childScope.validationResult = $q.when({});
@@ -207,7 +207,7 @@ describe("templateSelector Directive", function() {
 			});
 
 			it("should show an alert when printable attribute is not set in any template ", function(done) {
-				config.CustomAttributes.printFlagUID = {id: "1"};
+				config.customAttributes.printFlagUID = {id: "1"};
 				childScope.validationResult = $q.when({});
 				datasets[0].attributeValues[0].value = "false";
 				datasets[1].attributeValues[0].value = "false";

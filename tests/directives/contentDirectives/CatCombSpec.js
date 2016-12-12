@@ -37,7 +37,7 @@ describe("CatComb", function() {
 		element = compile(element)($scope);
 		$scope.$digest();
 		elementsScope = element.scope().$$childHead;
-		expect(elementsScope.displayOptions).toEqual(config.CustomAttributes.displayOptionUID.options)
+		expect(elementsScope.displayOptions).toEqual(config.customAttributes.displayOptionUID.options)
 	});
 
 	xit("should return table width as 9.5cm when section is not catcomb", function() {
