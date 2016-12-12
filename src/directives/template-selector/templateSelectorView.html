@@ -1,10 +1,10 @@
 <span class="hidden-print">
     <span ng-if="!showMultipleTemplates" id="template-selection-wrapper">
-      <dropdown-list  selected-item="$parent.selectedTemplates[0]" items="templates" placeHolder="{{'SELECT_TEMPLATE' | translate}}" on-select="select()"></dropdown-list>
+      <dropdown-list  selected-item="$parent.selectedTemplates[0]" items="templates" placeHolder="{{'select_template' | translate}}" on-select="select()"></dropdown-list>
     </span>
     <span ng-if="showMultipleTemplates">
         <span ng-repeat="template in $parent.selectedTemplates track by $index" id="template-selection-wrapper">
-          <dropdown-list  selected-item="$parent.selectedTemplates[$index]" items="dataSetTemplates" placeHolder="{{'SELECT_TEMPLATE' | translate}}" on-select="select()"></dropdown-list>
+          <dropdown-list  selected-item="$parent.selectedTemplates[$index]" items="dataSetTemplates" placeHolder="{{'select_template' | translate}}" on-select="select()"></dropdown-list>
           <button ng-click="removeTemplate($index)" class="btn btn-default hidden-print">
               <span class="glyphicon glyphicon-remove"></span>
           </button>

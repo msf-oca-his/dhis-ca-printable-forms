@@ -9,10 +9,13 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	var validateOptionSetOfAttribute = function(attributeFromDhis, attributeNameFromConfig) {
 		if(_.isEmpty(attributeFromDhis.optionSet))
 			throw prepareErrorObject("no_association_with_optionset", attributeNameFromConfig, ModalAlertTypes.indismissibleError);
-		if(_.isEmpty(attributeFromDhis.optionSet.options))
+
+		if(_.isEmpty(attributeFromDhis.optionSet.options) || _.isEmpty(config.CustomAttributes[attributeNameFromConfig].options))
 			throw prepareErrorObject('optionset_without_options', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
+
 		if(areConfigOptionsNotEqualTo(attributeFromDhis, attributeNameFromConfig))
 			throw prepareErrorObject('optionset_with_incorrect_options', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
+
 		return true;
 	};
 
@@ -36,12 +39,11 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 		if(config.CustomAttributes[attributeNameFromConfig].options) {
 			return validateOptionSetOfAttribute(attributeFromDhis, attributeNameFromConfig);
 		}
-		return true;
 	};
 
-	var validateAllAttributes = function(allCustomAtrributesFromDhis) {
+	var validateAllAttributes = function(allCustomAttributesFromDhis) {
 		try {
-			return _(allCustomAtrributesFromDhis)
+			return _(allCustomAttributesFromDhis)
 				.map(validateCustomAttribute)
 				.value();
 		}
