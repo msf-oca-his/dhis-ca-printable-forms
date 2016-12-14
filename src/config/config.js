@@ -1,4 +1,4 @@
-TallySheets.factory("Config", ['CalculatedConfig', function(CalculatedConfig) {
+TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 
 	var config = {};
 

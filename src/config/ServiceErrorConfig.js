@@ -1,4 +1,4 @@
-TallySheets.factory("ServiceErrorConfig", [function() {
+TallySheets.factory('ServiceErrorConfig', [function() {
 
 	//Message CODE 2500 and above number are errors
 	//Message CODE 2000 to 2499 are warnings

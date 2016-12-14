@@ -29,7 +29,7 @@ TallySheets.factory('RegisterPage', ['Config','PageTypes', function(config,PageT
 		registerPage.heightLeft = config.PageTypes.A4.LandScape.availableHeight - config.Register.pageHeaderHeight;
 		registerPage.widthLeft = config.PageTypes.A4.LandScape.availableWidth;
 		registerPage.type = PageTypes.REGISTER;
-		return new Page(registerPage)
+		return new Page(registerPage);
 	}
 }]);
 
@@ -40,6 +40,6 @@ TallySheets.factory('CodeSheetPage', ['Config','PageTypes', function(config,Page
 		codeSheetPage.widthLeft = config.PageTypes.A4.Portrait.availableWidth;
 		codeSheetPage.type = PageTypes.CODESHEET;
 		codeSheetPage.columns = new Array(config.CodeSheet.numberOfColumns);
-		return new Page(codeSheetPage)
+		return new Page(codeSheetPage);
 	}
 }]);

@@ -1,10 +1,10 @@
 <section-title title="content.title"></section-title>
 <table class="default-section">
 
-    <tr ng-repeat="name in content.leftSideDataElements">
+    <tr ng-repeat="displayName in content.leftSideDataElements">
 
         <td class="deLabel general">
-            {{content.leftSideDataElements[$index].name}}
+            {{content.leftSideDataElements[$index].displayName}}
         </td>
         <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType=='BOOLEAN'">
             <input type="checkbox" class="pffcheckbox">Yes</input>
@@ -17,7 +17,7 @@
         <td class="default-section-divider"></td>
 
         <td class="deLabel general" ng-if="content.rightSideDataElements[$index]">
-            {{content.rightSideDataElements[$index].name}}
+            {{content.rightSideDataElements[$index].displayName}}
         </td>
 
         <span ng-if="content.rightSideDataElements[$index]">

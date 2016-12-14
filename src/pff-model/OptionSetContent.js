@@ -19,8 +19,8 @@ TallySheets.factory('OptionSetContent', ['Config', function(config) {
 	
 	return function OptionSetContent(section, dataElementKey) {
 		if(!section) return;
-		this.title = section.name;
-		this.dataElementName = (section[dataElementKey])[0].name;
+		this.title = section.displayName;
+		this.dataElementName = (section[dataElementKey])[0].displayName;
 		this.rows =  getOptionRows(section, dataElementKey);
 	}
 }]);
