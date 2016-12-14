@@ -79,7 +79,7 @@ TallySheets.factory("Config", ['CalculatedConfig', function(CalculatedConfig) {
 			optionLabelDelimiter: "]",
 			categoryOptionComboDelimiter: "<br>"
 	};
-		config.CustomAttributes = {
+		config.customAttributes = {
 			// printFlagUID: {
 			// 	id: "F6S3pRyjnSf",
 			// 	associatedWith: ['dataSet', 'program']

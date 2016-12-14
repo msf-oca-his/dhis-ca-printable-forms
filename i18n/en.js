@@ -4,6 +4,7 @@ module.exports = {
 	"export_excel": "Export to MS Excel",
 	"select_template": "Select a Template",
 	"no_attribute_exists": "The specified UID doesn't exist in the system. Please contact your system administrator.",
+	"fetching_custom_attributes_failed": "Fetching custom attributes is failed",
 	"no_association_with_entity": "No association between the attribute and the specified entity in config",
 	"attribute_not_set": "The specified UID is not set in any template. Please contact your system administrator.",
 	"no_association_with_optionset": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",

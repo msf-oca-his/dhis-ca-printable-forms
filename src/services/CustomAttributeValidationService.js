@@ -52,18 +52,16 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	};
 
 	var getAllCustomAttributes = function() {
-		try {
-			return _(config.customAttributes)
-				.map('id')
-				.map(CustomAttributeService.getCustomAttribute)
-				.value()
-		}
-		catch(err) {
-			var messageType = {
-				recoverable: true
-			};
-			return Promise.reject(new ServiceError(err.message, Severity.ERROR, messageType, err.message));
-		}
+		var customAttributeIds = _.map(config.customAttributes, 'id');
+		return _.map(customAttributeIds, function(customAttributeId) {
+			return CustomAttributeService.getCustomAttribute(customAttributeId).then(function(customAttribute) {
+				return customAttribute
+			}).catch(function(err) {
+				console.log(err);
+				return handleError(prepareErrorObject('fetching_custom_attributes_failed', '', ModalAlertTypes.indismissibleError));
+			});
+		});
+
 	};
 
 	var prepareErrorObject = function(message, additionalInfo, type) {
@@ -74,15 +72,12 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	};
 
 	var handleError = function(err) {
-		var messageType = {
-			recoverable: true
-		};
 		return CustomAngularTranslateService.getTranslation(err.message).then(function(translatedMessage) {
+			var messageType = {recoverable: true};
 			if(err.type == ModalAlertTypes.indismissibleError)
 				messageType.recoverable = false;
 			else if(err.type == ModalAlertTypes.dismissibleError)
 				messageType.recoverable = true;
-
 			var completeMessage = err.errorSrc ? err.errorSrc + " : " + translatedMessage : translatedMessage;
 			return Promise.reject(new ServiceError(completeMessage, Severity.ERROR, messageType, err.message));
 		});

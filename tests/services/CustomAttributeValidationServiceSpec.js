@@ -49,7 +49,8 @@ describe("CustomAttributeValidationService", function() {
 				"no_association_with_optionset": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
 				"optionset_without_options": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
 				"optionset_with_incorrect_options": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
-				"no_association_with_entity": "No association between the attribute and the specified entity in config"
+				"no_association_with_entity": "No association between the attribute and the specified entity in config",
+				"fetching_custom_attributes_failed":"fetching custom attributes is failed"
 			});
 		});
 	});
@@ -93,6 +94,18 @@ describe("CustomAttributeValidationService", function() {
 				done();
 			});
 			getAngularPromiseOfDepth(8, _$rootScope);
+		});
+
+		it("should show an alert when the print flag custom attribute is not proper in config", function(done) {
+			customAttributeService.getCustomAttribute = function() {
+				return Promise.reject({})
+			};
+			config.customAttributes.printFlagUID.id = "";
+			customAttributeValidationService.validate().catch(function(alertObject) {
+				expect(alertObject.message).toEqual("fetching custom attributes is failed");
+				done();
+			});
+			getAngularPromiseOfDepth(9, _$rootScope);
 		});
 
 		it("should show an alert when there is no association between custom attribute and any entity", function(done) {

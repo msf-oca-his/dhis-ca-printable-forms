@@ -53,13 +53,8 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		return $q.reject();
 	};
 
-	var onValidationFail = function(alertObject) {
-			return handleError(alertObject);
-	};
-
 	$scope.validationProcess = $q.when({})
 		.then(CustomAttributeValidationService.validate)
-		.catch(onValidationFail)
 		.catch(handleError);
 
 	$scope.dsId = 1;
