@@ -28,7 +28,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				var isFirstSection = Number.isInteger(sectionIndex) ? ( sectionIndex == 0 ) : sectionIndex;
 				if(_.isEmpty(page.contents) || isFirstSection) page.contents.push(new Content(ContentTypes.datasetTitle, new DatasetTitle(dataSet.displayName)));
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, dataSet.sections);
-				if(isDuplicate) section.name = "";
+				if(isDuplicate) section.displayName = "";
 				if(isCatCombSection(section))
 					page.contents.push(new Content(ContentTypes.catComb, new CatCombContent(section)));
 				else if(printFriendlyUtils.isOptionSetSection(section, 'dataElements'))
