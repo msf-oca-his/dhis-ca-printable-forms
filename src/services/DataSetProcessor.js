@@ -42,6 +42,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 			var addSectionToNewPage = function(section) {
 				page = new DataSetPage();
 				pages[++currentPageIndex] = page;
+				sectionIndex = 0;
 				processSection(section, sectionIndex);
 			};
 			var getNumberOfOptionsThatCanFit = function(section){
@@ -65,7 +66,6 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				if(isCatCombSection(section)) {
 					var newSection = _.cloneDeep(section);
 					newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
-					// newSection.isDuplicate = true;
 					addSectionToPage(section, page.heightLeft);
 					addSectionToNewPage(newSection);
 				}

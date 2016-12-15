@@ -34,20 +34,17 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 		var newSection;
 		var indexOfDEWithOptions = getIndexOfDEWithOptionSets(section, dataElementsKey);
 		if(indexOfDEWithOptions.length == 0) return;
-		if((indexOfDEWithOptions.length == 1) && (section[dataElementsKey].length == 1)) {
-			// section = this.createOptionSetSection(section, dataElementsKey);
-			return;
-		}
-
+		if((indexOfDEWithOptions.length == 1) && (section[dataElementsKey].length == 1))  return;
+		
 		var pushSection = function(section, dataElementsKey) {
-			if(section[dataElementsKey].length > 0) sections.splice(index + (++pushIndex), 0, section);
+			if(section[dataElementsKey].length > 0) 
+				sections.splice(index + (++pushIndex), 0, section);
 		};
 
 		_.map(indexOfDEWithOptions, (function(indexOfDE) {
 			newSection = this.createNewSectionUsing(section, _.slice(section[dataElementsKey], currentIndex, indexOfDE), dataElementsKey);
 			pushSection(newSection, dataElementsKey);
 			newSection = this.createNewSectionUsing(section, [(section[dataElementsKey])[indexOfDE]], dataElementsKey);
-			// newSection = this.createOptionSetSection(newSection, dataElementsKey);
 			pushSection(newSection, dataElementsKey);
 			currentIndex = indexOfDE + 1;
 		}).bind(this));
@@ -55,7 +52,6 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 		newSection = this.createNewSectionUsing(section, _.slice(section[dataElementsKey], currentIndex, section[dataElementsKey].length), dataElementsKey);
 		pushSection(newSection, dataElementsKey);
 		sections.splice(index, 1);
-		// sections[index].isDuplicate = false;
 	};
 
 	this.isOptionSetSection = function(section, dataElementsKey) {
@@ -98,7 +94,6 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 			if(dataElement.valueType == ValueTypes.OPTIONSET) {
 				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 				if(displayOptionAttribute) {
-					// dataElement.displayOption = displayOptionAttribute.value;
 					return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;
 				}
 			}
