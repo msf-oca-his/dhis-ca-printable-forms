@@ -25,7 +25,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			var addSectionToPage = function(section, height) {
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections)
-				if(isDuplicate && !_.isEmpty(page.contents)) section.name = "";
+				if(isDuplicate && !_.isEmpty(page.contents)) section.displayName = "";
 				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
 					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, 'programStageDataElements')));
 				else
@@ -34,10 +34,11 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 				page.heightLeft = page.heightLeft - height;
 			};
 
-			var addSectionToNewPage = function(section, height) {
+			var addSectionToNewPage = function(section) {
 				page = new CoverSheetPage();
 				page.programName = program.displayName;
 				pages[++currentPageIndex] = page;
+				sectionIndex = 0;
 				processSection(section, sectionIndex);
 			};
 
