@@ -1,3 +1,4 @@
+require('./CalculatedConfig.js');
 TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 
 	var config = {};
