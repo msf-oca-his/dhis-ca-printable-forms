@@ -14,9 +14,3 @@ TallySheets.factory('ServiceErrorConfig', [function() {
 		"no_template_available": 1000
 	};
 }]);
-
-window.MessageCode ={
-	ERROR:2500,
-	WARNING:2000,
-	INFO:1000
-};

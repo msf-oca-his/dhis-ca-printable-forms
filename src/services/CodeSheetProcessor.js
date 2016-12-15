@@ -1,4 +1,4 @@
-TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElementTypes', 'PrintFriendlyUtils', function(config, CodeSheetPage, CodeSheetElementTypes, printFriendlyUtils) {
+TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElementTypes', 'PrintFriendlyUtils','ValueTypes', function(config, CodeSheetPage, CodeSheetElementTypes, printFriendlyUtils,ValueTypes) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
 
@@ -45,7 +45,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements = printFriendlyUtils.getDataElementsToDisplay({programStageDataElements: allDataElements}, "programStageDataElements");
 		_.map(allDataElements, function(dataElement) {
-			if(dataElement.valueType == 'OPTIONSET') {
+			if(dataElement.valueType == ValueTypes.OPTIONSET) {
 				addNewCodeSheetHeading(dataElement.displayName);
 				_.map(dataElement.options, function(option) {
 					addNewCodeSheetLabel(dataElement, option);

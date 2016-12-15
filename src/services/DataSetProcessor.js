@@ -5,6 +5,8 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 	var currentPageIndex;
 	var page;
 	var noOfDefaultTypeColumns = 2;
+	var configDataSet = config.DataSet;
+	var optionSetNumberOfColumns = config.OptionSet.numberOfColumns;
 
 	var processDataSet = function(dataSet) {
 		var processSection = function(section, sectionIndex) {
@@ -12,13 +14,14 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 			var getHeightForSection = function(section) {
 				var height;
 				if(isCatCombSection(section))
-					height = config.DataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + config.DataSet.heightOfTableHeader + config.DataSet.gapBetweenSections;
+					height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfTableHeader + configDataSet.gapBetweenSections;
 				else if(printFriendlyUtils.isOptionSetSection(section, 'dataElements'))
-					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.DataSet.gapBetweenSections;
+					{
+						height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
+					}
 				else
-					height = config.DataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + config.DataSet.gapBetweenSections;
-
-				return printFriendlyUtils.isDuplicateSection(sectionIndex, dataSet.sections) ? height : height + config.DataSet.heightOfSectionTitle;
+					height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + configDataSet.gapBetweenSections;
+				return printFriendlyUtils.isDuplicateSection(sectionIndex, dataSet.sections) ? height : height + configDataSet.heightOfSectionTitle;
 			};
 
 			var addSectionToPage = function(section, height) {
@@ -36,26 +39,26 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				page.heightLeft = page.heightLeft - height;
 			};
 
-			var addSectionToNewPage = function(section, height) {
+			var addSectionToNewPage = function(section) {
 				page = new DataSetPage();
 				pages[++currentPageIndex] = page;
 				processSection(section, sectionIndex);
 			};
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.dataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.defaultHeightOfDataElementLabel));
+				return section.dataElements[0].options.length - Math.ceil(overFlow * optionSetNumberOfColumns / (configDataSet.defaultHeightOfDataElementLabel));
 			};
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
 				if(isCatCombSection(section)) {
-					var numberOfOrphanDataElements = Math.ceil(overFlow / config.DataSet.heightOfDataElementInCatCombTable);
+					var numberOfOrphanDataElements = Math.ceil(overFlow / configDataSet.heightOfDataElementInCatCombTable);
 					var numberOfDataElements = section.dataElements.length;
 					return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
 				}
 				else if(printFriendlyUtils.isOptionSetSection(section, 'dataElements'))
-					return section.dataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.DataSet.defaultHeightOfDataElementLabel));
+					return section.dataElements[0].options.length - Math.round(overFlow * optionSetNumberOfColumns / (configDataSet.defaultHeightOfDataElementLabel));
 				else
-					return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.DataSet.defaultHeightOfDataElementLabel));
+					return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (configDataSet.defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section, numberOfElementsThatCanFit) {
@@ -64,31 +67,31 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
 					// newSection.isDuplicate = true;
 					addSectionToPage(section, page.heightLeft);
-					addSectionToNewPage(newSection, getHeightForSection(newSection));
+					addSectionToNewPage(newSection);
 				}
 				else if(printFriendlyUtils.isOptionSetSection(section, 'dataElements')) {
 					var newSection = _.cloneDeep(section);
 					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
-					if(numberOfOptionsThatCanFit <= config.OptionSet.numberOfColumns){
-						addSectionToNewPage(section, getHeightForSection(section), false);
+					if(numberOfOptionsThatCanFit <= optionSetNumberOfColumns){
+						addSectionToNewPage(section);
 						return;
 					}
-					if(numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns > 0)
-						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (config.OptionSet.numberOfColumns - numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns);
+					if(numberOfOptionsThatCanFit % optionSetNumberOfColumns > 0)
+						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (optionSetNumberOfColumns - numberOfOptionsThatCanFit % optionSetNumberOfColumns);
 					newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfOptionsThatCanFit);
 					addSectionToPage(section, page.heightLeft);
-					addSectionToNewPage(newSection, getHeightForSection(newSection), false);
+					addSectionToNewPage(newSection);
 				}
 				else {
 					var newSection = _.cloneDeep(section);
 					(numberOfElementsThatCanFit % noOfDefaultTypeColumns == 0) ? 0 : ++numberOfElementsThatCanFit;
 					newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
 					addSectionToPage(section, page.heightLeft);
-					addSectionToNewPage(newSection, getHeightForSection(newSection));
+					addSectionToNewPage(newSection);
 				}
 			};
 
-			var sectionHeight = (sectionIndex == 0 || (page.contents.length == 0)) ? getHeightForSection(section) + config.DataSet.heightOfDataSetTitle : getHeightForSection(section);
+			var sectionHeight = (sectionIndex == 0 || (page.contents.length == 0)) ? getHeightForSection(section) + configDataSet.heightOfDataSetTitle : getHeightForSection(section);
 			var overflow = sectionHeight - page.heightLeft;
 			if(overflow < 0)
 				addSectionToPage(section, sectionHeight);
@@ -101,7 +104,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				else if (printFriendlyUtils.isOptionSetSection(section, 'dataElements'))
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
-					addSectionToNewPage(section, sectionHeight)
+					addSectionToNewPage(section)
 				}
 			}
 		};
@@ -125,13 +128,13 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 		currentPageIndex = 0;
 		_.map(dataSets, function(dataSet) {
 			dataSet = _.cloneDeep(dataSet);
-			for(var i = 0; i < dataSet.sections.length; i++) {
-				dataSet.sections[i].dataElements = printFriendlyUtils.getDataElementsToDisplay(dataSet.sections[i], 'dataElements');
-				if(isCatCombSection(dataSet.sections[i])) {
-					printFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, i, "dataElements");
+			for(var sectionIndex = 0; sectionIndex < dataSet.sections.length; sectionIndex++) {
+				dataSet.sections[sectionIndex].dataElements = printFriendlyUtils.getDataElementsToDisplay(dataSet.sections[sectionIndex], 'dataElements');
+				if(isCatCombSection(dataSet.sections[sectionIndex])) {
+					printFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, sectionIndex, "dataElements");
 				}
 				else {
-					printFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, i, "dataElements");
+					printFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, sectionIndex, "dataElements");
 				}
 			}
 			processDataSet(dataSet)

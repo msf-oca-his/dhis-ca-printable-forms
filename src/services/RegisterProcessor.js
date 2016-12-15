@@ -1,4 +1,4 @@
-TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils', function(RegisterPage, Content, DataElement, contentTypes, config, printFriendlyUtils){
+TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils','ValueTypes', function(RegisterPage, Content, DataElement, contentTypes, config, printFriendlyUtils,ValueTypes){
 	var page, currentPageIndex, pages;
 
 	this.process = function(program) {
@@ -13,7 +13,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 		};
 
 		var getWidthOfDataElement = function(dataElement) {
-			return (dataElement.valueType == 'TEXT') ? config.Register.textElementWidth : config.Register.otherElementWidth;
+			return (dataElement.valueType == ValueTypes.TEXT ) ? config.Register.textElementWidth : config.Register.otherElementWidth;
 		};
 
 		var distributeDataElementsToPages = function(allDataElements) {
