@@ -20,8 +20,12 @@ describe("Coversheet Template", function() {
 				displayOptionUID  : {}
 		}
 		};
-		module(function($provide) {
+		module(function($provide,$translateProvider) {
 			$provide.value('Config', config);
+			$translateProvider.translations('en', {
+				"comments": "Comments"
+			});
+			$translateProvider.use('en');
 		});
 		inject(function($compile, $rootScope, $httpBackend) {
 			$scope = $rootScope.$new();

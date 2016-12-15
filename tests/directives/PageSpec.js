@@ -17,32 +17,35 @@ describe("Page Directive", function() {
 		}
 	};
 	beforeEach(function() {
-		module("TallySheets");
 		angular.module('d2HeaderBar', []);
 		config  = {customAttributes: {
 			displayOptionUID:{}
 		}};
-		module(function($provide) {
-			$provide.value('Config', config);
-		});
-	});
 
-	beforeEach(inject(function(_$controller_, $compile, $rootScope, $httpBackend) {
-		$httpBackend.expectGET("i18n/en.json").respond(200, {});
-		$controller = _$controller_;
-		outerScope = $rootScope.$new();
-		outerScope.PageTypes = {
-			COVERSHEET: "COVERSHEET",
-			REGISTER:"REGISTER",
-			CODESHEET:"CODESHEET",
-			DATASET:"DATASET",
-			PROGRAM:"PROGRAM"};
-		childScope = outerScope.$new();
-		compile = $compile;
-		outerScope.testPage = "testPage"
-		outerScope.testIndex = 5;
-		outerScope.testTotalPages = 7;
-	}));
+		module("TallySheets",function($provide,$translateProvider) {
+			$provide.value('Config', config);
+			$translateProvider.translations('en', {
+				"page": "Page"
+			});
+			$translateProvider.use('en');
+		});
+
+		inject(function(_$controller_, $compile, $rootScope) {
+			$controller = _$controller_;
+			outerScope = $rootScope.$new();
+			outerScope.PageTypes = {
+				COVERSHEET: "COVERSHEET",
+				REGISTER:"REGISTER",
+				CODESHEET:"CODESHEET",
+				DATASET:"DATASET",
+				PROGRAM:"PROGRAM"};
+			childScope = outerScope.$new();
+			compile = $compile;
+			outerScope.testPage = "testPage";
+			outerScope.testIndex = 5;
+			outerScope.testTotalPages = 7;
+		})
+	});
 
 	beforeEach(function() {
 		section = {

@@ -15,5 +15,21 @@ module.exports = {
 	"spinner_loading": "Loading...",
 	"dataset_prefix": "tally_",
 	"program_prefix": "perPt_",
-	"add_form": "Add form"
+	"add_form": "Add form",
+	"codes": "Codes",
+	"org_structure": "Org Structure",
+	"supervisor": "Supervisor",
+	"period": "Period",
+	"s_no": "S.NO",
+	"set_number": "Set Number",
+	"yes": "Yes",
+	"no": "No",
+	"cover_sheet": "Cover Sheet",
+	"register": "Register",
+	"code_sheet": "Code Sheet",
+	"comments": "Comments",
+	"page": "Page",
+	"part": "Part",
+	"of": "of"
+
 };

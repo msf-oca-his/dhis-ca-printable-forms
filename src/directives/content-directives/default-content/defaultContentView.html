@@ -7,9 +7,9 @@
             {{content.leftSideDataElements[$index].displayName}}
         </td>
         <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType=='BOOLEAN'">
-            <input type="checkbox" class="pffcheckbox">Yes</input>
+            <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
             <span class="checkbox-separator"></span>
-            <input type="checkbox" class="pffcheckbox">No</input>
+            <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
         </td>
 
         <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!='BOOLEAN'"></td>
@@ -22,9 +22,9 @@
 
         <span ng-if="content.rightSideDataElements[$index]">
             <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType=='BOOLEAN'">
-                <input type="checkbox" class="pffcheckbox">Yes</input>
+                <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
                 <span class="checkbox-separator"></span>
-                <input type="checkbox" class="pffcheckbox">No</input>
+                <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
             </td>
             <td class="deField"
                 ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!='BOOLEAN'">

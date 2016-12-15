@@ -30,8 +30,12 @@ describe("CodeSheet Template", function() {
 				numberOfColumns: 3
 			}
 		};
-		module(function($provide) {
+		module(function($provide,$translateProvider) {
 			$provide.value('Config', config);
+			$translateProvider.translations('en', {
+				"codes": "Codes"
+			});
+			$translateProvider.use('en');
 		});
 
 		inject(function($compile, $rootScope, $httpBackend) {

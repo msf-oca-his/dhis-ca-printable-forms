@@ -11,10 +11,10 @@
 
 
   <div class="page-number" ng-if="page.type!=$parent.PageTypes.REGISTER">
-    Page {{pageNumber}} of {{totalPages}}
+    {{ 'page' | translate }} {{pageNumber}} {{ 'of' | translate }} {{totalPages}}
   </div>
   <div class="page-number" ng-if="page.type==$parent.PageTypes.REGISTER">
-    Part {{pageNumber}} of {{totalPages}}
+    {{ 'part' | translate }} {{pageNumber}} {{ 'of' | translate }} {{totalPages}}
   </div>
 
 </div>

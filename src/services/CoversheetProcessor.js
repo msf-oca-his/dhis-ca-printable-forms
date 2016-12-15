@@ -4,6 +4,8 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 	var currentPageIndex;
 	var page;
 	var noOfDefaultTypeColumns = 2;
+	var numberOfColumns = config.OptionSet.numberOfColumns;
+	var defaultHeightOfDataElementLabel = config.Coversheet.defaultHeightOfDataElementLabel;
 
 
 	var processProgram = function(program) {
@@ -11,10 +13,12 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		var processSection = function(section, sectionIndex) {
 			var getHeightForSection = function(section) {
 				var height;
+				var gapBetweenSections = config.Coversheet.gapBetweenSections;
+
 				if (printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
-					height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].options.length / config.OptionSet.numberOfColumns)) + config.Coversheet.gapBetweenSections;
+					height = defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].options.length / numberOfColumns)) + gapBetweenSections;
 				else
-					height = config.Coversheet.defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + config.Coversheet.gapBetweenSections;
+					height = defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + gapBetweenSections;
 
 				return printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections) ? height : height + config.Coversheet.heightOfSectionTitle;
 			};
@@ -39,27 +43,27 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			var getNumberOfOptionsThatCanFit = function(section){
 				var overFlow = sectionHeight - page.heightLeft;
-				return section.programStageDataElements[0].options.length - Math.ceil(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
+				return section.programStageDataElements[0].options.length - Math.ceil(overFlow * numberOfColumns / (defaultHeightOfDataElementLabel));
 			};
 
 			var getNumberOfElementsThatCanFit = function(section) {
 				var overFlow = sectionHeight - page.heightLeft;
 				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements'))
-					return section.programStageDataElements[0].options.length - Math.round(overFlow * config.OptionSet.numberOfColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
+					return section.programStageDataElements[0].options.length - Math.round(overFlow * numberOfColumns / (defaultHeightOfDataElementLabel));
 				else
-					return section.programStageDataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (config.Coversheet.defaultHeightOfDataElementLabel));
+					return section.programStageDataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (defaultHeightOfDataElementLabel));
 			};
 
 			var breakAndAddSection = function(section) {
 				if(printFriendlyUtils.isOptionSetSection(section, 'programStageDataElements')) {
 					var newSection = _.cloneDeep(section);
 					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
-					if(numberOfOptionsThatCanFit <= config.OptionSet.numberOfColumns){
+					if(numberOfOptionsThatCanFit <= numberOfColumns){
 						addSectionToNewPage(section, getHeightForSection(section), false);
 						return
 					}
-					if(numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns > 0)
-						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (config.OptionSet.numberOfColumns - numberOfOptionsThatCanFit % config.OptionSet.numberOfColumns);
+					if(numberOfOptionsThatCanFit % numberOfColumns > 0)
+						numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (numberOfColumns - numberOfOptionsThatCanFit % numberOfColumns);
 					newSection.programStageDataElements[0].options = section.programStageDataElements[0].options.splice(numberOfOptionsThatCanFit);
 					addSectionToPage(section, page.heightLeft);
 					addSectionToNewPage(newSection, getHeightForSection(newSection), false);
@@ -96,7 +100,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 			if(lastPage.heightLeft > config.Coversheet.commentsHeight)
 				lastPage.contents.push(new Content(ContentTypes.comments));
 			else {
-				var newPage = new CoverSheetPage("COVERSHEET");
+				var newPage = new CoverSheetPage();
 				newPage.contents.push(new Content(ContentTypes.comments));
 				pages.push(newPage);
 			}
@@ -104,7 +108,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		};
 
 		if(!pages[currentPageIndex]) {
-			page = new CoverSheetPage("COVERSHEET");
+			page = new CoverSheetPage();
 			page.programName = program.displayName;
 			pages[++currentPageIndex] = page;
 		}
@@ -122,10 +126,13 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		currentPageIndex = -1;
 		_.map([program], function(Program) {
 			if(Program.programStages.length == 0) return;
-			for(var i = 0; i < Program.programStages[0].programStageSections.length; i++) {
-				if(Program.programStages[0].programStageSections.length == 0) return;
-				Program.programStages[0].programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(Program.programStages[0].programStageSections[i], "programStageDataElements");
-				printFriendlyUtils.divideOptionSetsIntoNewSections(Program.programStages[0].programStageSections, i, "programStageDataElements");
+
+			var programStageSections = Program.programStages[0].programStageSections;
+
+			for(var i = 0; i < programStageSections.length; i++) {
+				if(programStageSections.length == 0) return;
+				programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(programStageSections[i], "programStageDataElements");
+				printFriendlyUtils.divideOptionSetsIntoNewSections(programStageSections, i, "programStageDataElements");
 			}
 			processProgram(Program)
 		});
