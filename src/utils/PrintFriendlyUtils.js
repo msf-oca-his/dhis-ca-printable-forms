@@ -44,9 +44,9 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 		var indexOfDEWithOptions = getIndexOfDEWithOptionSets(section, dataElementsKey);
 		if(indexOfDEWithOptions.length == 0) return;
 		if((indexOfDEWithOptions.length == 1) && (section[dataElementsKey].length == 1))  return;
-		
+
 		var pushSection = function(section, dataElementsKey) {
-			if(section[dataElementsKey].length > 0) 
+			if(section[dataElementsKey].length > 0)
 				sections.splice(index + (++pushIndex), 0, section);
 		};
 
