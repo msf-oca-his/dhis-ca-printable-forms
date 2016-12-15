@@ -31,5 +31,4 @@ module.exports = {
 	"page": "Page",
 	"part": "Partie",
 	"of": "de"
-
 };
