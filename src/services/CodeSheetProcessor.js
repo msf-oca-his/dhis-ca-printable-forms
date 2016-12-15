@@ -1,4 +1,4 @@
-TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElementTypes', 'PrintFriendlyUtils','ValueTypes', function(config, CodeSheetPage, CodeSheetElementTypes, printFriendlyUtils,ValueTypes) {
+TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils','ValueTypes', function(config, CodeSheetPage, CodeSheetElements, printFriendlyUtils,ValueTypes) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
 
@@ -21,7 +21,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 	var addNewCodeSheetHeading = function(dataElementName) {
 		if(currentRowIndex >= maxOptionsPerColumn)
 			gotoNextColumn();
-		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetHeading(dataElementName));
+		page.columns[currentColumnIndex].push(new CodeSheetElements.CodeSheetHeading(dataElementName));
 		currentRowIndex++;
 	};
 
@@ -30,14 +30,14 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 			gotoNextColumn();
 			addNewCodeSheetHeading(dataElement.displayName);
 		}
-		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetLabel(option.code, option.displayName));
+		page.columns[currentColumnIndex].push(new CodeSheetElements.CodeSheetLabel(option.code, option.displayName));
 		currentRowIndex++;
 	};
 
 	var addNewCodeSheetGap = function() {
 		if(currentRowIndex >= totalRows)
 			return;
-		page.columns[currentColumnIndex].push(new CodeSheetElementTypes.CodeSheetGap());
+		page.columns[currentColumnIndex].push(new CodeSheetElements.CodeSheetGap());
 		currentRowIndex++;
 	};
 

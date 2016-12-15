@@ -2,7 +2,6 @@ describe("CodeSheet Template", function() {
 	var compile, element;
 	var $scope = {}, elementScope;
 	var config = {};
-	var httpMock;
 	var columns, codeSheetElements;
 
 	function createElement() {
@@ -38,11 +37,9 @@ describe("CodeSheet Template", function() {
 			$translateProvider.use('en');
 		});
 
-		inject(function($compile, $rootScope, $httpBackend) {
+		inject(function($compile, $rootScope) {
 			$scope = $rootScope.$new();
 			compile = $compile;
-			httpMock = $httpBackend;
-			httpMock.expectGET("i18n/en.json").respond(200, {});
 		});
 
 		$scope.programName = "programName";

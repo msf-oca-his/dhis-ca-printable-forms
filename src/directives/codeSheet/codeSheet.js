@@ -1,4 +1,4 @@
-TallySheets.directive('codeSheet', ['Config', function(config) {
+TallySheets.directive('codeSheet', ['Config', 'CodeSheetElementTypes', function(config, CodeSheetElementTypes) {
 	return {
 		restrict: 'E',
 		template: require('./codeSheetView.html'),
@@ -10,12 +10,15 @@ TallySheets.directive('codeSheet', ['Config', function(config) {
 			$scope.rowHeight = config.CodeSheet.rowHeight;
 			$scope.getClass = function(codesheetElement) {
 				switch(codesheetElement.type) {
-					case 'HEADING':
-						return 'optionHeading'; break;
-					case 'LABEL':
-						return 'optionLabel'; break;
+					case CodeSheetElementTypes.HEADING:
+						return 'optionHeading';
+						break;
+					case CodeSheetElementTypes.LABEL:
+						return 'optionLabel';
+						break;
 					default:
-						return 'optionGap'; break;
+						return 'optionGap';
+						break;
 				}
 			};
 		}
