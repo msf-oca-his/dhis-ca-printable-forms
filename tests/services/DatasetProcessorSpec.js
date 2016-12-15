@@ -141,7 +141,7 @@ describe("DataSetProcessor", function() {
 				_.assignIn(expectedPage, {
 					contents: [{type: {type: 'DATASET_TITLE', renderer: 'dataset-title'}, data: {title: 'test dataset'}}, {
 						type: Object({type: 'CATCOMB', renderer: 'category-combo'}),
-						data: {categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
+						data: {title: 'section',categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
 					}], heightLeft: 188, widthLeft: 183, type: 'DATASET', datasetName: 'test dataset'
 				});
 				var expectedPages = [expectedPage];
@@ -181,6 +181,7 @@ describe("DataSetProcessor", function() {
 									renderer: 'category-combo'
 								},
 								data: {
+									title: 'section',
 									categoryOptionCombos: ['male<br>5', 'female<br>7'],
 									dataElementNames: ['dataElement']
 								}
