@@ -14,6 +14,7 @@ describe("CatCombContent", function() {
 			CatCombContent = _CatCombContent_;
 		});
 		testSection = {
+			displayName:"testSection",
 			dataElements: [{
 				categoryCombo: {
 					categoryOptionCombos: ["test,String1,", "test,String2,", "test, String3"]
@@ -31,6 +32,11 @@ describe("CatCombContent", function() {
 		expect(catCombContent.categoryOptionCombos[0]).toEqual("test<br>String1<br>");
 		expect(catCombContent.categoryOptionCombos[1]).toEqual("test<br>String2<br>");
 		expect(catCombContent.categoryOptionCombos[2]).toEqual("test<br> String3");
+	});
+
+	it("should have section title", function(){
+		var catCombContent = new CatCombContent(testSection)
+		expect(catCombContent.title).toEqual("testSection");
 	});
 
 	it("should not replace any other character", function() {

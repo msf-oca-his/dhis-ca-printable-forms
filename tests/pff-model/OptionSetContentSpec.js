@@ -54,6 +54,7 @@ describe("OptionSetContent", function() {
 			OptionSetContent = _OptionSetContent_;
 		});
 		testSection = {
+			displayName:"OptionSetContent",
 			testKey: [
 				{
 					options: []
@@ -65,6 +66,11 @@ describe("OptionSetContent", function() {
 	it("should add empty array as rows when there are no options", function() {
 		var actualSection = new OptionSetContent(testSection, "testKey");
 		expect(actualSection.rows).toEqual([]);
+	});
+
+	it("should have section title", function(){
+		var actualSection = new OptionSetContent(testSection, "testKey");
+		expect(actualSection.title).toEqual("OptionSetContent");
 	});
 
 	it("should place a max of 3 options in each row", function() {

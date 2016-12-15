@@ -8,6 +8,7 @@ describe("DefaultContent", function() {
 		});
 
 		testSections = [{
+			displayName:"section",
 			testKey: []
 		}];
 	});
@@ -17,6 +18,11 @@ describe("DefaultContent", function() {
 			var actualContent = new DefaultContent(testSections[0], "testKey");
 			expect(actualContent.leftSideDataElements).toEqual([]);
 			expect(actualContent.rightSideDataElements).toEqual([]);
+		});
+
+		it("should have section title", function(){
+			var actualContent = new DefaultContent(testSections[0], "testKey");
+			expect(actualContent.title).toEqual("section");
 		});
 	});
 
