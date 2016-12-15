@@ -1,9 +1,9 @@
-TallySheets.factory('OptionSetContent', ['Config', function(config) {
+TallySheets.factory('OptionSetContent', ['Config', 'CommonUtils', function(config, commonUtils) {
 
 	var getOptionRows = function(section, dataElementsKey) {
 		var dataElement = (section[dataElementsKey])[0];
 		var rows = [];
-		var numberOfRows = Math.ceil(dataElement.options.length / config.OptionSet.numberOfColumns );
+		var numberOfRows = Math.ceil(dataElement.options.length / config.OptionSet.numberOfColumns);
 		for(var i = 0; i < numberOfRows; i++) {
 			var j = 0;
 			while(j < dataElement.options.length) {
@@ -16,12 +16,18 @@ TallySheets.factory('OptionSetContent', ['Config', function(config) {
 		}
 		return rows;
 	};
-	
+
 	return function OptionSetContent(section, dataElementKey) {
 		if(!section) return;
 		this.title = section.displayName;
 		this.dataElementName = (section[dataElementKey])[0].displayName;
-		this.rows =  getOptionRows(section, dataElementKey);
+		this.rows = getOptionRows(section, dataElementKey);
+
+		_.map(this.rows, function(row) {
+			_.map(row, function(option) {
+				option.label = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.optionLabelDelimiter));
+			})
+		});
 	}
 }]);
 

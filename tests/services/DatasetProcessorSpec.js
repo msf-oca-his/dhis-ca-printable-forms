@@ -115,9 +115,11 @@ describe("DataSetProcessor", function() {
 					displayName: "test dataset",
 					sections: [{
 						name: "section",
+						displayName: "section",
 						id: "134",
 						dataElements: [{
 							name: "dataElement",
+							displayName: "dataElement",
 							id: "1234",
 							valueType: "TEXT",
 							categoryCombo: {
