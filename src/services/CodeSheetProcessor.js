@@ -6,6 +6,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		return Math.round((config.PageTypes.A4.Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes.A4.Portrait.graceHeight) / config.CodeSheet.rowHeight);
 	};
 	var totalRows = this.getNumberOfRows();
+
 	lastColumn = config.CodeSheet.numberOfColumns - 1;
 	maxOptionsPerColumn = totalRows - 2;
 
@@ -56,9 +57,6 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 	};
 
 	this.process = function(program) {
-		pages = [];
-		currentPageIndex = -1;
-
 		getNewPage = function() {
 			page = new CodeSheetPage();
 			page.programName = program.displayName;
@@ -69,6 +67,8 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 			return page;
 		};
 
+		pages = [];
+		currentPageIndex = -1;
 		page = getNewPage();
 		getCodeSheetElements(program);
 		return pages;

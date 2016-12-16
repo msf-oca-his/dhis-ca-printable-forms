@@ -2,9 +2,6 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 	var page, currentPageIndex, pages;
 
 	this.process = function(program) {
-		pages = [];
-		currentPageIndex  = -1;
-
 		var getNewPage = function() {
 			page = new RegisterPage();
 			page.programName = program.displayName;
@@ -39,6 +36,8 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 			});
 		};
 
+		pages = [];
+		currentPageIndex  = -1;
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements = printFriendlyUtils.getDataElementsToDisplay({programStageDataElements: allDataElements}, "programStageDataElements");

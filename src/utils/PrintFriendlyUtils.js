@@ -1,17 +1,7 @@
 TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(config,ValueTypes) {
-	
-	this.createNewSectionUsing = function(section, dataElements, dataElementsKey){
-		var newSection = _.cloneDeep(section);
-		newSection[dataElementsKey] = dataElements;
-		return newSection;
-	};
 
-	this.isDuplicateSection = function(sectionIndex, sections) {
-		if(sectionIndex == 0) return false;
-		return sections[sectionIndex].id == sections[sectionIndex - 1].id;
-	};
 	var isListTypeDataElement = function(dataElement) {
-		if(dataElement.valueType != 'OPTIONSET') return false;
+		if(dataElement.valueType != ValueTypes.OPTIONSET) return false;
 		if(!config.customAttributes.displayOptionUID) return true;
 		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 		if(displayOptionAttribute && displayOptionAttribute.value)
@@ -25,6 +15,25 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 				indexOfDEWithOptions.push(index);
 		});
 		return indexOfDEWithOptions;
+	};
+
+	var getCustomAttributeForRenderingOptionSets = function(customAttributes) {
+		return _.reduce(_.filter(customAttributes, function(customAttribute) {
+			if(customAttribute.attribute.id == config.customAttributes.displayOptionUID.id) {
+				return customAttribute;
+			}
+		}));
+	};
+
+	this.createNewSectionUsing = function(section, dataElements, dataElementsKey){
+		var newSection = _.cloneDeep(section);
+		newSection[dataElementsKey] = dataElements;
+		return newSection;
+	};
+
+	this.isDuplicateSection = function(sectionIndex, sections) {
+		if(sectionIndex == 0) return false;
+		return sections[sectionIndex].id == sections[sectionIndex - 1].id;
 	};
 
 	this.divideOptionSetsIntoNewSections = function(sections, index, dataElementsKey) {
@@ -77,15 +86,6 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 			newSection[dataElementsKey] = newDataElements;
 			sections.splice(index + 1, 0, newSection)
 		}
-	};
-
-	//TODO: extract this to data model util.
-	var getCustomAttributeForRenderingOptionSets = function(customAttributes) {
-		return _.reduce(_.filter(customAttributes, function(customAttribute) {
-			if(customAttribute.attribute.id == config.customAttributes.displayOptionUID.id) {
-				return customAttribute;
-			}
-		}));
 	};
 
 	this.getDataElementsToDisplay = function(section, dataElementsKey) {

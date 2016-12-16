@@ -14,37 +14,23 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 		},
 		link: function($scope, element) {
 
-			var dataSetPrefixTranslater = function() {
+			var dataSetPrefixTranslator = function() {
 				return CustomAngularTranslateService.getTranslation(config.Prefixes.dataSetPrefix.translationKey).then(function(prefix) {
 					$scope.dataSetPrefix = prefix;
 				});
 			};
 
-			var programPrefixTranslater = function() {
+			var programPrefixTranslator = function() {
 				return CustomAngularTranslateService.getTranslation(config.Prefixes.programPrefix.translationKey).then(function(prefix) {
 					$scope.programPrefix = prefix;
 				});
 			};
 
 			var getTranslatedPrefixes = function() {
-				dataSetPrefixTranslater();
-				programPrefixTranslater();
+				dataSetPrefixTranslator();
+				programPrefixTranslator();
 			};
 
-			getTranslatedPrefixes();
-
-			$scope.selectorLoaded = false;
-			$scope.removeTemplate = function(index){
-				$scope.selectedTemplates.splice(index, 1);
-				if($scope.selectedTemplates.length == 1)
-					$scope.showMultipleTemplates = false;
-				setTimeout(handleUpdate, 1);
-			};
-
-			$scope.addForm = function() {
-				$scope.showMultipleTemplates = true;
-				$scope.selectedTemplates.push("");
-			};
 
 			var getPrintableAttribute = function(attributeValues) {
 				return _.reduce(_.filter(attributeValues, function(attributeValue) {
@@ -65,9 +51,7 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 			var isPrintableTemplate = function(template) {
 				var isValid = "true";
 				var printableAttribute = getPrintableAttribute(template.attributeValues);
-				if(printableAttribute && printableAttribute.value == isValid)
-					return true;
-				return false;
+				return printableAttribute && printableAttribute.value == isValid;
 			};
 
 			var addDataSetPrefix = function(dataSet){
@@ -111,6 +95,22 @@ TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', 
 				$scope.$apply();
 				$scope.onChange({selectedTemplates: $scope.selectedTemplates});
 			};
+
+			getTranslatedPrefixes();
+
+			$scope.selectorLoaded = false;
+			$scope.removeTemplate = function(index){
+				$scope.selectedTemplates.splice(index, 1);
+				if($scope.selectedTemplates.length == 1)
+					$scope.showMultipleTemplates = false;
+				setTimeout(handleUpdate, 1);
+			};
+
+			$scope.addForm = function() {
+				$scope.showMultipleTemplates = true;
+				$scope.selectedTemplates.push("");
+			};
+
 
 			$scope.select = function() {
 				handleUpdate();

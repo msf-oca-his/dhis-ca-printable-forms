@@ -85,7 +85,6 @@ TallySheets.service("CustomAttributeValidationService", ['CustomAttributeService
 	};
 
 	this.validate = function() {
-		// validateConfigFile();
 		if(!config.customAttributes) return;
 		return Promise.all(getAllCustomAttributes())
 			.then(validateAllAttributes)
