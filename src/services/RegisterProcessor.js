@@ -41,7 +41,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements = printFriendlyUtils.getDataElementsToDisplay({programStageDataElements: allDataElements}, "programStageDataElements");
-		allDataElements.push(new DataElement({displayName: 'Comments', type: 'TEXT'}));
+		allDataElements.push(new DataElement({displayName: 'Comments', type: ValueTypes.TEXT}));
 		var dataElementsPerPage = [];
 		distributeDataElementsToPages(allDataElements);
 		if(!_.isEmpty(dataElementsPerPage))
