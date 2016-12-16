@@ -3,7 +3,6 @@ describe("TallySheets ctrl", function() {
 	var scope;
 	var defer, $q, $provide;
 	var _$rootScope;
-	var dataSetService;
 	var mockedDataSetService;
 	var mockedDataSetProcessor;
 	var mockedProgramService;
@@ -68,10 +67,9 @@ describe("TallySheets ctrl", function() {
 		$provide.value('appLoadingFailed', false);
 	});
 
-	beforeEach(inject(function(_$controller_, $rootScope, DataSetService) {
+	beforeEach(inject(function(_$controller_, $rootScope) {
 		_$rootScope = $rootScope;
 		defer = $q.defer();
-		dataSetService = DataSetService;
 		scope = _$rootScope.$new();
 		$controller = _$controller_;
 	}));

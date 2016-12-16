@@ -4,7 +4,6 @@ describe("Coversheet Template", function() {
 	var section;
 	var $scope = {}, elementScope;
 	var config = {};
-	var httpMock;
 
 	function createElement() {
 		element = angular.element('<coversheet-template contents="modelContents" program-name="programName"></coversheet-template>');
@@ -27,11 +26,9 @@ describe("Coversheet Template", function() {
 			});
 			$translateProvider.use('en');
 		});
-		inject(function($compile, $rootScope, $httpBackend) {
+		inject(function($compile, $rootScope) {
 			$scope = $rootScope.$new();
 			compile = $compile;
-			httpMock = $httpBackend;
-			httpMock.expectGET("i18n/en.json").respond(200, {});
 		});
 
 		section = {

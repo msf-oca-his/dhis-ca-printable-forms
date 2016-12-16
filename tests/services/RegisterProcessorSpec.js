@@ -1,9 +1,5 @@
 describe('RegisterProcessor', function() {
 	var registerProcessor, _DataElement;
-	var httpMock;
-	var $rootScope;
-	var timeout;
-	var p;
 	var config = {
 		PageTypes: {
 			A4: {
@@ -14,7 +10,7 @@ describe('RegisterProcessor', function() {
 			}
 		},
 		Register: {
-			tableHeaderHeight: 10,              
+			tableHeaderHeight: 10,
 			dataEntryRowHeight: 9,
 			pageHeaderHeight: 25,
 			textElementWidth: 50,
@@ -42,14 +38,9 @@ describe('RegisterProcessor', function() {
 			$provide.value('Config', config);
 		});
 
-		inject(function(RegisterProcessor, $httpBackend, $q, _$rootScope_, $timeout, DataElement) {
+		inject(function(RegisterProcessor, DataElement) {
 			registerProcessor = RegisterProcessor;
-			p = $q;
-			$rootScope = _$rootScope_;
-			httpMock = $httpBackend;
-			timeout = $timeout;
 			_DataElement = DataElement;
-			httpMock.expectGET("i18n/en.json").respond(200, {});
 		})
 	});
 

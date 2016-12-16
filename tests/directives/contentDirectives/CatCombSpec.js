@@ -1,6 +1,6 @@
 describe("CatComb", function() {
 	var section;
-	var compile, httpMock;
+	var compile;
 	var $scope = {};
 	var config = {
 		DataSet: {
@@ -22,14 +22,12 @@ describe("CatComb", function() {
 		});
 	});
 
-	beforeEach(inject(function($compile, $rootScope, $httpBackend) {
+	beforeEach(inject(function($compile, $rootScope) {
 		$scope = $rootScope.$new();
 		compile = $compile;
-		httpMock = $httpBackend;
-		httpMock.expectGET("i18n/en.json").respond(200, {});
 		section = {dataElements: [{categoryCombo: {}}]}
 	}));
-//TODO: write tests here.
+	//TODO: write tests here.
 	xit("should get displayOptions from config", function() {
 		var element = angular.element('<dataset-template contents = "" dataset-name = "test_DataSet"></dataset-template>');
 		$scope.test_DataSet = "dataSetName";

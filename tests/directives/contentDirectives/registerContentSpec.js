@@ -2,7 +2,6 @@ describe("Register Content", function() {
 	var compile, element;
 	var $scope = {}, elementScope;
 	var config = {};
-	var httpMock;
 	var dataElements;
 
 	function createElement() {
@@ -36,11 +35,9 @@ describe("Register Content", function() {
 			$provide.value('Config', config);
 		});
 
-		inject(function($compile, $rootScope, $httpBackend) {
+		inject(function($compile, $rootScope) {
 			$scope = $rootScope.$new();
 			compile = $compile;
-			httpMock = $httpBackend;
-			httpMock.expectGET("i18n/en.json").respond(200, {});
 		});
 
 		$scope.programName = "programName";

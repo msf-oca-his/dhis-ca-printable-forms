@@ -1,6 +1,5 @@
 describe("Common Utils", function() {
 	var commonUtils;
-	var httpMock;
 	var config;
 	beforeEach(function() {
 		module("TallySheets");
@@ -13,10 +12,8 @@ describe("Common Utils", function() {
 			$provide.value('Config', config);
 		});
 
-		inject(function(CommonUtils, $httpBackend) {
+		inject(function(CommonUtils) {
 			commonUtils = CommonUtils;
-			httpMock = $httpBackend;
-			httpMock.expectGET("i18n/en.json").respond(200, {});
 		});
 	});
 

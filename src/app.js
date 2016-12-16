@@ -8,10 +8,10 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor",
 	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes','AlertTypes',
-	'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', "CodeSheetProcessor","PageTypes",
+	 'CustomAngularTranslateService', '$q', "CodeSheetProcessor","PageTypes",
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, AlertTypes,
-	         InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor,PageTypes) {
+	          CustomAngularTranslateService, $q, CodeSheetProcessor,PageTypes) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
@@ -82,7 +82,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		table.find('.hidden-print').remove();
 		table.find('.noprint').remove();
 		table.find('link').remove();
-		
+
 		// Take the name of the first dataset as filename
 		var xlsName = ($scope.pages[0].datasetName) ? $scope.pages[0].datasetName : $scope.pages[0].programName;
 		var name = xlsName + '.xls';

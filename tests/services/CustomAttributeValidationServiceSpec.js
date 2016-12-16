@@ -1,14 +1,10 @@
 describe("CustomAttributeValidationService", function() {
 	var customAttributeService = {};
-	var httpMock;
-	var window;
 	var _$rootScope;
 	var config;
 	var customAttribute;
 	var mockedCustomAttribute;
 	var customAttributeValidationService;
-	var _ModalAlert;
-	var _ModalAlertTypes;
 	var mockedModalAlertsService;
 
 	beforeEach(function() {
@@ -55,15 +51,10 @@ describe("CustomAttributeValidationService", function() {
 		});
 	});
 
-	beforeEach(inject(function($rootScope, $httpBackend, $window, CustomAttribute, CustomAttributeValidationService, ModalAlert, ModalAlertTypes) {
+	beforeEach(inject(function($rootScope, CustomAttribute, CustomAttributeValidationService) {
 		_$rootScope = $rootScope;
-		httpMock = $httpBackend;
-		window = $window;
-		httpMock.expectGET("i18n/en.js").respond(200, {});
 		customAttribute = CustomAttribute;
 		customAttributeValidationService = CustomAttributeValidationService;
-		_ModalAlert = ModalAlert;
-		_ModalAlertTypes = ModalAlertTypes;
 
 		mockedCustomAttribute = new customAttribute({
 			name: "displayOptions",

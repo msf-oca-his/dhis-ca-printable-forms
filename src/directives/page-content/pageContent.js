@@ -1,4 +1,4 @@
-TallySheets.directive('pageContent', ['Config', '$compile', function(config, $compile) {
+TallySheets.directive('pageContent', ['$compile', function($compile) {
 	return {
 		restrict: 'AE',
 		template: '',

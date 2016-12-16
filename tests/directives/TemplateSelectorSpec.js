@@ -5,8 +5,6 @@ describe("templateSelector Directive", function() {
 	var dataSetService = {};
 	var programService = {};
 	var customAttributeService = {};
-	var httpMock;
-	var window;
 	var _$rootScope;
 	var config;
 	var d2;
@@ -46,7 +44,7 @@ describe("templateSelector Directive", function() {
 
 	});
 
-	beforeEach(inject(function(_$controller_, _$q_, $rootScope, $httpBackend, $window, _$timeout_, $compile, DataSet, Program, CustomAttribute, ModalAlert, ModalAlertTypes) {
+	beforeEach(inject(function(_$controller_, _$q_, $rootScope, _$timeout_, $compile, DataSet, Program, CustomAttribute, ModalAlert, ModalAlertTypes) {
 		_$rootScope = $rootScope;
 		$timeout = _$timeout_;
 		$controller = _$controller_;
@@ -59,10 +57,7 @@ describe("templateSelector Directive", function() {
 			DATASET:"DATASET",
 			PROGRAM:"PROGRAM"};
 		childScope = scope.$new();
-		httpMock = $httpBackend;
-		window = $window;
 		compile = $compile;
-		httpMock.expectGET("i18n/en.js").respond(200, {});
 		dataSet = DataSet;
 		program = Program;
 		$q = _$q_;
@@ -235,7 +230,7 @@ describe("templateSelector Directive", function() {
 				expect(childScope.$$childHead.programTemplates[0].displayName.includes("program_prefix")).toEqual(true)
 			})
 		});
-		
+
 		describe("Add form button", function() {
 			it("should disable the add form button when nothing selected", function(){
 				childScope.change = jasmine.createSpy("change");
@@ -256,7 +251,7 @@ describe("templateSelector Directive", function() {
 				var button = elements[0].getElementsByTagName('button');
 				expect(button[0].classList.contains('ng-hide')).toBe(true);
 			});
-			
+
 			it("should enable the add form button when a dataset is selected", function() {
 				childScope.change = jasmine.createSpy("change");
 				childScope.showAllTemplates = false;
@@ -284,7 +279,7 @@ describe("templateSelector Directive", function() {
 				button[0].click();
 				expect(childScope.$$childHead.selectedTemplates.length).toBe(2);
 			});
-			
+
 			it("should able to remove the form from multiple datasets selected", function() {
 				childScope.change = jasmine.createSpy("change");
 				childScope.showMultipleTemplates = true;

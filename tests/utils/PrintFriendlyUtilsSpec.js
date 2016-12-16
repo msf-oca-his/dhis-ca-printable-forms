@@ -1,6 +1,5 @@
 describe("Print Friendly Utils", function() {
 	var printFriendlyUtils;
-	var httpMock;
 	var config;
 	beforeEach(function() {
 		module("TallySheets");
@@ -26,9 +25,8 @@ describe("Print Friendly Utils", function() {
 			$provide.value('Config', config);
 		});
 
-		inject(function(PrintFriendlyUtils, $httpBackend) {
+		inject(function(PrintFriendlyUtils) {
 			printFriendlyUtils = PrintFriendlyUtils;
-			httpMock = $httpBackend;
 		});
 	});
 

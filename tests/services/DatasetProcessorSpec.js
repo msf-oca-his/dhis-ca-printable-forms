@@ -1,9 +1,5 @@
 describe("DataSetProcessor", function() {
 	var dataSetProcessor, DefaultContent, OptionSetContent;
-	var httpMock;
-	var $rootScope;
-	var timeout;
-	var p;
 	var config;
 	var DataSetPage;
 	beforeEach(function() {
@@ -79,14 +75,9 @@ describe("DataSetProcessor", function() {
 		});
 	});
 
-	beforeEach(inject(function(DataSetProcessor, $httpBackend, $q, _$rootScope_, $timeout, _DataSetPage_) {
+	beforeEach(inject(function(DataSetProcessor, _DataSetPage_) {
 		dataSetProcessor = DataSetProcessor;
-		p = $q;
-		$rootScope = _$rootScope_;
-		httpMock = $httpBackend;
 		DataSetPage = _DataSetPage_;
-		timeout = $timeout;
-		httpMock.expectGET("i18n/en.js").respond(200, {});
 	}));
 
 	describe("process dataSet", function() {

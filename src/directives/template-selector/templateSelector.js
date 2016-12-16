@@ -1,8 +1,8 @@
-TallySheets.directive('templateSelector', ['$rootScope', '$window', '$timeout', '$translate',
-	'DataSetService', 'ProgramService', 'CustomAttributeService', 'Config', 'ModalAlert',
+TallySheets.directive('templateSelector', [
+	'DataSetService', 'ProgramService','Config', 'ModalAlert',
 	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q',
-	function($rootScope, $window, $timeout, $translate, DataSetService, ProgramService,
-	         CustomAttributeService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
+	function(DataSetService, ProgramService,
+	         config, ModalAlert, ModalAlertTypes, ModalAlertsService,
 	         CustomAngularTranslateService, $q) {
 	return {
 		restrict: 'E',

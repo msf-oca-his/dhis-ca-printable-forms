@@ -1,6 +1,5 @@
 describe("Coversheet Processor", function() {
 	var coversheetProcessor, _DataElement, DefaultContent, OptionSetContent;
-	var httpMock;
 	var $rootScope;
 	var p;
 	var config = {
@@ -58,13 +57,11 @@ describe("Coversheet Processor", function() {
 			$provide.value('OptionSetContent', OptionSetContent);
 		});
 
-		inject(function(CoversheetProcessor, $httpBackend, $q, _$rootScope_, DataElement) {
+		inject(function(CoversheetProcessor, $q, _$rootScope_, DataElement) {
 			coversheetProcessor = CoversheetProcessor;
 			p = $q;
 			$rootScope = _$rootScope_;
-			httpMock = $httpBackend;
 			_DataElement = DataElement;
-			httpMock.expectGET("i18n/en.js").respond(200, {});
 		})
 
 	});
