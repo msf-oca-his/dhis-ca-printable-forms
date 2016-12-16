@@ -1,9 +1,10 @@
 TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils','ValueTypes', function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils,ValueTypes) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
-
+	var dataElementKey = 'programStageDataElements';
+	var pageType="A4";
 	this.getNumberOfRows = function() {
-		return Math.round((config.PageTypes.A4.Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes.A4.Portrait.graceHeight) / config.CodeSheet.rowHeight);
+		return Math.round((config.PageTypes[pageType].Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes[pageType].Portrait.graceHeight) / config.CodeSheet.rowHeight);
 	};
 	var totalRows = this.getNumberOfRows();
 
@@ -43,8 +44,8 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 	};
 
 	var getCodeSheetElements = function(program) {
-		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
-		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay({programStageDataElements: allDataElements}, "programStageDataElements");
+		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, dataElementKey));
+		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay({programStageDataElements: allDataElements}, dataElementKey);
 		_.map(allDataElements, function(dataElement) {
 			if(dataElement.valueType == ValueTypes.OPTIONSET) {
 				addNewCodeSheetHeading(dataElement.displayName);
