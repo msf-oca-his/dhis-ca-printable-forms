@@ -106,7 +106,7 @@ describe("Register Content", function() {
 		it("should give de general text type if dataelement type is not TEXT", function() {
 			var dataElement = {valueType: 'anything'};
 			$scope.$digest();
-			expect(elementScope.getClass(dataElement)).toEqual('deField general');
+			expect(elementScope.getClass(dataElement)).toEqual('deField default');
 		});
 	});
 
