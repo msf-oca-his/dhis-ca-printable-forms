@@ -26,8 +26,10 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 			var addSectionToPage = function(section, height) {
 				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections)
 				if(isDuplicate && !_.isEmpty(page.contents)) section.displayName = "";
-				if(printFriendlyUtils.isOptionSetSection(section, dataElementsKey))
-					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, dataElementsKey)));
+				if(printFriendlyUtils.isOptionSetSection(section, dataElementsKey)) {
+					if(section.programStageDataElements[0].options.length != 0)
+						page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, dataElementsKey)));
+				}
 				else
 					page.contents.push(new Content(ContentTypes.default, new DefaultContent(section, dataElementsKey)));
 
