@@ -4,11 +4,11 @@
       {{ 's_no' | translate }}
     </td>
     <td class="deLabel" ng-repeat="dataElement in content">
-      {{dataElement.displayName}}
+      {{ dataElement.displayName }}
     </td>
   </tr>
   <tr ng-repeat="row in rows track by $index">
-    <td class="sno-value" style="height:{{rowHeight}}mm">{{$index + 1}}</td>
+    <td class="sno-value" style="height:{{ rowHeight }}">{{ $index + 1 }}</td>
     <td ng-repeat="dataElement in content" ng-class="getClass(dataElement)">
     </td>
   </tr>

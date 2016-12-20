@@ -7,7 +7,7 @@ TallySheets.directive('codeSheet', ['Config', 'CodeSheetElementTypes', function(
 			programName: '='
 		},
 		link: function($scope) {
-			$scope.rowHeight = config.CodeSheet.rowHeight;
+			$scope.rowHeight = config.CodeSheet.rowHeight + config.Metrics.mm;
 			$scope.getClass = function(codesheetElement) {
 				switch(codesheetElement.type) {
 					case CodeSheetElementTypes.HEADING:

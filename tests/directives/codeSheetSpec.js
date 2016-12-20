@@ -23,6 +23,9 @@ describe("CodeSheet Template", function() {
 					}
 				}
 			},
+			Metrics: {
+				mm: "mm"
+			},
 			CodeSheet: {
 				heightOfProgramTitle: 10,
 				rowHeight: 6,

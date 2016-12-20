@@ -1,6 +1,6 @@
 TallySheets.factory('ValueTypes', [function() {
 	return {
-		OPTIONSET: "OPTIONSET",
-		TEXT: "TEXT"
+		OPTIONSET: 'OPTIONSET',
+		TEXT: 'TEXT'
 	}
 }]);

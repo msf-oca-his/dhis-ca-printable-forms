@@ -1,9 +1,7 @@
-TallySheets.directive('templateSelector', [
-	'DataSetService', 'ProgramService','Config', 'ModalAlert',
+TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService','Config', 'ModalAlert',
 	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q',
-	function(DataSetService, ProgramService,
-	         config, ModalAlert, ModalAlertTypes, ModalAlertsService,
-	         CustomAngularTranslateService, $q) {
+	function(DataSetService, ProgramService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
+		CustomAngularTranslateService, $q) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
@@ -12,7 +10,7 @@ TallySheets.directive('templateSelector', [
 			onChange: '&',
 			selectedTemplatesType: '='
 		},
-		link: function($scope, element) {
+		link: function($scope) {
 
 			var dataSetPrefixTranslator = function() {
 				return CustomAngularTranslateService.getTranslation(config.Prefixes.dataSetPrefix.translationKey).then(function(prefix) {
@@ -127,7 +125,7 @@ TallySheets.directive('templateSelector', [
 }]);
 
 
-var getTypeOfTemplate = function(template,PageTypes) {
+var getTypeOfTemplate = function(template, PageTypes) {
 	if(_.isEmpty(template))
 		return;
 	if(template.constructor.name == "DataSet")

@@ -8,6 +8,10 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 	var configDataSet = config.DataSet;
 	var optionSetNumberOfColumns = config.OptionSet.numberOfColumns;
 
+	var isCatCombSection = function(section) {
+		return !!section.dataElements[0] && !!section.dataElements[0].categoryCombo && section.dataElements[0].categoryCombo.name != "default"
+	};
+		
 	var processDataSet = function(dataSet) {
 		var processSection = function(section, sectionIndex) {
 
@@ -119,10 +123,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 		}
 		_.map(dataSet.sections, processSection);
 	};
-
-	var isCatCombSection = function(section) {
-		return !!section.dataElements[0] && !!section.dataElements[0].categoryCombo && section.dataElements[0].categoryCombo.name != "default"
-	};
+		
 	this.process = function(dataSets) {
 		pages = [];
 		currentPageIndex = 0;

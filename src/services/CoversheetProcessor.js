@@ -24,7 +24,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 			};
 
 			var addSectionToPage = function(section, height) {
-				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections)
+				var isDuplicate = printFriendlyUtils.isDuplicateSection(sectionIndex, program.programStages[0].programStageSections);
 				if(isDuplicate && !_.isEmpty(page.contents)) section.displayName = "";
 				if(printFriendlyUtils.isOptionSetSection(section, dataElementsKey)) {
 					if(section.programStageDataElements[0].options.length != 0)
@@ -128,8 +128,6 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 		pages = [];
 		currentPageIndex = -1;
 		_.map([program], function(Program) {
-			if(Program.programStages.length == 0) return;
-
 			var programStageSections = Program.programStages[0].programStageSections;
 
 			for(var i = 0; i < programStageSections.length; i++) {

@@ -29,6 +29,9 @@ describe("Register Content", function() {
 				textElementWidth: 50,
 				otherElementWidth: 30
 			},
+			Metrics: {
+				mm: "mm"
+			},
 			DisplayOptions: "testDisplayOptions"
 		};
 		module(function($provide) {
