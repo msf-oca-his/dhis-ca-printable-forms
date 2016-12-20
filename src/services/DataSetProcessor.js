@@ -7,11 +7,12 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 	var noOfDefaultTypeColumns = 2;
 	var configDataSet = config.DataSet;
 	var optionSetNumberOfColumns = config.OptionSet.numberOfColumns;
+	var dataElementsKey = "dataElements";
 
 	var isCatCombSection = function(section) {
 		return !!section.dataElements[0] && !!section.dataElements[0].categoryCombo && section.dataElements[0].categoryCombo.name != "default"
 	};
-		
+
 	var processDataSet = function(dataSet) {
 		var processSection = function(section, sectionIndex) {
 
@@ -19,7 +20,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				var height;
 				if(isCatCombSection(section))
 					height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfTableHeader + configDataSet.gapBetweenSections;
-				else if(PrintFriendlyUtils.isOptionSetSection(section, 'dataElements'))
+				else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey))
 					{
 						height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
 					}
@@ -35,10 +36,10 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 				if(isDuplicate) section.displayName = "";
 				if(isCatCombSection(section))
 					page.contents.push(new Content(ContentTypes.catComb, new CatCombContent(section)));
-				else if(PrintFriendlyUtils.isOptionSetSection(section, 'dataElements'))
-					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, 'dataElements')));
+				else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey))
+					page.contents.push(new Content(ContentTypes.optionSet, new OptionSetContent(section, dataElementsKey)));
 				else
-					page.contents.push(new Content(ContentTypes.default, new DefaultContent(section, 'dataElements')));
+					page.contents.push(new Content(ContentTypes.default, new DefaultContent(section, dataElementsKey)));
 
 				page.heightLeft = page.heightLeft - height;
 			};
@@ -60,7 +61,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					var numberOfDataElements = section.dataElements.length;
 					return (numberOfOrphanDataElements > 1) ? (numberOfDataElements - numberOfOrphanDataElements) : (numberOfDataElements - numberOfOrphanDataElements - 1);
 				}
-				else if(PrintFriendlyUtils.isOptionSetSection(section, 'dataElements'))
+				else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey))
 					return section.dataElements[0].options.length - Math.round(overFlow * optionSetNumberOfColumns / (configDataSet.defaultHeightOfDataElementLabel));
 				else
 					return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (configDataSet.defaultHeightOfDataElementLabel));
@@ -73,7 +74,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					addSectionToPage(section, page.heightLeft);
 					addSectionToNewPage(newSection);
 				}
-				else if(PrintFriendlyUtils.isOptionSetSection(section, 'dataElements')) {
+				else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey)) {
 					var newSection = _.cloneDeep(section);
 					var numberOfOptionsThatCanFit = getNumberOfOptionsThatCanFit(section);
 					if(numberOfOptionsThatCanFit <= optionSetNumberOfColumns){
@@ -105,7 +106,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 					addSectionToPage(section, sectionHeight);}
 				else if(numberOfElementsThatCanFit > 1)
 					breakAndAddSection(section, numberOfElementsThatCanFit);
-				else if (PrintFriendlyUtils.isOptionSetSection(section, 'dataElements'))
+				else if (PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey))
 					breakAndAddSection(section, numberOfElementsThatCanFit);
 				else {
 					addSectionToNewPage(section)
@@ -123,7 +124,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 		}
 		_.map(dataSet.sections, processSection);
 	};
-		
+
 	this.process = function(dataSets) {
 		pages = [];
 		currentPageIndex = 0;
@@ -132,10 +133,10 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 			for(var sectionIndex = 0; sectionIndex < dataSet.sections.length; sectionIndex++) {
 				dataSet.sections[sectionIndex].dataElements = PrintFriendlyUtils.getDataElementsToDisplay(dataSet.sections[sectionIndex].dataElements);
 				if(isCatCombSection(dataSet.sections[sectionIndex])) {
-					PrintFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, sectionIndex, "dataElements");
+					PrintFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, sectionIndex, dataElementsKey);
 				}
 				else {
-					PrintFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, sectionIndex, "dataElements");
+					PrintFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, sectionIndex, dataElementsKey);
 				}
 			}
 			processDataSet(dataSet)
