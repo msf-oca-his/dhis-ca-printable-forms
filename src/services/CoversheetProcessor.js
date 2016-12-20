@@ -132,7 +132,7 @@ TallySheets.service('CoversheetProcessor', [ 'Config', 'Content', 'ContentTypes'
 
 			for(var i = 0; i < programStageSections.length; i++) {
 				if(programStageSections.length == 0) return;
-				programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(programStageSections[i], dataElementsKey);
+				programStageSections[i].programStageDataElements = printFriendlyUtils.getDataElementsToDisplay(programStageSections[i].programStageDataElements);
 				printFriendlyUtils.divideOptionSetsIntoNewSections(programStageSections, i, dataElementsKey);
 			}
 			processProgram(Program)

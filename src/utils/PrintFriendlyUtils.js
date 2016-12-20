@@ -88,9 +88,9 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 		}
 	};
 
-	this.getDataElementsToDisplay = function(section, dataElementsKey) {
-		if(!config.customAttributes.displayOptionUID) return section[dataElementsKey];
-		return _.filter(section[dataElementsKey], function(dataElement) {
+	this.getDataElementsToDisplay = function(dataElements) {
+		if(!config.customAttributes.displayOptionUID) return dataElements;
+		return _.filter(dataElements, function(dataElement) {
 			if(dataElement.valueType == ValueTypes.OPTIONSET) {
 				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 				if(displayOptionAttribute) {

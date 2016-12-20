@@ -130,7 +130,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 		_.map(dataSets, function(dataSet) {
 			dataSet = _.cloneDeep(dataSet);
 			for(var sectionIndex = 0; sectionIndex < dataSet.sections.length; sectionIndex++) {
-				dataSet.sections[sectionIndex].dataElements = PrintFriendlyUtils.getDataElementsToDisplay(dataSet.sections[sectionIndex], 'dataElements');
+				dataSet.sections[sectionIndex].dataElements = PrintFriendlyUtils.getDataElementsToDisplay(dataSet.sections[sectionIndex].dataElements);
 				if(isCatCombSection(dataSet.sections[sectionIndex])) {
 					PrintFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, sectionIndex, "dataElements");
 				}
