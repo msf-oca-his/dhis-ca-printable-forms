@@ -71,14 +71,16 @@ displayOptionUID: {
 TallySheets app has config files in the `src/config` directory.
 
 1. Config.js
-2. BootConfig.js  
+2. CalculatedConfig.js
+3. BootConfig.js  
+
 
 ##Config.js
 The configuration options are explained below.
 
 1. `PageTypes`: page types that app supports.
-  2. `A4`: contains configuration options for A4 sheets
-    3. `Portrait`: contains config for Portrait mode of A4 sheet
+  1. `A4`: contains configuration options for A4 sheets
+    1. `Portrait`: contains config for Portrait mode of A4 sheet
       1. `height`: Do not change this value; this denotes the height (length) of the piece of paper on which content is printed.
       2. `width`: Do not change this value; this denotes the width of the piece of paper on which content is printed.
       3. `borderTop`, `borderBottom`, `borderLeft`, `borderRight`: these are, respectively, the top, bottom, left, and right, printing margins. These values are set by the browser. They need to be declared manually here because we cannot derive them from the browser. Do not decrease these values below 15 mm. 
@@ -95,8 +97,7 @@ The configuration options are explained below.
   2. `gapBetweenSections`: white space left between two adjacent sections on a page.
   3. `heightOfSectionTitle`: height (length) of section titles, present at the top of each new section. 
   4. `heightOfProgramTitle`: height (length) of program title, present at the top of each new page.
-  5. `graceHeight`: If the content to be printed is greater than a single page, and the spillover is under the grace height, then the page printable area will increase by the grace height to accommodate the spillover. Practice caution when editing this value, as the grace height increase causes equivalent decreases in the print margins. Maximum value is 10 mm. 
-  6. `commentsHeight`: height (length) of Comments section (which includes the Comments label along with the blank text rows)
+  5. `commentsHeight`: height (length) of Comments section (which includes the Comments label along with the blank text rows)
 4. `DataSet`: configuration options for printing tally sheets
   1. `heightOfTableHeader`: height (length) of table column label row, when data elements are rendered as CatCombs (category combinations) .
   2. `heightOfDataElementInCatCombTable`: height (length) of rows rendered as CatCombs
@@ -116,10 +117,12 @@ The configuration options are explained below.
   1. `labelPadding`: the gap between the checkbox and the option name (option label)
   2. `dataElementLabel`: the space (width) assigned for data element names. Longer names without spaces will not word wrap.
   3. `numberOfColumns`: the number of columns for displaying options in an option set.
-7. `Prefixes`: Prefixes can be added to any objects, for example printable form types, section names, or options sets. All prefixes used in this app are configured here. Value keys contain the prefix values; the translationKey has to be the same as what is set in the i18n files.
+7. `Metrics`: the unit of measure used for length/width calculations in our app.
+  1. `mm`: indicates millimeter. This is fixed and should not be changed. 
+8. `Prefixes`: Prefixes can be added to any objects, for example printable form types, section names, or options sets. All prefixes used in this app are configured here. Value keys contain the prefix values; the translationKey has to be the same as what is set in the i18n files.
   1. `dataSetPrefix`: prefix for each data set, prepended to the data set name, seen in the template selection dropdown box.
   2. `programPrefix`: prefix for each program, prepended to the program name, seen in the template selection dropdown box.
-8. `Delimiters`: contains all usable delimiters. Any number of white spaces may be added around delimiters during configuration as these will be trimmed by the app.
+9. `Delimiters`: contains all usable delimiters. Any number of white spaces may be added around delimiters during configuration as these will be trimmed by the app.
   1. `optionLabelDelimiter`: separates the option code from the option label, In the following example, closing square bracket ']' is the delimiter, and the app would only display the LABEL.
   2. `categoryOptionComboDelimiter`: used as a delimiter to split categoryOptionCombos in the CatComb table for dataSet tally Sheets. In our app, we are using '<br>' as the delimiter.
   
@@ -130,7 +133,7 @@ Each of the following examples will be considered valid by the app
 [  CODE] LABEL    
 
 #Calculated Config:
-Some values used for configuration are calculated on the fly when the app starts. The formulae for these values are found at the end of config.js. See below for an example.
+Some values used for configuration are calculated on the fly when the app starts. The formulae for these values are found in calculatedConfig.js file. See below for an example.
 ####Example:
 ```javascript
 var updateDataSetWithCalculatedValues = function(){
