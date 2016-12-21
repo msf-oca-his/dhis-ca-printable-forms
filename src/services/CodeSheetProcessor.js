@@ -4,7 +4,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 	var dataElementKey = 'programStageDataElements';
 	var pageType="A4";
 	this.getNumberOfRows = function() {
-		return Math.round((config.PageTypes[pageType].Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.PageTypes[pageType].Portrait.graceHeight) / config.CodeSheet.rowHeight);
+		return Math.round((config.PageTypes[pageType].Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.CodeSheet.pageNumberHeight) / config.CodeSheet.rowHeight);
 	};
 	var totalRows = this.getNumberOfRows();
 

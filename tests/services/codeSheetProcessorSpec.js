@@ -10,15 +10,15 @@ describe("CodeSheet Processor", function() {
 				A4: {
 					Portrait: {
 						availableHeight: 50,
-						availableWidth: 183,
-						graceHeight: 10
+						availableWidth: 183
 					}
 				}
 			},
 			CodeSheet: {
 				heightOfProgramTitle: 10,
 				rowHeight: 6,
-				numberOfColumns: 3
+				numberOfColumns: 3,
+				pageNumberHeight: 10
 			},
 			Delimiters: {
 				optionLabelDelimiter: "]"

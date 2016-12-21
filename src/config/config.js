@@ -12,10 +12,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 				borderLeft: 15,
 				borderRight: 15,
 				availableHeight: 237,
-				availableWidth: 183,
-				widthAfterRemovingDefaultBorders: 'will be calculated',
-				heightAfterRemovingDefaultBorders: 'will be calculated',
-				graceHeight: 10
+				availableWidth: 183
 			},
 			LandScape: {
 				availableHeight: 175,
@@ -35,9 +32,6 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		gapBetweenSections: 5,
 		heightOfSectionTitle: 7,
 		heightOfProgramTitle: 10,
-		graceHeight: 10,
-		availableHeight: 237,
-		availableWidth: 183,
 		commentsHeight: 30
 	};
 	config.DataSet = {
@@ -48,9 +42,6 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		heightOfDataSetTitle: 5.5,
 		gapBetweenSections: 3,
 		pageHeaderHeight: 9,
-		graceHeight: 5,
-		availableHeight: 'will be calculated',
-		availableWidth: config.PageTypes.A4.widthAfterRemovingDefaultBorders,
 		numberOfCOCColumns: 5,
 		widthOfCategoryOptionCombo: 30,
 		widthOfDataElement: 40
@@ -58,7 +49,8 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 	config.CodeSheet = {
 		heightOfProgramTitle: 10,
 		rowHeight: 6,
-		numberOfColumns: 3
+		numberOfColumns: 3,
+		pageNumberHeight: 10
 	};
 	config.OptionSet = {
 		labelPadding: 4,

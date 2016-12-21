@@ -18,8 +18,7 @@ describe("CodeSheet Template", function() {
 				A4: {
 					Portrait: {
 						availableHeight: 50,
-						availableWidth: 183,
-						graceHeight: 10
+						availableWidth: 183
 					}
 				}
 			},
@@ -29,7 +28,8 @@ describe("CodeSheet Template", function() {
 			CodeSheet: {
 				heightOfProgramTitle: 10,
 				rowHeight: 6,
-				numberOfColumns: 3
+				numberOfColumns: 3,
+				pageNumberHeight: 10
 			}
 		};
 		module(function($provide,$translateProvider) {

@@ -9,22 +9,28 @@ describe("DataSetProcessor", function() {
 			PageTypes: {
 				A4: {
 					Portrait: {
+						height: 297,
+						width: 210,
+						borderTop: 15,
+						borderBottom: 15,
+						borderLeft: 15,
+						borderRight: 15,
 						availableHeight: 237,
-						availableWidth: 183,
-						graceHeight: 10
+						availableWidth: 183
 					}
 				}
 			},
 			DataSet: {
 				heightOfTableHeader: 15,
-				availableHeight: 237,
-				availableWidth: 183,
 				heightOfDataElementInCatCombTable: 12,
 				defaultHeightOfDataElementLabel: 9,
-				heightOfSectionTitle: 7,
-				heightOfDataSetTitle: 10,
-				gapBetweenSections: 5,
-				numberOfCOCColumns: 5
+				heightOfSectionTitle: 5,
+				heightOfDataSetTitle: 5.5,
+				gapBetweenSections: 3,
+				pageHeaderHeight: 9,
+				numberOfCOCColumns: 5,
+				widthOfCategoryOptionCombo: 30,
+				widthOfDataElement: 40
 			},
 			OptionSet: {
 				numberOfColumns: 3
@@ -44,6 +50,10 @@ describe("DataSetProcessor", function() {
 				}
 			}
 		};
+
+		config.DataSet.availableHeight = config.PageTypes.A4.Portrait.height - config.PageTypes.A4.Portrait.borderBottom - config.PageTypes.A4.Portrait.borderTop - config.DataSet.pageHeaderHeight;
+		config.DataSet.availableWidth = config.PageTypes.A4.Portrait.width - config.PageTypes.A4.Portrait.borderRight - config.PageTypes.A4.Portrait.borderLeft;
+
 		optionsObject = {
 			123: {id: "123", name: "male", options: {name: "option1"}},
 			12: {id: "12", name: "female", options: {name: "option2"}}
@@ -133,7 +143,7 @@ describe("DataSetProcessor", function() {
 					contents: [{type: {type: 'DATASET_TITLE', renderer: 'dataset-title'}, data: {title: 'test dataset'}}, {
 						type: Object({type: 'CATCOMB', renderer: 'category-combo'}),
 						data: {title: 'section',categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
-					}], heightLeft: 188, widthLeft: 183, type: 'DATASET', datasetName: 'test dataset'
+					}], heightLeft: 217.5, widthLeft: 180, type: 'DATASET', datasetName: 'test dataset'
 				});
 				var expectedPages = [expectedPage];
 				var actualPages = dataSetProcessor.process([dataSet]);
@@ -177,8 +187,8 @@ describe("DataSetProcessor", function() {
 									dataElementNames: ['dataElement']
 								}
 							}],
-							heightLeft: 188,
-							widthLeft: 183,
+							heightLeft: 217.5,
+							widthLeft: 180,
 							type: 'DATASET',
 							datasetName: 'test dataset'
 					} ];
@@ -204,8 +214,8 @@ describe("DataSetProcessor", function() {
 				};
 				assignCOCToSection(currentTestDataSet.sections[0], 20);
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
-				expect(actualPages[0].contents[1].data.dataElementNames.length).toEqual(16);
-				expect(actualPages[1].contents[1].data.dataElementNames.length).toEqual(4);
+				expect(actualPages[0].contents[1].data.dataElementNames.length).toEqual(18);
+				expect(actualPages[1].contents[1].data.dataElementNames.length).toEqual(2);
 			});
 
 			it("should process the dataset with overflowed elements are exactly one", function() {
@@ -219,9 +229,8 @@ describe("DataSetProcessor", function() {
 				currentTestDataSet.sections[1] = _.cloneDeep(testDataSet.sections[0]);
 				assignCOCDataElementsToSection(currentTestDataSet.sections[1], 1);
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
-				expect(actualPages[0].contents[1].data.dataElementNames.length).toEqual(15);
-				expect(actualPages[1].contents[1].data.dataElementNames.length).toEqual(2);
-				expect(actualPages[1].contents[2].data.dataElementNames.length).toEqual(1);
+				expect(actualPages[0].contents[1].data.dataElementNames.length).toEqual(17);
+				expect(actualPages[1].contents[1].data.dataElementNames.length).toEqual(1);
 			});
 		});
 
@@ -264,10 +273,10 @@ describe("DataSetProcessor", function() {
 						section.dataElements[0].options[index] = {id: 1, displayName: "option"};
 					}
 				};
-				assignOptionsToDE(currentTestDataSet.sections[0], 76);   //75 options will overflow to the new page
+				assignOptionsToDE(currentTestDataSet.sections[0], 86);
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
-				expect(actualPages[0].contents[1].data.dataElements[0].options.length).toEqual(69);
-				expect(actualPages[1].contents[1].data.dataElements[0].options.length).toEqual(7);
+				expect(actualPages[0].contents[1].data.dataElements[0].options.length).toEqual(81);
+				expect(actualPages[1].contents[1].data.dataElements[0].options.length).toEqual(5);
 			});
 
 			it("should process the dataSet which contains dataElements of type optionSet and general dataElements", function() {
@@ -342,11 +351,11 @@ describe("DataSetProcessor", function() {
 						section.dataElements[i] = _.cloneDeep(testDataSet.sections[0].dataElements[0]);
 					}
 				};
-				assignDeToSections(currentTestDataSet.sections[0], 50);
+				assignDeToSections(currentTestDataSet.sections[0], 60);
 				var expectedSection1 = _.cloneDeep(testDataSet.sections[0]);
-				assignDeToSections(expectedSection1, 48); //48 will fit in a page
+				assignDeToSections(expectedSection1, 54); //54 will fit in a page
 				var expectedSection2 = _.cloneDeep(testDataSet.sections[0]);
-				assignDeToSections(expectedSection2, 2);//expected would be 2
+				assignDeToSections(expectedSection2, 6);//expected would be 6
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(actualPages[0].contents[1].data).toEqual(expectedSection1);
 				expect(actualPages[1].contents[1].data).toEqual(expectedSection2);

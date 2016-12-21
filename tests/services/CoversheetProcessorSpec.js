@@ -7,22 +7,15 @@ describe("Coversheet Processor", function() {
 			A4: {
 				Portrait: {
 					availableHeight: 237,
-					availableWidth: 183,
-					graceHeight: 10
+					availableWidth: 183
 				}
 			}
 		},
 		Coversheet: {
-			heightOfTableHeader: 15,
-			heightOfDataElementInCatCombTable: 12,
 			defaultHeightOfDataElementLabel: 9,
+			gapBetweenSections: 5,
 			heightOfSectionTitle: 7,
 			heightOfProgramTitle: 10,
-			gapBetweenSections: 5,
-			graceHeight: 10,
-			availableHeight: 237,
-			availableWidth: 183,
-			numberOfCOCColumns: 5,
 			commentsHeight: 30
 		},
 		OptionSet: {

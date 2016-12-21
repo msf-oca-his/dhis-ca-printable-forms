@@ -79,7 +79,7 @@ TallySheets app has config files in the `src/config` directory.
 The configuration options are explained below.
 
 1. `PageTypes`: page types that app supports.
-  1. `A4`: contains configuration options for A4 sheets
+  1. `A4`: contains configuration options for A4 sheets. The values mentioned are the optimum values for A4 sheet.
     1. `Portrait`: contains config for Portrait mode of A4 sheet
       1. `height`: Do not change this value; this denotes the height (length) of the piece of paper on which content is printed.
       2. `width`: Do not change this value; this denotes the width of the piece of paper on which content is printed.
@@ -113,6 +113,7 @@ The configuration options are explained below.
     1. `heightOfProgramTitle`: height (length) of program title present at top of the sheet
     2. `rowHeight`: height (length) of each row
     3. `numberOfColumns`: number of columns to fit in a page.
+    4. `pageNumberHeight`: height (length) left above the page number in the explainer sheet so as to accommodate for any options that require text wrap.
 6. `OptionSet`: configuration related to rendering option sets, in both tally sheets and cover sheets (note: changing the values of labelPadding and dataElementLabel will not affect printing, as these options will not come into use until JSS is introduced).
   1. `labelPadding`: the gap between the checkbox and the option name (option label)
   2. `dataElementLabel`: the space (width) assigned for data element names. Longer names without spaces will not word wrap.
