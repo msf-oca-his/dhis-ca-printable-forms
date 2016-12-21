@@ -10,13 +10,13 @@ module.exports = {
 		utils: "./src/utils.js",
 		'pff-model': "./src/pff-model.js",
 		translationsSetup: "./src/translationsSetup.js",
-		boot: "./src/boot.js",
-		config: "./src/config/config.js"
+		boot: "./src/boot.js"
 	},
 	plugins: [
 		new CopyWebpackPlugin([
 			// {output}/file.txt
 			// { from: './src/app.js', to: './app.js' },
+			{from: './src/config/config.js', to: './config.js'},
 			{from: './src/index.html', to: './index.html'}
 		]),
 		new webpack.DefinePlugin({
