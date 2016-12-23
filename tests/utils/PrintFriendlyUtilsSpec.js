@@ -124,70 +124,70 @@ describe("Print Friendly Utils", function() {
 			config.DataSet.numberOfCOCColumns = 5;
 
 			testSections = [{
-				testKey  : [{ categoryCombo: { categoryOptionCombos: [] } }],
+				categoryCombo: { categoryOptionCombos: [] },
 				isCatComb: true
 			}
 			];
 		});
 
 		it("should not create new sections if the number of columns is equal to number of columns that can fit on the page", function() {
-			testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5]
+			testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5]
 			var expectedSections = clone(testSections);
-			printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
+			printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0);
 			expect(expectedSections.length).toEqual(testSections.length);
 			expect(expectedSections).toEqual(testSections);
 		});
 
 		it("should not create new sections if the number of columns is less than the number of columns that can fit on the page", function() {
-			testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3];
+			testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3];
 			var expectedSections = clone(testSections);
-			printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
+			printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0);
 			expect(expectedSections.length).toEqual(testSections.length);
 			expect(expectedSections).toEqual(testSections);
 		});
 
 		describe("when number of columns overflow", function() {
 			it("should create new sections", function() {
-				testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
 				expect(testSections.length).toEqual(2);
 			});
 
 			it("should create new section with only overflown categoryOptionCombinations", function() {
-				testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
-				expect(testSections[1].testKey[0].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
+				expect(testSections[1].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
 			});
 
 			it("should remove overflowing categoryOptionCombinations", function() {
-				testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
-				expect(testSections[0].testKey[0].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
+				expect(testSections[0].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
 			});
 
 			it("should create a duplicate section to accommodate overflown categoryOptionCombos", function() {
-				testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
-				expect(testSections[1].testKey[0].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
+				expect(testSections[1].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
 			});
 
 			it("should not create a section with a single categoryOptionCombo", function() {
-				testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6];
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
-				expect(testSections[1].testKey[0].categoryCombo.categoryOptionCombos).toEqual([5, 6]);
+				expect(testSections[1].categoryCombo.categoryOptionCombos).toEqual([5, 6]);
 			});
 
 			it("should create new sections only after the given index", function() {
 				testSections[1] = clone(testSections[0]);
 				testSections[2] = clone(testSections[0]);
-				testSections[0].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4];
-				testSections[1].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
-				testSections[2].testKey[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5];
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4];
+				testSections[1].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7];
+				testSections[2].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 1, "testKey");
-				expect(testSections[0].testKey[0].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4]);
-				expect(testSections[1].testKey[0].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
-				expect(testSections[2].testKey[0].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
-				expect(testSections[3].testKey[0].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
+				expect(testSections[0].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4]);
+				expect(testSections[1].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
+				expect(testSections[2].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
+				expect(testSections[3].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
 			});
 		});
 

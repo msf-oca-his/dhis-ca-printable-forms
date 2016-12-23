@@ -67,23 +67,15 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 		return section[dataElementsKey][0] && isListTypeDataElement(section[dataElementsKey][0]);
 	};
 
-	this.divideCatCombsIfNecessary = function(sections, index, dataElementsKey) {
+	this.divideCatCombsIfNecessary = function(sections, index) {
 		var section = sections[index];
-		var dataElement = (section[dataElementsKey])[0];
 		var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
 
-		if(numberOfFittingColumns < dataElement.categoryCombo.categoryOptionCombos.length) {
-			var overflow = dataElement.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
+		if(numberOfFittingColumns < section.categoryCombo.categoryOptionCombos.length) {
+			var overflow = section.categoryCombo.categoryOptionCombos.length - numberOfFittingColumns;
 			var numberOfColumnsThatCanFitInThisSection = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
-			var newDataElements = [];
-			_.map(section[dataElementsKey], function(dataElement) {   //TODO: extract this out as function???
-				var newDataElement = _.cloneDeep(dataElement);
-				newDataElement.categoryCombo.categoryOptionCombos.splice(0, numberOfColumnsThatCanFitInThisSection);
-				newDataElements.push(newDataElement);
-				dataElement.categoryCombo.categoryOptionCombos.splice(numberOfColumnsThatCanFitInThisSection);
-			});
 			var newSection = _.cloneDeep(section);
-			newSection[dataElementsKey] = newDataElements;
+			newSection.categoryCombo.categoryOptionCombos = section.categoryCombo.categoryOptionCombos.splice(numberOfColumnsThatCanFitInThisSection);
 			sections.splice(index + 1, 0, newSection)
 		}
 	};

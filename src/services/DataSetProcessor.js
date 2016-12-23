@@ -10,7 +10,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 	var dataElementsKey = "dataElements";
 
 	var isCatCombSection = function(section) {
-		return !!section.dataElements[0] && !!section.dataElements[0].categoryCombo && section.dataElements[0].categoryCombo.name != "default"
+		return !!section.dataElements[0] && !!section.categoryCombo && section.categoryCombo.name != "default"
 	};
 
 	var processDataSet = function(dataSet) {
@@ -133,7 +133,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 			for(var sectionIndex = 0; sectionIndex < dataSet.sections.length; sectionIndex++) {
 				dataSet.sections[sectionIndex].dataElements = PrintFriendlyUtils.getDataElementsToDisplay(dataSet.sections[sectionIndex].dataElements);
 				if(isCatCombSection(dataSet.sections[sectionIndex])) {
-					PrintFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, sectionIndex, dataElementsKey);
+					PrintFriendlyUtils.divideCatCombsIfNecessary(dataSet.sections, sectionIndex);
 				}
 				else {
 					PrintFriendlyUtils.divideOptionSetsIntoNewSections(dataSet.sections, sectionIndex, dataElementsKey);

@@ -118,6 +118,11 @@ describe("DataSetProcessor", function() {
 						name: "section",
 						displayName: "section",
 						id: "134",
+						categoryCombo: {
+							id: "154",
+							categoryOptionCombos: ["female<br><12", "male<br><10"],
+							name: "catcomb"
+						},
 						dataElements: [{
 							name: "dataElement",
 							displayName: "dataElement",
@@ -153,16 +158,16 @@ describe("DataSetProcessor", function() {
 			it("should process the dataset with sections of type catcomb with category option combos", function() {
 				var currentTestDataSet = _.clone(testDataSet);
 
-				currentTestDataSet.sections[0].dataElements[0].categoryCombo.categories = [{
+				currentTestDataSet.sections[0].categoryCombo.categories = [{
 					id: "123",
 					name: "Gender"
 				}];
 
-				currentTestDataSet.sections[0].dataElements[0].categoryCombo.categoryOptionCombos = ["male,5", "female,7"];
+				currentTestDataSet.sections[0].categoryCombo.categoryOptionCombos = ["male,5", "female,7"];
 
 				var expectedSection = _.cloneDeep(currentTestDataSet.sections[0]);
 
-				expectedSection.dataElements[0].categoryCombo.categoryOptionCombos = ["male<br>5", "female<br>7"];
+				expectedSection.categoryCombo.categoryOptionCombos = ["male<br>5", "female<br>7"];
 
 				var expectedPages = [
 					{
@@ -199,7 +204,7 @@ describe("DataSetProcessor", function() {
 
 			it("should process the dataset with sections of type catcomb with category option combos are overflowed", function() {
 				var currentTestDataSet = _.cloneDeep(testDataSet);
-				currentTestDataSet.sections[0].dataElements[0].categoryCombo.categoryOptionCombos = ["male,<5", "female,<7", "male,<10", "female,<11", "female,<12", "male,<10"];
+				currentTestDataSet.sections[0].categoryCombo.categoryOptionCombos = ["male,<5", "female,<7", "male,<10", "female,<11", "female,<12", "male,<10"];
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(actualPages[0].contents[1].data.categoryOptionCombos.length).toEqual(4);
 				expect(actualPages[0].contents[2].data.categoryOptionCombos.length).toEqual(2);

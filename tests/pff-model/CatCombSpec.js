@@ -15,11 +15,9 @@ describe("CatCombContent", function() {
 		});
 		testSection = {
 			displayName:"testSection",
-			dataElements: [{
-				categoryCombo: {
+			categoryCombo: {
 					categoryOptionCombos: ["test,String1,", "test,String2,", "test, String3"]
 				}
-			}]
 		};
 	});
 	it("should replace all , with <br>s", function() {
@@ -41,7 +39,7 @@ describe("CatCombContent", function() {
 
 	it("should not replace any other character", function() {
 		var testString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()./>?:;'|\]}[{')\",";
-		testSection.dataElements[0].categoryCombo.categoryOptionCombos.push(testString);
+		testSection.categoryCombo.categoryOptionCombos.push(testString);
 		var catCombContent = new CatCombContent(testSection)
 		expect(catCombContent.categoryOptionCombos[3]).toEqual(testString.replace(",", "<br>"));
 	})
