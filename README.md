@@ -148,3 +148,10 @@ This file contains configuration specific to the running and behaviour of the ap
 
 1. `localAppUrl`: the URL of the machine being used for local development of the application. Do not change this value unless you plan to change the application’s code (not configuration settings). 
 2. `apiVersion`: the version of DHIS2 API used in the app, for example: 22, 23.
+
+
+#Support for other Languages: 
+Currently, the app interface supports two locales - English and French. The app has the flexibility to support any other language as well. To add support for a locale
+- Create a js file with the locale name in `i18n` directory
+- Add all the keys and relevant translations to that file
+- Include the file name in `translationsSetup.js` 
