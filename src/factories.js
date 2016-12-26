@@ -2,4 +2,4 @@ require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/factories/ModalAlertTypes.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/factories/InlineAlert.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/factories/InlineAlertTypes.js");
-require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/factories/AlertTypes.js");
+require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/factories/AlertTypesContract.js");
