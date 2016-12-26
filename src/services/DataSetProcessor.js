@@ -10,7 +10,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 	var dataElementsKey = "dataElements";
 
 	var isCatCombSection = function(section) {
-		return !!section.dataElements[0] && !!section.categoryCombo && section.categoryCombo.name != "default"
+		return !!section.categoryCombo && section.categoryCombo.name != "default";
 	};
 
 	var processDataSet = function(dataSet) {
