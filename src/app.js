@@ -7,10 +7,10 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 }]);
 
 TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor",
-	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes','AlertTypes',
+	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes','AlertTypesContract',
 	 'CustomAngularTranslateService', '$q', "CodeSheetProcessor","PageTypes",
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
-	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, AlertTypes,
+	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, AlertTypesContract,
 	          CustomAngularTranslateService, $q, CodeSheetProcessor,PageTypes) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
@@ -39,15 +39,15 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 			return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, type));
 		})
 	};
-	var handleError = function(alertObject) {
+	var handleError = function(serviceError) {
 
-		if(alertObject.severity == Severity.FATAL || alertObject.severity == Severity.ERROR) {
-			ModalAlertsService.showModalAlert(AlertTypes.renderModelAlert(alertObject));
+		if(serviceError.severity == Severity.FATAL || serviceError.severity == Severity.ERROR) {
+			ModalAlertsService.showModalAlert(AlertTypesContract.getModalAlert(serviceError));
 		}
-		else if(alertObject.severity == Severity.INFO || alertObject.severity == Severity.WARN)
-			showInlineAlert(AlertTypes.renderInlineAlert(alertObject));
+		else if(serviceError.severity == Severity.INFO || serviceError.severity == Severity.WARN)
+			showInlineAlert(AlertTypesContract.getInlineAlert(serviceError));
 		else{
-			console.log(alertObject); //must have console
+			console.log(serviceError); //must have console
 			return throwError('unexpected_error', ModalAlertTypes.dismissibleError);
 		}
 		return $q.reject();
