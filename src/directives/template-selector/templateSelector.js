@@ -1,4 +1,4 @@
-TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService','Config', 'ModalAlert',
+TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', 'Config', 'ModalAlert',
 	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q',
 	function(DataSetService, ProgramService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
 		CustomAngularTranslateService, $q) {
