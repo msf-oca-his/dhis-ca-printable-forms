@@ -1,4 +1,4 @@
-TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlertTypes', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlertTypes) {
+TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlertTypes', 'ServiceError', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlertTypes, ServiceError) {
 
 	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
 		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code');
