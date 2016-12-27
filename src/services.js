@@ -4,6 +4,7 @@ require("./services/RegisterProcessor.js");
 require("./services/CodeSheetProcessor.js");
 require("./services/CustomAttributeValidationService.js");
 require("./service-error-config/ServiceErrorConfig.js");
-require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/Exceptions/ServiceError.js")
+require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/Exceptions/ServiceError.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/services/CustomAngularTranslateService.js");
 require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/services/ModalAlertsService.js");
+require("imports?angularModule=>TallySheets!../../custom_app_commons/js/angular-commons/services/AlertTypesContract.js");
