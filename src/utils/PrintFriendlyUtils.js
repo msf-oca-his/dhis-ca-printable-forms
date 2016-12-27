@@ -1,4 +1,4 @@
-TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(config,ValueTypes) {
+TallySheets.factory('PrintFriendlyUtils', ['Config', 'ValueTypes', function(config, ValueTypes) {
 
 	var isListTypeDataElement = function(dataElement) {
 		if(dataElement.valueType != ValueTypes.OPTIONSET) return false;
@@ -25,7 +25,7 @@ TallySheets.factory('PrintFriendlyUtils', ['Config','ValueTypes', function(confi
 		}));
 	};
 
-	this.createNewSectionUsing = function(section, dataElements, dataElementsKey){
+	this.createNewSectionUsing = function(section, dataElements, dataElementsKey) {
 		var newSection = _.cloneDeep(section);
 		newSection[dataElementsKey] = dataElements;
 		return newSection;

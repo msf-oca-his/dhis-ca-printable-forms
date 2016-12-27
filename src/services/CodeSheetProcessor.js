@@ -1,8 +1,8 @@
-TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils','ValueTypes', function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils,ValueTypes) {
+TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils', 'ValueTypes', function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils, ValueTypes) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
 	var dataElementKey = 'programStageDataElements';
-	var pageType="A4";
+	var pageType = 'A4';
 	this.getNumberOfRows = function() {
 		return Math.round((config.PageTypes[pageType].Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.CodeSheet.pageNumberHeight) / config.CodeSheet.rowHeight);
 	};
