@@ -6,12 +6,12 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "DataSetProcessor", "ProgramService", "CoversheetProcessor",
-	"RegisterProcessor", "CustomAttributeValidationService", "appLoadingFailed", 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes','AlertTypesContract',
-	 'CustomAngularTranslateService', '$q', "CodeSheetProcessor","PageTypes",
+TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
+	'RegisterProcessor', 'CustomAttributeValidationService', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes','AlertTypesContract',
+	 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes',
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 	         CustomAttributeValidationService, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, AlertTypesContract,
-	          CustomAngularTranslateService, $q, CodeSheetProcessor,PageTypes) {
+	          CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes) {
 
 	$scope.appLoadingFailed = appLoadingFailed;
 	$scope.spinnerShown = false;
@@ -102,13 +102,13 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 
 	};
 
-	var processDataSets = function(){
+	var processDataSets = function() {
 		$scope.spinnerShown = true;
 		$scope.programMode = null;
 		return $q.all(_($scope.templates)
 			              .map('id')
 			              .filter(_.negate(_.isEmpty))
-			              .map(DataSetService.getReferentialDataSet)
+			              .map(DataSetService.getReferentialDataSetById)
 			              .value())
 						.then(DataSetProcessor.process)
 	};
@@ -119,7 +119,7 @@ TallySheets.controller('TallySheetsController', ["$scope", "DataSetService", "Da
 		return $q.all(_($scope.templates)
 			       .map('id')
              .filter(_.negate(_.isEmpty))
-             .map(ProgramService.getProgram)
+             .map(ProgramService.getProgramById)
              .value())
 						.then(_.cloneDeep)
 						.then(function(programs){

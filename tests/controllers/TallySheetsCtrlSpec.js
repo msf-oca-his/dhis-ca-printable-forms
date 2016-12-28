@@ -24,12 +24,12 @@ describe("TallySheets ctrl", function() {
 		expectedPages = "testPages";
 
 		mockedDataSetService = {
-			getReferentialDataSet: function() {
+			getReferentialDataSetById: function() {
 				return $q.when(mockDataset);
 			}
 		};
 		mockedProgramService = {
-			getProgram: function() {
+			getProgramById: function() {
 				return $q.when(mockProgram);
 			}
 		};
