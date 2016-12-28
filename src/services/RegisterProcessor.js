@@ -1,4 +1,4 @@
-TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils','ValueTypes', function(RegisterPage, Content, DataElement, ContentTypes, config, PrintFriendlyUtils,ValueTypes){
+TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils','DhisConstants', function(RegisterPage, Content, DataElement, ContentTypes, config, PrintFriendlyUtils, DhisConstants){
 	var page, currentPageIndex, pages;
 
 	this.process = function(program) {
@@ -10,7 +10,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 		};
 
 		var getWidthOfDataElement = function(dataElement) {
-			return (dataElement.valueType == ValueTypes.TEXT ) ? config.Register.textElementWidth : config.Register.otherElementWidth;
+			return (dataElement.valueType == DhisConstants.ValueTypes.TEXT ) ? config.Register.textElementWidth : config.Register.otherElementWidth;
 		};
 
 		var distributeDataElementsToPages = function(allDataElements) {
@@ -41,7 +41,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay(allDataElements);
-		allDataElements.push(new DataElement({displayName: 'Comments', type: ValueTypes.TEXT}));
+		allDataElements.push(new DataElement({displayName: 'Comments', type: DhisConstants.ValueTypes.TEXT}));
 		var dataElementsPerPage = [];
 		distributeDataElementsToPages(allDataElements);
 		if(!_.isEmpty(dataElementsPerPage))

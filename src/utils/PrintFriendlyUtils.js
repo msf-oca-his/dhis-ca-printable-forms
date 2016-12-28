@@ -1,7 +1,7 @@
-TallySheets.factory('PrintFriendlyUtils', ['Config', 'ValueTypes', function(config, ValueTypes) {
+TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(config, DhisConstants) {
 
 	var isListTypeDataElement = function(dataElement) {
-		if(dataElement.valueType != ValueTypes.OPTIONSET) return false;
+		if(dataElement.valueType != DhisConstants.ValueTypes.OPTIONSET) return false;
 		if(!config.customAttributes.displayOptionUID) return true;
 		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 		if(displayOptionAttribute && displayOptionAttribute.value)
@@ -83,7 +83,7 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'ValueTypes', function(conf
 	this.getDataElementsToDisplay = function(dataElements) {
 		if(!config.customAttributes.displayOptionUID) return dataElements;
 		return _.filter(dataElements, function(dataElement) {
-			if(dataElement.valueType == ValueTypes.OPTIONSET) {
+			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
 				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
 				if(displayOptionAttribute) {
 					return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;

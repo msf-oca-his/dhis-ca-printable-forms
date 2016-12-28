@@ -1,6 +1,6 @@
 TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'ContentTypes', 'PrintFriendlyUtils', 'DefaultContent',
-	'OptionSetContent', 'CatCombContent', 'DatasetTitle', function(config, DataSetPage, Content, ContentTypes, PrintFriendlyUtils,DefaultContent,
-	                                               OptionSetContent, CatCombContent, DatasetTitle) {
+	'OptionSetContent', 'CatCombContent', 'DatasetTitle', 'DhisConstants', function(config, DataSetPage, Content, ContentTypes, PrintFriendlyUtils,DefaultContent,
+	                                               OptionSetContent, CatCombContent, DatasetTitle, DhisConstants) {
 	var pages = [];
 	var currentPageIndex;
 	var page;
@@ -10,7 +10,7 @@ TallySheets.service('DataSetProcessor', [ 'Config', 'DataSetPage', 'Content', 'C
 	var dataElementsKey = "dataElements";
 
 	var isCatCombSection = function(section) {
-		return !!section.categoryCombo && section.categoryCombo.name != "default";
+		return !!section.categoryCombo && section.categoryCombo.name != DhisConstants.CategoryComboType.default;
 	};
 
 	var processDataSet = function(dataSet) {
