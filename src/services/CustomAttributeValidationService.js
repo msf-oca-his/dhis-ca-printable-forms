@@ -1,4 +1,4 @@
-TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlertTypes', 'ServiceError', 'ApiFilters', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlertTypes, ServiceError, ApiFilters) {
+TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlertTypes', 'ServiceError', 'DhisConstants', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlertTypes, ServiceError, DhisConstants) {
 
 	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
 		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code');
@@ -54,7 +54,7 @@ TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService
 	var getAllCustomAttributes = function() {
 		var customAttributeIds = _.map(config.customAttributes, 'id');
 		return _.map(customAttributeIds, function(customAttributeId) {
-			var filter = ApiFilters.filterById + customAttributeId;
+			var filter = DhisConstants.ApiFilters.filterById + customAttributeId;
 			return CustomAttributeService.getCustomAttribute(filter).then(function(customAttribute) {
 				return customAttribute
 			}).catch(function(err) {
