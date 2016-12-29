@@ -1,7 +1,7 @@
 TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', 'Config', 'ModalAlert',
-	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q',
+	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', 'DhisConstants',
 	function(DataSetService, ProgramService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
-		CustomAngularTranslateService, $q) {
+		CustomAngularTranslateService, $q, DhisConstants) {
 	return {
 		restrict: 'E',
 		template: require('./templateSelectorView.html'),
@@ -47,9 +47,8 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 			};
 
 			var isPrintableTemplate = function(template) {
-				var isValid = "true";
 				var printableAttribute = getPrintableAttribute(template.attributeValues);
-				return printableAttribute && printableAttribute.value == isValid;
+				return printableAttribute && printableAttribute.value == DhisConstants.Boolean.true;
 			};
 
 			var addDataSetPrefix = function(dataSet){

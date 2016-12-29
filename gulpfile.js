@@ -42,7 +42,7 @@ APP = {
 		manifest: "manifest.webapp"
 	},
 	webpack: {
-		config: "./webpack.config.js",
+		config: "./webpack.config.js"
 	},
 	tests: {
 		root: 'tests',
