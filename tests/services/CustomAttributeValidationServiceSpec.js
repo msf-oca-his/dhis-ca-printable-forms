@@ -46,7 +46,7 @@ describe("CustomAttributeValidationService", function() {
 				"optionset_without_options": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
 				"optionset_with_incorrect_options": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
 				"no_association_with_entity": "No association between the attribute and the specified entity in config",
-				"fetching_custom_attributes_failed":"fetching custom attributes is failed"
+				"fetching_custom_attributes_failed": "fetching custom attributes is failed"
 			});
 		});
 	});

@@ -1,4 +1,4 @@
-TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils','DhisConstants', function(RegisterPage, Content, DataElement, ContentTypes, config, PrintFriendlyUtils, DhisConstants){
+TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils', 'DhisConstants', function(RegisterPage, Content, DataElement, ContentTypes, config, PrintFriendlyUtils, DhisConstants) {
 	var page, currentPageIndex, pages;
 
 	this.process = function(program) {
@@ -37,7 +37,7 @@ TallySheets.service('RegisterProcessor', [ 'RegisterPage', 'Content', 'DataEleme
 		};
 
 		pages = [];
-		currentPageIndex  = -1;
+		currentPageIndex = -1;
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay(allDataElements);

@@ -14,10 +14,10 @@ describe("CatCombContent", function() {
 			CatCombContent = _CatCombContent_;
 		});
 		testSection = {
-			displayName:"testSection",
+			displayName: "testSection",
 			categoryCombo: {
-					categoryOptionCombos: ["test,String1,", "test,String2,", "test, String3"]
-				}
+				categoryOptionCombos: ["test,String1,", "test,String2,", "test, String3"]
+			}
 		};
 	});
 	it("should replace all , with <br>s", function() {
@@ -32,7 +32,7 @@ describe("CatCombContent", function() {
 		expect(catCombContent.categoryOptionCombos[2]).toEqual("test<br> String3");
 	});
 
-	it("should have section title", function(){
+	it("should have section title", function() {
 		var catCombContent = new CatCombContent(testSection)
 		expect(catCombContent.title).toEqual("testSection");
 	});

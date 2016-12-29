@@ -1,4 +1,4 @@
-TallySheets.directive('list', [ function() {
+TallySheets.directive('list', [function() {
 	return {
 		restrict: 'E',
 		template: require('./listView.html'),

@@ -1,123 +1,136 @@
 .page {
-    width: 297mm;
-    min-height: 210mm;
-    /*padding: 5mm;*/
-    /*border: 0.5px #D3D3D3  solid;*/
-    /*border-radius: 5px;*/
-    background: white;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  width      : 297mm;
+  min-height : 210mm;
+  /*padding: 5mm;*/
+  /*border: 0.5px #D3D3D3  solid;*/
+  /*border-radius: 5px;*/
+  background : white;
+  box-shadow : 0 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .subpage {
-    margin: 2mm auto;
-    padding: 2mm;
-    width: 278mm;
-    border: 0.7mm red solid;
-    height: 195mm;
-    page-break-after: always;
-    position: relative;
+  margin           : 2mm auto;
+  padding          : 2mm;
+  width            : 278mm;
+  border           : 0.7mm red solid;
+  height           : 195mm;
+  page-break-after : always;
+  position         : relative;
 }
 
 .footer {
-  position: absolute;
-  bottom: 5px;
+  position : absolute;
+  bottom   : 5px;
 }
 
-.deLabel{
-    width: 30mm;
-    text-align: center;
-    height: 15mm;
+.deLabel {
+  width      : 30mm;
+  text-align : center;
+  height     : 15mm;
 }
 
-.sno-header{
-    @extend .deLabel;
-    width: 10mm;
+.sno-header {
+  @extend .deLabel;
+  width : 10mm;
 }
 
-.sno-value{
-    text-align: center;
-}
-.deField.text{
-    width: 50mm;
-}
-.deField.general{
-    width: 30mm;
+.sno-value {
+  text-align : center;
 }
 
-.table-heading{
-    text-align: center;
-    height: 15mm;
+.deField.text {
+  width : 50mm;
 }
 
-.header{
-    font-weight: 600;
-    font-size: 4mm;
-    margin-bottom: 8mm;
+.deField.general {
+  width : 30mm;
 }
+
+.table-heading {
+  text-align : center;
+  height     : 15mm;
+}
+
+.header {
+  font-weight   : 600;
+  font-size     : 4mm;
+  margin-bottom : 8mm;
+}
+
 .programName {
-    font-size: 6mm;
+  font-size : 6mm;
 }
-.headerLabel{
-    /*width: 14%;*/
-    padding-right: 2mm;
+
+.headerLabel {
+  /*width: 14%;*/
+  padding-right : 2mm;
 }
-.set-number-label{
+
+.set-number-label {
   @extend .headerLabel;
-  font-size: 4.1mm !important;
-}
-.set-number-value{
-  width: 60%;
-  border-bottom: 1px solid black;
+  font-size : 4.1mm !important;
 }
 
-.headerField{
-    width: 16%;
-    border-bottom: 1px solid black;
+.set-number-value {
+  width         : 60%;
+  border-bottom : 1px solid black;
 }
+
+.headerField {
+  width         : 16%;
+  border-bottom : 1px solid black;
+}
+
 .separator {
-    width: 10%;
+  width : 10%;
 }
+
 .programName {
-    text-align:center;
-    border:none;
-    font-size: 6mm;
-    margin-bottom: 5mm;
+  text-align    : center;
+  border        : none;
+  font-size     : 6mm;
+  margin-bottom : 5mm;
 }
+
 table {
-    border-collapse: collapse;
-    table-layout: fixed;
+  border-collapse : collapse;
+  table-layout    : fixed;
 }
 
 .sectionName {
-    font-size: 4mm;
+  font-size : 4mm;
 }
+
 @page {
-    size: A4;
-    margin: 0;
+  size   : A4;
+  margin : 0;
 }
+
 .page-number {
   @extend .footer;
-  text-align: right;
-  width: 95%;
+  text-align : right;
+  width      : 95%;
 }
 
 @media print {
-    html, body {
-        height: 210mm;
-        width: 298mm;
-    }
-    @page {size: A4 landscape;}
-    .page {
-        margin: 0;
-        border: initial;
-        border-radius: initial;
-        width: initial;
-        min-height: initial;
-        box-shadow: initial;
-        background: initial;
-        page-break-after: always;
-    }
-    .subpage{
-        border: none;
-    }
+  html, body {
+    height : 210mm;
+    width  : 298mm;
+  }
+  @page {
+    size : A4 landscape;
+  }
+  .page {
+    margin           : 0;
+    border           : initial;
+    border-radius    : initial;
+    width            : initial;
+    min-height       : initial;
+    box-shadow       : initial;
+    background       : initial;
+    page-break-after : always;
+  }
+  .subpage {
+    border : none;
+  }
 }

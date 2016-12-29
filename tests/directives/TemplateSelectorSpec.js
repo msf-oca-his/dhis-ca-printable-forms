@@ -24,10 +24,10 @@ describe("templateSelector Directive", function() {
 		config = {
 			Prefixes: {
 				dataSetPrefix: {
-				translationKey:"dataset_prefix"
+					translationKey: "dataset_prefix"
 				},
-				programPrefix:{
-					translationKey:"program_prefix"
+				programPrefix: {
+					translationKey: "program_prefix"
 				}
 			},
 			customAttributes: {}
@@ -52,10 +52,11 @@ describe("templateSelector Directive", function() {
 		scope = _$rootScope.$new();
 		scope.PageTypes = {
 			COVERSHEET: "COVERSHEET",
-			REGISTER:"REGISTER",
-			CODESHEET:"CODESHEET",
-			DATASET:"DATASET",
-			PROGRAM:"PROGRAM"};
+			REGISTER: "REGISTER",
+			CODESHEET: "CODESHEET",
+			DATASET: "DATASET",
+			PROGRAM: "PROGRAM"
+		};
 		childScope = scope.$new();
 		compile = $compile;
 		dataSet = DataSet;
@@ -232,7 +233,7 @@ describe("templateSelector Directive", function() {
 		});
 
 		describe("Add form button", function() {
-			it("should disable the add form button when nothing selected", function(){
+			it("should disable the add form button when nothing selected", function() {
 				childScope.change = jasmine.createSpy("change");
 				elements = angular.element('<template-selector on-change= "change()" selected-templates-type="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(childScope);
@@ -314,14 +315,12 @@ describe("templateSelector Directive", function() {
 				selectElement.selectedIndex = 3;
 				selectElement.dispatchEvent(new Event('change'));
 				childScope.$apply();
-				setTimeout(function(){
+				setTimeout(function() {
 					childScope.$apply();
 					expect(childScope.change).toHaveBeenCalledWith([programs[0]]);
 					done();
 				}, 1);
 			});
-
-		})
-
-	})
+		});
+	});
 });

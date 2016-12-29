@@ -40,8 +40,14 @@ describe("Coversheet Processor", function() {
 	};
 
 	beforeEach(function() {
-		DefaultContent = function(section){ section.mockedBy = 'DefaultContent'; return section; };
-		OptionSetContent = function(section){ section.mockedBy = 'OptionSetContent'; return section; };
+		DefaultContent = function(section) {
+			section.mockedBy = 'DefaultContent';
+			return section;
+		};
+		OptionSetContent = function(section) {
+			section.mockedBy = 'OptionSetContent';
+			return section;
+		};
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
 		module(function($provide) {
@@ -72,7 +78,7 @@ describe("Coversheet Processor", function() {
 			var expectedPages = [{
 				heightLeft: config.PageTypes.A4.Portrait.availableHeight,
 				widthLeft: config.PageTypes.A4.Portrait.availableWidth,
-				contents: [{type: { type: 'COMMENTS', renderer: 'comments' }}],
+				contents: [{type: {type: 'COMMENTS', renderer: 'comments'}}],
 				type: 'COVERSHEET',
 				programName: "test program"
 			}];

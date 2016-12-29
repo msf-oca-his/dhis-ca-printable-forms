@@ -6,8 +6,8 @@ var gulp        = require('gulp'),
     KarmaServer = require('karma').Server,
     webpack     = require('webpack'),
     zip         = require('gulp-zip'),
-		chmod       = require('gulp-chmod'),
-		sass        = require('gulp-sass');
+    chmod       = require('gulp-chmod'),
+    sass        = require('gulp-sass');
 
 APP = {
 	src: {
@@ -15,14 +15,14 @@ APP = {
 		all: "src/**/*.*",
 		html: "src/**/*.html",
 		js: "src/**/*.js",
-		scss:"src/scss/*.scss"
+		scss: "src/scss/*.scss"
 	},
 	dependencies: {
 		root: 'dependencies',
 		bower_components: {
 			root: 'dependencies/bower_components',
 			all: 'dependencies/bower_components/**/*.*',
-			bootstrap:{
+			bootstrap: {
 				fonts: {
 					all: "dependencies/bower_components/bootstrap/dist/fonts/*.*"
 				}
@@ -63,7 +63,7 @@ DEST = {
 
 TEMP = {
 	root: ".temp",
-	css:".temp/css",
+	css: ".temp/css",
 	all: ".temp/**/*.*",
 	resources: ".temp/resources",
 	fonts: ".temp/fonts"
@@ -71,7 +71,7 @@ TEMP = {
 };
 
 GitHooks = {
-	scripts:{
+	scripts: {
 		all: "githooks/*"
 	},
 	defaultFolder: {
@@ -98,7 +98,7 @@ TASKS = {
 	setProdEnv: '_setProdEnv'
 };
 
-gulp.task(TASKS.setupGitHooks, function(){
+gulp.task(TASKS.setupGitHooks, function() {
 	gulp.src(GitHooks.scripts.all)
 		.pipe(chmod(700))
 		.pipe(gulp.dest(GitHooks.defaultFolder.root))
@@ -137,13 +137,12 @@ gulp.task(TASKS.reload, function() {
 });
 
 gulp.task(TASKS.watchSrc, function() {
-	gulp.watch([APP.src.html, APP.src.js,APP.i18n.all], gulpsync.sync([TASKS.webpack, TASKS.reload]));
+	gulp.watch([APP.src.html, APP.src.js, APP.i18n.all], gulpsync.sync([TASKS.webpack, TASKS.reload]));
 	gulp.watch(APP.src.scss, gulpsync.sync([TASKS.compileScss, TASKS.reload]));
 	gulp.watch(APP.resources.all, gulpsync.sync([TASKS.copyResourcesToTemp, TASKS.reload]))
 });
 
-
-gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack,TASKS.compileScss, TASKS.copyResourcesToTemp]))
+gulp.task(TASKS.setUpTemp, gulpsync.sync([TASKS.cleanTemp, TASKS.webpack, TASKS.compileScss, TASKS.copyResourcesToTemp]))
 
 gulp.task(TASKS.serve, [TASKS.setUpTemp], function() {
 	browserSync.init({
@@ -184,7 +183,7 @@ gulp.task(TASKS.setProdEnv, function() {
 	process.env.NODE_ENV = 'production';
 });
 
-gulp.task(TASKS.pack, [ TASKS.setProdEnv, TASKS.setUpTemp ], function() {
+gulp.task(TASKS.pack, [TASKS.setProdEnv, TASKS.setUpTemp], function() {
 	return gulp.src([TEMP.all, APP.appManifest.manifest])
 		.pipe(zip(DEST.prodZip))
 		.pipe(gulp.dest(DEST.target));

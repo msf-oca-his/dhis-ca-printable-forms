@@ -16,10 +16,10 @@ describe("Coversheet Template", function() {
 		module("TallySheets");
 		config = {
 			customAttributes: {
-				displayOptionUID  : {}
-		}
+				displayOptionUID: {}
+			}
 		};
-		module(function($provide,$translateProvider) {
+		module(function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$translateProvider.translations('en', {
 				"comments": "Comments"
@@ -50,13 +50,13 @@ describe("Coversheet Template", function() {
 	});
 
 	it("should display the name of the program", function() {
-		$scope.modelContents = [{type: { type: 'COMMENTS', renderer: 'comments' }}];
+		$scope.modelContents = [{type: {type: 'COMMENTS', renderer: 'comments'}}];
 		$scope.$digest();
 		expect(element.innerHTML).toContain($scope.programName)
 	});
 
 	it("should display comments section if content type is comments", function() {
-		$scope.modelContents = [{type: { type: 'COMMENTS', renderer: 'comments' }}];
+		$scope.modelContents = [{type: {type: 'COMMENTS', renderer: 'comments'}}];
 		createElement();
 		$scope.$digest();
 		expect(element.innerText).toContain('Comments');

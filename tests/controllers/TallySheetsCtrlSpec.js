@@ -15,7 +15,7 @@ describe("TallySheets ctrl", function() {
 		module(function(_$provide_) {
 			$provide = _$provide_;
 		});
-		inject(function(_$q_){
+		inject(function(_$q_) {
 			$q = _$q_;
 		});
 		var mockDataset = "testDataSet";
@@ -60,7 +60,7 @@ describe("TallySheets ctrl", function() {
 		$provide.value('DataSetProcessor', mockedDataSetProcessor);
 		$provide.value('ProgramService', mockedProgramService);
 		$provide.value('ProgramProcessor', mockedProgramProcessor);
-		$provide.value('CustomAttributeValidationService',mockedValidationService);
+		$provide.value('CustomAttributeValidationService', mockedValidationService);
 		$provide.value('CoversheetProcessor', mockedProgramProcessor);
 		$provide.value('CodeSheetProcessor', mockedProgramProcessor);
 		$provide.value('RegisterProcessor', mockedProgramProcessor);
@@ -100,7 +100,7 @@ describe("TallySheets ctrl", function() {
 		});
 
 		it("should render the programs if it has template id", function() {
-			scope.templates = [{id:'blah'}]
+			scope.templates = [{id: 'blah'}]
 			scope.selectedTemplatesType = "PROGRAM";
 			scope.programMode = "COVERSHEET";
 			scope.renderTemplates();

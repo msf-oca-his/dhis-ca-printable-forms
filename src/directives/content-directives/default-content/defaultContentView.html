@@ -1,34 +1,34 @@
 <section-title title="content.title"></section-title>
 <table class="default-section">
 
-    <tr ng-repeat="displayName in content.leftSideDataElements">
+  <tr ng-repeat="displayName in content.leftSideDataElements">
 
-        <td class="deLabel general">
-            {{content.leftSideDataElements[$index].displayName}}
-        </td>
-        <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType=='BOOLEAN'">
+    <td class="deLabel general">
+      {{content.leftSideDataElements[$index].displayName}}
+    </td>
+    <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType=='BOOLEAN'">
+      <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
+      <span class="checkbox-separator"></span>
+      <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
+    </td>
+
+    <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!='BOOLEAN'"></td>
+
+    <td class="default-section-divider"></td>
+
+    <td class="deLabel general" ng-if="content.rightSideDataElements[$index]">
+      {{content.rightSideDataElements[$index].displayName}}
+    </td>
+
+    <span ng-if="content.rightSideDataElements[$index]">
+        <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType=='BOOLEAN'">
             <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
-            <span class="checkbox-separator"></span>
+          <span class="checkbox-separator"></span>
             <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
         </td>
-
-        <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!='BOOLEAN'"></td>
-
-        <td class="default-section-divider"></td>
-
-        <td class="deLabel general" ng-if="content.rightSideDataElements[$index]">
-            {{content.rightSideDataElements[$index].displayName}}
+        <td class="deField"
+            ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!='BOOLEAN'">
         </td>
-
-        <span ng-if="content.rightSideDataElements[$index]">
-            <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType=='BOOLEAN'">
-                <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
-                <span class="checkbox-separator"></span>
-                <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
-            </td>
-            <td class="deField"
-                ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!='BOOLEAN'">
-            </td>
-        </span>
-    </tr>
+    </span>
+  </tr>
 </table>

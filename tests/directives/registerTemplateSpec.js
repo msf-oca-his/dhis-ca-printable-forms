@@ -31,6 +31,4 @@ describe("Register Template", function() {
 		$scope.$digest();
 		expect(element.innerHTML).toContain($scope.programName)
 	});
-
-
 });

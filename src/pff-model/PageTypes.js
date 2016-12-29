@@ -1,4 +1,4 @@
-TallySheets.factory('PageTypes', [ function() {
+TallySheets.factory('PageTypes', [function() {
 	return {
 		COVERSHEET: 'COVERSHEET',
 		REGISTER: 'REGISTER',

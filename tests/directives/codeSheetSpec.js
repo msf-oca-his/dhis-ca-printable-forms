@@ -32,7 +32,7 @@ describe("CodeSheet Template", function() {
 				pageNumberHeight: 10
 			}
 		};
-		module(function($provide,$translateProvider) {
+		module(function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$translateProvider.translations('en', {
 				"codes": "Codes"

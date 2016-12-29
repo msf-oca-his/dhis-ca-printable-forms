@@ -1,18 +1,19 @@
 <section-title title="content.title"></section-title>
 <div>
-    <table>
-        <td valign=top class="deLabel optionLabel">
-            {{content.dataElementName}}
-        </td>
-        <td valign=top><table class="optionsetTable">
-            <tr ng-repeat="optionRow in content.rows">
-                <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer option">
-                      <input type="checkbox" class="pffcheckbox">{{option.label}}</input>
-                </td>
-            </tr>
-        </table>
-        </td>
-    </table>
+  <table>
+    <td valign=top class="deLabel optionLabel">
+      {{content.dataElementName}}
+    </td>
+    <td valign=top>
+      <table class="optionsetTable">
+        <tr ng-repeat="optionRow in content.rows">
+          <td valign=top ng-repeat="option in optionRow" class="checkboxcontainer option">
+            <input type="checkbox" class="pffcheckbox">{{option.label}}</input>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </table>
 </div>
 
 
