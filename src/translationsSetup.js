@@ -3,7 +3,7 @@ TallySheets.config(['$translateProvider', 'uiLocaleProvider', function($translat
 	_.map(languages, function(language) {
 		$translateProvider.translations(language, require('../i18n/' + language + '.js'));
 	});
-	
+
 	$translateProvider.fallbackLanguage(['en']);
 	$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 
