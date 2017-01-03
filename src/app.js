@@ -123,6 +123,10 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		window.location = dhisUrl;
 	};
 
+	$scope.closeModalAlert = function(context) {
+		window.location = dhisUrl;
+	};
+
 	$scope.renderTemplates = function(templates) {
 		$scope.pages = [];
 		$scope.templates = templates ? templates : $scope.templates;
