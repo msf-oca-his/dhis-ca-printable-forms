@@ -74,7 +74,7 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				.value())
 				.then(DataSetProcessor.process)
 		};
-		
+
 		var processPrograms = function() {
 			if($scope.programMode == null)
 				return;
@@ -116,12 +116,16 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			else return $q.when([]);
 		};
 
-		$scope.renderTemplates = function(templates) {
-			$scope.pages = [];
-			$scope.templates = templates ? templates : $scope.templates;
-			$q.when()
-				.then(processTemplates)
-				.then(addProcessedPagesToDOM)
-				.catch(handleError);
-		};
-	}]);
+	$scope.closeModalAlert = function(context) {
+		window.location = dhisUrl;
+	};
+
+	$scope.renderTemplates = function(templates) {
+		$scope.pages = [];
+		$scope.templates = templates ? templates : $scope.templates;
+		$q.when()
+			.then(processTemplates)
+			.then(addProcessedPagesToDOM)
+			.catch(handleError);
+	};
+}]);
