@@ -71,8 +71,8 @@ describe("DataSetProcessor", function() {
 				return Promise.resolve(mockedCustomAttribute);
 			}
 		};
-		DefaultContent = function(section){ return section; };
-		OptionSetContent = function(section){ return section; };
+		DefaultContent = function(section) { return section; };
+		OptionSetContent = function(section) { return section; };
 		module(function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('DefaultContent', DefaultContent);
@@ -147,7 +147,7 @@ describe("DataSetProcessor", function() {
 				_.assignIn(expectedPage, {
 					contents: [{type: {type: 'DATASET_TITLE', renderer: 'dataset-title'}, data: {title: 'test dataset'}}, {
 						type: Object({type: 'CATCOMB', renderer: 'category-combo'}),
-						data: {title: 'section',categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
+						data: {title: 'section', categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
 					}], heightLeft: 217.5, widthLeft: 180, type: 'DATASET', datasetName: 'test dataset'
 				});
 				var expectedPages = [expectedPage];
@@ -192,11 +192,11 @@ describe("DataSetProcessor", function() {
 									dataElementNames: ['dataElement']
 								}
 							}],
-							heightLeft: 217.5,
-							widthLeft: 180,
-							type: 'DATASET',
-							datasetName: 'test dataset'
-					} ];
+						heightLeft: 217.5,
+						widthLeft: 180,
+						type: 'DATASET',
+						datasetName: 'test dataset'
+					}];
 
 				actualPages = dataSetProcessor.process([currentTestDataSet]);
 				expect(expectedPages).toEqual(clone(actualPages));
@@ -309,12 +309,12 @@ describe("DataSetProcessor", function() {
 
 			it("should remove dataElements from given dataElements if displayOption is none", function() {
 				var dataElements = [{
-					id             : "123",
-					name           : "de1",
-					displayName    : "de1",
-					valueType      : 'OPTIONSET',
-					options        : ['hello'],
-					attributeValues: [{ attribute: { id: config.customAttributes.displayOptionUID.id }, value: '0' }]
+					id: "123",
+					name: "de1",
+					displayName: "de1",
+					valueType: 'OPTIONSET',
+					options: ['hello'],
+					attributeValues: [{attribute: {id: config.customAttributes.displayOptionUID.id}, value: '0'}]
 				}];
 				dataElements.push(clone(dataElements[0]));
 				dataElements.push(clone(dataElements[0]));

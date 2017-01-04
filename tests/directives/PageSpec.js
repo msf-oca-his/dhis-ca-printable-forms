@@ -2,8 +2,7 @@ describe("Page Directive", function() {
 	var $controller;
 	var section;
 	var PageElement;
-	var outerScope, compile,childScope;
-	var pageTypes;
+	var outerScope, compile, childScope;
 	var config = {
 		customAttributes: {
 			displayOptionUID: {
@@ -18,11 +17,13 @@ describe("Page Directive", function() {
 	};
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
-		config  = {customAttributes: {
-			displayOptionUID:{}
-		}};
+		config = {
+			customAttributes: {
+				displayOptionUID: {}
+			}
+		};
 
-		module("TallySheets",function($provide,$translateProvider) {
+		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$translateProvider.translations('en', {
 				"page": "Page"
@@ -35,10 +36,11 @@ describe("Page Directive", function() {
 			outerScope = $rootScope.$new();
 			outerScope.PageTypes = {
 				COVERSHEET: "COVERSHEET",
-				REGISTER:"REGISTER",
-				CODESHEET:"CODESHEET",
-				DATASET:"DATASET",
-				PROGRAM:"PROGRAM"};
+				REGISTER: "REGISTER",
+				CODESHEET: "CODESHEET",
+				DATASET: "DATASET",
+				PROGRAM: "PROGRAM"
+			};
 			childScope = outerScope.$new();
 			compile = $compile;
 			outerScope.testPage = "testPage";

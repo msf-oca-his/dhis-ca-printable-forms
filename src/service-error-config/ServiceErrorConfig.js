@@ -3,6 +3,7 @@ TallySheets.factory('ServiceErrorConfig', [function() {
 	//Message CODE 2500 and above number are errors
 	//Message CODE 2000 to 2499 are warnings
 	//Message CODE 1000 to 1999 are info
+	
 	return {
 		"no_association_with_optionset": 2511,
 		"optionset_without_options": 2512,
@@ -14,7 +15,6 @@ TallySheets.factory('ServiceErrorConfig', [function() {
 		"no_template_available": 1000
 	};
 }]);
-
 
 window.MessageCode = {
 	ERROR: 2500,

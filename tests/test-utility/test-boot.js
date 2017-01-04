@@ -1,4 +1,4 @@
-angular.bootstrap = function dummy() {}
+angular.bootstrap = function dummy() {};
 window.mockedD2 = {d2: {}};
 window.d2Lib = {
 	init: function() {

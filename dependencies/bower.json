@@ -1,8 +1,8 @@
 {
   "name": "dhis_tally_sheets",
-  "description": "",
+  "description": "App to generate print friendly forms for DataSets and Programs configured on DHIS",
   "main": "",
-  "moduleType": [],
+  "moduleType": [ ],
   "license": "MIT",
   "private": true,
   "ignore": [

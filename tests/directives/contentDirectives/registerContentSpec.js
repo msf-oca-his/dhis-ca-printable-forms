@@ -23,7 +23,7 @@ describe("Register Content", function() {
 				}
 			},
 			Register: {
-				tableHeaderHeight: 10,              
+				tableHeaderHeight: 10,
 				dataEntryRowHeight: 20,
 				pageHeaderHeight: 10,
 				textElementWidth: 50,

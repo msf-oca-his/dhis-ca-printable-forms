@@ -34,7 +34,7 @@
           </span>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
-            <button ng-click="exportToTable('app')" class="btn btn-success hidden-print">{{ 'export_excel' | translate}}</button>
+            <button ng-click="exportToExcel('app')" class="btn btn-success hidden-print">{{ 'export_excel' | translate}}</button>
 					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'print' | translate }}</button>
 					</span>
 				</span>
@@ -53,10 +53,10 @@
   <div ng-if="appLoadingFailed" class="noprint">
     <h2 class="error">{{ 'app_loading_failed' | translate }}</h2>
   </div>
-</span>
   <modal-alert on-close="closeModalAlert(context)"></modal-alert>
-  <script src="dependencies.js" type="text/javascript"></script>
+</span>
 
+<script src="dependencies.js" type="text/javascript"></script>
 <script src="app.js" type="text/javascript"></script>
 <script src="translationsSetup.js" type="text/javascript"></script>
 <!-- Load directives and modules -->

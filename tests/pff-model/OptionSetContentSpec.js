@@ -47,7 +47,7 @@ describe("OptionSetContent", function() {
 			OptionSetContent = _OptionSetContent_;
 		});
 		testSection = {
-			displayName:"OptionSetContent",
+			displayName: "OptionSetContent",
 			testKey: [
 				{
 					options: []
@@ -61,7 +61,7 @@ describe("OptionSetContent", function() {
 		expect(actualSection.rows).toEqual([]);
 	});
 
-	it("should have section title", function(){
+	it("should have section title", function() {
 		var actualSection = new OptionSetContent(testSection, "testKey");
 		expect(actualSection.title).toEqual("OptionSetContent");
 	});

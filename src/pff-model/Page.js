@@ -5,7 +5,7 @@ var Page = function(template) {
 	_.assignIn(this, template);
 };
 
-TallySheets.factory('DataSetPage', ['Config','PageTypes', function(config, PageTypes) {
+TallySheets.factory('DataSetPage', ['Config', 'PageTypes', function(config, PageTypes) {
 	return function DataSetPage() {
 		var dataSetPage = {};
 		dataSetPage.heightLeft = config.DataSet.availableHeight;
@@ -15,7 +15,7 @@ TallySheets.factory('DataSetPage', ['Config','PageTypes', function(config, PageT
 	}
 }]);
 
-TallySheets.factory('CoverSheetPage', ['Config','PageTypes', function(config, PageTypes) {
+TallySheets.factory('CoverSheetPage', ['Config', 'PageTypes', function(config, PageTypes) {
 	return function CoverSheetPage() {
 		var coverSheetPage = {};
 		coverSheetPage.heightLeft = config.PageTypes[pageType].Portrait.availableHeight;
@@ -25,7 +25,7 @@ TallySheets.factory('CoverSheetPage', ['Config','PageTypes', function(config, Pa
 	}
 }]);
 
-TallySheets.factory('RegisterPage', ['Config','PageTypes', function(config, PageTypes) {
+TallySheets.factory('RegisterPage', ['Config', 'PageTypes', function(config, PageTypes) {
 	return function RegisterPage() {
 		var registerPage = {};
 		registerPage.heightLeft = config.PageTypes[pageType].LandScape.availableHeight - config.Register.pageHeaderHeight;
@@ -35,7 +35,7 @@ TallySheets.factory('RegisterPage', ['Config','PageTypes', function(config, Page
 	}
 }]);
 
-TallySheets.factory('CodeSheetPage', ['Config','PageTypes', function(config, PageTypes) {
+TallySheets.factory('CodeSheetPage', ['Config', 'PageTypes', function(config, PageTypes) {
 	return function CodeSheetPage() {
 		var codeSheetPage = {};
 		codeSheetPage.heightLeft = config.PageTypes[pageType].Portrait.availableHeight;

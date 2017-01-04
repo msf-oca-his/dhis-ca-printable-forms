@@ -1,139 +1,151 @@
-.content{
-    margin-bottom: 2mm;
+.content {
+  margin-bottom : 2mm;
 }
 
 .page {
-    width: 210mm;
-    min-height: 297mm;
-    /*padding: 5mm;*/
-    /*border: 0.5px #D3D3D3  solid;*/
-    /*border-radius: 5px;*/
-    background: white;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  width      : 210mm;
+  min-height : 297mm;
+  /*padding: 5mm;*/
+  /*border: 0.5px #D3D3D3  solid;*/
+  /*border-radius: 5px;*/
+  background : white;
+  box-shadow : 0 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .subpage {
-    margin: 2mm auto;
-    padding: 2mm;
-    width: 200mm;
-    border: 0.7mm red solid;
-    height: 278mm;
-    page-break-after: always;
-    position: relative;
+  margin           : 2mm auto;
+  padding          : 2mm;
+  width            : 200mm;
+  border           : 0.7mm red solid;
+  height           : 278mm;
+  page-break-after : always;
+  position         : relative;
 }
 
-.deField{
-    width: 20%;
-    border-bottom: 1px solid black;
+.deField {
+  width         : 20%;
+  border-bottom : 1px solid black;
 }
+
 .deFieldCatComb {
-    width: 4cm;
-    border-bottom: 1px solid black;
+  width         : 4cm;
+  border-bottom : 1px solid black;
 }
-.headerLabel{
-    /*width: 14%;*/
-    padding-right: 2mm;
+
+.headerLabel {
+  /*width: 14%;*/
+  padding-right : 2mm;
 }
-.headerField{
-    width: 14%;
-    border-bottom: 1px solid black;
+
+.headerField {
+  width         : 14%;
+  border-bottom : 1px solid black;
 }
+
 .separator {
-    width: 10%;
+  width : 10%;
 }
 
 .checkbox-separator {
-    margin-right: 5mm;
+  margin-right : 5mm;
 }
 
 .default-section-divider {
   @extend .separator;
-  width:1cm;
+  width : 1cm;
 }
 
 .default-section {
-  width: 90%;
+  width : 90%;
 }
 
-.deLabel{
-    width: 3cm;
-    padding-right: 5mm;
+.deLabel {
+  width         : 3cm;
+  padding-right : 5mm;
 }
-.deLabel.catComb{
-    width: 4cm;
-    text-align: right;
-    height:12mm;
-    padding-right: 2mm;
-    padding-left: 1mm;
+
+.deLabel.catComb {
+  width         : 4cm;
+  text-align    : right;
+  height        : 12mm;
+  padding-right : 2mm;
+  padding-left  : 1mm;
 }
-.deLabel.general{
-    width: 25%;
-    text-align: right;
-    height: 9mm;
+
+.deLabel.general {
+  width      : 25%;
+  text-align : right;
+  height     : 9mm;
 }
-.deLabel.optionLabel{
-    width: 4.8cm;
-    text-align: right;
-    height: 9mm;
+
+.deLabel.optionLabel {
+  width      : 4.8cm;
+  text-align : right;
+  height     : 9mm;
 }
-.table-heading{
-    text-align: center;
-    height: 15mm;
-    width: 3cm;
+
+.table-heading {
+  text-align : center;
+  height     : 15mm;
+  width      : 3cm;
 }
-.header{
-    font-weight: 600;
-    font-size: 3.8mm;
-    margin-bottom: 5mm
+
+.header {
+  font-weight   : 600;
+  font-size     : 3.8mm;
+  margin-bottom : 5mm
 }
+
 .datasetName {
-    border:none;
-    font-size: 3.5mm;
-    font-weight: 700;
-    height: 3.5mm;
+  border      : none;
+  font-size   : 3.5mm;
+  font-weight : 700;
+  height      : 3.5mm;
 }
 
 table {
-    border-collapse: collapse;
+  border-collapse : collapse;
 }
 
 td {
-    /*padding-top: 3mm;*/
+  /*padding-top: 3mm;*/
 }
 
 .sectionName {
-  font-size: 3mm;
-  height: 5mm;
-  font-weight: 600;
+  font-size   : 3mm;
+  height      : 5mm;
+  font-weight : 600;
 }
+
 @page {
-    size: A4;
-    margin: 0;
+  size   : A4;
+  margin : 0;
 }
+
 .page-number {
-    text-align: right;
-    position: absolute;
-    bottom: 5px;
-    width: 95%;
+  text-align : right;
+  position   : absolute;
+  bottom     : 5px;
+  width      : 95%;
 }
 
 @media print {
-    html, body {
-        height: 297mm;
-        width: 210mm;
-    }
-    .page {
-        margin: 0;
-        border: initial;
-        border-radius: initial;
-        width: initial;
-        min-height: initial;
-        box-shadow: initial;
-        background: initial;
-        page-break-after: always;
-    }
-    .subpage{
-        border: none;
-        margin: 8mm;
-    }
+  html, body {
+    height : 297mm;
+    width  : 210mm;
+  }
+  .page {
+    margin           : 0;
+    border           : initial;
+    border-radius    : initial;
+    width            : initial;
+    min-height       : initial;
+    box-shadow       : initial;
+    background       : initial;
+    page-break-after : always;
+  }
+  .subpage {
+    border : none;
+    margin : 8mm;
+  }
 }

@@ -43,7 +43,7 @@ describe("Print Friendly Utils", function() {
 		});
 
 		it("should return a section with all the properties intact from the section passed", function() {
-			var testSection = { testKey1: 'testValue1', testKey2: 'testValue2', testDataElements: 'testDEs' };
+			var testSection = {testKey1: 'testValue1', testKey2: 'testValue2', testDataElements: 'testDEs'};
 			var actualSection = printFriendlyUtils.createNewSectionUsing(testSection, "testDataElements", "testDataElements");
 			expect(actualSection.testKey1).toEqual('testValue1');
 			expect(actualSection.testKey2).toEqual('testValue2');
@@ -66,7 +66,7 @@ describe("Print Friendly Utils", function() {
 				}
 			];
 			inject(function(PrintFriendlyUtils) {
-				testTypeDataElement = { valueType: 'testType' };
+				testTypeDataElement = {valueType: 'testType'};
 				stubbedPrintFriendlyUtils = PrintFriendlyUtils;
 			})
 		});
@@ -124,7 +124,7 @@ describe("Print Friendly Utils", function() {
 			config.DataSet.numberOfCOCColumns = 5;
 
 			testSections = [{
-				categoryCombo: { categoryOptionCombos: [] },
+				categoryCombo: {categoryOptionCombos: []},
 				isCatComb: true
 			}
 			];
@@ -193,7 +193,7 @@ describe("Print Friendly Utils", function() {
 
 	});
 
-	xdescribe("applyDisplayOptionsToDataElements", function(){
+	xdescribe("applyDisplayOptionsToDataElements", function() {
 		var testSections;
 		beforeEach(function() {
 			testSections = [{
