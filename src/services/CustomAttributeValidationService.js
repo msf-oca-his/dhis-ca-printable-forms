@@ -23,12 +23,13 @@ TallySheets.service('CustomAttributeValidationService', ['ValidationService', 'C
 	};
 
 	var handleError = function(err) {
+
 		return CustomAngularTranslateService.getTranslation(err.errorCode).then(function(translatedMessage) {
 			var messageType = {recoverable: false};
 			var completeMessage = err.errorSrc ? err.errorSrc + " : " + translatedMessage : translatedMessage;
-			if(err.type == Severity.ERROR || err.type == Severity.FATAL)
+			if(err.errorType == Severity.ERROR || err.errorType == Severity.FATAL)
 				return Promise.reject(new ServiceError(completeMessage, Severity.ERROR, messageType, err.errorCode));
-			return Promise.reject(new ServiceError(completeMessage, Severity.WARNING, messageType, err.errorCode));
+			return Promise.reject(new ServiceError(completeMessage, Severity.WARN, messageType, err.errorCode));
 		});
 	};
 
