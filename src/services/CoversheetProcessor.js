@@ -86,7 +86,7 @@ TallySheets.service('CoversheetProcessor', ['Config', 'Content', 'ContentTypes',
 					addSectionToPage(section, sectionHeight);
 				else {
 					var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section);
-					if(numberOfElementsThatCanFit == section.programStageDataElements.length)
+					if(numberOfElementsThatCanFit == section.programStageDataElements.length && !(printFriendlyUtils.isOptionSetSection(section, dataElementsKey)))
 						addSectionToPage(section, sectionHeight);
 					else if(numberOfElementsThatCanFit > 1)
 						breakAndAddSection(section, numberOfElementsThatCanFit);

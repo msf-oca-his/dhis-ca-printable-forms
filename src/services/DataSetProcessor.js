@@ -101,7 +101,7 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 					addSectionToPage(section, sectionHeight);
 				else {
 					var numberOfElementsThatCanFit = getNumberOfElementsThatCanFit(section);
-					if(numberOfElementsThatCanFit == section.dataElements.length) {
+					if(numberOfElementsThatCanFit == section.dataElements.length && !(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey))) {
 						addSectionToPage(section, sectionHeight);
 					}
 					else if(numberOfElementsThatCanFit > 1)
