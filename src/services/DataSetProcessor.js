@@ -84,7 +84,8 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 							numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (optionSetNumberOfColumns - numberOfOptionsThatCanFit % optionSetNumberOfColumns);
 						newSection.dataElements[0].options = section.dataElements[0].options.splice(numberOfOptionsThatCanFit);
 						addSectionToPage(section, page.heightLeft);
-						addSectionToNewPage(newSection);
+						if(newSection.dataElements[0].options.length > 0)
+							addSectionToNewPage(newSection);
 					}
 					else {
 						var newSection = _.cloneDeep(section);

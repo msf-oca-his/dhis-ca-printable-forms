@@ -69,7 +69,8 @@ TallySheets.service('CoversheetProcessor', ['Config', 'Content', 'ContentTypes',
 							numberOfOptionsThatCanFit = numberOfOptionsThatCanFit + (numberOfColumns - numberOfOptionsThatCanFit % numberOfColumns);
 						newSection.programStageDataElements[0].options = section.programStageDataElements[0].options.splice(numberOfOptionsThatCanFit);
 						addSectionToPage(section, page.heightLeft);
-						addSectionToNewPage(newSection);
+						if(newSection.programStageDataElements[0].options.length > 0)
+							addSectionToNewPage(newSection);
 					}
 					else {
 						var newSection = _.cloneDeep(section);
