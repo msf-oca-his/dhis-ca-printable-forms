@@ -30,5 +30,6 @@ module.exports = {
 	"comments": "Comments",
 	"page": "Page",
 	"part": "Part",
-	"of": "of"
+	"of": "of",
+	'close':'CLOSE'
 };

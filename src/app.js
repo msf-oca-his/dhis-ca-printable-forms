@@ -34,24 +34,26 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				$scope.$apply();
 			}, 5000);
 		};
-		var throwError = function(message, type) {
-			return CustomAngularTranslateService.getTranslation(message).then(function(translatedMessage) {
-				return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, type));
-			})
-		};
-		var handleError = function(serviceError) {
 
+		var handleError = function(serviceError) {
 			if(serviceError.severity == Severity.FATAL || serviceError.severity == Severity.ERROR) {
-				var modelAlertType = AlertTypesContract.getModalAlert(serviceError);
-				ModalAlertsService.showModalAlert(new ModalAlert(serviceError.message, modelAlertType));
+				var modalAlertType = AlertTypesContract.getModalAlert(serviceError);
+				var closeOption = modalAlertType.isDismissible ?'close':'go_to_home';
+				 CustomAngularTranslateService.getTranslation(closeOption).then(function(buttonText) {
+					ModalAlertsService.showModalAlert(new ModalAlert(serviceError.message, modalAlertType, buttonText));
+				});
 			}
-			else if(serviceError.severity == Severity.INFO || serviceError.severity == Severity.WARN){
+			else if(serviceError.severity == Severity.INFO || serviceError.severity == Severity.WARN) {
 				var inlineAlertType = AlertTypesContract.getInlineAlert(serviceError);
 				showInlineAlert(new InlineAlert(serviceError.message, inlineAlertType));
 			}
 			else {
-				console.log(serviceError); //must have console
-				return throwError('unexpected_error', ModalAlertTypes.dismissibleError);
+				console.log(serviceError);   //must have console
+				return CustomAngularTranslateService.getTranslation('unexpected_error').then(function(translatedMessage) {
+					return CustomAngularTranslateService.getTranslation('close').then(function(buttonText) {
+						return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.dismissibleError, buttonText));
+					});
+				});
 			}
 			return $q.reject();
 		};
