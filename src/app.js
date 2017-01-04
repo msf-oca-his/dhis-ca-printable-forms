@@ -42,10 +42,13 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		var handleError = function(serviceError) {
 
 			if(serviceError.severity == Severity.FATAL || serviceError.severity == Severity.ERROR) {
-				ModalAlertsService.showModalAlert(AlertTypesContract.getModalAlert(serviceError));
+				var modelAlertType = AlertTypesContract.getModalAlert(serviceError);
+				ModalAlertsService.showModalAlert(new ModalAlert(serviceError.message, modelAlertType));
 			}
-			else if(serviceError.severity == Severity.INFO || serviceError.severity == Severity.WARN)
-				showInlineAlert(AlertTypesContract.getInlineAlert(serviceError));
+			else if(serviceError.severity == Severity.INFO || serviceError.severity == Severity.WARN){
+				var inlineAlertType = AlertTypesContract.getInlineAlert(serviceError);
+				showInlineAlert(new InlineAlert(serviceError.message, inlineAlertType));
+			}
 			else {
 				console.log(serviceError); //must have console
 				return throwError('unexpected_error', ModalAlertTypes.dismissibleError);

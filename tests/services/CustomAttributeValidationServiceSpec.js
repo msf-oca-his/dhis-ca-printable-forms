@@ -6,6 +6,7 @@ describe("CustomAttributeValidationService", function() {
 	var mockedCustomAttribute;
 	var customAttributeValidationService;
 	var mockedModalAlertsService;
+	var mockedValidationService = {};
 
 	beforeEach(function() {
 		config = {
@@ -38,15 +39,10 @@ describe("CustomAttributeValidationService", function() {
 		module("TallySheets", function($provide, $translateProvider) {
 			$provide.value('Config', config);
 			$provide.value('CustomAttributeService', customAttributeService);
-			$provide.value('ModalAlertsService', mockedModalAlertsService);
+			$provide.value('ValidationService', mockedValidationService);
 			$translateProvider.preferredLanguage('en');
 			$translateProvider.translations('en', {
 				"no_attribute_exists": "The specified UID doesn't exist in the system. Please contact your system administrator.",
-				"no_association_with_optionset": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
-				"optionset_without_options": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
-				"optionset_with_incorrect_options": "The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.",
-				"no_association_with_entity": "No association between the attribute and the specified entity in config",
-				"fetching_custom_attributes_failed": "fetching custom attributes is failed"
 			});
 		});
 	});
@@ -69,6 +65,12 @@ describe("CustomAttributeValidationService", function() {
 		customAttributeService.getCustomAttribute = function() {
 			return Promise.resolve(mockedCustomAttribute)
 		};
+		mockedValidationService.validateAllAttributes = function(){
+			var error = new Error("no_attribute_exists");
+			error.errorSrc = "displayOptionUID";
+			error.errorCode = "no_attribute_exists";
+			return Promise.reject(error)
+		}
 	});
 
 	describe("validation of all custom attributes", function() {
@@ -78,7 +80,7 @@ describe("CustomAttributeValidationService", function() {
 			_$rootScope.$digest();
 		});
 
-		it("should show an alert when specified display custom attribute is not present in dhis", function(done) {
+		it("should throw an alert when specified display custom attribute is not present in dhis", function(done) {
 			mockedCustomAttribute = {};
 			customAttributeValidationService.validate().catch(function(alertObject) {
 				expect(alertObject.message).toEqual("displayOptionUID : The specified UID doesn't exist in the system. Please contact your system administrator.");
@@ -86,80 +88,5 @@ describe("CustomAttributeValidationService", function() {
 			});
 			getAngularPromiseOfDepth(8, _$rootScope);
 		});
-
-		it("should show an alert when the print flag custom attribute is not proper in config", function(done) {
-			customAttributeService.getCustomAttribute = function() {
-				return Promise.reject({})
-			};
-			config.customAttributes.printFlagUID.id = "";
-			customAttributeValidationService.validate().catch(function(alertObject) {
-				expect(alertObject.message).toEqual("fetching custom attributes is failed");
-				done();
-			});
-			getAngularPromiseOfDepth(9, _$rootScope);
-		});
-
-		it("should show an alert when there is no association between custom attribute and any entity", function(done) {
-			mockedCustomAttribute.optionSet = undefined;
-			mockedCustomAttribute.dataElementAttribute = false;
-			customAttributeValidationService.validate().catch(function(alertObject) {
-				expect(alertObject.message).toEqual("displayOptionUID : No association between the attribute and the specified entity in config");
-				done();
-			});
-			getAngularPromiseOfDepth(8, _$rootScope);
-		});
-
-		it("should show an alert when the custom attribute is not associated with optionSet", function(done) {
-			mockedCustomAttribute.optionSet = undefined;
-			customAttributeValidationService.validate().catch(function(alertObject) {
-				expect(alertObject.message).toEqual("displayOptionUID : The specified attribute is not associated with any optionSet. Please contact your system administrator.");
-				done();
-			});
-			getAngularPromiseOfDepth(8, _$rootScope);
-		});
-
-		it("should show an alert when the optionSet of attribute doesn't have options", function(done) {
-			mockedCustomAttribute.optionSet = {id: '12'};
-			customAttributeValidationService.validate().catch(function(alertObject) {
-				expect(alertObject.message).toEqual("displayOptionUID : The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.");
-				done();
-			});
-			getAngularPromiseOfDepth(8, _$rootScope);
-		});
-
-		it("should show an alert when the optionSet options of a custom attribute are incorrect", function(done) {
-			mockedCustomAttribute.optionSet = {id: '1', options: [{code: '8'}, {code: '9'}, {code: '10'}]};
-			customAttributeValidationService.validate().catch(function(alertObject) {
-				expect(alertObject.message).toEqual("displayOptionUID : The specified attribute of type optionSet's options are incorrect. Please contact your system administrator.");
-				done();
-			});
-			getAngularPromiseOfDepth(8, _$rootScope);
-		});
-
-		it("should be validated as true when custom attribute in dhis is same as in app config", function(done) {
-			delete config.customAttributes.printFlagUID;
-			mockedCustomAttribute.optionSet = {id: '1', options: [{code: '0'}, {code: '1'}, {code: '2'}]};
-			customAttributeValidationService.validate().then(function(result) {
-				expect(result).toEqual([true]);
-				done();
-			});
-			getAngularPromiseOfDepth(8, _$rootScope);
-		});
-
-		it("should not validate optionSet of custom attribute when it doesn't have options in config", function() {
-			delete config.customAttributes.displayOptionUID;
-			mockedCustomAttribute = new customAttribute({
-				name: "isPrintable",
-				id: "2",
-				displayName: "isPrintable",
-				dataSetAttribute: true,
-				programAttribute: true
-			});
-			customAttributeValidationService.validate().then(function(result) {
-				expect(result).toEqual([true]);
-				done();
-			});
-			getAngularPromiseOfDepth(8, _$rootScope);
-		})
 	});
 });

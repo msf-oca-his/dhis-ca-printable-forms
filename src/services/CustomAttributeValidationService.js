@@ -1,55 +1,4 @@
-TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlertTypes', 'ServiceError', 'DhisConstants', function(CustomAttributeService, config, CustomAngularTranslateService, ModalAlertTypes, ServiceError, DhisConstants) {
-
-	var areConfigOptionsNotEqualTo = function(attributeFromDhis, customAttributeNameFromConfig) {
-		var optionsFromDhis = _.map(attributeFromDhis.optionSet.options, 'code');
-		var configOptions = _.map(config.customAttributes[customAttributeNameFromConfig].options);
-		return !_.isEqual(configOptions.sort(), optionsFromDhis.sort())
-	};
-
-	var validateOptionSetOfAttribute = function(attributeFromDhis, attributeNameFromConfig) {
-		if(_.isEmpty(attributeFromDhis.optionSet))
-			throw prepareErrorObject("no_association_with_optionset", attributeNameFromConfig, ModalAlertTypes.indismissibleError);
-
-		if(_.isEmpty(attributeFromDhis.optionSet.options) || _.isEmpty(config.customAttributes[attributeNameFromConfig].options))
-			throw prepareErrorObject('optionset_without_options', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
-
-		if(areConfigOptionsNotEqualTo(attributeFromDhis, attributeNameFromConfig))
-			throw prepareErrorObject('optionset_with_incorrect_options', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
-
-		return true;
-	};
-
-	var validateAttributeAssignment = function(attributeFromDhis, attributeNameFromConfig) {
-		_.map(config.customAttributes[attributeNameFromConfig].associatedWith, function(associatedWith) {
-			if(attributeFromDhis[associatedWith + "Attribute"] == true)
-				return true;
-			throw prepareErrorObject("no_association_with_entity", attributeNameFromConfig, ModalAlertTypes.indismissibleError);
-		});
-	};
-
-	var validateCustomAttribute = function(attributeFromDhis, index) {
-		var attributeNameFromConfig = Object.keys(config.customAttributes)[index];
-
-		if(_.isEmpty(attributeFromDhis)) {
-			throw prepareErrorObject('no_attribute_exists', attributeNameFromConfig, ModalAlertTypes.indismissibleError);
-		}
-
-		validateAttributeAssignment(attributeFromDhis, attributeNameFromConfig);
-
-		if(config.customAttributes[attributeNameFromConfig].options) {
-			return validateOptionSetOfAttribute(attributeFromDhis, attributeNameFromConfig);
-		}
-		return true
-	};
-
-	var validateAllAttributes = function(allCustomAttributesFromDhis) {
-		try {
-			return _(allCustomAttributesFromDhis)
-				.map(validateCustomAttribute)
-				.value();
-		}
-		catch(err) {return Promise.reject(err)}
-	};
+TallySheets.service('CustomAttributeValidationService', ['ValidationService', 'CustomAttributeService', 'Config', 'CustomAngularTranslateService', 'ModalAlertTypes', 'ServiceError', 'DhisConstants', function(ValidationService, CustomAttributeService, config, CustomAngularTranslateService, ModalAlertTypes, ServiceError, DhisConstants) {
 
 	var getAllCustomAttributes = function() {
 		var customAttributeIds = _.map(config.customAttributes, 'id');
@@ -59,35 +8,34 @@ TallySheets.service('CustomAttributeValidationService', ['CustomAttributeService
 				return customAttribute
 			}).catch(function(err) {
 				console.log(err);
-				return handleError(prepareErrorObject('fetching_custom_attributes_failed', '', ModalAlertTypes.indismissibleError));
+				return handleError(prepareErrorObject('fetching_custom_attributes_failed', ''));
 			});
 		});
 
 	};
 
-	var prepareErrorObject = function(message, additionalInfo, type) {
+	var prepareErrorObject = function(message, additionalInfo) {
 		var err = new Error(message);
+		err.errorCode = message;
+		err.errorType = Severity.ERROR;
 		err.errorSrc = additionalInfo;
-		err.type = type;
 		return err;
 	};
 
 	var handleError = function(err) {
-		return CustomAngularTranslateService.getTranslation(err.message).then(function(translatedMessage) {
-			var messageType = {recoverable: true};
-			if(err.type == ModalAlertTypes.indismissibleError)
-				messageType.recoverable = false;
-			else if(err.type == ModalAlertTypes.dismissibleError)
-				messageType.recoverable = true;
+		return CustomAngularTranslateService.getTranslation(err.errorCode).then(function(translatedMessage) {
+			var messageType = {recoverable: false};
 			var completeMessage = err.errorSrc ? err.errorSrc + " : " + translatedMessage : translatedMessage;
-			return Promise.reject(new ServiceError(completeMessage, Severity.ERROR, messageType, err.message));
+			if(err.type == Severity.ERROR || err.type == Severity.FATAL)
+				return Promise.reject(new ServiceError(completeMessage, Severity.ERROR, messageType, err.errorCode));
+			return Promise.reject(new ServiceError(completeMessage, Severity.WARNING, messageType, err.errorCode));
 		});
 	};
 
 	this.validate = function() {
 		if(!config.customAttributes) return;
 		return Promise.all(getAllCustomAttributes())
-			.then(validateAllAttributes)
+			.then(ValidationService.validateAllAttributes)
 			.catch(function(err) {
 				return handleError(err);
 			})
