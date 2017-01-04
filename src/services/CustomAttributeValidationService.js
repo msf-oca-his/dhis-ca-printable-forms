@@ -8,7 +8,7 @@ TallySheets.service('CustomAttributeValidationService', ['ValidationService', 'C
 				return customAttribute
 			}).catch(function(err) {
 				console.log(err);
-				return handleError(prepareErrorObject('fetching_custom_attributes_failed', ''));
+				return Promise.reject(prepareErrorObject('fetching_custom_attributes_failed', ''));
 			});
 		});
 
@@ -23,7 +23,6 @@ TallySheets.service('CustomAttributeValidationService', ['ValidationService', 'C
 	};
 
 	var handleError = function(err) {
-
 		return CustomAngularTranslateService.getTranslation(err.errorCode).then(function(translatedMessage) {
 			var messageType = {recoverable: false};
 			var completeMessage = err.errorSrc ? err.errorSrc + " : " + translatedMessage : translatedMessage;

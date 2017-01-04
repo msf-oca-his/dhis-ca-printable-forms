@@ -7,11 +7,11 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 }]);
 
 TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
-	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes', 'AlertTypesContract',
-	'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes',
+	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
+	'AlertTypesContract','InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes',
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
-		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes, AlertTypesContract,
-		CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes) {
+		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
+		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes) {
 
 		$scope.appLoadingFailed = appLoadingFailed;
 		$scope.spinnerShown = false;
