@@ -219,6 +219,23 @@ describe("templateSelector Directive", function() {
 						done();
 					});
 				childScope.$digest();
+			});
+
+			it("should show an alert when there are no templates in the system", function(done) {
+				config.customAttributes.printFlagUID = {id: "1"};
+				childScope.validationResult = $q.when({});
+				datasets = [];
+				programs = [];
+				spyOn(mockedModalAlertsService, 'showModalAlert');
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(childScope);
+				childScope.$digest();
+				getPromiseOfDepth(3)
+					.then(function() {
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("no_templates", _ModalAlertTypes.indismissibleError));
+						done();
+					});
+				childScope.$digest();
 			})
 		});
 

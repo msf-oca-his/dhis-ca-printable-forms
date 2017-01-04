@@ -1,7 +1,7 @@
 TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', 'Config', 'ModalAlert',
-	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', 'DhisConstants',
+	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', 'DhisConstants', 'ServiceError',
 	function(DataSetService, ProgramService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
-		CustomAngularTranslateService, $q, DhisConstants) {
+		CustomAngularTranslateService, $q, DhisConstants, ServiceError) {
 		return {
 			restrict: 'E',
 			template: require('./templateSelectorView.html'),
@@ -59,12 +59,24 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 					program.displayName = $scope.programPrefix + program.displayName;
 					return program;
 				};
+
+				var prepareError = function(message, config) {
+					var err = new Error(message);
+					err.errorCode = message;
+					err.errorType = "error";
+					err.errorSrc = config;
+					return err
+				};
+
 				var getAllTemplates = function() {
 					return $q.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 						.then(function(arrayOfTemplates) {
 							var printFlagUID = config.customAttributes.printFlagUID;
 							var allDataSets = arrayOfTemplates[0];
 							var allPrograms = arrayOfTemplates[1];
+
+							if(_.isEmpty(allDataSets) && _.isEmpty(allPrograms))
+								return $q.reject(prepareError("no_templates", ""));
 
 							var dataSetTemplates = printFlagUID ? _.filter(allDataSets, isPrintableTemplate) : allDataSets;
 							var programTemplates = printFlagUID ? _.filter(allPrograms, isPrintableTemplate) : allPrograms;
@@ -82,6 +94,11 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 						.then(function(templates) {
 							$scope.templates = templates;
 							alertForEmptyTemplates();
+						})
+						.catch(function(err) {
+							CustomAngularTranslateService.getTranslation(err.errorCode).then(function(translatedMessage) {
+								ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
+							});
 						})
 				};
 
