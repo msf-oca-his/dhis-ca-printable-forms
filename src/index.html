@@ -53,12 +53,10 @@
   <div ng-if="appLoadingFailed" class="noprint">
     <h2 class="error">{{ 'app_loading_failed' | translate }}</h2>
   </div>
+  <modal-alert on-close="closeModalAlert(context)"></modal-alert>
 </span>
 
-  <modal-alert on-close="closeModalAlert(context)"></modal-alert>
-  <script src="dependencies.js" type="text/javascript"></script>
-
-
+<script src="dependencies.js" type="text/javascript"></script>
 <script src="app.js" type="text/javascript"></script>
 <script src="translationsSetup.js" type="text/javascript"></script>
 <!-- Load directives and modules -->
