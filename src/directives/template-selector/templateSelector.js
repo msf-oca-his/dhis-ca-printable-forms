@@ -96,8 +96,10 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 							alertForEmptyTemplates();
 						})
 						.catch(function(err) {
-							CustomAngularTranslateService.getTranslation(err.errorCode).then(function(translatedMessage) {
-								ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError));
+							return CustomAngularTranslateService.getTranslation(err.errorCode).then(function(translatedMessage) {
+								return CustomAngularTranslateService.getTranslation('go_to_home').then(function(buttonText) {
+									return ModalAlertsService.showModalAlert(new ModalAlert(translatedMessage, ModalAlertTypes.indismissibleError, buttonText));
+								});
 							});
 						})
 				};

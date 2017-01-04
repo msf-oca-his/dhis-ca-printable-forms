@@ -230,9 +230,10 @@ describe("templateSelector Directive", function() {
 				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
 				elements = compile(elements)(childScope);
 				childScope.$digest();
+				var buttonText = "go_to_home";
 				getPromiseOfDepth(3)
 					.then(function() {
-						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("no_templates", _ModalAlertTypes.indismissibleError));
+						expect(mockedModalAlertsService.showModalAlert).toHaveBeenCalledWith(new _ModalAlert("no_templates", _ModalAlertTypes.indismissibleError,buttonText));
 						done();
 					});
 				childScope.$digest();
