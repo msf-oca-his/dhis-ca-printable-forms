@@ -27,7 +27,8 @@ describe("Register Content", function() {
 				dataEntryRowHeight: 20,
 				pageHeaderHeight: 10,
 				textElementWidth: 50,
-				otherElementWidth: 30
+				otherElementWidth: 30,
+				defaultColumnWidth:30
 			},
 			Metrics: {
 				mm: "mm"
@@ -52,10 +53,6 @@ describe("Register Content", function() {
 		}];
 		$scope.modelContents = dataElements;
 		createElement()
-	});
-
-	xit("should apply table Header height to data element names", function() {
-		// we should write this after doing JSS
 	});
 
 	it("should display the data element names", function() {
@@ -98,15 +95,19 @@ describe("Register Content", function() {
 
 	describe("get class", function() {
 		it("should give de field text type if dataelement type is TEXT", function() {
-			var dataElement = {valueType: 'TEXT'};
+			var defaultRenderType =	{
+				code: "10",
+					width: 60
+			};
+			var registerColumn = {name:'Comments',renderType:defaultRenderType};
 			$scope.$digest();
-			expect(elementScope.getClass(dataElement)).toEqual('deField text');
+			expect(elementScope.getWidthOfRegisterColumn(registerColumn)).toEqual('60mm');
 		});
 
 		it("should give de general text type if dataelement type is not TEXT", function() {
-			var dataElement = {valueType: 'anything'};
+			var registerColumn = {name:'Comments'};
 			$scope.$digest();
-			expect(elementScope.getClass(dataElement)).toEqual('deField default');
+			expect(elementScope.getWidthOfRegisterColumn(registerColumn)).toEqual('30mm');
 		});
 	});
 

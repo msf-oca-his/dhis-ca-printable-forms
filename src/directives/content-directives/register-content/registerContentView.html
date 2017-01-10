@@ -3,13 +3,13 @@
     <td class="sno-header">
       {{ 's_no' | translate }}
     </td>
-    <td class="deLabel" ng-repeat="dataElement in content">
-      {{ dataElement.displayName }}
+    <td class="deLabel" style="width:{{ getWidthOfRegisterColumn(registerColumn) }}" ng-repeat="registerColumn in content">
+      {{ registerColumn.name }}
     </td>
   </tr>
   <tr ng-repeat="row in rows track by $index">
     <td class="sno-value" style="height:{{ rowHeight }}">{{ $index + 1 }}</td>
-    <td ng-repeat="dataElement in content" ng-class="getClass(dataElement)">
+    <td ng-repeat="registerColumn in content" style="width:{{ getWidthOfRegisterColumn(registerColumn) }}">
     </td>
   </tr>
 </table>

@@ -1,9 +1,9 @@
 TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(config, DhisConstants) {
-
+	var PrintFriendlyUtils = {};
 	var isListTypeDataElement = function(dataElement) {
 		if(dataElement.valueType != DhisConstants.ValueTypes.OPTIONSET) return false;
 		if(!config.customAttributes.displayOptionUID) return true;
-		var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+		var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "displayOptionUID");
 		if(displayOptionAttribute && displayOptionAttribute.value)
 			return displayOptionAttribute.value == config.customAttributes.displayOptionUID.options.list;
 		return true;
@@ -17,26 +17,26 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 		return indexOfDEWithOptions;
 	};
 
-	var getCustomAttributeForRenderingOptionSets = function(customAttributes) {
+	PrintFriendlyUtils.getCustomAttribute = function(customAttributes, customAttributeToFilter) {
 		return _.reduce(_.filter(customAttributes, function(customAttribute) {
-			if(customAttribute.attribute.id == config.customAttributes.displayOptionUID.id) {
+			if(customAttribute.attribute.id == config.customAttributes[customAttributeToFilter].id) {
 				return customAttribute;
 			}
 		}));
 	};
 
-	this.createNewSectionUsing = function(section, dataElements, dataElementsKey) {
+	PrintFriendlyUtils.createNewSectionUsing = function(section, dataElements, dataElementsKey) {
 		var newSection = _.cloneDeep(section);
 		newSection[dataElementsKey] = dataElements;
 		return newSection;
 	};
 
-	this.isDuplicateSection = function(sectionIndex, sections) {
+	PrintFriendlyUtils.isDuplicateSection = function(sectionIndex, sections) {
 		if(sectionIndex == 0) return false;
 		return sections[sectionIndex].id == sections[sectionIndex - 1].id;
 	};
 
-	this.divideOptionSetsIntoNewSections = function(sections, index, dataElementsKey) {
+	PrintFriendlyUtils.divideOptionSetsIntoNewSections = function(sections, index, dataElementsKey) {
 		var section = sections[index];
 		var currentIndex = 0;
 		var pushIndex = 0;
@@ -63,11 +63,11 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 		sections.splice(index, 1);
 	};
 
-	this.isOptionSetSection = function(section, dataElementsKey) {
+	PrintFriendlyUtils.isOptionSetSection = function(section, dataElementsKey) {
 		return section[dataElementsKey][0] && isListTypeDataElement(section[dataElementsKey][0]);
 	};
 
-	this.divideCatCombsIfNecessary = function(sections, index) {
+	PrintFriendlyUtils.divideCatCombsIfNecessary = function(sections, index) {
 		var section = sections[index];
 		var numberOfFittingColumns = config.DataSet.numberOfCOCColumns;
 
@@ -80,17 +80,18 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 		}
 	};
 
-	this.getDataElementsToDisplay = function(dataElements) {
+	PrintFriendlyUtils.getDataElementsToDisplay = function(dataElements) {
 		if(!config.customAttributes.displayOptionUID) return dataElements;
-		return _.filter(dataElements, function(dataElement) {
+		var getOptionSetDataElements = function(dataElement) {
 			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
-				var displayOptionAttribute = getCustomAttributeForRenderingOptionSets(dataElement.attributeValues);
+				var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues,"displayOptionUID");
 				if(displayOptionAttribute) {
 					return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;
 				}
 			}
 			return true;
-		});
+		};
+		return _.filter(dataElements, getOptionSetDataElements);
 	};
-	return this;
+	return PrintFriendlyUtils;
 }]);

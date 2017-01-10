@@ -1,4 +1,4 @@
-TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'DataElement', 'ContentTypes', 'Config', 'PrintFriendlyUtils', 'DhisConstants', function(RegisterPage, Content, DataElement, ContentTypes, config, PrintFriendlyUtils, DhisConstants) {
+TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'RegisterColumn', 'ContentTypes', 'Config', 'PrintFriendlyUtils', function(RegisterPage, Content, RegisterColumn, ContentTypes, config, PrintFriendlyUtils) {
 	var page, currentPageIndex, pages;
 
 	this.process = function(program) {
@@ -9,29 +9,43 @@ TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'DataElemen
 			return page;
 		};
 
-		var getWidthOfDataElement = function(dataElement) {
-			return (dataElement.valueType == DhisConstants.ValueTypes.TEXT ) ? config.Register.textElementWidth : config.Register.otherElementWidth;
+		var getColumnWidthOption = function(value) {
+			return _.filter(config.customAttributes.columnWidthOptionUID.columnWidthOptions, function(option) {
+				if(option.code == value) {
+					return {code: option.code, width: option.width}
+				}
+			})
+		};
+		var getDataElementRenderType = function(dataElement) {
+			var columnWidthAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "columnWidthOptionUID");
+			if(columnWidthAttribute) {
+				return getColumnWidthOption(columnWidthAttribute.value)[0];
+			}
+			return {code:'', width: config.Register.defaultColumnWidth}
 		};
 
 		var distributeDataElementsToPages = function(allDataElements) {
 			_.map(allDataElements, function(dataElement, index) {
-				page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);
+				var dataElementRenderType = getDataElementRenderType(dataElement);
+				var registerColumn = new RegisterColumn(dataElement.displayName, dataElementRenderType);
+				page.widthLeft = page.widthLeft - dataElementRenderType.width;
 
 				if((allDataElements.length == (index + 1)) && page.widthLeft > 0) {
-					dataElementsPerPage.push(dataElement);
+					registerColumnsPerPage.push(registerColumn);
 				}
-				else if(((allDataElements.length - 1) == (index + 1)) && page.widthLeft > getWidthOfDataElement(allDataElements[index + 1])) {
-					dataElementsPerPage.push(dataElement);
+				else if(((allDataElements.length - 1) == (index + 1)) && page.widthLeft > getDataElementRenderType(allDataElements[index + 1]).width) {
+					registerColumnsPerPage.push(registerColumn);
 				}
 				else if(((index + 1) < allDataElements.length - 1 ) && page.widthLeft > 0) {
-					dataElementsPerPage.push(dataElement);
+					registerColumnsPerPage.push(registerColumn);
 				}
 				else {
-					page.contents.push(new Content(ContentTypes.registerContent, dataElementsPerPage));
-					dataElementsPerPage = [];
+					page.contents.push(new Content(ContentTypes.registerContent, registerColumnsPerPage));
+					registerColumnsPerPage = [];
 					page = getNewPage();
-					page.widthLeft = page.widthLeft - getWidthOfDataElement(dataElement);
-					dataElementsPerPage.push(dataElement);
+					var registerColumnRenderType = getDataElementRenderType(dataElement);
+					page.widthLeft = page.widthLeft - registerColumnRenderType.width;
+					registerColumnsPerPage.push(new RegisterColumn(dataElement.displayName, registerColumnRenderType));
 				}
 			});
 		};
@@ -41,11 +55,12 @@ TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'DataElemen
 		page = getNewPage();
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, 'programStageDataElements'));
 		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay(allDataElements);
-		allDataElements.push(new DataElement({displayName: 'Comments', type: DhisConstants.ValueTypes.TEXT}));
-		var dataElementsPerPage = [];
+		var defaultRenderType = { code: '',width: config.Register.defaultColumnWidth };
+		var registerColumnsPerPage = [];
 		distributeDataElementsToPages(allDataElements);
-		if(!_.isEmpty(dataElementsPerPage))
-			page.contents.push(new Content(ContentTypes.registerContent, dataElementsPerPage));
+		registerColumnsPerPage.push(new RegisterColumn('Comments', defaultRenderType));
+		if(!_.isEmpty(registerColumnsPerPage))
+			page.contents.push(new Content(ContentTypes.registerContent, registerColumnsPerPage));
 		return pages;
 	};
 }]);
