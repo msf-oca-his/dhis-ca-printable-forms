@@ -24,8 +24,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		tableHeaderHeight: 10,
 		dataEntryRowHeight: 9,
 		pageHeaderHeight: 25,
-		textElementWidth: 50,
-		otherElementWidth: 30
+		defaultColumnWidth:30
 	};
 	config.Coversheet = {
 		defaultHeightOfDataElementLabel: 9,

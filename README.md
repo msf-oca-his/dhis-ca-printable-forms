@@ -47,8 +47,13 @@ running `gulp pack` will pack the app as a .zip file, and place it in the target
 
 1. `printFlagUID`: A custom attribute of type “Yes only” needs to be created in DHIS2 and associated with dataSets and programs. Any dataSets or programs that have this attribute set to Yes, will be made available for printing through this app. Place the custom attribute UID in the id field, and its associations in associatedWith, as shown in the example below.  
 
-2. `displayOptionUID`: A custom attribute of type “option set” needs to be created in DHIS2 and associated with data elements. Note that setting this custom attribute will only affect rendering of data elements of type option set (rendering of data elements of other types will not be affected). Currently, this attribute allows three rendering options: NONE, LIST and TEXT. If NONE is selected, the data element will not be shown on the print form. If TEXT is selected, it will be rendered as a text field. If LIST is selected, it will be rendered as a list. If nothing is selected, the data element will be rendered as a list (default). To use this custom attribute, place its UID in the id field (Fth2lxGOF4M in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to their respective labels in the option list (0, 1, 2 in the example). The option’s code needs to correspond to the codes assigned to the respective options in DHIS2.
-
+2. `displayOptionUID`: A custom attribute of type “option set” needs to be created in DHIS2 and associated with data elements. Note that setting this custom attribute will only affect rendering of data elements of type option set (rendering of data 
+elements of other types will not be affected). Currently, this attribute allows three rendering options: NONE, LIST and TEXT. If NONE is selected, the data element will not be shown on the print form. If TEXT is selected, it will be rendered as a text field. If LIST is selected, it will be rendered as a list. If nothing is selected, the data element will be rendered as a list (default). To use this custom attribute, place its UID in the id field (V6Mc90ZVPUX in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to their respective labels in the option list (0, 1, 2 in the example). The option’s code needs to correspond to the codes assigned to the respective options in DHIS2.
+3. `columnWidthOptionUID`: A custom attribute of type “option set” needs to be created in DHIS2 and associated with data elements. Note that setting this custom attribute will only affect rendering of data elements of type option set in `program register`
+(rendering of 
+data elements
+                           of other types will not be affected). Currently, this attribute allows four rendering options: STANDARD, WIDE NARROW and EXTRA_WIDE. If NONE is selected, the data element width in register will be shown `defaultColumnWidth`. If any other option is selected, it will be shown its width. If 
+                           To use this custom attribute, place its UID in the id field (Fth2lxGOF4M in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to their respective labels in the option list (10, 11, 12, 13 in the example). The option’s code needs to correspond to the codes assigned to the respective options in DHIS2.
 #####Example:
 ```javascript
 printFlagUID: {
@@ -64,6 +69,28 @@ displayOptionUID: {
     list: '2'
   }
 }
+columnWidthOptionUID: {
+    id: "V6Mc90ZVPUX",
+    associatedWith: ['dataElement'],
+    columnWidthOptions: {
+      standard:{
+        code: "10",
+        width: defaultColumnWidth
+      },
+      wide:{
+        code: "11",
+        width: 60
+      },
+      narrow: {
+        code: "12",
+        width: 50
+      },
+      extra_wide: {
+        code: "13",
+        width: 70
+      }
+    }
+  }
 ```
 
 
@@ -90,8 +117,7 @@ The configuration options are explained below.
   1. `tableHeaderHeight`: height (length) of table header.
   2. `dataEntryRowHeight`: table row height (length).
   3. `pageHeaderHeight`: height (length) of page header.
-  4. `textElementWidth`: width of columns containing data elements of type text.
-  5. `otherElementWidth`: width of columns containing data elements of all other types (e.g. option sets, number).
+  4. `defaultColumnWidth`: default width of columns containing data elements of type text.
 3. `Coversheet`: config related to printing patient file cover sheets
   1. `defaultHeightOfDataElementLabel`: displayed height of a data element field if default rendering is used. This rendering is in two columns, and allows the user to fill in each data element in free text.
   2. `gapBetweenSections`: white space left between two adjacent sections on a page.
