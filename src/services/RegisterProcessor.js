@@ -17,9 +17,11 @@ TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'RegisterCo
 			})
 		};
 		var getDataElementRenderType = function(dataElement) {
-			var columnWidthAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "columnWidthOptionUID");
-			if(columnWidthAttribute) {
-				return getColumnWidthOption(columnWidthAttribute.value)[0];
+			if(config.customAttributes && config.customAttributes.columnWidthOptionUID){
+				var columnWidthAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "columnWidthOptionUID");
+				if(columnWidthAttribute) {
+					return getColumnWidthOption(columnWidthAttribute.value)[0];
+				}
 			}
 			return {code:'', width: config.Register.defaultColumnWidth}
 		};
