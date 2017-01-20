@@ -73,7 +73,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		optionLabelDelimiter: "]",
 		categoryOptionComboDelimiter: "<br>"
 	};
-	config.customAttributes = {
+	// config.customAttributes = {
 		// printFlagUID: {
 		// 	id: "F6S3pRyjnSf",
 		// 	associatedWith: ['dataSet', 'program']
@@ -86,7 +86,29 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		// 		text: '1',
 		// 		list: '2'
 		// 	}
+		// },
+		// columnWidthOptionUID: {
+		// 	id: "xc1FowUHfmV",
+		// 	associatedWith: ['dataElement'],
+		// 	columnWidthOptions: {
+		// 		standard:{
+		// 			code: "10",
+		// 			width: config.Register.defaultColumnWidth
+		// 		},
+		// 		wide:{
+		// 			code: "11",
+		// 			width: 90
+		// 		},
+		// 		narrow: {
+		// 			code: "12",
+		// 			width: 30
+		// 		},
+		// 		extra_wide: {
+		// 			code: "13",
+		// 			width: 100
+		// 		}
+		// 	}
 		// }
-	};
+	// };
 	return CalculatedConfig.getConfig(config);
 }]);
