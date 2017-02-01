@@ -71,15 +71,14 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 				var getAllTemplates = function() {
 					return $q.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
 						.then(function(arrayOfTemplates) {
-							var printFlagUID = config.customAttributes.printFlagUID;
 							var allDataSets = arrayOfTemplates[0];
 							var allPrograms = arrayOfTemplates[1];
 
 							if(_.isEmpty(allDataSets) && _.isEmpty(allPrograms))
 								return $q.reject(prepareError("no_templates", ""));
 
-							var dataSetTemplates = printFlagUID ? _.filter(allDataSets, isPrintableTemplate) : allDataSets;
-							var programTemplates = printFlagUID ? _.filter(allPrograms, isPrintableTemplate) : allPrograms;
+							var dataSetTemplates = config.customAttributes.printFlagUID ? _.filter(allDataSets, isPrintableTemplate) : allDataSets;
+							var programTemplates = config.customAttributes.printFlagUID ? _.filter(allPrograms, isPrintableTemplate) : allPrograms;
 
 							$scope.dataSetTemplates = _.map(dataSetTemplates, addDataSetPrefix);
 							$scope.programTemplates = _.map(programTemplates, addProgramPrefix);
