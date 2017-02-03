@@ -73,7 +73,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		optionLabelDelimiter: "]",
 		categoryOptionComboDelimiter: "<br>"
 	};
-	// config.customAttributes = {
+	config.customAttributes = {
 		// printFlagUID: {
 		// 	id: "F6S3pRyjnSf",
 		// 	associatedWith: ['dataSet', 'program']
@@ -109,6 +109,6 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		// 		}
 		// 	}
 		// }
-	// };
+	};
 	return CalculatedConfig.getConfig(config);
 }]);
