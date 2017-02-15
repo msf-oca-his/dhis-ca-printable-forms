@@ -51,10 +51,8 @@ running `gulp pack` will pack the app as a .zip file, and place it in the target
 2. `displayOptionUID`: A custom attribute of type “option set” needs to be created in DHIS2 and associated with data elements. Note that setting this custom attribute will only affect rendering of data elements of type option set (rendering of data 
 elements of other types will not be affected). Currently, this attribute allows three rendering options: NONE, LIST and TEXT. If NONE is selected, the data element will not be shown on the print form. If TEXT is selected, it will be rendered as a text field. If LIST is selected, it will be rendered as a list. If nothing is selected, the data element will be rendered as a list (default). To use this custom attribute, place its UID in the id field (V6Mc90ZVPUX in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to their respective labels in the option list (0, 1, 2 in the example). The option’s code needs to correspond to the codes assigned to the respective options in DHIS2.
 3. `columnWidthOptionUID`: A custom attribute of type “option set” needs to be created in DHIS2 and associated with data elements. Note that setting this custom attribute will only affect rendering of data elements of type option set in `program register`
-(rendering of 
-data elements
-                           of other types will not be affected). Currently, this attribute allows four rendering options: STANDARD, WIDE NARROW and EXTRA_WIDE. If NONE is selected, the data element width in register will be shown `defaultColumnWidth`. If any other option is selected, it will be shown its width. If 
-                           To use this custom attribute, place its UID in the id field (Fth2lxGOF4M in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to their respective labels in the option list (10, 11, 12, 13 in the example). The option’s code needs to correspond to the codes assigned to the respective options in DHIS2.
+(rendering of data elements of other types will not be affected). Currently, this attribute allows four rendering options: STANDARD, WIDE NARROW and EXTRA WIDE. If NONE is selected, the data element width in register will be shown `defaultColumnWidth`. If any other option is selected, it will be shown its width.
+To use this custom attribute, place its UID in the id field (Fth2lxGOF4M in the example), its associations in associatedWith (dataElement in the example), and assign each option's code to their respective labels in the option list (10, 11, 12, 13 in the example). The option’s code needs to correspond to the codes assigned to the respective options in DHIS2.
                            
 #####Example:
 ```javascript
@@ -77,7 +75,7 @@ columnWidthOptionUID: {
     columnWidthOptions: {
       standard:{
         code: "10",
-        width: defaultColumnWidth
+        width: defaultColumnWidt 
       },
       wide:{
         code: "11",

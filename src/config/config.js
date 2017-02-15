@@ -24,7 +24,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		tableHeaderHeight: 10,
 		dataEntryRowHeight: 9,
 		pageHeaderHeight: 25,
-		defaultColumnWidth:30
+		defaultColumnWidth: 30
 	};
 	config.Coversheet = {
 		defaultHeightOfDataElementLabel: 9,
@@ -87,28 +87,28 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		// 		list: '2'
 		// 	}
 		// },
-		// columnWidthOptionUID: {
-		// 	id: "xc1FowUHfmV",
-		// 	associatedWith: ['dataElement'],
-		// 	columnWidthOptions: {
-		// 		standard:{
-		// 			code: "10",
-		// 			width: config.Register.defaultColumnWidth
-		// 		},
-		// 		wide:{
-		// 			code: "11",
-		// 			width: 90
-		// 		},
-		// 		narrow: {
-		// 			code: "12",
-		// 			width: 30
-		// 		},
-		// 		extra_wide: {
-		// 			code: "13",
-		// 			width: 100
-		// 		}
-		// 	}
-		// }
+		columnWidthOptionUID: {
+			id: "xc1FowUHfmV",
+			associatedWith: ['dataElement'],
+			columnWidthOptions: {
+				standard:{
+					code: "10",
+					width: config.Register.defaultColumnWidth
+				},
+				wide:{
+					code: "11",
+					width: 50
+				},
+				narrow: {
+					code: "12",
+					width: 15
+				},
+				extra_wide: {
+					code: "13",
+					width: 80
+				}
+			}
+		}
 	};
 	return CalculatedConfig.getConfig(config);
 }]);
