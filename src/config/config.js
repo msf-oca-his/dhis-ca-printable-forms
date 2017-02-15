@@ -87,28 +87,28 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		// 		list: '2'
 		// 	}
 		// },
-		columnWidthOptionUID: {
-			id: "xc1FowUHfmV",
-			associatedWith: ['dataElement'],
-			columnWidthOptions: {
-				standard:{
-					code: "10",
-					width: config.Register.defaultColumnWidth
-				},
-				wide:{
-					code: "11",
-					width: 50
-				},
-				narrow: {
-					code: "12",
-					width: 15
-				},
-				extra_wide: {
-					code: "13",
-					width: 80
-				}
-			}
-		}
+		// columnWidthOptionUID: {
+		// 	id: "xc1FowUHfmV",
+		// 	associatedWith: ['dataElement'],
+		// 	columnWidthOptions: {
+		// 		standard:{
+		// 			code: "10",
+		// 			width: config.Register.defaultColumnWidth
+		// 		},
+		// 		wide:{
+		// 			code: "11",
+		// 			width: 50
+		// 		},
+		// 		narrow: {
+		// 			code: "12",
+		// 			width: 15
+		// 		},
+		// 		extra_wide: {
+		// 			code: "13",
+		// 			width: 80
+		// 		}
+		// 	}
+		// }
 	};
 	return CalculatedConfig.getConfig(config);
 }]);
