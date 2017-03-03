@@ -13,6 +13,7 @@ module.exports = {
 	"custom_attribute_has_no_id_field": "The specified custom attribute has no id field",
 	"no_templates":"No templates are available in the system",
 	"app_loading_failed": "Could not load the app, Please refresh the page.",
+	"unexpected_error": "An unexpected error has occurred, please try again.",
 	"spinner_loading": "Loading...",
 	"dataset_prefix": "tally_",
 	"program_prefix": "perPt_",
