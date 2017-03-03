@@ -44,7 +44,8 @@ describe("Coversheet Template", function() {
 			name: "section"
 		};
 
-		$scope.programName = "programName"
+		$scope.programName = "programName";
+		$scope.header = "health_structure";
 		$scope.modelContents = section;
 		createElement();
 	});
@@ -53,6 +54,12 @@ describe("Coversheet Template", function() {
 		$scope.modelContents = [{type: {type: 'COMMENTS', renderer: 'comments'}}];
 		$scope.$digest();
 		expect(element.innerHTML).toContain($scope.programName)
+	});
+
+	it("should display the header", function() {
+		$scope.modelContents = [{type: {type: 'COMMENTS', renderer: 'comments'}}];
+		$scope.$digest();
+		expect(element.innerHTML).toContain($scope.header)
 	});
 
 	it("should display comments section if content type is comments", function() {

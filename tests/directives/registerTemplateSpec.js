@@ -17,12 +17,14 @@ describe("Register Template", function() {
 			$provide.value('Config', config);
 		});
 
+
 		inject(function($compile, $rootScope) {
 			$scope = $rootScope.$new();
 			compile = $compile;
 		});
 
 		$scope.programName = "programName";
+		$scope.header = "health_structure";
 		$scope.modelContents = dataElements;
 		createElement()
 	});
@@ -30,5 +32,10 @@ describe("Register Template", function() {
 	it("should display the name of program", function() {
 		$scope.$digest();
 		expect(element.innerHTML).toContain($scope.programName)
+	});
+
+	it("should display the header", function() {
+		$scope.$digest();
+		expect(element.innerHTML).toContain($scope.header)
 	});
 });
