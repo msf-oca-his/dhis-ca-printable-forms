@@ -10,7 +10,6 @@ module.exports = {
 	"no_association_with_optionset": "The specified attribute is not associated with any optionSet. Please contact your system administrator.",
 	"optionset_without_options": "The specified attribute of type optionSet doesn't have any options. Please contact your system administrator.",
 	"optionset_with_incorrect_options": "The specified attribute's options are incorrect. Please contact your system administrator.",
-	"custom_attribute_has_no_id_field": "The specified custom attribute has no id field",
 	"no_templates":"No templates are available in the system",
 	"app_loading_failed": "Could not load the app, Please refresh the page.",
 	"unexpected_error": "An unexpected error has occurred, please try again.",

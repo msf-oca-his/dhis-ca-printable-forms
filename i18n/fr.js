@@ -10,7 +10,6 @@ module.exports = {
 	"no_association_with_optionset": "L'attribut spécifié n'est associé à aucun paramètre optionSet. Veuillez contacter votre administrateur système.",
 	"optionset_without_options": "L'attribut spécifié du type optionSet n'a aucune option. Veuillez contacter votre administrateur système.",
 	"optionset_with_incorrect_options": "Les options de l'attribut spécifié sont incorrectes. Veuillez contacter votre administrateur système.",
-	"custom_attribute_has_no_id_field": "L'attribut personnalisé spécifié n'a pas de champ id",
 	"app_loading_failed": "Impossible de charger l'application. Veuillez actualiser la page.",
 	"spinner_loading": "Chargement...",
 	"dataset_prefix": "tally_",
