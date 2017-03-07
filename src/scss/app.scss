@@ -32,6 +32,31 @@ input.clean {
   transition            : none;
 }
 
+.mediumHeaderLabel {
+  width : 30mm;
+  padding-right: 2mm;
+}
+
+.smallHeaderLabel {
+  width : 15mm;
+  padding-right: 2mm;
+}
+
+.largeHeaderField{
+  width : 90mm;
+  border-bottom : 1px solid black;
+}
+
+.mediumHeaderField {
+  width : 60mm;
+  border-bottom : 1px solid black;
+}
+
+.smallHeaderField {
+  width : 30mm;
+  border-bottom : 1px solid black;
+}
+
 .pffcheckbox {
   margin-right : 2mm !important;
 }
