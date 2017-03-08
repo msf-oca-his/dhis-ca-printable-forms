@@ -105,6 +105,7 @@ TallySheets.service('CoversheetProcessor', ['Config', 'Content', 'ContentTypes',
 					lastPage.contents.push(new Content(ContentTypes.comments));
 				else {
 					var newPage = new CoverSheetPage();
+					newPage.programName = program.displayName;
 					newPage.contents.push(new Content(ContentTypes.comments));
 					pages.push(newPage);
 				}
