@@ -87,6 +87,19 @@ describe("Coversheet Processor", function() {
 			expect(expectedPages).toEqual(actualPages);
 		});
 
+		it("program name should be shown in the page when comments are the part of page and no other data elements in the page", function() {
+			config.Coversheet.commentsHeight = 250;
+			var testProgram = {
+				id: "123",
+				name: "test program",
+				displayName: "test program",
+				programStages: [{programStageSections: []}],
+				type: "program"
+			};
+			var actualPages = clone(coversheetProcessor.process(testProgram));
+			expect('test program').toEqual(actualPages[actualPages.length - 1].programName);
+		});
+
 		describe("Section with option sets", function() {
 			var testProgram = {
 				id: "123",
