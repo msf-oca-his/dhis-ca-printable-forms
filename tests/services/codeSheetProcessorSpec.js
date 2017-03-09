@@ -80,7 +80,7 @@ describe("CodeSheet Processor", function() {
 				programStageSections: [{
 					programStageDataElements: [{
 						id: "1234",
-						displayName: "dataElement",
+						displayFormName: "dataElement",
 						options: [{id: 1, code: 1, displayName: "option1"}, {id: 2, code: 2, displayName: "option2"}],
 						valueType: "OPTIONSET",
 						attributeValues: [
@@ -105,12 +105,12 @@ describe("CodeSheet Processor", function() {
 
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
 				id: "111",
-				displayName: "de1",
+				displayFormName: "de1",
 				valueType: "INTEGER"
 			};
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
 				id: "112",
-				displayName: "de2",
+				displayFormName: "de2",
 				valueType: "TEXT"
 			};
 

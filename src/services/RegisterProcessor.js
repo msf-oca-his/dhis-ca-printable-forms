@@ -29,7 +29,7 @@ TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'RegisterCo
 		var distributeDataElementsToPages = function(allDataElements) {
 			_.map(allDataElements, function(dataElement, index) {
 				var dataElementRenderType = getDataElementRenderType(dataElement);
-				var registerColumn = new RegisterColumn(dataElement.displayName, dataElementRenderType);
+				var registerColumn = new RegisterColumn(dataElement.displayFormName, dataElementRenderType);
 				page.widthLeft = page.widthLeft - dataElementRenderType.width;
 
 				if((allDataElements.length == (index + 1)) && page.widthLeft > 0) {
@@ -47,7 +47,7 @@ TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'RegisterCo
 					page = getNewPage();
 					var registerColumnRenderType = getDataElementRenderType(dataElement);
 					page.widthLeft = page.widthLeft - registerColumnRenderType.width;
-					registerColumnsPerPage.push(new RegisterColumn(dataElement.displayName, registerColumnRenderType));
+					registerColumnsPerPage.push(new RegisterColumn(dataElement.displayFormName, registerColumnRenderType));
 				}
 			});
 		};

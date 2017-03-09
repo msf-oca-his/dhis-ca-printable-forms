@@ -20,7 +20,7 @@ TallySheets.factory('OptionSetContent', ['Config', 'CommonUtils', function(confi
 	return function OptionSetContent(section, dataElementKey) {
 		if(!section) return;
 		this.title = section.displayName;
-		this.dataElementName = (section[dataElementKey])[0].displayName;
+		this.dataElementName = (section[dataElementKey])[0].displayFormName;
 		this.rows = getOptionRows(section, dataElementKey);
 
 		_.map(this.rows, function(row) {
