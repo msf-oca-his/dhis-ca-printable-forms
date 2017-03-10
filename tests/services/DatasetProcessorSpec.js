@@ -125,7 +125,7 @@ describe("DataSetProcessor", function() {
 						},
 						dataElements: [{
 							name: "dataElement",
-							displayName: "dataElement",
+							displayFormName: "dataElement",
 							id: "1234",
 							valueType: "TEXT",
 							categoryCombo: {

@@ -30,7 +30,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 	var addNewCodeSheetLabel = function(dataElement, option) {
 		if((currentRowIndex == totalRows - 1) && (option.id == dataElement.options[dataElement.options.length - 2].id) || (currentRowIndex >= totalRows)) {
 			gotoNextColumn();
-			addNewCodeSheetHeading(dataElement.displayName);
+			addNewCodeSheetHeading(dataElement.displayFormName);
 		}
 		page.columns[currentColumnIndex].push(new CodeSheetElements.CodeSheetLabel(option.code, option.displayName));
 		currentRowIndex++;
@@ -48,7 +48,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay(allDataElements);
 		_.map(allDataElements, function(dataElement) {
 			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
-				addNewCodeSheetHeading(dataElement.displayName);
+				addNewCodeSheetHeading(dataElement.displayFormName);
 				_.map(dataElement.options, function(option) {
 					addNewCodeSheetLabel(dataElement, option);
 				});

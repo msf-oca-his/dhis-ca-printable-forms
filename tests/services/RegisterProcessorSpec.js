@@ -117,7 +117,7 @@ describe('RegisterProcessor', function() {
 		for(var i = 0; i < 5; i++) {
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[i] = {
 				name: "dataElement",
-				displayName: "dataElement",
+				displayFormName: "dataElement",
 				id: "1234",
 				valueType: "TEXT",
 				attributeValues:[{

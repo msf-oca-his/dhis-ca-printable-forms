@@ -10,7 +10,7 @@ TallySheets.factory('CatCombContent', ['Config', function(config) {
 		if(!section) return;
 		this.title = section.displayName;
 		this.categoryOptionCombos = addLineBreakAfterEachCategoryOption(section.categoryCombo.categoryOptionCombos);
-		this.dataElementNames = _.map(section.dataElements, 'displayName');
+		this.dataElementNames = _.map(section.dataElements, 'displayFormName');
 	}
 }]);
 
