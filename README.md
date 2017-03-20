@@ -70,27 +70,27 @@ displayOptionUID: {
   }
 }
 columnWidthOptionUID: {
-    id: "V6Mc90ZVPUX",
+    id: "xc1FowUHfmV",
     associatedWith: ['dataElement'],
     columnWidthOptions: {
       standard:{
         code: "10",
-        width: defaultColumnWidt 
+        width: config.Register.defaultColumnWidth
       },
       wide:{
         code: "11",
-        width: 60
+        width: 50
       },
       narrow: {
         code: "12",
-        width: 50
+        width: 15
       },
       extra_wide: {
         code: "13",
-        width: 70
+        width: 80
       }
     }
-  }
+}
 ```
 
 
