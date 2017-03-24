@@ -21,7 +21,8 @@ describe("CodeSheet Processor", function() {
 				pageNumberHeight: 10
 			},
 			Delimiters: {
-				optionLabelDelimiter: "]"
+				optionLabelStartDelimiter: "[",
+				optionLabelEndDelimiter: "]"
 			},
 			customAttributes: {
 				displayOptionUID: {
@@ -81,7 +82,7 @@ describe("CodeSheet Processor", function() {
 					programStageDataElements: [{
 						id: "1234",
 						displayFormName: "dataElement",
-						options: [{id: 1, code: 1, displayName: "option1"}, {id: 2, code: 2, displayName: "option2"}],
+						options: [{id: 1, code: 1, displayName: "[o1]option1"}, {id: 2, code: 2, displayName: "[o2]option2"}],
 						valueType: "OPTIONSET",
 						attributeValues: [
 							{
@@ -119,8 +120,8 @@ describe("CodeSheet Processor", function() {
 				type: 'CODESHEET',
 				columns: [[
 					{code: "Code", label: "dataElement", type: "HEADING"},
-					{code: 1, label: "option1", type: "LABEL"},
-					{code: 2, label: "option2", type: "LABEL"},
+					{code: "o1", label: "option1", type: "LABEL"},
+					{code: "o2", label: "option2", type: "LABEL"},
 					{code: '', label: '', type: "GAP"}
 				]]
 			}];
@@ -128,6 +129,68 @@ describe("CodeSheet Processor", function() {
 			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
 			expect(expectedPages[0].columns[0]).toEqual(actualPages[0].columns[0]);
 		});
+
+		it("should fetch the code of option from the option label", function() {
+			var currentTestProgram = _.cloneDeep(testProgram);
+
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+				id: "111",
+				displayFormName: "de1",
+				valueType: "INTEGER"
+			};
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+				id: "112",
+				displayFormName: "de2",
+				valueType: "TEXT"
+			};
+
+			var expectedPages = [{
+				contents: [],
+				type: 'CODESHEET',
+				columns: [[
+					{code: "Code", label: "dataElement", type: "HEADING"},
+					{code: "o1", label: "option1", type: "LABEL"},
+					{code: "o2", label: "option2", type: "LABEL"},
+					{code: '', label: '', type: "GAP"}
+				]]
+			}];
+
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+		});
+
+		it("incase of any misconfiguration of the label of the option the code of the option should be blank", function() {
+			var currentTestProgram = _.cloneDeep(testProgram);
+
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[o option1";
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "o] option2";
+
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+				id: "111",
+				displayFormName: "de1",
+				valueType: "INTEGER"
+			};
+			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+				id: "112",
+				displayFormName: "de2",
+				valueType: "TEXT"
+			};
+
+			var expectedPages = [{
+				contents: [],
+				type: 'CODESHEET',
+				columns: [[
+					{code: "Code", label: "dataElement", type: "HEADING"},
+					{code: "", label: "option1", type: "LABEL"},
+					{code: "", label: "option2", type: "LABEL"},
+					{code: '', label: '', type: "GAP"}
+				]]
+			}];
+
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+		});
+
 
 		it("should get all those data elements whose display option is not NONE", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
@@ -141,8 +204,8 @@ describe("CodeSheet Processor", function() {
 				type: 'CODESHEET',
 				columns: [[
 					{code: "Code", label: "dataElement", type: "HEADING"},
-					{code: 1, label: "option1", type: "LABEL"},
-					{code: 2, label: "option2", type: "LABEL"},
+					{code: "o1", label: "option1", type: "LABEL"},
+					{code: "o2", label: "option2", type: "LABEL"},
 					{code: '', label: '', type: "GAP"}
 				]]
 			}];
@@ -165,8 +228,8 @@ describe("CodeSheet Processor", function() {
 			var expectedPages = [{
 				columns: [[
 					{code: "Code", label: "dataElement", type: "HEADING"},
-					{code: 1, label: "option1", type: "LABEL"},
-					{code: 2, label: "option2", type: "LABEL"},
+					{code: "o1", label: "option1", type: "LABEL"},
+					{code: "o2", label: "option2", type: "LABEL"},
 					{code: '', label: '', type: "GAP"}
 				], null, null]
 			}];
@@ -178,20 +241,21 @@ describe("CodeSheet Processor", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 
 			for(var i = 0; i < 4; i++) {
+				var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
 					code: i + 1,
-					displayName: "option1"
+					displayName: optionDisplayName
 				};
 			}
 
 			var expectedPages = [{
 				columns: [[
 					{code: "Code", label: "dataElement", type: "HEADING"},
-					{code: 1, label: "option1", type: "LABEL"},
-					{code: 2, label: "option1", type: "LABEL"},
-					{code: 3, label: "option1", type: "LABEL"},
-					{code: 4, label: "option1", type: "LABEL"}
+					{code: "o1", label: "option1", type: "LABEL"},
+					{code: "o2", label: "option2", type: "LABEL"},
+					{code: "o3", label: "option3", type: "LABEL"},
+					{code: "o4", label: "option4", type: "LABEL"}
 				], null, null]
 			}];
 
@@ -202,10 +266,11 @@ describe("CodeSheet Processor", function() {
 		it("should repeat data element heading in next column after breaking labels in previous column", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 			for(var i = 0; i < 6; i++) {
+				var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
 					code: i + 1,
-					displayName: "option1"
+					displayName: optionDisplayName
 				};
 			}
 
@@ -215,15 +280,15 @@ describe("CodeSheet Processor", function() {
 				columns: [
 					[
 						{code: "Code", label: "dataElement", type: "HEADING"},
-						{code: 1, label: "option1", type: "LABEL"},
-						{code: 2, label: "option1", type: "LABEL"},
-						{code: 3, label: "option1", type: "LABEL"},
-						{code: 4, label: "option1", type: "LABEL"}
+						{code: "o1", label: "option1", type: "LABEL"},
+						{code: "o2", label: "option2", type: "LABEL"},
+						{code: "o3", label: "option3", type: "LABEL"},
+						{code: "o4", label: "option4", type: "LABEL"}
 					],
 					[
 						{code: "Code", label: "dataElement", type: "HEADING"},
-						{code: 5, label: "option1", type: "LABEL"},
-						{code: 6, label: "option1", type: "LABEL"},
+						{code: "o5", label: "option5", type: "LABEL"},
+						{code: "o6", label: "option6", type: "LABEL"},
 						{code: '', label: '', type: "GAP"}
 					], null]
 			}];
@@ -237,7 +302,7 @@ describe("CodeSheet Processor", function() {
 			it("should add options along with header to a new column if only one option fits in the previous column", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
-				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options = [{id: 1, code: 1, displayName: "option1"}];
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options = [{id: 1, code: 1, displayName: "[o1]option1"}];
 				var dataElement = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0];
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
 
@@ -247,12 +312,12 @@ describe("CodeSheet Processor", function() {
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 1, label: "option1", type: "LABEL"},
+							{code: "o1", label: "option1", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						],
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 1, label: "option1", type: "LABEL"},
+							{code: "o1", label: "option1", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						], null]
 				}];
@@ -264,10 +329,11 @@ describe("CodeSheet Processor", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
 				for(var i = 0; i < 5; i++) {
+					var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
 					currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 						id: i + 1,
 						code: i + 1,
-						displayName: "option1"
+						displayName: optionDisplayName
 					};
 				}
 
@@ -277,14 +343,14 @@ describe("CodeSheet Processor", function() {
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 1, label: "option1", type: "LABEL"},
-							{code: 2, label: "option1", type: "LABEL"},
-							{code: 3, label: "option1", type: "LABEL"}
+							{code: "o1", label: "option1", type: "LABEL"},
+							{code: "o2", label: "option2", type: "LABEL"},
+							{code: "o3", label: "option3", type: "LABEL"}
 						],
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 4, label: "option1", type: "LABEL"},
-							{code: 5, label: "option1", type: "LABEL"},
+							{code: "o4", label: "option4", type: "LABEL"},
+							{code: "o5", label: "option5", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						], null]
 				}];
@@ -305,14 +371,14 @@ describe("CodeSheet Processor", function() {
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 1, label: "option1", type: "LABEL"},
-							{code: 2, label: "option2", type: "LABEL"},
+							{code: "o1", label: "option1", type: "LABEL"},
+							{code: "o2", label: "option2", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						],
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 1, label: "option1", type: "LABEL"},
-							{code: 2, label: "option2", type: "LABEL"},
+							{code: "o1", label: "option1", type: "LABEL"},
+							{code: "o2", label: "option2", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						], null]
 				}];
@@ -328,10 +394,11 @@ describe("CodeSheet Processor", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 
 			for(var i = 0; i < 14; i++) {
+				var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
 					code: i + 1,
-					displayName: "option1"
+					displayName: optionDisplayName
 				};
 			}
 			var expectedPages = [
@@ -342,22 +409,22 @@ describe("CodeSheet Processor", function() {
 					widthLeft: 183,
 					columns: [[
 						{code: "Code", label: "dataElement", type: "HEADING"},
-						{code: 1, label: "option1", type: "LABEL"},
-						{code: 2, label: "option1", type: "LABEL"},
-						{code: 3, label: "option1", type: "LABEL"},
-						{code: 4, label: "option1", type: "LABEL"}
+						{code: "o1", label: "option1", type: "LABEL"},
+						{code: "o2", label: "option2", type: "LABEL"},
+						{code: "o3", label: "option3", type: "LABEL"},
+						{code: "o4", label: "option4", type: "LABEL"}
 					], [
 						{code: "Code", label: "dataElement", type: "HEADING"},
-						{code: 5, label: "option1", type: "LABEL"},
-						{code: 6, label: "option1", type: "LABEL"},
-						{code: 7, label: "option1", type: "LABEL"},
-						{code: 8, label: "option1", type: "LABEL"}
+						{code: "o5", label: "option5", type: "LABEL"},
+						{code: "o6", label: "option6", type: "LABEL"},
+						{code: "o7", label: "option7", type: "LABEL"},
+						{code: "o8", label: "option8", type: "LABEL"}
 					], [
 						{code: "Code", label: "dataElement", type: "HEADING"},
-						{code: 9, label: "option1", type: "LABEL"},
-						{code: 10, label: "option1", type: "LABEL"},
-						{code: 11, label: "option1", type: "LABEL"},
-						{code: 12, label: "option1", type: "LABEL"}
+						{code: "o9", label: "option9", type: "LABEL"},
+						{code: "o10", label: "option10", type: "LABEL"},
+						{code: "o11", label: "option11", type: "LABEL"},
+						{code: "o12", label: "option12", type: "LABEL"}
 					]],
 					programName: "test program"
 				},
@@ -369,8 +436,8 @@ describe("CodeSheet Processor", function() {
 					columns: [
 						[
 							{code: "Code", label: "dataElement", type: "HEADING"},
-							{code: 13, label: "option1", type: "LABEL"},
-							{code: 14, label: "option1", type: "LABEL"},
+							{code: "o13", label: "option13", type: "LABEL"},
+							{code: "o14", label: "option14", type: "LABEL"},
 							{code: '', label: '', type: "GAP"}
 						], null, null],
 					programName: "test program"

@@ -25,7 +25,7 @@ describe("Coversheet Processor", function() {
 			numberOfColumns: 3
 		},
 		Delimiters: {
-			optionLabelDelimiter: "]"
+			optionLabelEndDelimiter: "]"
 		},
 		customAttributes: {
 			displayOptionUID: {

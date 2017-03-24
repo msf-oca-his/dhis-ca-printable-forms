@@ -70,7 +70,8 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		}
 	};
 	config.Delimiters = {
-		optionLabelDelimiter: "]",
+		optionLabelStartDelimiter: "[",
+		optionLabelEndDelimiter: "]",
 		categoryOptionComboDelimiter: "<br>"
 	};
 	config.customAttributes = {

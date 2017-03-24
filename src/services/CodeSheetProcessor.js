@@ -20,6 +20,21 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		currentRowIndex = 0;
 	};
 
+	var getOptionCode = function(optionDisplayName){
+		var optionCode;
+		var startDelimiter = config.Delimiters.optionLabelStartDelimiter;
+		var endDelimiter = config.Delimiters.optionLabelEndDelimiter;
+		var startDelimiterIndex = optionDisplayName.indexOf(startDelimiter);
+		var endDelimiterIndex = optionDisplayName.indexOf(endDelimiter);
+
+		if(startDelimiterIndex == -1 || endDelimiterIndex == -1) {
+			optionCode = "";
+		} else {
+				optionCode = optionDisplayName.substring(startDelimiterIndex + 1, endDelimiterIndex);
+		}
+		return optionCode;
+	};
+
 	var addNewCodeSheetHeading = function(dataElementName) {
 		if(currentRowIndex >= maxOptionsPerColumn)
 			gotoNextColumn();
@@ -32,7 +47,8 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 			gotoNextColumn();
 			addNewCodeSheetHeading(dataElement.displayFormName);
 		}
-		page.columns[currentColumnIndex].push(new CodeSheetElements.CodeSheetLabel(option.code, option.displayName));
+		var optionCode = getOptionCode(option.displayName);
+		page.columns[currentColumnIndex].push(new CodeSheetElements.CodeSheetLabel(optionCode, option.displayName));
 		currentRowIndex++;
 	};
 

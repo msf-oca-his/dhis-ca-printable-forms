@@ -26,7 +26,7 @@ describe("OptionSetContent", function() {
 				numberOfColumns: 3
 			},
 			Delimiters: {
-				optionLabelDelimiter: "]"
+				optionLabelEndDelimiter: "]"
 			},
 			CustomAttributes: {
 				displayOptionUID: {
