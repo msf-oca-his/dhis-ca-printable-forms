@@ -25,7 +25,7 @@ TallySheets.factory('OptionSetContent', ['Config', 'CommonUtils', function(confi
 
 		_.map(this.rows, function(row) {
 			_.map(row, function(option) {
-				option.label = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.optionLabelEndDelimiter));
+				option.label = _.trim(commonUtils.getRightPartOfSplit(option.displayName, config.Delimiters.optionCodeEndDelimiter));
 			})
 		});
 	}

@@ -20,19 +20,10 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		currentRowIndex = 0;
 	};
 
-	var getOptionCode = function(optionDisplayName){
-		var optionCode;
-		var startDelimiter = config.Delimiters.optionLabelStartDelimiter;
-		var endDelimiter = config.Delimiters.optionLabelEndDelimiter;
-		var startDelimiterIndex = optionDisplayName.indexOf(startDelimiter);
-		var endDelimiterIndex = optionDisplayName.indexOf(endDelimiter);
-
-		if(startDelimiterIndex == -1 || endDelimiterIndex == -1) {
-			optionCode = "";
-		} else {
-				optionCode = optionDisplayName.substring(startDelimiterIndex + 1, endDelimiterIndex);
-		}
-		return optionCode;
+	var getOptionCode = function(optionDisplayName) {
+		var startDelimiter = config.Delimiters.optionCodeStartDelimiter;
+		var endDelimiter = config.Delimiters.optionCodeEndDelimiter;
+		return optionDisplayName.substr(0, optionDisplayName.search(endDelimiter)).replace(startDelimiter, '');
 	};
 
 	var addNewCodeSheetHeading = function(dataElementName) {

@@ -36,7 +36,7 @@ describe("DataSetProcessor", function() {
 				numberOfColumns: 3
 			},
 			Delimiters: {
-				optionLabelEndDelimiter: "]",
+				optionCodeEndDelimiter: "]",
 				categoryOptionComboDelimiter: "<br>"
 			},
 			customAttributes: {

@@ -21,8 +21,8 @@ describe("CodeSheet Processor", function() {
 				pageNumberHeight: 10
 			},
 			Delimiters: {
-				optionLabelStartDelimiter: "[",
-				optionLabelEndDelimiter: "]"
+				optionCodeStartDelimiter: "[",
+				optionCodeEndDelimiter: "]"
 			},
 			customAttributes: {
 				displayOptionUID: {
@@ -130,67 +130,203 @@ describe("CodeSheet Processor", function() {
 			expect(expectedPages[0].columns[0]).toEqual(actualPages[0].columns[0]);
 		});
 
-		it("should fetch the code of option from the option label", function() {
-			var currentTestProgram = _.cloneDeep(testProgram);
+		describe("Code of the option for single delimiter", function() {
+			it("should fetch the code of option from the option label", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
 
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
-				id: "111",
-				displayFormName: "de1",
-				valueType: "INTEGER"
-			};
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
-				id: "112",
-				displayFormName: "de2",
-				valueType: "TEXT"
-			};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+					id: "111",
+					displayFormName: "de1",
+					valueType: "INTEGER"
+				};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+					id: "112",
+					displayFormName: "de2",
+					valueType: "TEXT"
+				};
 
-			var expectedPages = [{
-				contents: [],
-				type: 'CODESHEET',
-				columns: [[
-					{code: "Code", label: "dataElement", type: "HEADING"},
-					{code: "o1", label: "option1", type: "LABEL"},
-					{code: "o2", label: "option2", type: "LABEL"},
-					{code: '', label: '', type: "GAP"}
-				]]
-			}];
+				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
+					columns: [[
+						{code: "Code", label: "dataElement", type: "HEADING"},
+						{code: "o1", label: "option1", type: "LABEL"},
+						{code: "o2", label: "option2", type: "LABEL"},
+						{code: '', label: '', type: "GAP"}
+					]]
+				}];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
-			expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+			});
+
+			it("should give the code of the option as blank when there is no end delimiter", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[o1 option1";
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "[o2 option2";
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+					id: "111",
+					displayFormName: "de1",
+					valueType: "INTEGER"
+				};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+					id: "112",
+					displayFormName: "de2",
+					valueType: "TEXT"
+				};
+
+				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
+					columns: [[
+						{code: "Code", label: "dataElement", type: "HEADING"},
+						{code: "", label: "option1", type: "LABEL"},
+						{code: "", label: "option2", type: "LABEL"},
+						{code: '', label: '', type: "GAP"}
+					]]
+				}];
+
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+			});
+
+			it("should give the code of the option as the remaining part which is before the end delimiter in the label", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[o1] option1";
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "o2] option2";
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+					id: "111",
+					displayFormName: "de1",
+					valueType: "INTEGER"
+				};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+					id: "112",
+					displayFormName: "de2",
+					valueType: "TEXT"
+				};
+
+				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
+					columns: [[
+						{code: "Code", label: "dataElement", type: "HEADING"},
+						{code: "o1", label: "option1", type: "LABEL"},
+						{code: "o2", label: "option2", type: "LABEL"},
+						{code: '', label: '', type: "GAP"}
+					]]
+				}];
+
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+				expect(expectedPages[0].columns[0][2].code).toEqual(actualPages[0].columns[0][2].code);
+			});
 		});
 
-		it("incase of any misconfiguration of the label of the option the code of the option should be blank", function() {
-			var currentTestProgram = _.cloneDeep(testProgram);
+		describe("Code of the option for multiple delimiters", function() {
+			beforeEach(function() {
+				config.Delimiters.optionCodeStartDelimiter = '[[[';
+				config.Delimiters.optionCodeEndDelimiter = ']]]';
+			});
 
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[o option1";
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "o] option2";
+			it("should fetch the code of option from the option label", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+					id: "111",
+					displayFormName: "de1",
+					valueType: "INTEGER"
+				};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+					id: "112",
+					displayFormName: "de2",
+					valueType: "TEXT"
+				};
 
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
-				id: "111",
-				displayFormName: "de1",
-				valueType: "INTEGER"
-			};
-			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
-				id: "112",
-				displayFormName: "de2",
-				valueType: "TEXT"
-			};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[[[o1]]] option1";
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "[[[o2]]] option2";
 
-			var expectedPages = [{
-				contents: [],
-				type: 'CODESHEET',
-				columns: [[
-					{code: "Code", label: "dataElement", type: "HEADING"},
-					{code: "", label: "option1", type: "LABEL"},
-					{code: "", label: "option2", type: "LABEL"},
-					{code: '', label: '', type: "GAP"}
-				]]
-			}];
+				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
+					columns: [[
+						{code: "Code", label: "dataElement", type: "HEADING"},
+						{code: "o1", label: "option1", type: "LABEL"},
+						{code: "o2", label: "option2", type: "LABEL"},
+						{code: '', label: '', type: "GAP"}
+					]]
+				}];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
-			expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+			});
+
+			it("should give the code of the option as blank when there is no end delimiter", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[[[o1 option1";
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "[[[o2 option2";
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+					id: "111",
+					displayFormName: "de1",
+					valueType: "INTEGER"
+				};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+					id: "112",
+					displayFormName: "de2",
+					valueType: "TEXT"
+				};
+
+				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
+					columns: [[
+						{code: "Code", label: "dataElement", type: "HEADING"},
+						{code: "", label: "option1", type: "LABEL"},
+						{code: "", label: "option2", type: "LABEL"},
+						{code: '', label: '', type: "GAP"}
+					]]
+				}];
+
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+			});
+
+			it("should give the code of the option as the remaining part which is before the end delimiter in the label", function() {
+				var currentTestProgram = _.cloneDeep(testProgram);
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[0].displayName = "[o1]]] option1";
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[1].displayName = "o2]]] option2";
+
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
+					id: "111",
+					displayFormName: "de1",
+					valueType: "INTEGER"
+				};
+				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
+					id: "112",
+					displayFormName: "de2",
+					valueType: "TEXT"
+				};
+
+				var expectedPages = [{
+					contents: [],
+					type: 'CODESHEET',
+					columns: [[
+						{code: "Code", label: "dataElement", type: "HEADING"},
+						{code: "[o1", label: "option1", type: "LABEL"},
+						{code: "o2", label: "option2", type: "LABEL"},
+						{code: '', label: '', type: "GAP"}
+					]]
+				}];
+
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
+				expect(expectedPages[0].columns[0][2].code).toEqual(actualPages[0].columns[0][2].code);
+			});
 		});
-
 
 		it("should get all those data elements whose display option is not NONE", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
@@ -241,7 +377,7 @@ describe("CodeSheet Processor", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 
 			for(var i = 0; i < 4; i++) {
-				var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
+				var optionDisplayName = config.Delimiters.optionCodeStartDelimiter + "o" + (i + 1) + config.Delimiters.optionCodeEndDelimiter + "option" + (i + 1);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
 					code: i + 1,
@@ -266,7 +402,7 @@ describe("CodeSheet Processor", function() {
 		it("should repeat data element heading in next column after breaking labels in previous column", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 			for(var i = 0; i < 6; i++) {
-				var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
+				var optionDisplayName = config.Delimiters.optionCodeStartDelimiter + "o" + (i + 1) + config.Delimiters.optionCodeEndDelimiter + "option" + (i + 1);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
 					code: i + 1,
@@ -329,7 +465,7 @@ describe("CodeSheet Processor", function() {
 				var currentTestProgram = _.cloneDeep(testProgram);
 
 				for(var i = 0; i < 5; i++) {
-					var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
+					var optionDisplayName = config.Delimiters.optionCodeStartDelimiter + "o" + (i + 1) + config.Delimiters.optionCodeEndDelimiter + "option" + (i + 1);
 					currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 						id: i + 1,
 						code: i + 1,
@@ -394,7 +530,7 @@ describe("CodeSheet Processor", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
 
 			for(var i = 0; i < 14; i++) {
-				var optionDisplayName = config.Delimiters.optionLabelStartDelimiter + "o" + (i + 1) + config.Delimiters.optionLabelEndDelimiter + "option" + (i + 1);
+				var optionDisplayName = config.Delimiters.optionCodeStartDelimiter + "o" + (i + 1) + config.Delimiters.optionCodeEndDelimiter + "option" + (i + 1);
 				currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0].options[i] = {
 					id: i + 1,
 					code: i + 1,
