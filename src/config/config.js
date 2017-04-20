@@ -75,41 +75,41 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		categoryOptionComboDelimiter: "<br>"
 	};
 	config.customAttributes = {
-		// printFlagUID: {
-		// 	id: "F6S3pRyjnSf",
-		// 	associatedWith: ['dataSet', 'program']
-		// },
-		// displayOptionUID: {
-		// 	id: "Fth2lxGOF4M",
-		// 	associatedWith: ['dataElement'],
-		// 	options: {
-		// 		none: '0',
-		// 		text: '1',
-		// 		list: '2'
-		// 	}
-		// },
-		// columnWidthOptionUID: {
-		// 	id: "xc1FowUHfmV",
-		// 	associatedWith: ['dataElement'],
-		// 	columnWidthOptions: {
-		// 		standard:{
-		// 			code: "10",
-		// 			width: config.Register.defaultColumnWidth
-		// 		},
-		// 		wide:{
-		// 			code: "11",
-		// 			width: 50
-		// 		},
-		// 		narrow: {
-		// 			code: "12",
-		// 			width: 15
-		// 		},
-		// 		extra_wide: {
-		// 			code: "13",
-		// 			width: 80
-		// 		}
-		// 	}
-		// }
+		printFlagUID: {
+			id: "c0ZXZFHlWTn",
+			associatedWith: ['dataSet', 'program']
+		},
+		displayOptionUID: {
+			id: "kWsPSyYxPsW",
+			associatedWith: ['dataElement'],
+			options: {
+				none: '0',
+				text: '1',
+				list: '2'
+			}
+		},
+		columnWidthOptionUID: {
+			id: "wSbFx381Jxw",
+			associatedWith: ['dataElement'],
+			columnWidthOptions: {
+				standard:{
+					code: "10",
+					width: config.Register.defaultColumnWidth
+				},
+				wide:{
+					code: "11",
+					width: 50
+				},
+				narrow: {
+					code: "12",
+					width: 15
+				},
+				extra_wide: {
+					code: "13",
+					width: 80
+				}
+			}
+		}
 	};
 	return CalculatedConfig.getConfig(config);
 }]);
