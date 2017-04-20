@@ -86,7 +86,7 @@ describe("CustomAttributeValidationService", function() {
 				expect(alertObject.message).toEqual("displayOptionUID : The specified UID doesn't exist in the system. Please contact your system administrator.");
 				done();
 			});
-			getAngularPromiseOfDepth(8, _$rootScope);
+			getAngularPromiseOfDepth(10, _$rootScope);
 		});
 	});
 });
