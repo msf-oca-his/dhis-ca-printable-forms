@@ -10,7 +10,9 @@ module.exports = {
 	"no_association_with_optionset": "L'attribut spécifié n'est associé à aucun paramètre optionSet. Veuillez contacter votre administrateur système.",
 	"optionset_without_options": "L'attribut spécifié du type optionSet n'a aucune option. Veuillez contacter votre administrateur système.",
 	"optionset_with_incorrect_options": "Les options de l'attribut spécifié sont incorrectes. Veuillez contacter votre administrateur système.",
+	"no_templates": "Aucun modèle n'est disponible dans le système.",
 	"app_loading_failed": "Impossible de charger l'application. Veuillez actualiser la page.",
+	"unexpected_error": "Une erreur inattendue s'est produite, réessayez.",
 	"spinner_loading": "Chargement...",
 	"dataset_prefix": "tally_",
 	"program_prefix": "parPt_",
@@ -19,7 +21,7 @@ module.exports = {
 	"health_structure": "Structure de la santé",
 	"supervisor": "Superviseur",
 	"start_or_end_date": "Date de début / fin",
-	"S.NO": "S NO",
+	"s_no": "S NO",
 	"set_number": "Numéro d'ensemble",
 	"yes": "Oui",
 	"no": "Non",
@@ -29,5 +31,6 @@ module.exports = {
 	"comments": "commentaires",
 	"page": "Page",
 	"part": "Partie",
-	"of": "de"
+	"of": "de",
+	'close': 'FERMER'
 };
