@@ -4,7 +4,7 @@
       {{ 's_no' | translate }}
     </td>
     <td class="deLabel" style="width:{{ getWidthOfRegisterColumn(registerColumn) }}" ng-repeat="registerColumn in content">
-      {{ registerColumn.name }}
+      {{ registerColumn.name | translate}}
     </td>
   </tr>
   <tr ng-repeat="row in rows track by $index">

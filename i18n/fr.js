@@ -28,7 +28,7 @@ module.exports = {
 	"cover_sheet": "Couverture",
 	"register": "registre",
 	"code_sheet": "Feuille de code",
-	"comments": "commentaires",
+	"Comments": "commentaires",
 	"page": "Page",
 	"part": "Partie",
 	"of": "de",
