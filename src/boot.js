@@ -34,6 +34,7 @@ var createDummyD2DependentAngularComponents = function() {
 };
 
 var loadD2UIComponents = function() {
+	window.d2Lib = require("../../custom_app_commons/js/utils/d2-export.js");
 	require('./d2-ui-components.js');
 };
 
@@ -55,14 +56,13 @@ var getUiLocale = function() {
 	})
 };
 
-window.d2Lib = require("../../custom_app_commons/js/utils/d2-export.js");
 window.dhisUrl = determineDhisUrl();
 window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 
 var uiLocalePromise = getUiLocale();
 Promise.resolve(ApiUrl)
-	.then(initializeD2)
 	.then(loadD2UIComponents, createDummyD2DependentAngularComponents)
+	.then(initializeD2)
 	.then(bootStrapAngularApp)
 	.catch(function(err) {
 		console.log(err);
