@@ -60,6 +60,7 @@ function handleD2InitializationFailure(error) {
 	TallySheets.value('appLoadingFailed', true);
 	createDummyD2DependentAngularComponents();
 }
+TallySheets.value('appLoadingFailed', false);
 Promise.resolve(ApiUrl)
     .then(initializeD2)
 	.catch(handleD2InitializationFailure)
