@@ -12,10 +12,9 @@ var createD2AngularModule = function(d2) {
 	});
 };
 
-var bootStrapAngularApp = function() {
+var bootStrap = function() {
 	console.log('bootstrapping');
-	TallySheets.value('appLoadingFailed', _.isError(arguments[0]));
-	return uiLocalePromise.then(function(uiLocale) {
+    return uiLocalePromise.then(function(uiLocale) {
 		TallySheets.value('uiLocale', uiLocale);
 		angular.bootstrap(document, ['TallySheets']);
 		document.querySelector('#app').classList.remove('hidden');
@@ -30,12 +29,6 @@ var initializeD2 = function(ApiUrl) {
 var createDummyD2DependentAngularComponents = function() {
 	createD2AngularModule({});
 	TallySheets.directive('d2HeaderBar', function() {return {}});
-	return new Error('d2 failed to load')
-};
-
-var loadD2UIComponents = function() {
-	window.d2Lib = require("../../custom_app_commons/js/utils/d2-export.js");
-	require('./d2-ui-components.js');
 };
 
 var getUiLocale = function() {
@@ -56,14 +49,22 @@ var getUiLocale = function() {
 	})
 };
 
+require('./d2-ui-components.js');
 window.dhisUrl = determineDhisUrl();
 window.ApiUrl = bootConfig.apiVersion ? (dhisUrl + 'api/' + bootConfig.apiVersion) : (dhisUrl + 'api');
 
 var uiLocalePromise = getUiLocale();
+
+function handleD2InitializationFailure(error) {
+	console.log(error);
+	TallySheets.value('appLoadingFailed', true);
+	createDummyD2DependentAngularComponents();
+}
+TallySheets.value('appLoadingFailed', false);
 Promise.resolve(ApiUrl)
-	.then(loadD2UIComponents, createDummyD2DependentAngularComponents)
-	.then(initializeD2)
-	.then(bootStrapAngularApp)
+    .then(initializeD2)
+	.catch(handleD2InitializationFailure)
+	.then(bootStrap)
 	.catch(function(err) {
 		console.log(err);
 		document.body.innerHTML = "<h4>App loading failed... Contact Administrator.</h4>";
