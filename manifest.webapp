@@ -1,6 +1,6 @@
 {
 	"version":"1.2",
-	"name":"PFF App",
+	"name":"Print Tally Sheets",
 	"description":"Print Tally Sheets",
 	"launch_path":"index.html",
 	"icons":{"16":null,
