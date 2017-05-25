@@ -6,13 +6,13 @@
     <td class="deLabel general">
       {{content.leftSideDataElements[$index].displayFormName}}
     </td>
-    <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType=='BOOLEAN'">
+    <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType==booleanType">
       <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
       <span class="checkbox-separator"></span>
       <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
     </td>
 
-    <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!='BOOLEAN'"></td>
+    <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!=booleanType"></td>
 
     <td class="default-section-divider"></td>
 
@@ -21,13 +21,13 @@
     </td>
 
     <span ng-if="content.rightSideDataElements[$index]">
-        <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType=='BOOLEAN'">
+        <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType==booleanType">
             <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
           <span class="checkbox-separator"></span>
             <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
         </td>
         <td class="deField"
-            ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!='BOOLEAN'">
+            ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!=booleanType">
         </td>
     </span>
   </tr>
