@@ -18,6 +18,7 @@ describe("templateSelector Directive", function() {
 	var _ModalAlertTypes;
 	var mockedModalAlertsService;
 	var childScope;
+	var mockedTemplateProcessor;
 
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
@@ -36,7 +37,7 @@ describe("templateSelector Directive", function() {
 		mockedModalAlertsService = {
 			showModalAlert: function() {}
 		};
-
+		
 		module("TallySheets", function(_$provide_, $translateProvider) {
 			$translateProvider.translations('en', {});
 			$provide = _$provide_;
@@ -135,6 +136,12 @@ describe("templateSelector Directive", function() {
 				programAttribute: true
 			})
 		];
+		mockedTemplateProcessor = {
+			getTemplates: function() {
+				return [datasets,programs];
+			}
+		};
+		$provide.value('TemplateProcessor', mockedTemplateProcessor);
 		validationObject = {}
 	}));
 

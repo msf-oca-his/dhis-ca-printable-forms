@@ -1,7 +1,7 @@
 TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', 'Config', 'ModalAlert',
-	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', 'DhisConstants', 'ServiceError',
+	'ModalAlertTypes', 'ModalAlertsService', 'CustomAngularTranslateService', '$q', 'DhisConstants', 'ServiceError', 'TemplateProcessor',
 	function(DataSetService, ProgramService, config, ModalAlert, ModalAlertTypes, ModalAlertsService,
-		CustomAngularTranslateService, $q, DhisConstants, ServiceError) {
+		CustomAngularTranslateService, $q, DhisConstants, ServiceError, TemplateProcessor) {
 		return {
 			restrict: 'E',
 			template: require('./templateSelectorView.html'),
@@ -68,18 +68,25 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 					return err
 				};
 
+				var addTemplateType = function(templateType,template) {
+					template.templateType = templateType;
+				};
+
 				var getAllTemplates = function() {
-					return $q.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()])
+					return $q.all([TemplateProcessor.getTemplates()])
 						.then(function(arrayOfTemplates) {
-							var allDataSets = arrayOfTemplates[0];
-							var allPrograms = arrayOfTemplates[1];
+							var allDataSets = arrayOfTemplates[0][0];
+							var allPrograms = arrayOfTemplates[0][1];
 
 							if(_.isEmpty(allDataSets) && _.isEmpty(allPrograms))
 								return $q.reject(prepareError("no_templates", ""));
 
 							var dataSetTemplates = config.customAttributes.printFlagUID ? _.filter(allDataSets, isPrintableTemplate) : allDataSets;
 							var programTemplates = config.customAttributes.printFlagUID ? _.filter(allPrograms, isPrintableTemplate) : allPrograms;
-
+							
+							_.map(dataSetTemplates,_.curry(addTemplateType)("DataSet"));
+							_.map(programTemplates,_.curry(addTemplateType)("Program"));
+							
 							$scope.dataSetTemplates = _.map(dataSetTemplates, addDataSetPrefix);
 							$scope.programTemplates = _.map(programTemplates, addProgramPrefix);
 							return _.flatten([$scope.dataSetTemplates, $scope.programTemplates]);
@@ -142,8 +149,8 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 var getTypeOfTemplate = function(template, PageTypes) {
 	if(_.isEmpty(template))
 		return;
-	if(template.constructor.name == "DataSet")
+	if(template.templateType == "DataSet")
 		return PageTypes.DATASET;
-	else if(template.constructor.name == "Program")
+	else if(template.templateType == "Program")
 		return PageTypes.PROGRAM;
 };
