@@ -1,4 +1,4 @@
-TallySheets.service('TemplateProcessor', ['Config', '$http', function(Config, $http) {
+TallySheets.service('TemplateProcessor', ['$http','$q', function($http,$q) {
 
 	var getAllTemplates = function(response) {
 		return _.map(response.data, function(data) {
