@@ -73,10 +73,10 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 				};
 
 				var getAllTemplates = function() {
-					return $q.all([TemplateProcessor.getTemplates()])
+					return TemplateProcessor.getTemplates()
 						.then(function(arrayOfTemplates) {
-							var allDataSets = arrayOfTemplates[0][0];
-							var allPrograms = arrayOfTemplates[0][1];
+							var allDataSets = arrayOfTemplates[0];
+							var allPrograms = arrayOfTemplates[1];
 
 							if(_.isEmpty(allDataSets) && _.isEmpty(allPrograms))
 								return $q.reject(prepareError("no_templates", ""));

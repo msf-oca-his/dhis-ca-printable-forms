@@ -138,7 +138,7 @@ describe("templateSelector Directive", function() {
 		];
 		mockedTemplateProcessor = {
 			getTemplates: function() {
-				return [datasets,programs];
+				return $q.all([datasets,programs]);
 			}
 		};
 		$provide.value('TemplateProcessor', mockedTemplateProcessor);
