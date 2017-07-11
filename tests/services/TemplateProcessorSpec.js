@@ -88,7 +88,4 @@ describe('TemplateProcessor', function() {
 		$httpBackend.flush()
 	});
 
-
-
-
 });

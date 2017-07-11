@@ -24,17 +24,19 @@ TallySheets.service('TemplateProcessor', ['$http','$q', function($http,$q) {
 		console.log(err);
 		return $q.reject(new Error('Fetching user organisation units data failed'));
 	};
+
+	var getFilteredTemplates = function(templates, entityName) {
+			var templates = getPropertyData(templates,entityName);
+			var filteredTemplates = filterEmptyObjects(templates);
+			return _.uniqBy(_.flatten(filteredTemplates), 'id')
+	};
 	
 	this.getTemplates = function() {
 		return $http.get(ApiUrl + "/me/organisationUnits?includeDescendants=true")
 			.then(function(response) {
 				var templates = getAllTemplates(response);
-				var filteredTemplates = filterEmptyObjects(templates);
-				var allDataSets = getPropertyData(filteredTemplates, "dataSets");
-				var allPrograms = getPropertyData(filteredTemplates, "programs");
-				var dataSets = filterEmptyObjects(allDataSets);
-				var programs = filterEmptyObjects(allPrograms);
-				return [_.uniqBy(_.flatten(dataSets), 'id'), _.uniqBy(_.flatten(programs), 'id')];
+				var templatesWithoutEmptyObjects = filterEmptyObjects(templates);
+				return [getFilteredTemplates(templatesWithoutEmptyObjects,"dataSets"), getFilteredTemplates(templatesWithoutEmptyObjects,"programs")];
 			})
 			.catch(handleError)
 	};
