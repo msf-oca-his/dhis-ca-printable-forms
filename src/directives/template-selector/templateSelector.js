@@ -68,12 +68,16 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 					return err
 				};
 
-				var addTemplateType = function(templateType,template) {
+				var addTemplateType = function(templateType, template) {
 					template.templateType = templateType;
 				};
 
+				var getTemplatesBasedOnConfig = function() {
+					return (config.showOnlyUserRelatedForms) ? TemplateProcessor.getTemplates() : $q.all([DataSetService.getAllDataSets(), ProgramService.getAllPrograms()]);
+				};
+
 				var getAllTemplates = function() {
-					return TemplateProcessor.getTemplates()
+					return getTemplatesBasedOnConfig()
 						.then(function(arrayOfTemplates) {
 							var allDataSets = arrayOfTemplates[0];
 							var allPrograms = arrayOfTemplates[1];
@@ -83,10 +87,10 @@ TallySheets.directive('templateSelector', ['DataSetService', 'ProgramService', '
 
 							var dataSetTemplates = config.customAttributes.printFlagUID ? _.filter(allDataSets, isPrintableTemplate) : allDataSets;
 							var programTemplates = config.customAttributes.printFlagUID ? _.filter(allPrograms, isPrintableTemplate) : allPrograms;
-							
-							_.map(dataSetTemplates,_.curry(addTemplateType)("DataSet"));
-							_.map(programTemplates,_.curry(addTemplateType)("Program"));
-							
+
+							_.map(dataSetTemplates, _.curry(addTemplateType)("DataSet"));
+							_.map(programTemplates, _.curry(addTemplateType)("Program"));
+
 							$scope.dataSetTemplates = _.map(dataSetTemplates, addDataSetPrefix);
 							$scope.programTemplates = _.map(programTemplates, addProgramPrefix);
 							return _.flatten([$scope.dataSetTemplates, $scope.programTemplates]);

@@ -111,5 +111,6 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			}
 		}
 	};
+	config.showOnlyUserRelatedForms=false;
 	return CalculatedConfig.getConfig(config);
 }]);

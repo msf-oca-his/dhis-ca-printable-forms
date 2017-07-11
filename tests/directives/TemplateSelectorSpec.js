@@ -19,6 +19,7 @@ describe("templateSelector Directive", function() {
 	var mockedModalAlertsService;
 	var childScope;
 	var mockedTemplateProcessor;
+	var usersDatasets,usersPrograms;
 
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
@@ -120,6 +121,32 @@ describe("templateSelector Directive", function() {
 				}]
 			})
 		];
+		usersDatasets = [
+			new dataSet({
+				id: 1,
+				displayName: "dataset",
+				attributeValues: [{
+					value: "true",
+					attribute: {
+						id: "1",
+						name: "isPrintable"
+					}
+				}]
+			})
+		];
+		usersPrograms = [
+			new program({
+				id: "1",
+				displayName: "program1",
+				attributeValues: [{
+					value: "true",
+					attribute: {
+						id: "1",
+						name: "isPrintable"
+					}
+				}]
+			})
+		];
 		customAttributes = [
 			new customAttribute({
 				name: "isPrintable",
@@ -138,7 +165,7 @@ describe("templateSelector Directive", function() {
 		];
 		mockedTemplateProcessor = {
 			getTemplates: function() {
-				return $q.all([datasets,programs]);
+				return $q.all([usersDatasets,usersPrograms]);
 			}
 		};
 		$provide.value('TemplateProcessor', mockedTemplateProcessor);
@@ -244,7 +271,17 @@ describe("templateSelector Directive", function() {
 						done();
 					});
 				childScope.$digest();
-			})
+			});
+
+			it("should load only user related forms when showUserRelatedforms set to true", function() {
+				childScope.validationResult = $q.when({});
+				config.customAttributes = {};
+				config.showOnlyUserRelatedForms=true;
+				elements = angular.element('<template-selector on-select-dataset= "testRenderDataSets()" selected-template="testTemplate" load-after="validationProcess"></template-selector>');
+				elements = compile(elements)(childScope);
+				childScope.$apply();
+				expect(childScope.$$childHead.templates).toEqual(usersDatasets.concat(usersPrograms));
+			});
 		});
 
 		describe("when template is dataset", function() {
