@@ -92,7 +92,7 @@ describe("TallySheets ctrl", function() {
 		});
 
 		it("should render the templates if it there is a valid template selected", function() {
-			var template = {id: '134'};
+			var template = {type: 'DataSet',data:{id:'143'},displayName:"tally_ds1"};
 			scope.templates = [template];
 			scope.selectedTemplatesType = 'DATASET';
 			scope.renderTemplates();
@@ -102,7 +102,7 @@ describe("TallySheets ctrl", function() {
 		});
 
 		it("should render the programs if it has template id", function() {
-			scope.templates = [{id: 'blah'}];
+			scope.templates = [{id: 'blah',data:{id:'1'},displayName:"perPt_prog1"}];
 			scope.selectedTemplatesType = "PROGRAM";
 			scope.programMode = "COVERSHEET";
 			scope.renderTemplates();

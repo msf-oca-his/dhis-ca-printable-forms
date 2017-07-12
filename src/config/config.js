@@ -92,11 +92,11 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			id: "wSbFx381Jxw",
 			associatedWith: ['dataElement'],
 			columnWidthOptions: {
-				standard:{
+				standard: {
 					code: "10",
 					width: config.Register.defaultColumnWidth
 				},
-				wide:{
+				wide: {
 					code: "11",
 					width: 50
 				},
@@ -111,6 +111,6 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			}
 		}
 	};
-	config.showOnlyUserRelatedForms=false;
+	config.showUserRelatedFormsOnly = true;
 	return CalculatedConfig.getConfig(config);
 }]);

@@ -1,7 +1,7 @@
 
-describe('TemplateProcessor', function() {
+describe('UserService', function() {
 	var $httpBackend;
-	var templateProcessor;
+	var userService;
 	var _$rootScope_;
 	var templates;
 	var $q;
@@ -9,11 +9,11 @@ describe('TemplateProcessor', function() {
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
 
-		inject(function($rootScope,$injector,TemplateProcessor,_$q_) {
+		inject(function($rootScope,$injector,UserService,_$q_) {
 			$q=_$q_;
 			_$rootScope_=$rootScope;
 			$httpBackend = $injector.get('$httpBackend');
-			templateProcessor=TemplateProcessor;
+			userService=UserService;
 		});
 
 		templates = [
@@ -53,7 +53,7 @@ describe('TemplateProcessor', function() {
 
 		var expectedTemplates = [[{'id':1,'name':'dataset1'},{'id':3,
 			'name':'dataset2'}],[{'id':2, 'name':'program1'},{'id':4,'name':'program3'}]]
-		templateProcessor.getTemplates().then(function(templates) {
+		userService.getDataSetsAndPrograms().then(function(templates) {
 			expect(templates).toEqual(expectedTemplates)
 		});
 		_$rootScope_.$digest();
@@ -71,7 +71,7 @@ describe('TemplateProcessor', function() {
 		$httpBackend.when('GET', "testurl/me/organisationUnits?includeDescendants=true").respond(templates)
 		var expectedTemplates = [[{'id':1,'name':'dataset1'},{'id':3,
 			'name':'dataset2'}],[{'id':2, 'name':'program1'},{'id':4,'name':'program3'}]]
-		templateProcessor.getTemplates().then(function(templates) {
+		userService.getDataSetsAndPrograms().then(function(templates) {
 			expect(templates).toEqual(expectedTemplates);
 		});
 		_$rootScope_.$digest();
@@ -80,8 +80,8 @@ describe('TemplateProcessor', function() {
 
 	it("should catch the error when api throws an error", function() {
 		$httpBackend.when('GET', "testurl/me/organisationUnits?includeDescendants=true").respond(404,'')
-		var expectedError = new Error('Fetching user organisation units data failed');
-		templateProcessor.getTemplates().catch(function(actualError) {
+		var expectedError = new Error('Plucking user datasets and programs failed');
+		userService.getDataSetsAndPrograms().catch(function(actualError) {
 			expect(actualError).toEqual(expectedError);
 		});
 		_$rootScope_.$digest();

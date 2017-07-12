@@ -1,5 +1,6 @@
 require("./services/DataSetProcessor.js");
-require("./services/TemplateProcessor.js");
+require("./services/UserService.js");
+require("./services/PrintableTemplateService.js");
 require("./services/CoversheetProcessor.js");
 require("./services/RegisterProcessor.js");
 require("./services/CodeSheetProcessor.js");

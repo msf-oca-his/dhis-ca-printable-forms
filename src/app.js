@@ -1,4 +1,4 @@
-window.TallySheets = angular.module('TallySheets', [ 'pascalprecht.translate', 'DhisModel', 'DhisServices', 'D2']);
+window.TallySheets = angular.module('TallySheets', ['pascalprecht.translate', 'DhisModel', 'DhisServices', 'D2']);
 
 TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	return function(text) {
@@ -8,7 +8,7 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 
 TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
 	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
-	'AlertTypesContract','InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes',
+	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes',
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
 		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes) {
@@ -38,8 +38,8 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		var handleError = function(serviceError) {
 			if(serviceError.severity == Severity.FATAL || serviceError.severity == Severity.ERROR) {
 				var modalAlertType = AlertTypesContract.getModalAlert(serviceError);
-				var closeOption = modalAlertType.isDismissible ?'close':'go_to_home';
-				 CustomAngularTranslateService.getTranslation(closeOption).then(function(buttonText) {
+				var closeOption = modalAlertType.isDismissible ? 'close' : 'go_to_home';
+				CustomAngularTranslateService.getTranslation(closeOption).then(function(buttonText) {
 					ModalAlertsService.showModalAlert(new ModalAlert(serviceError.message, modalAlertType, buttonText));
 				});
 			}
@@ -65,7 +65,7 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		$scope.dsId = 1;
 		$scope.templates = [];
 		$scope.pages = [];
-		$scope.exportToExcel = function(tableId){
+		$scope.exportToExcel = function(tableId) {
 			ExportToExcel.process(tableId, $scope.pages[0].datasetName, $scope.pages[0].programName);
 		};
 
@@ -73,6 +73,7 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			$scope.spinnerShown = true;
 			$scope.programMode = null;
 			return $q.all(_($scope.templates)
+				.map('data')
 				.map('id')
 				.filter(_.negate(_.isEmpty))
 				.map(DataSetService.getReferentialDataSetById)
@@ -85,6 +86,7 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				return;
 			$scope.spinnerShown = true;
 			return $q.all(_($scope.templates)
+				.map('data')
 				.map('id')
 				.filter(_.negate(_.isEmpty))
 				.map(ProgramService.getProgramById)
@@ -121,20 +123,20 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			else return $q.when([]);
 		};
 
-	$scope.closeModalAlert = function(context) {
-		window.location = dhisUrl;
-	};
+		$scope.closeModalAlert = function(context) {
+			window.location = dhisUrl;
+		};
 
-	$scope.closeModalAlert = function(context) {
-		window.location = dhisUrl;
-	};
+		$scope.closeModalAlert = function(context) {
+			window.location = dhisUrl;
+		};
 
-	$scope.renderTemplates = function(templates) {
-		$scope.pages = [];
-		$scope.templates = templates ? templates : $scope.templates;
-		$q.when()
-			.then(processTemplates)
-			.then(addProcessedPagesToDOM)
-			.catch(handleError);
-	};
-}]);
+		$scope.renderTemplates = function(templates) {
+			$scope.pages = [];
+			$scope.templates = templates ? templates : $scope.templates;
+			$q.when()
+				.then(processTemplates)
+				.then(addProcessedPagesToDOM)
+				.catch(handleError);
+		};
+	}]);

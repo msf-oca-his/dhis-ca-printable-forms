@@ -7,3 +7,4 @@ require('./pff-model/OptionSetContent.js');
 require('./pff-model/DatasetTitle.js');
 require('./pff-model/PageTypes.js');
 require('./pff-model/RegisterColumn.js');
+require('./pff-model/Template.js');
