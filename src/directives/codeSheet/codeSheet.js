@@ -8,6 +8,7 @@ TallySheets.directive('codeSheet', ['Config', 'CodeSheetElementTypes', function(
 		},
 		link: function($scope) {
 			$scope.rowHeight = config.CodeSheet.rowHeight + config.Metrics.mm;
+			$scope.columnWidth = config.PageTypes.A4.Portrait.availableWidth / config.CodeSheet.numberOfColumns + config.Metrics.mm;
 			$scope.getClass = function(codesheetElement) {
 				switch(codesheetElement.type) {
 					case CodeSheetElementTypes.HEADING:

@@ -2,7 +2,7 @@
 
 <table class="container">
   <tr>
-    <td valign="top" ng-repeat="column in columns track by $index">
+    <td valign="top" ng-repeat="column in columns track by $index" style="width:{{columnWidth}}">
       <table class="container">
         <tr ng-repeat="codesheetElement in column" ng-class="getClass(codesheetElement)">
           <td class="codeSheetCode" style="height:{{ rowHeight }}">{{ codesheetElement.code }}</td>
