@@ -8,6 +8,10 @@ TallySheets.directive('categoryCombo', ['Config', function(config) {
 		link: function($scope) {
 			$scope.getTableWidth = function(categoryOptionCombos) {
 				return (categoryOptionCombos.length * config.DataSet.widthOfCategoryOptionCombo + config.DataSet.widthOfDataElement) + config.Metrics.mm;
+			};
+
+			$scope.isGreyFieldCatCombOption = function(index,greyedFieldIndexes) {
+				return (_.indexOf(greyedFieldIndexes,index) != -1)?true:false;
 			}
 		}
 	};

@@ -17,7 +17,17 @@ describe("CatCombContent", function() {
 			displayName: "testSection",
 			categoryCombo: {
 				categoryOptionCombos: ["test,String1,", "test,String2,", "test, String3"]
-			}
+			},
+			dataElements:[{
+				id:'1',
+				displayFormName:'de1',
+				greyedFieldIndexes:[1,2]
+			},
+				{
+					id:'2',
+					displayFormName:'de2',
+					greyedFieldIndexes:[3,4]
+				}]
 		};
 	});
 	it("should replace all , with <br>s", function() {
@@ -42,5 +52,10 @@ describe("CatCombContent", function() {
 		testSection.categoryCombo.categoryOptionCombos.push(testString);
 		var catCombContent = new CatCombContent(testSection)
 		expect(catCombContent.categoryOptionCombos[3]).toEqual(testString.replace(",", "<br>"));
+	});
+
+	it("should have graedindexes and display name in dataelement array",function() {
+		var catCombContent = new CatCombContent(testSection)
+		expect(catCombContent.dataElements).toEqual([{displayFormName:'de1',greyedFieldIndexes:[1,2]},{displayFormName:'de2',greyedFieldIndexes:[3,4]}])
 	})
 });

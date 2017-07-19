@@ -9,13 +9,13 @@
     </td>
   </tr>
   </thead>
-  <tr ng-repeat="dataElementName in content.dataElementNames">
+  <tr ng-repeat="dataElement in content.dataElements">
 
     <td class="deLabel catComb">
-      {{dataElementName}}
+      {{dataElement.displayFormName}}
     </td>
-    <td class="deFieldCatComb"
-        ng-repeat="catComb in content.categoryOptionCombos">
+    <td ng-class="isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes)?'greyFieldCatComb':'deFieldCatComb'"
+        ng-repeat="catComb in content.categoryOptionCombos track by $index">
     </td>
   </tr>
 </table>

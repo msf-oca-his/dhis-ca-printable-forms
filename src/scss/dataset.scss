@@ -27,9 +27,21 @@
   border-bottom : 1px solid black;
 }
 
+.greyDeField:before {
+  content: "No data Entry";
+  width:20%;
+  border-bottom : 1px solid black;
+}
+
 .deFieldCatComb {
   width         : 4cm;
   border-bottom : 1px solid black;
+}
+
+.greyFieldCatComb:before {
+  content: "No data Entry";
+  width         : 4cm;
+  padding-left: 5mm;
 }
 
 .separator {

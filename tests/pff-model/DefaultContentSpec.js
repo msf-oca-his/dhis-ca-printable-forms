@@ -28,10 +28,10 @@ describe("DefaultContent", function() {
 
 	describe("when number of data elements are even", function() {
 		it("should split data elements into left and right side elements equally ", function() {
-			var de1 = {name: 'de1', valueType: 'value1'};
-			var de2 = {name: 'de2', valueType: 'value2'};
-			var de3 = {name: 'de3', valueType: 'value3'};
-			var de4 = {name: 'de4', valueType: 'value4'};
+			var de1 = {name: 'de1', valueType: 'value1',greyField:false};
+			var de2 = {name: 'de2', valueType: 'value2',greyField:false};
+			var de3 = {name: 'de3', valueType: 'value3',greyField:false};
+			var de4 = {name: 'de4', valueType: 'value4',greyField:false};
 			testSections[0].testKey = [de1, de2, de3, de4];
 			var actualContent = new DefaultContent(testSections[0], "testKey");
 			expect(actualContent.leftSideDataElements.length).toEqual(2);
@@ -43,11 +43,11 @@ describe("DefaultContent", function() {
 
 	describe("when number of data elements are odd", function() {
 		it("should have left side elements more than right side elements ", function() {
-			var de1 = {name: 'de1', valueType: 'value1'};
-			var de2 = {name: 'de2', valueType: 'value2'};
-			var de3 = {name: 'de3', valueType: 'value3'};
-			var de4 = {name: 'de4', valueType: 'value4'};
-			var de5 = {name: 'de5', valueType: 'value5'};
+			var de1 = {name: 'de1', valueType: 'value1',greyField:true};
+			var de2 = {name: 'de2', valueType: 'value2',greyField:true};
+			var de3 = {name: 'de3', valueType: 'value3',greyField:true};
+			var de4 = {name: 'de4', valueType: 'value4',greyField:false};
+			var de5 = {name: 'de5', valueType: 'value5',greyField:false};
 			testSections[0].testKey = [de1, de2, de3, de4, de5];
 			var actualContent = new DefaultContent(testSections[0], "testKey");
 			expect(actualContent.leftSideDataElements.length).toBe(3);
