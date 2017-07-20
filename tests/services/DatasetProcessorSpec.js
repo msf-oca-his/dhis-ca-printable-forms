@@ -24,13 +24,15 @@ describe("DataSetProcessor", function() {
 				heightOfTableHeader: 15,
 				heightOfDataElementInCatCombTable: 12,
 				defaultHeightOfDataElementLabel: 9,
-				heightOfSectionTitle: 5,
-				heightOfDataSetTitle: 5.5,
-				gapBetweenSections: 3,
-				pageHeaderHeight: 9,
-				numberOfCOCColumns: 5,
-				widthOfCategoryOptionCombo: 30,
-				widthOfDataElement: 40
+        gapBetweenColumnsInDefaultRendering: 10,
+        heightOfSectionTitle: 5,
+        heightOfDataSetTitle: 5.5,
+        gapBetweenSections: 3,
+        pageHeaderHeight: 9,
+        numberOfCOCColumns: 5,
+        widthOfCategoryOptionCombo: 30,
+        widthOfDataElement: 40,
+        numberOfColumnsInDefaultRendering: 2
 			},
 			OptionSet: {
         dataElementLabelWidth: 44,

@@ -36,14 +36,16 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 	config.DataSet = {
 		heightOfTableHeader: 15,
 		heightOfDataElementInCatCombTable: 12,
-		defaultHeightOfDataElementLabel: 9,
+		defaultHeightOfDataElementLabel: 9, //TODO: change the name as per others in the list - this one is odd one out
+		gapBetweenColumnsInDefaultRendering: 10,
 		heightOfSectionTitle: 5,
 		heightOfDataSetTitle: 5.5,
 		gapBetweenSections: 3,
 		pageHeaderHeight: 9,
 		numberOfCOCColumns: 5,
 		widthOfCategoryOptionCombo: 30,
-		widthOfDataElement: 40
+		widthOfDataElement: 40,
+		numberOfColumnsInDefaultRendering: 2 //TODO: app can only render 2, do not change this until its supported.
 	};
 	config.CodeSheet = {
 		heightOfProgramTitle: 10,

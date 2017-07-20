@@ -24,6 +24,7 @@
 
 .deField {
   width         : 20%;
+  display       :inline-block;
   border-bottom : 1px solid black;
 }
 
@@ -41,17 +42,18 @@
 }
 
 .default-section-divider {
-  @extend .separator;
-  width : 1cm;
+  display: inline-block;
 }
 
 .default-section {
-  width : 90%;
+  //width : 100%;
 }
 
 .deLabel {
-  width         : 3cm;
+  //width         : 3cm;
+  display       : inline-block;
   padding-right : 5mm;
+  overflow      : hidden;
 }
 
 .deLabel.catComb {
@@ -63,9 +65,9 @@
 }
 
 .deLabel.general {
-  width      : 25%;
+  //width      : 25%;
   text-align : right;
-  height     : 9mm;
+  //height     : 9mm;
 }
 
 .deLabel.optionLabel {

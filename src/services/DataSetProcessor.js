@@ -4,8 +4,8 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 		var pages = [];
 		var currentPageIndex;
 		var page;
-		var noOfDefaultTypeColumns = 2;
 		var configDataSet = config.DataSet;
+    var noOfDefaultTypeColumns = configDataSet.numberOfColumnsInDefaultRendering;
     var optionSetDataElementLabelHeight =  config.OptionSet.dataElementLabelHeight;
 		var optionSetNumberOfColumns = config.OptionSet.numberOfColumns;
 		var dataElementsKey = "dataElements";
