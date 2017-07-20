@@ -34,7 +34,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		commentsHeight: 30
 	};
 	config.DataSet = {
-		heightOfTableHeader: 15,
+		heightOfCatCombTableHeader: 15,
 		heightOfDataElementInCatCombTable: 12,
 		defaultHeightOfDataElementLabel: 9, //TODO: change the name as per others in the list - this one is odd one out
 		gapBetweenColumnsInDefaultRendering: 10,

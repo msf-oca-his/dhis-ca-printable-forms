@@ -21,7 +21,7 @@ describe("DataSetProcessor", function() {
 				}
 			},
 			DataSet: {
-				heightOfTableHeader: 15,
+        heightOfCatCombTableHeader: 15,
 				heightOfDataElementInCatCombTable: 12,
 				defaultHeightOfDataElementLabel: 9,
         gapBetweenColumnsInDefaultRendering: 10,

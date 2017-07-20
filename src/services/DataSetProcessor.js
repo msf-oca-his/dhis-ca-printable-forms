@@ -20,7 +20,7 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 				var getHeightForSection = function(section) {
 					var height;
 					if(isCatCombSection(section))
-						height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfTableHeader + configDataSet.gapBetweenSections;
+						height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfCatCombTableHeader + configDataSet.gapBetweenSections;
 					else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey)) {
 						height = optionSetDataElementLabelHeight * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
 					}

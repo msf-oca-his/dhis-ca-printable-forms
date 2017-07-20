@@ -6,7 +6,8 @@
     <td class="deLabel general" style="width:{{widthOfDataElementLabel}}; height:{{heightOfDataElement}}">
       {{content.leftSideDataElements[$index].displayFormName}}
     </td>
-    <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType==booleanType">
+    <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType==booleanType"
+        style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
       <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
       <span class="checkbox-separator"></span>
       <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
@@ -22,8 +23,9 @@
       {{content.rightSideDataElements[$index].displayFormName}}
     </td>
 
-    <span ng-if="content.rightSideDataElements[$index]">
-        <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType==booleanType">
+    <span ng-if="content.rightSideDataElements[$index]" style="display:inline-block">
+        <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType==booleanType"
+            style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
             <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
           <span class="checkbox-separator"></span>
             <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
