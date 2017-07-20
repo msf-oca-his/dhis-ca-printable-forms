@@ -28,9 +28,10 @@
 }
 
 .greyDeField:before {
-  content: "No data Entry";
+  content: "N/A";
   width:20%;
   border-bottom : 1px solid black;
+  color:grey;
 }
 
 .deFieldCatComb {
@@ -39,9 +40,9 @@
 }
 
 .greyFieldCatComb:before {
-  content: "No data Entry";
-  width         : 4cm;
+  content: "N/A";
   padding-left: 5mm;
+  color:grey;
 }
 
 .separator {
