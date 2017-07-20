@@ -52,9 +52,10 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		pageNumberHeight: 10
 	};
 	config.OptionSet = {
-		labelPadding: 4,
-		dataElementLabel: 48,
-		numberOfColumns: 3
+		dataElementLabelWidth: 44,
+		numberOfColumns: 3,
+		heightOfOption: 9,	//do not edit this value and the below one. They should be same until we start supporting different values
+    dataElementLabelHeight: 9
 	};
 	config.Metrics = {
 		mm: "mm"

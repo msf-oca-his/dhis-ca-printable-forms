@@ -6,6 +6,7 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 		var page;
 		var noOfDefaultTypeColumns = 2;
 		var configDataSet = config.DataSet;
+    var optionSetDataElementLabelHeight =  config.OptionSet.dataElementLabelHeight;
 		var optionSetNumberOfColumns = config.OptionSet.numberOfColumns;
 		var dataElementsKey = "dataElements";
 
@@ -21,7 +22,7 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 					if(isCatCombSection(section))
 						height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfTableHeader + configDataSet.gapBetweenSections;
 					else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey)) {
-						height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
+						height = optionSetDataElementLabelHeight * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
 					}
 					else
 						height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + configDataSet.gapBetweenSections;

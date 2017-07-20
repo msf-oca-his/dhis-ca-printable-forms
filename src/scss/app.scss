@@ -62,16 +62,18 @@ input.clean {
 }
 
 .option {
-  width  : 5cm;
-  height : 9mm;
+  //width  : 5cm;
+  //height : 9mm;
 }
 
 .checkboxcontainer {
-  margin-left : 5mm;
+  //margin-left : 5mm;
+  overflow : hidden;
+  display : inline-block;
 }
 
 .optionsetTable td {
-  padding-right : 10mm;
+  //padding-right : 10mm;
 }
 
 .spinner-wrapper img {

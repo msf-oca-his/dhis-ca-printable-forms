@@ -33,7 +33,10 @@ describe("DataSetProcessor", function() {
 				widthOfDataElement: 40
 			},
 			OptionSet: {
-				numberOfColumns: 3
+        dataElementLabelWidth: 44,
+        numberOfColumns: 3,
+        heightOfOption: 9,	//do not edit this value and the below one. They should be same until we start supporting different values
+        dataElementLabelHeight: 9
 			},
 			Delimiters: {
 				optionCodeEndDelimiter: "]",

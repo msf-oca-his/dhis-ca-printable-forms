@@ -19,10 +19,10 @@ describe("Coversheet Processor", function() {
 			commentsHeight: 30
 		},
 		OptionSet: {
-			labelPadding: 4,
-			dataElementLabel: 48,
-			optionsPadding: 12,
-			numberOfColumns: 3
+      dataElementLabelWidth: 44,
+      numberOfColumns: 3,
+      heightOfOption: 9,	//do not edit this value and the below one. They should be same until we start supporting different values
+      dataElementLabelHeight: 9
 		},
 		Delimiters: {
 			optionCodeEndDelimiter: "]"

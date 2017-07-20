@@ -72,7 +72,8 @@
 }
 
 .deLabel {
-  width         : 3cm;
+  width         : 30mm;
+  display : inline-block;
   padding-right : 5mm;
 }
 
@@ -82,10 +83,8 @@
   height     : 9mm;
 }
 
-.deLabel.optionLabel {
-  width      : 4.8cm;
+.deLabel.optionSetDataElement {
   text-align : right;
-  height     : 9mm;
 }
 
 .table-heading {
