@@ -95,4 +95,10 @@ describe("OptionSetContent", function() {
 		var actualSection = new OptionSetContent(testSection, "testKey");
 		expect(actualSection.rows[0][0].label).toEqual("MyOption");
 	});
+
+	it("should get grey field section in content",function() {
+		testSection.testKey[0].greyField=false;
+		var actualSection = new OptionSetContent(testSection, "testKey");
+		expect(actualSection.greyField).toEqual(false);
+	})
 });

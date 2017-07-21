@@ -125,7 +125,10 @@ describe("Print Friendly Utils", function() {
 
 			testSections = [{
 				categoryCombo: {categoryOptionCombos: []},
-				isCatComb: true
+				isCatComb: true,
+				dataElements:[{
+					greyedFieldIndexes:[7,8]
+				}]
 			}
 			];
 		});
@@ -189,6 +192,19 @@ describe("Print Friendly Utils", function() {
 				expect(testSections[2].categoryCombo.categoryOptionCombos).toEqual([6, 7]);
 				expect(testSections[3].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
 			});
+
+			it("should substract number columns that can fit from the grey indexes array when columns got overflowed",function() {
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7,8];
+				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
+				expect(testSections[1].dataElements[0].greyedFieldIndexes).toEqual([2,3]);
+			});
+
+			it("should be same grey indexes array when columns not overflowed",function() {
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5];
+				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
+				expect(testSections[0].dataElements[0].greyedFieldIndexes).toEqual([7,8]);
+			})
+
 		});
 
 	});

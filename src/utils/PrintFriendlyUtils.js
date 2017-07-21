@@ -76,6 +76,11 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 			var numberOfColumnsThatCanFitInThisSection = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
 			var newSection = _.cloneDeep(section);
 			newSection.categoryCombo.categoryOptionCombos = section.categoryCombo.categoryOptionCombos.splice(numberOfColumnsThatCanFitInThisSection);
+			_.map(newSection.dataElements, function(dataElement){
+				dataElement.greyedFieldIndexes = _.map(dataElement.greyedFieldIndexes, function(greyedFieldIndex) {
+					return greyedFieldIndex - numberOfColumnsThatCanFitInThisSection;
+				});
+			});
 			sections.splice(index + 1, 0, newSection)
 		}
 	};

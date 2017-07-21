@@ -1,19 +1,21 @@
 <section-title title="content.title"></section-title>
 <table class="default-section">
 
-  <tr ng-repeat="displayName in content.leftSideDataElements">
-
+  <tr ng-repeat="leftSideDataElement in content.leftSideDataElements">
     <td class="deLabel general" style="width:{{widthOfDataElementLabel}}; height:{{heightOfDataElement}}">
       {{content.leftSideDataElements[$index].displayFormName}}
     </td>
-    <td class="yesno" ng-if="content.leftSideDataElements[$index].valueType==booleanType"
+    <td ng-class="leftSideDataElement.greyField ?'greyDeField':'yesno'" ng-if="content.leftSideDataElements[$index].valueType==booleanType"
         style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
+      <span ng-if="!leftSideDataElement.greyField">
       <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
       <span class="checkbox-separator"></span>
       <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
+      </span>
     </td>
 
-    <td class="deField" ng-if="content.leftSideDataElements[$index].valueType!=booleanType"
+    <td ng-class="leftSideDataElement.greyField ?'greyDeField':'deField'"
+        ng-if="content.leftSideDataElements[$index].valueType!=booleanType"
         style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
     </td>
 
@@ -24,13 +26,16 @@
     </td>
 
     <span ng-if="content.rightSideDataElements[$index]" style="display:inline-block">
-        <td class="yesno" ng-if="content.rightSideDataElements[$index].valueType==booleanType"
+        <td ng-class="content.rightSideDataElements[$index].greyField ?'greyDeField':'yesno'"
+            ng-if="content.rightSideDataElements[$index].valueType==booleanType"
             style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
+            <span ng-if="!content.rightSideDataElements[$index].greyField">
             <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
-          <span class="checkbox-separator"></span>
+            <span class="checkbox-separator"></span>
             <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
+            </span>
         </td>
-        <td class="deField"
+        <td ng-class="content.rightSideDataElements[$index].greyField ?'greyDeField':'deField'"
             style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}"
             ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!=booleanType">
         </td>

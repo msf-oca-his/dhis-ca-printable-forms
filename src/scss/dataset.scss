@@ -28,11 +28,24 @@
   border-bottom : 1px solid black;
 }
 
+.greyDeField:before {
+  content: "N/A";
+  width:20%;
+  border-bottom : 1px solid black;
+  color:grey;
+}
+
 .deFieldCatComb {
   //width         : 4cm;
   display : inline-block;
   border-bottom: none;
   border-right: none;
+}
+
+.greyFieldCatComb:before {
+  content: "N/A";
+  padding-left: 5mm;
+  color:grey;
 }
 
 .separator {

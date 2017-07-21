@@ -9,12 +9,13 @@
     </td>
   </tr>
   </thead>
-  <tr ng-repeat="dataElementName in content.dataElementNames">
+  <tr ng-repeat="dataElement in content.dataElements">
 
     <td class="deLabel catComb" style="width:{{widthOfDataElementLabel}};height:{{heightOfDataElement}};">
-      {{dataElementName}}
+      {{dataElement.displayFormName}}
     </td>
-    <td class="deFieldCatComb" style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};"
+    <td ng-class="isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes)?'greyFieldCatComb':'deFieldCatComb'"
+        style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};"
         ng-repeat="catComb in content.categoryOptionCombos">
     </td>
   </tr>

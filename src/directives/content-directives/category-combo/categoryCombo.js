@@ -11,7 +11,10 @@ TallySheets.directive('categoryCombo', ['Config', function(config) {
 			$scope.heightOfDataElement = config.DataSet.heightOfDataElementInCatCombTable + config.Metrics.mm;
 			$scope.widthOfDataElementField = config.DataSet.widthOfCategoryOptionCombo + config.Metrics.mm;
 			$scope.getTableWidth = function(categoryOptionCombos) {
-				return (categoryOptionCombos.length * config.DataSet.widthOfCategoryOptionCombo + config.DataSet.widthOfDataElement + 1) + config.Metrics.mm;
+        return (categoryOptionCombos.length * config.DataSet.widthOfCategoryOptionCombo + config.DataSet.widthOfDataElement + 1) + config.Metrics.mm;
+			};
+			$scope.isGreyFieldCatCombOption = function(index,greyedFieldIndexes) {
+				return _.includes(greyedFieldIndexes, index)
 			}
 		}
 	};

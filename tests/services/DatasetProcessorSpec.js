@@ -152,9 +152,10 @@ describe("DataSetProcessor", function() {
 				_.assignIn(expectedPage, {
 					contents: [{type: {type: 'DATASET_TITLE', renderer: 'dataset-title'}, data: {title: 'test dataset'}}, {
 						type: Object({type: 'CATCOMB', renderer: 'category-combo'}),
-						data: {title: 'section', categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElementNames: ['dataElement']}
+						data: {title: 'section', categoryOptionCombos: ['female<br><12', 'male<br><10'], dataElements: [{displayFormName:'dataElement'}]}
 					}], heightLeft: 217.5, widthLeft: 180, type: 'DATASET', datasetName: 'test dataset'
 				});
+
 				var expectedPages = [expectedPage];
 				var actualPages = dataSetProcessor.process([dataSet]);
 				expect(clone(actualPages)).toEqual(clone(expectedPages));
@@ -194,7 +195,7 @@ describe("DataSetProcessor", function() {
 								data: {
 									title: 'section',
 									categoryOptionCombos: ['male<br>5', 'female<br>7'],
-									dataElementNames: ['dataElement']
+									dataElements: [{displayFormName:'dataElement'}]
 								}
 							}],
 						heightLeft: 217.5,
@@ -224,8 +225,8 @@ describe("DataSetProcessor", function() {
 				};
 				assignCOCToSection(currentTestDataSet.sections[0], 20);
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
-				expect(actualPages[0].contents[1].data.dataElementNames.length).toEqual(18);
-				expect(actualPages[1].contents[1].data.dataElementNames.length).toEqual(2);
+				expect(actualPages[0].contents[1].data.dataElements.length).toEqual(18);
+				expect(actualPages[1].contents[1].data.dataElements.length).toEqual(2);
 			});
 
 			it("should process the dataset with overflowed elements are exactly one", function() {
@@ -239,9 +240,10 @@ describe("DataSetProcessor", function() {
 				currentTestDataSet.sections[1] = _.cloneDeep(testDataSet.sections[0]);
 				assignCOCDataElementsToSection(currentTestDataSet.sections[1], 1);
 				var actualPages = dataSetProcessor.process([currentTestDataSet]);
-				expect(actualPages[0].contents[1].data.dataElementNames.length).toEqual(17);
-				expect(actualPages[1].contents[1].data.dataElementNames.length).toEqual(1);
+				expect(actualPages[0].contents[1].data.dataElements.length).toEqual(17);
+				expect(actualPages[1].contents[1].data.dataElements.length).toEqual(1);
 			});
+			
 		});
 
 		describe("sections of type OptionSets", function() {
