@@ -13,17 +13,17 @@
     "tests"
   ],
   "dependencies": {
-    "lodash": "~4.3.0",
-    "angular": "^1.5.7",
-    "angular-translate": "^2.11.0",
-    "angular-translate-loader-static-files": "^2.11.0",
-    "jquery": "^3.0.0",
-    "jquery-ui": "^1.11.4",
-    "bootstrap": "^3.3.6",
-    "bootstrap-select": "^1.10.0"
+    "lodash": "4.3.0",
+    "angular": "1.5.11",
+    "angular-translate": "2.15.2",
+    "angular-translate-loader-static-files": "2.15.2",
+    "jquery": "3.2.1",
+    "jquery-ui": "1.12.1",
+    "bootstrap": "3.3.7",
+    "bootstrap-select": "1.12.4"
   },
   "devDependencies": {
-    "angular-mocks": "~1.5.5"
+    "angular-mocks": "1.5.11"
   },
   "resolutions": {
     "jquery": "1.9.1 - 2",
