@@ -14,8 +14,9 @@ describe('RegisterProcessor', function() {
 			tableHeaderHeight: 10,
 			dataEntryRowHeight: 9,
 			pageHeaderHeight: 25,
-			defaultColumnWidth:60
-		},
+			defaultColumnWidth:60,
+      widthOfSNOColumn: 10
+    },
 		OptionSet: {
 			labelPadding: 4,
 			dataElementLabel: 48,
@@ -97,7 +98,7 @@ describe('RegisterProcessor', function() {
 	it("should test register's page width and height and test the register which contains only comments data element", function() {
 		var expectedPages = [{
 			heightLeft: 150,
-			widthLeft: 270,
+			widthLeft: 260,
 			type: 'REGISTER',
 			contents: [{
 				data: [

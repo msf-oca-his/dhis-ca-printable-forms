@@ -29,7 +29,7 @@ TallySheets.factory('RegisterPage', ['Config', 'PageTypes', function(config, Pag
 	return function RegisterPage() {
 		var registerPage = {};
 		registerPage.heightLeft = config.PageTypes[pageType].LandScape.availableHeight - config.Register.pageHeaderHeight;
-		registerPage.widthLeft = config.PageTypes[pageType].LandScape.availableWidth;
+		registerPage.widthLeft = config.PageTypes[pageType].LandScape.availableWidth - config.Register.widthOfSNOColumn;
 		registerPage.type = PageTypes.REGISTER;
 		return new Page(registerPage);
 	}
