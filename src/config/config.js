@@ -49,9 +49,10 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 	};
 	config.CodeSheet = {
 		heightOfProgramTitle: 10,
-		rowHeight: 6,
+		rowHeight: 8,
 		numberOfColumns: 3,
-		pageNumberHeight: 10
+		pageNumberHeight: 10,
+		widthOfCode: 20
 	};
 	config.OptionSet = {
 		dataElementLabelWidth: 44,

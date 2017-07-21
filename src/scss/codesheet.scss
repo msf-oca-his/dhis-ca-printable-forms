@@ -65,12 +65,13 @@
   //border-style: dashed;
   //border-bottom-style: dashed;
   border-width : 0.1mm;
-  padding      : 5px;
-  height       : 6mm;
+  //padding      : 5px;
+  display : inline-block;
+  overflow: hidden;
 }
 
 .container {
-  width   : 100%;
+  //width   : 100%;
   padding : 0px;
 }
 
