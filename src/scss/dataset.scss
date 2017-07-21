@@ -31,7 +31,8 @@
 .deFieldCatComb {
   //width         : 4cm;
   display : inline-block;
-
+  border-bottom: none;
+  border-right: none;
 }
 
 .separator {
@@ -58,11 +59,13 @@
 }
 
 .deLabel.catComb {
-  width         : 4cm;
   text-align    : right;
   height        : 12mm;
   padding-right : 2mm;
   padding-left  : 1mm;
+  border-right :none;
+  border-left: none;
+  border-bottom: none;
 }
 
 .deLabel.general {
@@ -78,9 +81,13 @@
 }
 
 .table-heading {
-  display    : inline-block;
-  text-align : center;
-  overflow   : hidden;
+  display       : inline-block;
+  text-align    : center;
+  overflow      : hidden;
+  border-top: none;
+  border-right: none;
+  border-bottom :none;
+  margin-bottom: -2px;
   //height     : 15mm;
   //width      : 3cm;
 }

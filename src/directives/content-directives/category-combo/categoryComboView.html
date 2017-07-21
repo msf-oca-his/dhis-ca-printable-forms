@@ -2,7 +2,7 @@
 <table style="width:{{getTableWidth(content.categoryOptionCombos)}};table-layout: fixed;" border="1">
   <thead>
   <tr>
-    <td style="display:inline-block;width:{{widthOfDataElementLabel}}; height:{{heightOfTableHeader}};"></td>
+    <td style="display:inline-block;width:{{widthOfDataElementLabel}}; height:{{heightOfTableHeader}};border:none"></td>
     <td class="table-heading" style="width:{{widthOfDataElementField}}; height:{{heightOfTableHeader}};"
         ng-repeat="categoryOptionCombos in content.categoryOptionCombos"
         ng-bind-html="categoryOptionCombos | to_trusted_html">
@@ -11,7 +11,7 @@
   </thead>
   <tr ng-repeat="dataElementName in content.dataElementNames">
 
-    <td class="deLabel catComb" style="width:{{widthOfDataElementLabel}} height: {{heightOfDataElement}};">
+    <td class="deLabel catComb" style="width:{{widthOfDataElementLabel}};height:{{heightOfDataElement}};">
       {{dataElementName}}
     </td>
     <td class="deFieldCatComb" style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};"
