@@ -1,8 +1,16 @@
 describe("DefaultContent", function() {
 	var testSections;
 	var DefaultContent;
+  var config = {
+    DataSet: {
+      numberOfColumnsInDefaultRendering: 2
+    }
+  };
 	beforeEach(function() {
 		module("TallySheets");
+    module(function($provide) {
+      $provide.value('Config', config);
+    });
 		inject(function(_DefaultContent_) {
 			DefaultContent = _DefaultContent_;
 		});

@@ -1,15 +1,16 @@
-<table border="1">
+<table class="registerContentTable">
   <tr>
-    <td class="sno-header">
+    <td class="sno-header" style="width:{{widthOfSNOColumn}}; height:{{tableHeaderHeight}}">
       {{ 's_no' | translate }}
     </td>
-    <td class="deLabel" style="width:{{ getWidthOfRegisterColumn(registerColumn) }}" ng-repeat="registerColumn in content">
+    <td class="deLabel" style="width:{{ registerColumn.renderType.width + units }};height:{{tableHeaderHeight}}"
+        ng-repeat="registerColumn in content">
       {{ registerColumn.name | translate}}
     </td>
   </tr>
   <tr ng-repeat="row in rows track by $index">
-    <td class="sno-value" style="height:{{ rowHeight }}">{{ $index + 1 }}</td>
-    <td ng-repeat="registerColumn in content" style="width:{{ getWidthOfRegisterColumn(registerColumn) }}">
+    <td class="sno-value" style="height:{{ rowHeight }};width:{{widthOfSNOColumn}}">{{ $index + 1 }}</td>
+    <td ng-repeat="registerColumn in content" class="deField" style="width:{{ registerColumn.renderType.width + units }};height:{{rowHeight}};">
     </td>
   </tr>
 </table>

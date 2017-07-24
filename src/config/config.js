@@ -24,7 +24,8 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		tableHeaderHeight: 10,
 		dataEntryRowHeight: 9,
 		pageHeaderHeight: 25,
-		defaultColumnWidth: 30
+		defaultColumnWidth: 30,
+		widthOfSNOColumn: 10
 	};
 	config.Coversheet = {
 		defaultHeightOfDataElementLabel: 9,
@@ -34,27 +35,31 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		commentsHeight: 30
 	};
 	config.DataSet = {
-		heightOfTableHeader: 15,
+		heightOfCatCombTableHeader: 15,
 		heightOfDataElementInCatCombTable: 12,
-		defaultHeightOfDataElementLabel: 9,
+		defaultHeightOfDataElementLabel: 9, //TODO: change the name as per others in the list - this one is odd one out
+		gapBetweenColumnsInDefaultRendering: 10,
 		heightOfSectionTitle: 5,
 		heightOfDataSetTitle: 5.5,
 		gapBetweenSections: 3,
 		pageHeaderHeight: 9,
 		numberOfCOCColumns: 5,
 		widthOfCategoryOptionCombo: 30,
-		widthOfDataElement: 40
+		widthOfDataElement: 40,
+		numberOfColumnsInDefaultRendering: 2 //TODO: app can only render 2, do not change this until its supported.
 	};
 	config.CodeSheet = {
 		heightOfProgramTitle: 10,
-		rowHeight: 6,
+		rowHeight: 8,
 		numberOfColumns: 3,
-		pageNumberHeight: 10
+		pageNumberHeight: 10,
+		widthOfCode: 20
 	};
 	config.OptionSet = {
-		labelPadding: 4,
-		dataElementLabel: 48,
-		numberOfColumns: 3
+		dataElementLabelWidth: 44,
+		numberOfColumns: 3,
+		heightOfOption: 9,	//do not edit this value and the below one. They should be same until we start supporting different values
+    dataElementLabelHeight: 9
 	};
 	config.Metrics = {
 		mm: "mm"

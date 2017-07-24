@@ -5,6 +5,7 @@ TallySheets.service('CoversheetProcessor', ['Config', 'Content', 'ContentTypes',
 		var page;
 		var noOfDefaultTypeColumns = 2;
 		var numberOfColumns = config.OptionSet.numberOfColumns;
+		var optionSetDataElementLabelHeight =  config.OptionSet.dataElementLabelHeight;
 		var defaultHeightOfDataElementLabel = config.Coversheet.defaultHeightOfDataElementLabel;
 		var dataElementsKey = "programStageDataElements";
 
@@ -16,7 +17,7 @@ TallySheets.service('CoversheetProcessor', ['Config', 'Content', 'ContentTypes',
 					var gapBetweenSections = config.Coversheet.gapBetweenSections;
 
 					if(printFriendlyUtils.isOptionSetSection(section, dataElementsKey))
-						height = defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements[0].options.length / numberOfColumns)) + gapBetweenSections;
+						height = optionSetDataElementLabelHeight * (Math.ceil(section.programStageDataElements[0].options.length / numberOfColumns)) + gapBetweenSections;
 					else
 						height = defaultHeightOfDataElementLabel * (Math.ceil(section.programStageDataElements.length / noOfDefaultTypeColumns)) + gapBetweenSections;
 

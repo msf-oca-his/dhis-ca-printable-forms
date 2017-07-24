@@ -1,5 +1,5 @@
-TallySheets.factory('DefaultContent', [function() {
-	var noOfDefaultTypeColumns = 2;
+TallySheets.factory('DefaultContent', ['Config', function(config) {
+	var noOfDefaultTypeColumns = config.DataSet.numberOfColumnsInDefaultRendering;
 
 	return function DefaultContent(section, dataElementsKey) {
 		if(!section) return;

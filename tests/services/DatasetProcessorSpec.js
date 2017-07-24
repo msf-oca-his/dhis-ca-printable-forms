@@ -21,19 +21,24 @@ describe("DataSetProcessor", function() {
 				}
 			},
 			DataSet: {
-				heightOfTableHeader: 15,
+        heightOfCatCombTableHeader: 15,
 				heightOfDataElementInCatCombTable: 12,
 				defaultHeightOfDataElementLabel: 9,
-				heightOfSectionTitle: 5,
-				heightOfDataSetTitle: 5.5,
-				gapBetweenSections: 3,
-				pageHeaderHeight: 9,
-				numberOfCOCColumns: 5,
-				widthOfCategoryOptionCombo: 30,
-				widthOfDataElement: 40
+        gapBetweenColumnsInDefaultRendering: 10,
+        heightOfSectionTitle: 5,
+        heightOfDataSetTitle: 5.5,
+        gapBetweenSections: 3,
+        pageHeaderHeight: 9,
+        numberOfCOCColumns: 5,
+        widthOfCategoryOptionCombo: 30,
+        widthOfDataElement: 40,
+        numberOfColumnsInDefaultRendering: 2
 			},
 			OptionSet: {
-				numberOfColumns: 3
+        dataElementLabelWidth: 44,
+        numberOfColumns: 3,
+        heightOfOption: 9,	//do not edit this value and the below one. They should be same until we start supporting different values
+        dataElementLabelHeight: 9
 			},
 			Delimiters: {
 				optionCodeEndDelimiter: "]",

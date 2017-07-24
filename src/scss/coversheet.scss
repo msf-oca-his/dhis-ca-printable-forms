@@ -27,12 +27,11 @@
 }
 
 .default-section-divider {
-  @extend .separator;
-  width : 1cm;
+  display : inline-block;
 }
 
 .default-section {
-  width : 90%;
+  //width : 90%;
 }
 
 .programName {
@@ -67,29 +66,32 @@
 }
 
 .deField {
-  width         : 20%;
+  //width         : 20%;
   border-bottom : 1px solid black;
+  display       : inline-block;
 }
 
 .deLabel {
-  width         : 3cm;
+  //width         : 30mm;
+  display       : inline-block;
   padding-right : 5mm;
+  overflow      : hidden;
 }
 
 .deLabel.general {
-  width      : 25%;
+  //width      : 25%;
   text-align : right;
-  height     : 9mm;
+  //height     : 9mm;
 }
 
-.deLabel.optionLabel {
-  width      : 4.8cm;
+.deLabel.optionSetDataElement {
   text-align : right;
-  height     : 9mm;
 }
 
 .table-heading {
+  display    : inline-block;
   text-align : center;
+  overflow   : hidden;
   height     : 15mm;
 }
 

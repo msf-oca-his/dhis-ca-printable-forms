@@ -24,22 +24,35 @@
 }
 
 .deLabel {
+  display: inline-block;
+  overflow: hidden;
   text-align : center;
-  height     : 15mm;
+  border-left: 1px solid;
+  //height     : 15mm;
 }
 
 .sno-header {
-  @extend .deLabel;
-  width : 10mm;
-}
-
-.sno-value {
+  display: inline-block;
+  overflow: hidden;
   text-align : center;
+  //width : 10mm;
+}
+.registerContentTable {
+  border: 1px solid;
+}
+.sno-value {
+  display: inline-block;
+  overflow: hidden;
+  text-align : center;
+  border-top: 1px solid;
 }
 
 .table-heading {
+  display: inline-block;
+  overflow: hidden;
   text-align : center;
-  height     : 15mm;
+  border-left :1px solid;
+  //height     : 15mm;
 }
 
 .header {
@@ -86,7 +99,11 @@ table {
 .sectionName {
   font-size : 4mm;
 }
-
+.deField {
+  display : inline-block;
+  border-top :1px solid;
+  border-left: 1px solid;
+}
 @page {
   size   : A4;
   margin : 0;

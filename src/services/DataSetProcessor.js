@@ -4,8 +4,9 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 		var pages = [];
 		var currentPageIndex;
 		var page;
-		var noOfDefaultTypeColumns = 2;
 		var configDataSet = config.DataSet;
+    var noOfDefaultTypeColumns = configDataSet.numberOfColumnsInDefaultRendering;
+    var optionSetDataElementLabelHeight =  config.OptionSet.dataElementLabelHeight;
 		var optionSetNumberOfColumns = config.OptionSet.numberOfColumns;
 		var dataElementsKey = "dataElements";
 
@@ -19,9 +20,9 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 				var getHeightForSection = function(section) {
 					var height;
 					if(isCatCombSection(section))
-						height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfTableHeader + configDataSet.gapBetweenSections;
+						height = configDataSet.heightOfDataElementInCatCombTable * (section.dataElements.length ) + configDataSet.heightOfCatCombTableHeader + configDataSet.gapBetweenSections;
 					else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey)) {
-						height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
+						height = optionSetDataElementLabelHeight * (Math.ceil(section.dataElements[0].options.length / optionSetNumberOfColumns)) + configDataSet.gapBetweenSections;
 					}
 					else
 						height = configDataSet.defaultHeightOfDataElementLabel * (Math.ceil(section.dataElements.length / noOfDefaultTypeColumns)) + configDataSet.gapBetweenSections;
