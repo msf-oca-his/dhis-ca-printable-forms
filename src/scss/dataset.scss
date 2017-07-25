@@ -152,4 +152,10 @@ table {
     border : none;
     margin : 8mm;
   }
+  .greyDeField {
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M1 0 L0 1 L99 100 L100 99' fill='black' /></svg>") !important;
+    background-repeat:no-repeat !important;
+    background-position:center center !important;
+    background-size: 100% 100%, auto !important;
+  }
 }
