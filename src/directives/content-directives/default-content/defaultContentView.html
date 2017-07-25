@@ -14,7 +14,7 @@
       </span>
     </td>
 
-    <td ng-class="leftSideDataElement.greyField ?'greyDeField':'deField'"
+    <td ng-class="{deField : true, greyDeField : leftSideDataElement.greyField}"
         ng-if="content.leftSideDataElements[$index].valueType!=booleanType"
         style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
     </td>
@@ -26,7 +26,7 @@
     </td>
 
     <span ng-if="content.rightSideDataElements[$index]" style="display:inline-block">
-        <td ng-class="content.rightSideDataElements[$index].greyField ?'greyDeField':'yesno'"
+        <td ng-class="{deField : true, greyDeField : content.rightSideDataElements[$index].greyField }"
             ng-if="content.rightSideDataElements[$index].valueType==booleanType"
             style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
             <span ng-if="!content.rightSideDataElements[$index].greyField">
@@ -35,7 +35,7 @@
             <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
             </span>
         </td>
-        <td ng-class="content.rightSideDataElements[$index].greyField ?'greyDeField':'deField'"
+        <td ng-class="{deField: true, greyDeField: content.rightSideDataElements[$index].greyField}"
             style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}"
             ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!=booleanType">
         </td>

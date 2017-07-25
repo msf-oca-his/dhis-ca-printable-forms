@@ -28,24 +28,17 @@
   border-bottom : 1px solid black;
 }
 
-.greyDeField:before {
-  content: "N/A";
-  width:20%;
-  border-bottom : 1px solid black;
-  color:grey;
-}
-
 .deFieldCatComb {
   //width         : 4cm;
   display : inline-block;
   border-bottom: none;
   border-right: none;
 }
-
-.greyFieldCatComb:before {
-  content: "N/A";
-  padding-left: 5mm;
-  color:grey;
+.greyDeField {
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M1 0 L0 1 L99 100 L100 99' fill='black' /></svg>");
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-size: 100% 100%, auto;
 }
 
 .separator {
@@ -120,10 +113,6 @@
 
 table {
   border-collapse : collapse;
-}
-
-td {
-  /*padding-top: 3mm;*/
 }
 
 .sectionName {
