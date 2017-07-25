@@ -14,7 +14,7 @@
     <td class="deLabel catComb" style="width:{{widthOfDataElementLabel}};height:{{heightOfDataElement}};">
       {{dataElement.displayFormName}}
     </td>
-    <td ng-class="isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes)?'greyFieldCatComb':'deFieldCatComb'"
+    <td ng-class="{deFieldCatComb : true, greyDeField: isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes)}"
         style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};"
         ng-repeat="catComb in content.categoryOptionCombos">
     </td>
