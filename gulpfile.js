@@ -26,6 +26,11 @@ APP = {
 				fonts: {
 					all: "dependencies/bower_components/bootstrap/dist/fonts/*.*"
 				}
+			},
+			jstree: {
+				default_theme_css_images: {
+					all: "dependencies/bower_components/jstree/dist/themes/default/!(*.css)*"
+				}
 			}
 		}
 	},
@@ -66,8 +71,7 @@ TEMP = {
 	css: ".temp/css",
 	all: ".temp/**/*.*",
 	resources: ".temp/resources",
-	fonts: ".temp/fonts"
-
+	fonts: ".temp/fonts",
 };
 
 GitHooks = {
@@ -117,6 +121,8 @@ gulp.task(TASKS.cleanTarget, function() {
 });
 
 gulp.task(TASKS.compileScss, function() {
+  gulp.src([APP.dependencies.bower_components.jstree.default_theme_css_images.all])
+    .pipe(gulp.dest(TEMP.css));
 	gulp.src([APP.dependencies.bower_components.bootstrap.fonts.all])
 		.pipe(gulp.dest(TEMP.fonts));
 	return gulp.src([APP.src.scss])
