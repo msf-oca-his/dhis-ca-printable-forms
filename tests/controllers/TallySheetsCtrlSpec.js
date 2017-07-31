@@ -34,7 +34,7 @@ describe("TallySheets ctrl", function() {
 			}
 		};
 		mockedTemplatesToJsTreeNodesService ={
-      getJsTreeNodesFrom : function(template) {
+			getJsTreeNodes : function(template) {
 				return mockedNodes;
       }
 		};
