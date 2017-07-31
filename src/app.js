@@ -8,15 +8,17 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 
 TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
 	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
-	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes',
+	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes', 'TemplatesToJsTreeNodesService',
 	function($scope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
-		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes) {
+		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes, TemplatesToJsTreeNodesService) {
 
 		$scope.appLoadingFailed = appLoadingFailed;
 		$scope.spinnerShown = false;
 		$scope.PageTypes = PageTypes;
 		$scope.templatesType = '';
+		$scope.nodes = [];
+		$scope.isLoaded = false;
 		$scope.inlineAlert = {
 			message: '',
 			type: '',
@@ -78,6 +80,11 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				.filter(_.negate(_.isEmpty))
 				.map(DataSetService.getReferentialDataSetById)
 				.value())
+				.then(function(templates) {
+					$scope.nodes = TemplatesToJsTreeNodesService.getJsTreeNodesFrom(templates);
+					$scope.isLoaded = true;
+					return templates;
+				})
 				.then(DataSetProcessor.process)
 		};
 

@@ -1,7 +1,7 @@
 
 # Tally Sheets
 
-Along with this repo, you will need to also clone the #custom_app_commons repository as a sibling to this project.
+Along with this repo, you will need to also clone the #dhis-ca-common repository as a sibling to this project.
 
 #Installing dependencies for local development:
 Dependencies - use `brew`, `apt-get` or any package manager to install the following dependencies:
