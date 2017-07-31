@@ -137,9 +137,14 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				_.pullAt($scope.rootNodes, position);
 			else if (_.isEqual(action, 'select'))
 				$q.when(templates[position].data.id)
-					.then(DataSetService.getReferentialDataSetById)
+					.then(function(id) {
+						if($scope.selectedTemplatesType == 'DATASET')
+							return DataSetService.getReferentialDataSetById(id);
+						else
+							return ProgramService.getProgramById(id);
+					})
 					.then(function(template){
-            $scope.rootNodes[position] = TemplatesToJsTreeNodesService.getJsTreeNodesFrom(template);
+            $scope.rootNodes[position] = TemplatesToJsTreeNodesService.getJsTreeNodes(template,$scope.selectedTemplatesType);
             setTimeout(function() {
               $scope.$apply();
             }, 1);

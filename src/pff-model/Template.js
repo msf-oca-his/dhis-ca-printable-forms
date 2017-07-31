@@ -12,3 +12,19 @@ TallySheets.factory('TemplateTypes',[function() {
 		program: "Program"
 	}
 }]);
+
+TallySheets.factory('DataSetAttributes',[function() {
+	return function DataSetAttributes() {
+		this.TEMPLATE = 'template';
+		this.SECTIONS = 'sections';
+		this.DATAELEMENTS = 'dataElements';
+	}
+}]);
+
+TallySheets.factory('ProgramAttributes',[function() {
+	return function ProgramAttributes() {
+		this.TEMPLATE = 'template';
+		this.SECTIONS = 'programStages[0].programStageSections';
+		this.DATAELEMENTS = 'programStageDataElements';
+	}
+}]);
