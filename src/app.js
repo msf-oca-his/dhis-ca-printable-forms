@@ -18,7 +18,6 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		$scope.PageTypes = PageTypes;
 		$scope.templatesType = '';
 		$scope.nodes = [];
-		$scope.isLoaded = false;
 		$scope.inlineAlert = {
 			message: '',
 			type: '',
@@ -82,7 +81,6 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				.value())
 				.then(function(templates) {
 					$scope.nodes = TemplatesToJsTreeNodesService.getJsTreeNodesFrom(templates);
-					$scope.isLoaded = true;
 					return templates;
 				})
 				.then(DataSetProcessor.process)

@@ -43,7 +43,7 @@
     <link href="css/coversheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'COVERSHEET'">
     <link href="css/register.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'REGISTER'">
     <link href="css/codesheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'CODESHEET'">
-    <js-tree nodes="nodes" ng-if="isLoaded"></js-tree>
+    <js-tree ng-repeat="node in nodes" node="node" selectable="true"></js-tree>
     <page class="page print-content" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length"></page>
     <div class="spinner-wrapper noprint" ng-show="spinnerShown">
       <img src="resources/img/spinner.gif" alt={{'spinner_loading' | translate }}/>
