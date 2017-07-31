@@ -144,4 +144,8 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				.then(addProcessedPagesToDOM)
 				.catch(handleError);
 		};
+		$scope.onTreeSelectionChanged = function() {
+			console.log(arguments);
+    }
+
 	}]);
