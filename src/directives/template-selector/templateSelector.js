@@ -19,11 +19,11 @@ TallySheets.directive('templateSelector', ['TemplateTypes', 'PrintableTemplateSe
 						return PageTypes.PROGRAM;
 				};
 
-				var handleUpdate = function() {
+				var handleUpdate = function(action, position) {
 					if(!$scope.onChange) return;
 					$scope.selectedTemplatesType = getTypeOfTemplate($scope.selectedTemplates[0], $scope.$parent.PageTypes);
 					$scope.$apply();
-					$scope.onChange({selectedTemplates: $scope.selectedTemplates});
+					$scope.onChange({selectedTemplates: $scope.selectedTemplates, action: action, position: position});
 				};
 
 				$scope.selectorLoaded = false;
@@ -31,7 +31,9 @@ TallySheets.directive('templateSelector', ['TemplateTypes', 'PrintableTemplateSe
 					$scope.selectedTemplates.splice(index, 1);
 					if($scope.selectedTemplates.length == 1)
 						$scope.showMultipleTemplates = false;
-					setTimeout(handleUpdate, 1);
+					setTimeout(function(){
+            handleUpdate('remove', index)
+					}, 1);
 				};
 
 				$scope.addForm = function() {
@@ -39,8 +41,8 @@ TallySheets.directive('templateSelector', ['TemplateTypes', 'PrintableTemplateSe
 					$scope.selectedTemplates.push("");
 				};
 
-				$scope.select = function() {
-					handleUpdate();
+				$scope.select = function(index) {
+					handleUpdate('select', index);
 				};
 
 				var assignTemplatesToScope = function(templates) {

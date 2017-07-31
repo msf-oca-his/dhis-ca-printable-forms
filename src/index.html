@@ -17,7 +17,7 @@
       <div class="panel-body">
 				<span>
 					<span id="template-selector-container">
-            <template-selector on-change="renderTemplates(selectedTemplates)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector>
+            <template-selector on-change="updateTrees(selectedTemplates, action, position)" load-after="validationProcess" selected-templates-type="$parent.selectedTemplatesType"></template-selector>
             <span ng-if="selectedTemplatesType==PageTypes.PROGRAM">
 						<label class="radio-inline">
               <input ng-model="$parent.$parent.programMode" value="{{PageTypes.COVERSHEET}}" type="radio" ng-click="renderTemplates()"> {{ 'cover_sheet' | translate }}
@@ -32,6 +32,7 @@
           </span>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
+            <button ng-click="renderTemplates" class="btn btn-success hidden-print">{{ 'Render' | translate}}</button>
             <button ng-click="exportToExcel('app')" class="btn btn-success hidden-print">{{ 'export_excel' | translate}}</button>
 					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'print' | translate }}</button>
 					</span>
@@ -43,7 +44,7 @@
     <link href="css/coversheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'COVERSHEET'">
     <link href="css/register.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'REGISTER'">
     <link href="css/codesheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'CODESHEET'">
-    <js-tree ng-repeat="node in nodes" root-node="node" selectable="true" on-changed="onTreeSelectionChanged(e, data)"></js-tree>
+    <js-tree ng-repeat="rootNode in rootNodes" root-node="rootNode" selectable="true" on-changed="onTreeSelectionChanged(e, data)"></js-tree>
     <page class="page print-content" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length"></page>
     <div class="spinner-wrapper noprint" ng-show="spinnerShown">
       <img src="resources/img/spinner.gif" alt={{'spinner_loading' | translate }}/>

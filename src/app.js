@@ -17,7 +17,7 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		$scope.spinnerShown = false;
 		$scope.PageTypes = PageTypes;
 		$scope.templatesType = '';
-		$scope.nodes = [];
+		$scope.rootNodes = [];
 		$scope.inlineAlert = {
 			message: '',
 			type: '',
@@ -79,10 +79,6 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 				.filter(_.negate(_.isEmpty))
 				.map(DataSetService.getReferentialDataSetById)
 				.value())
-				.then(function(templates) {
-					$scope.nodes = TemplatesToJsTreeNodesService.getJsTreeNodesFrom(templates);
-					return templates;
-				})
 				.then(DataSetProcessor.process)
 		};
 
@@ -136,6 +132,19 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			window.location = dhisUrl;
 		};
 
+		$scope.updateTrees = function(templates, action, position) {
+			if(_.isEqual(action, 'remove'))
+				_.pullAt($scope.rootNodes, position);
+			else if (_.isEqual(action, 'select'))
+				$q.when(templates[position].data.id)
+					.then(DataSetService.getReferentialDataSetById)
+					.then(function(template){
+            $scope.rootNodes[position] = TemplatesToJsTreeNodesService.getJsTreeNodesFrom(template);
+            setTimeout(function() {
+              $scope.$apply();
+            }, 1);
+					});
+    };
 		$scope.renderTemplates = function(templates) {
 			$scope.pages = [];
 			$scope.templates = templates ? templates : $scope.templates;
