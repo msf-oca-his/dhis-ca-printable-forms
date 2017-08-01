@@ -1,27 +1,21 @@
 TallySheets.service('TemplatesToJsTreeNodesService', ['DataSetAttributes', 'ProgramAttributes', function(DataSetAttributes, ProgramAttributes) {
 
-	var node = function(id, text, path, childNodes) {
+	var node = function(id, text, index, childNodes) {
 		return {
 			'id': id,
 			'text': text,
 			'state': {'opened': true, 'selected': true},
-			'path': path,
+			'index': index,
 			'children': childNodes
 		};
 	};
 
-	var createPath = function(string1, joinParam, string2, index) {
-		return string1.concat(joinParam + string2 + "[" + index + "]");
-	};
-
 	var getNodesFrom = function(template, attributes) {
 		var childNodes = _.map(_.get(template,attributes.SECTIONS), function(section, index) {
-			var sectionPath = createPath(attributes.TEMPLATE, ".", attributes.SECTIONS, index);
 			var childNodes = _.map(section[attributes.DATAELEMENTS], function(dataElement, index) {
-				var dataElementPath = createPath(sectionPath, ".", attributes.DATAELEMENTS, index);
-				return node(dataElement.id, dataElement.displayFormName, dataElementPath, []);
+				return node(dataElement.id, dataElement.displayFormName, index, []);
 			});
-			return node(section.id, section.displayName, sectionPath, childNodes);
+			return node(section.id, section.displayName, index, childNodes);
 		});
 		return node(template.id, template.displayName, attributes.TEMPLATE, childNodes);
 	};

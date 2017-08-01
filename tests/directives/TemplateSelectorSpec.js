@@ -209,7 +209,6 @@ describe("templateSelector Directive", function() {
         childScope.$apply();
         setTimeout(function() {
           childScope.$apply();
-          console.log(childScope.$$childHead.selectedTemplates)
           expect(childScope.change).toHaveBeenCalledWith([templates[0], templates[0]], 'select', 1);
           done();
         }, 1);
@@ -234,7 +233,6 @@ describe("templateSelector Directive", function() {
         selectElement.selectedIndex = 1;
         selectElement.dispatchEvent(new Event('change'));
         childScope.$apply();
-        console.log(elements[0].querySelectorAll('span .glyphicon-remove').length);
         var deleteElement = elements[0].querySelectorAll('span .glyphicon-remove').item(0);
         deleteElement.click();
         childScope.$apply();
@@ -264,7 +262,6 @@ describe("templateSelector Directive", function() {
         selectElement.selectedIndex = 1;
         selectElement.dispatchEvent(new Event('change'));
         childScope.$apply();
-        console.log(elements[0].querySelectorAll('span .glyphicon-remove').length);
 				var deleteElement = elements[0].querySelectorAll('span .glyphicon-remove').item(1);
 				deleteElement.click();
 				childScope.$apply();

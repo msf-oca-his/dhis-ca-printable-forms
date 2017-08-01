@@ -23,7 +23,8 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			type: '',
 			shown: false
 		};
-
+		var templatesCustomizations = [];
+		var templatesFromDhis = [];
 		if(appLoadingFailed) return;
 
 		var showInlineAlert = function(inlineAlert) {
@@ -70,16 +71,10 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			ExportToExcel.process(tableId, $scope.pages[0].datasetName, $scope.pages[0].programName);
 		};
 
-		var processDataSets = function() {
+		var processDataSets = function(dataSets) {
 			$scope.spinnerShown = true;
 			$scope.programMode = null;
-			return $q.all(_($scope.templates)
-				.map('data')
-				.map('id')
-				.filter(_.negate(_.isEmpty))
-				.map(DataSetService.getReferentialDataSetById)
-				.value())
-				.then(DataSetProcessor.process)
+			return DataSetProcessor.process(dataSets);
 		};
 
 		var processPrograms = function() {
@@ -116,11 +111,11 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			}, 1)
 		};
 
-		var processTemplates = function() {
+		var processTemplates = function(templates) {
 			if($scope.selectedTemplatesType == PageTypes.DATASET)
-				return $q.when().then(processDataSets);
+				return $q.when(templates).then(processDataSets);
 			else if($scope.selectedTemplatesType == PageTypes.PROGRAM)
-				return $q.when().then(processPrograms);
+				return $q.when(templates).then(processPrograms);
 			else return $q.when([]);
 		};
 
@@ -132,34 +127,69 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 			window.location = dhisUrl;
 		};
 
-		$scope.updateTrees = function(templates, action, position) {
-			if(_.isEqual(action, 'remove'))
-				_.pullAt($scope.rootNodes, position);
+		var getTemplateFromDHIS = function(id) {
+      if($scope.selectedTemplatesType == 'DATASET')
+        return DataSetService.getReferentialDataSetById(id);
+      else
+        return ProgramService.getProgramById(id);
+    };
+
+		$scope.onTemplateSelectionChanged = function(templates, action, position) {
+			var removeTreeAndCustomizationsAt = function(position){
+        _.pullAt($scope.rootNodes, position);
+        _.pullAt(templatesCustomizations, position);
+			};
+			if(_.isEqual(action, 'remove')){
+        removeTreeAndCustomizationsAt(position)
+        $scope.$apply();
+      }
 			else if (_.isEqual(action, 'select'))
 				$q.when(templates[position].data.id)
-					.then(function(id) {
-						if($scope.selectedTemplatesType == 'DATASET')
-							return DataSetService.getReferentialDataSetById(id);
-						else
-							return ProgramService.getProgramById(id);
-					})
+					.then(getTemplateFromDHIS)
 					.then(function(template){
-            $scope.rootNodes[position] = TemplatesToJsTreeNodesService.getJsTreeNodes(template,$scope.selectedTemplatesType);
-            setTimeout(function() {
-              $scope.$apply();
-            }, 1);
+						templatesFromDhis[position]= template;
+            $scope.rootNodes[position] = TemplatesToJsTreeNodesService.getJsTreeNodes(template, $scope.selectedTemplatesType);
+            templatesCustomizations[position] = {completeSectionRemoval: {}, partialSectionRemoval: {}};
 					});
     };
-		$scope.renderTemplates = function(templates) {
+
+		var getCustomizedTemplates = function(){
+      var customizedTemplates = _.cloneDeep(templatesFromDhis);
+
+      var customizeTemplate = function(template, index){
+        var removeDataElement = function(dataElementIndexesAsObjects, sectionIndex){
+            _.pullAt(template.sections[sectionIndex].dataElements, _.keys(dataElementIndexesAsObjects));
+        };
+        _.map(templatesCustomizations[index].partialSectionRemoval, removeDataElement);
+      };
+      _.map(customizedTemplates, customizeTemplate);
+			return customizedTemplates;
+		};
+
+		$scope.renderTemplates = function() {
 			$scope.pages = [];
-			$scope.templates = templates ? templates : $scope.templates;
 			$q.when()
+				.then(getCustomizedTemplates)
 				.then(processTemplates)
 				.then(addProcessedPagesToDOM)
-				.catch(handleError);
+				.catch(handleError)
+				.then(releaseUI);
 		};
-		$scope.onTreeSelectionChanged = function() {
-			console.log(arguments);
+
+		var getIndexOfTree = function(treeInstance){
+			return treeInstance.attr('index');
+		};
+
+		var releaseUI = function(){}; //TODO: define this
+
+		$scope.onTreeSelectionChanged = function(event, data) {
+			if(_.isEqual(data.action, 'deselect_node')){
+        var node = data.node;
+        var tree = data.instance;
+        var parentNode = tree.get_node(node.parent);
+        var currentTemplateCustomization = templatesCustomizations[getIndexOfTree(data.instance.element)];
+        _.merge(currentTemplateCustomization.partialSectionRemoval, {[parentNode.original.index] : {[node.original.index]: {}}});
+			}
     }
 
 	}]);

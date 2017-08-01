@@ -10,7 +10,7 @@ describe("TallySheets ctrl", function() {
 	var mockedProgramProcessor;
 	var expectedPages;
 	var mockedValidationService;
-
+	var mockDataset;
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -23,7 +23,25 @@ describe("TallySheets ctrl", function() {
 			$q = _$q_;
 		});
 
-		var mockDataset = "testDataSet";
+    mockDataset = {
+      id: 'dsid',
+      sections : [
+        {
+          id: 'sec1',
+          dataElements: [
+            {id: 'de1'},
+            {id: 'de2'}
+          ]
+        },
+        {
+          id: 'sec2',
+          dataElements: [
+            {id: 'de1'},
+            {id: 'de2'}
+          ]
+        }
+      ]
+    };
 		var mockProgram = "testProgram";
     var mockedNodes = "testNodes";
 		expectedPages = "testPages";
@@ -87,26 +105,26 @@ describe("TallySheets ctrl", function() {
 		$controller('TallySheetsController', {$scope: scope});
 	});
 
-	describe("render templates", function() {
-		it("should not render template if it doesn't have template id", function() {
-			var template = {};
-			scope.templates = [template];
-			scope.selectedTemplatesType = 'DATASET';
-			scope.renderTemplates();
-			scope.$apply();
-			expect(scope.spinnerShown).toBe(false);
-			expect(scope.pages).toEqual([]);
-		});
+	describe("render templates", function() {//both of these are not valid now.
+		// it("should not render template if it doesn't have template id", function() {
+		// 	var template = {};
+		// 	scope.templates = [template];
+		// 	scope.selectedTemplatesType = 'DATASET';
+		// 	scope.renderTemplates();
+		// 	scope.$apply();
+		// 	expect(scope.spinnerShown).toBe(false);
+		// 	expect(scope.pages).toEqual([]);
+		// });
 
-		it("should render the templates if it there is a valid template selected", function() {
-			var template = {type: 'DataSet',data:{id:'143'},displayName:"tally_ds1"};
-			scope.templates = [template];
-			scope.selectedTemplatesType = 'DATASET';
-			scope.renderTemplates();
-			scope.$apply();
-			expect(scope.spinnerShown).toEqual(false);
-			expect(scope.pages).toEqual(expectedPages);
-		});
+		// it("should render the templates if there is a valid template selected", function() {
+		// 	var template = {type: 'DataSet',data:{id:'143'},displayName:"tally_ds1"};
+		// 	scope.templates = [template];
+		// 	scope.selectedTemplatesType = 'DATASET';
+		// 	scope.renderTemplates();
+		// 	scope.$apply();
+		// 	expect(scope.spinnerShown).toEqual(false);
+		// 	expect(scope.pages).toEqual(expectedPages);
+		// });
 
 		it("should render the programs if it has template id", function() {
 			scope.templates = [{id: 'blah',data:{id:'1'},displayName:"perPt_prog1"}];
@@ -127,20 +145,23 @@ describe("TallySheets ctrl", function() {
 		});
 	});
 
-	describe("update trees", function() {
+	describe("onTemplateSelectionChanged", function() {
 		describe("action remove", function() {
-			it("should remove root node from position 1 when position is  1", function(){
-        scope.rootNodes = [1, 2, 3];
-        scope.updateTrees([], 'remove', 1);
-        scope.$apply();
-        expect(scope.rootNodes).toEqual([1, 3]);
-			});
-
-      it("should remove root node from position 0 when first template is deleted", function(){
-        scope.rootNodes = [1, 2, 3];
-        scope.updateTrees([], 'remove', 0);
-        scope.$apply();
-        expect(scope.rootNodes).toEqual([2, 3]);
+			describe("at position 0", function() {
+        it("should remove root node from position 0", function(){
+          scope.rootNodes = [1, 2, 3];
+          scope.onTemplateSelectionChanged([], 'remove', 0);
+          scope.$apply();
+          expect(scope.rootNodes).toEqual([2, 3]);
+        });
+      });
+      describe("at position 1", function() {
+        it("should remove root node from position 1", function() {
+          scope.rootNodes = [ 1, 2, 3 ];
+          scope.onTemplateSelectionChanged([], 'remove', 1);
+          scope.$apply();
+          expect(scope.rootNodes).toEqual([ 1, 3 ]);
+        });
       });
     });
 
@@ -148,7 +169,7 @@ describe("TallySheets ctrl", function() {
 			it("should change root node at position 0 when a template is selected at position 0", function() {
 				scope.templates = [{data: {id: "1"}}, 2, 3];
         scope.rootNodes = [0, 1, 2];
-        scope.updateTrees(scope.templates, 'select', 0);
+        scope.onTemplateSelectionChanged(scope.templates, 'select', 0);
         scope.$apply();
         expect(scope.rootNodes).toEqual(['testNodes', 1, 2]);
       });
@@ -156,10 +177,49 @@ describe("TallySheets ctrl", function() {
       it("should change root node at position 2 when selecting a template at position 2", function() {
         scope.templates = [1, 2, {data: {id: "1"}}];
         scope.rootNodes = [0, 1, 2];
-        scope.updateTrees(scope.templates, 'select', 2);
+        scope.onTemplateSelectionChanged(scope.templates, 'select', 2);
         scope.$apply();
         expect(scope.rootNodes).toEqual([0, 1, 'testNodes']);
       });
     });
-  })
+  });
+
+  describe("tree customizations", function(){
+  	describe("when there are no customizations", function(){
+      it("should not customize anything in templates", function(){
+        var templates = [{data : mockDataset}];
+        scope.selectedTemplatesType = "DATASET";
+        scope.onTemplateSelectionChanged(templates, 'select', 0);
+        scope.$apply();
+        spyOn(mockedDataSetProcessor, 'process').and.callThrough();
+        scope.renderTemplates();
+        scope.$apply();
+        expect(mockedDataSetProcessor.process).toHaveBeenCalledWith([mockDataset]);
+        mockedDataSetProcessor.process.calls.reset();
+      });
+		});
+
+    describe("when 1st data element of 1st section is unchecked", function(){
+      it("should remove that data element from dataset", function(){
+        var templates = [{data : mockDataset}];
+        scope.selectedTemplatesType = "DATASET";
+        scope.onTemplateSelectionChanged(templates, 'select', 0);
+        scope.$apply();
+        spyOn(mockedDataSetProcessor, 'process').and.callThrough();
+        var changeData = {
+        	action: 'deselect_node',
+					instance: {get_node: function(){return _.set({}, 'original.index', 0)}, element: {attr: function(){return 0}}},
+					node: _.set({}, 'original.index', 0)
+				};
+        scope.onTreeSelectionChanged(undefined, changeData);
+        scope.$apply();
+        scope.renderTemplates();
+        scope.$apply();
+        var customizedDataSet = _.cloneDeep(mockDataset);
+        _.pullAt(customizedDataSet.sections[0].dataElements, 0);
+        expect(mockedDataSetProcessor.process).toHaveBeenCalledWith([customizedDataSet]);
+        mockedDataSetProcessor.process.calls.reset();
+      });
+    });
+  });
 });
