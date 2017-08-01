@@ -1,4 +1,4 @@
-TallySheets.service('TemplatesToJsTreeNodesService', ['$q', 'DataSetAttributes', 'ProgramAttributes', 'TemplateTypes', function($q, DataSetAttributes, ProgramAttributes, TemplateTypes) {
+TallySheets.service('TemplatesToJsTreeNodesService', ['DataSetAttributes', 'ProgramAttributes', function(DataSetAttributes, ProgramAttributes) {
 
 	var node = function(id, text, path, childNodes) {
 		return {
