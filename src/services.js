@@ -7,6 +7,7 @@ require("./services/CodeSheetProcessor.js");
 require("./services/CustomAttributeValidationService.js");
 require("./services/ExportToExcel.js");
 require("./services/TemplatesToJsTreeNodesService.js");
+require("./services/TemplateCustomizationService.js");
 require("./service-error-config/ServiceErrorConfig.js");
 require("imports?angularModule=>TallySheets!../../dhis-ca-common/js/angular-commons/Exceptions/ServiceError.js");
 require("imports?angularModule=>TallySheets!../../dhis-ca-common/js/angular-commons/services/CustomAngularTranslateService.js");

@@ -32,7 +32,6 @@
           </span>
 					<span>&nbsp;&nbsp;</span>
 					<span class="pull-right">
-            <button ng-click="renderTemplates()" class="btn btn-success hidden-print">{{ 'Render' | translate}}</button>
             <button ng-click="exportToExcel('app')" class="btn btn-success hidden-print">{{ 'export_excel' | translate}}</button>
 					<button onclick="window.print()" class="btn btn-primary hidden-print">{{ 'print' | translate }}</button>
 					</span>
@@ -44,7 +43,7 @@
     <link href="css/coversheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'COVERSHEET'">
     <link href="css/register.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'REGISTER'">
     <link href="css/codesheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'CODESHEET'">
-    <js-tree ng-repeat="rootNode in rootNodes" index={{$index}} root-node="rootNode" selectable="true" on-changed="onTreeSelectionChanged(e, data)"></js-tree>
+    <tree-component class="noprint" templates="$parent.templates" templates-customizations="$parent.templatesCustomizations" selected-templates-type="selectedTemplatesType" on-render="renderTemplates(templates)"></tree-component>
     <page class="page print-content" ng-repeat="(index,page) in pages" page="page" page-number="index + 1" total-pages="pages.length"></page>
     <div class="spinner-wrapper noprint" ng-show="spinnerShown">
       <img src="resources/img/spinner.gif" alt={{'spinner_loading' | translate }}/>

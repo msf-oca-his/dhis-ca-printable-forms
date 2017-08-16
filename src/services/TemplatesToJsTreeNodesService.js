@@ -1,10 +1,10 @@
 TallySheets.service('TemplatesToJsTreeNodesService', ['DataSetAttributes', 'ProgramAttributes', 'TreeNodeTypes', function(DataSetAttributes, ProgramAttributes, TreeNodeTypes) {
 
-	var node = function(id, text, index, type, childNodes) {
+	var node = function(id, text, index, type, childNodes, disabled) {
 		return {
 			'id': id,
 			'text': text,
-			'state': {'opened': true, 'selected': true},
+			'state': {'opened': true, 'selected': true, disabled: disabled},
 			'index': index,
 			'children': childNodes,
 			type: type
@@ -18,7 +18,7 @@ TallySheets.service('TemplatesToJsTreeNodesService', ['DataSetAttributes', 'Prog
 			});
 			return node(section.id, section.displayName, index, TreeNodeTypes.SECTION, childNodes);
 		});
-		return node(template.id, template.displayName, 0, TreeNodeTypes.TEMPLATE, childNodes);
+		return node(template.id, template.displayName, 0, TreeNodeTypes.TEMPLATE, childNodes, true);
 	};
 
 	this.getJsTreeNodes = function(template, templateType) {

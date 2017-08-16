@@ -7,10 +7,11 @@ describe("TallySheets ctrl", function() {
 	var mockedDataSetService;
 	var mockedDataSetProcessor;
 	var mockedProgramService;
-	var mockedProgramProcessor;
+	var mockedCodesheetProcessor, mockedCoversheetProcessor, mockedRegisterProcessor;
 	var expectedPages;
 	var mockedValidationService;
 	var mockDataset;
+	var pageTypes;
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -69,14 +70,27 @@ describe("TallySheets ctrl", function() {
 			}
 		};
 
-		mockedProgramProcessor = {
-			process: function() {
-				if(_.isEmpty(arguments[0]))
-					return [];
-				return expectedPages;
-			}
-		};
-
+    mockedCoversheetProcessor = {
+      process: function() {
+        if(_.isEmpty(arguments[0]))
+          return [];
+        return "coversheet";
+      }
+    };
+    mockedCodesheetProcessor = {
+      process: function() {
+        if(_.isEmpty(arguments[0]))
+          return [];
+        return "codesheet";
+      }
+    };
+    mockedRegisterProcessor = {
+      process: function() {
+        if(_.isEmpty(arguments[0]))
+          return [];
+        return "register";
+      }
+    };
 		mockedValidationService = {
 			validate: function() {
 				return $q.when({});
@@ -87,138 +101,90 @@ describe("TallySheets ctrl", function() {
 		$provide.value('DataSetService', mockedDataSetService);
 		$provide.value('DataSetProcessor', mockedDataSetProcessor);
 		$provide.value('ProgramService', mockedProgramService);
-		$provide.value('ProgramProcessor', mockedProgramProcessor);
 		$provide.value('CustomAttributeValidationService', mockedValidationService);
 		$provide.value('TemplatesToJsTreeNodesService', mockedTemplatesToJsTreeNodesService);
-		$provide.value('CoversheetProcessor', mockedProgramProcessor);
-		$provide.value('CodeSheetProcessor', mockedProgramProcessor);
-		$provide.value('RegisterProcessor', mockedProgramProcessor);
+		$provide.value('CoversheetProcessor', mockedCoversheetProcessor);
+		$provide.value('CodeSheetProcessor', mockedCodesheetProcessor);
+		$provide.value('RegisterProcessor', mockedRegisterProcessor);
 		$provide.value('appLoadingFailed', false);
 
-		inject(function(_$controller_, $rootScope) {
+		inject(function(_$controller_, $rootScope, PageTypes) {
 			_$rootScope = $rootScope;
 			defer = $q.defer();
 			scope = _$rootScope.$new();
 			$controller = _$controller_;
+			pageTypes = PageTypes;
 		});
 
 		$controller('TallySheetsController', {$scope: scope});
 	});
-
-	describe("render templates", function() {//both of these are not valid now.
-		// it("should not render template if it doesn't have template id", function() {
-		// 	var template = {};
-		// 	scope.templates = [template];
-		// 	scope.selectedTemplatesType = 'DATASET';
-		// 	scope.renderTemplates();
-		// 	scope.$apply();
-		// 	expect(scope.spinnerShown).toBe(false);
-		// 	expect(scope.pages).toEqual([]);
-		// });
-
-		// it("should render the templates if there is a valid template selected", function() {
-		// 	var template = {type: 'DataSet',data:{id:'143'},displayName:"tally_ds1"};
-		// 	scope.templates = [template];
-		// 	scope.selectedTemplatesType = 'DATASET';
-		// 	scope.renderTemplates();
-		// 	scope.$apply();
-		// 	expect(scope.spinnerShown).toEqual(false);
-		// 	expect(scope.pages).toEqual(expectedPages);
-		// });
-
-		it("should render the programs if it has template id", function() {
-			scope.templates = [{id: 'blah',data:{id:'1'},displayName:"perPt_prog1"}];
-			scope.selectedTemplatesType = "PROGRAM";
-			scope.programMode = "COVERSHEET";
-			scope.renderTemplates();
-			scope.$apply();
-			expect(scope.spinnerShown).toEqual(false);
-			expect(scope.pages).toEqual(expectedPages);
-		});
-
-		it("should not render the template which is neither program nor dataset", function() {
-			scope.selectedTemplatesType = "testType";
-			scope.renderTemplates();
-			scope.$apply();
-			expect(scope.spinnerShown).toEqual(false);
-			expect(scope.pages).toEqual([]);
-		});
+	describe("On templates removed", function(){
+		it("should broadcast the event down", function(){
+			scope.templates = [];
+			spy = jasmine.createSpy('templatesSelectionChangeHandlerSpy');
+			scope.$on('templatesSelectionChanged', spy);
+      scope.onTemplateSelectionChanged([], 'remove', 0);
+      scope.$apply();
+      expect(spy).toHaveBeenCalledWith(jasmine.any(Object), [], 'remove', 0);
+		})
 	});
-
-	describe("onTemplateSelectionChanged", function() {
-		describe("action remove", function() {
-			describe("at position 0", function() {
-        it("should remove root node from position 0", function(){
-          scope.rootNodes = [1, 2, 3];
-          scope.onTemplateSelectionChanged([], 'remove', 0);
-          scope.$apply();
-          expect(scope.rootNodes).toEqual([2, 3]);
-        });
-      });
-      describe("at position 1", function() {
-        it("should remove root node from position 1", function() {
-          scope.rootNodes = [ 1, 2, 3 ];
-          scope.onTemplateSelectionChanged([], 'remove', 1);
-          scope.$apply();
-          expect(scope.rootNodes).toEqual([ 1, 3 ]);
-        });
-      });
-    });
-
-		describe("action select", function() {
-			it("should change root node at position 0 when a template is selected at position 0", function() {
-				scope.templates = [{data: {id: "1"}}, 2, 3];
-        scope.rootNodes = [0, 1, 2];
-        scope.onTemplateSelectionChanged(scope.templates, 'select', 0);
-        scope.$apply();
-        expect(scope.rootNodes).toEqual(['testNodes', 1, 2]);
-      });
-
-      it("should change root node at position 2 when selecting a template at position 2", function() {
-        scope.templates = [1, 2, {data: {id: "1"}}];
-        scope.rootNodes = [0, 1, 2];
-        scope.onTemplateSelectionChanged(scope.templates, 'select', 2);
-        scope.$apply();
-        expect(scope.rootNodes).toEqual([0, 1, 'testNodes']);
-      });
-    });
+  describe("On templates add", function(){
+    it("should broadcast the event down", function(){
+      scope.templates = [];
+      spy = jasmine.createSpy('templatesSelectionChangeHandlerSpy');
+      scope.$on('templatesSelectionChanged', spy);
+      scope.onTemplateSelectionChanged([], 'add', 0);
+      scope.$apply();
+      expect(spy).toHaveBeenCalledWith(jasmine.any(Object), [], 'add', 0);
+    })
   });
+	describe("render templates", function() {
 
-  describe("tree customizations", function(){
-  	describe("when there are no customizations", function(){
-      it("should not customize anything in templates", function(){
-        var templates = [{data : mockDataset}];
-        scope.selectedTemplatesType = "DATASET";
-        scope.onTemplateSelectionChanged(templates, 'select', 0);
+    describe("when dataset is selected", function() {
+      it("should render dataset", function() {
+        var template = { type: 'DataSet', data: { id: '143' }, displayName: "tally_ds1" };
+        scope.selectedTemplatesType = 'DATASET';
+        scope.renderTemplates([ template ]);
         scope.$apply();
-        spyOn(mockedDataSetProcessor, 'process').and.callThrough();
-        scope.renderTemplates();
-        scope.$apply();
-        expect(mockedDataSetProcessor.process).toHaveBeenCalledWith([mockDataset]);
-        mockedDataSetProcessor.process.calls.reset();
+        expect(scope.spinnerShown).toEqual(false);
+        expect(scope.pages).toEqual(expectedPages);
       });
-		});
+      describe("when program is selected", function() {
+      	var template;
+      	beforeEach(function(){
+          template = { type: 'PROGRAM', data: { id: '143' }, displayName: "perpt_ds1" };
+          scope.selectedTemplatesType = 'PROGRAM';
+				});
+        it("should render coversheet", function() {
+          scope.programMode = pageTypes.COVERSHEET;
+          scope.renderTemplates([ template ]);
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual("coversheet");
+        });
+        it("should render codesheet", function() {
+          scope.programMode = pageTypes.CODESHEET;
+          scope.renderTemplates([ template ]);
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual("codesheet");
+        });
+        it("should render register", function() {
+          scope.programMode = pageTypes.REGISTER;
+          scope.renderTemplates([ template ]);
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual("register");
+        });
 
-    describe("when 1st data element of 1st section is unchecked", function(){
-      it("should remove that data element from dataset", function(){
-        var templates = [{data : mockDataset}];
-        scope.selectedTemplatesType = "DATASET";
-        scope.onTemplateSelectionChanged(templates, 'select', 0);
+      });
+
+      it("should not render the template which is neither program nor dataset", function() {
+        scope.selectedTemplatesType = "testType";
+        scope.renderTemplates([ { id: 'blah', data: {}, displayName: "perPt_prog1" } ]);
         scope.$apply();
-        spyOn(mockedDataSetProcessor, 'process').and.callThrough();
-        var changeData = {
-        	action: 'deselect_node',
-					instance: {get_node: function(){return _.set({}, 'original.index', 0)}, element: {attr: function(){return 0}}},
-					node: _.set({}, 'original.index', 0)
-				};
-        scope.onTreeSelectionChanged(undefined, changeData);
-        scope.$apply();
-        scope.renderTemplates();
-        scope.$apply();
-        var customizedDataSet = _.cloneDeep(mockDataset);
-        _.pullAt(customizedDataSet.sections[0].dataElements, 0);
-        expect(mockedDataSetProcessor.process).toHaveBeenCalledWith([customizedDataSet]);
-        mockedDataSetProcessor.process.calls.reset();
+        expect(scope.spinnerShown).toEqual(false);
+        expect(scope.pages).toEqual([]);
       });
     });
   });

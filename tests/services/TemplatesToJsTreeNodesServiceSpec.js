@@ -45,7 +45,7 @@ describe('TemplatesToJsTreeNodesServiceSpec', function() {
 		expect('1').toEqual(actualNode.id);
 		expect('dataset1').toEqual(actualNode.text);
 		expect(0).toEqual(actualNode.index);
-		expect({'opened': true, 'selected': true}).toEqual(actualNode.state);
+		expect({'opened': true, 'selected': true, disabled: true}).toEqual(actualNode.state);
 		expect('s1').toEqual(actualNode.children[0].id);
 	});
 
@@ -69,7 +69,7 @@ describe('TemplatesToJsTreeNodesServiceSpec', function() {
 		expect('1').toEqual(actualNode.id);
 		expect('program1').toEqual(actualNode.text);
 		expect(0).toEqual(actualNode.index);
-		expect({'opened': true, 'selected': true}).toEqual(actualNode.state);
+		expect({'opened': true, 'selected': true, disabled: true}).toEqual(actualNode.state);
 		expect('2').toEqual(actualNode.children[0].id);
 	});
 

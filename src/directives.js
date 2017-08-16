@@ -5,6 +5,7 @@ require("./directives/coversheet-template/coversheetTemplate.js");
 require("./directives/register-template/registerTemplate.js");
 require("./directives/codeSheet/codeSheet.js");
 require("./directives/page-content/pageContent.js");
+require("./directives/tree-component/tree-component.js");
 
 require("./directives/content-directives/list/list.js");
 require("./directives/content-directives/default-content/defaultContent.js");

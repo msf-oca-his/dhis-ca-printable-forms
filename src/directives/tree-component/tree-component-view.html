@@ -1,0 +1,2 @@
+<js-tree ng-repeat="rootNode in rootNodes" index={{$index}} root-node="rootNode" selectable="true" on-changed="onTreeSelectionChanged(e, data)"></js-tree>
+<button ng-if="rootNodes.length > 0" ng-click="render()" class="btn btn-success hidden-print">{{ 'apply_changes' | translate}}</button>
