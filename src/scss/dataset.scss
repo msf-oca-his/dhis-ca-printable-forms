@@ -14,12 +14,22 @@
 
 .subpage {
   margin           : 2mm auto;
-  padding          : 2mm;
+  padding-bottom   : 2mm;
+  padding-left     : 2mm;
+  padding-right    : 2mm;
   width            : 200mm;
   border           : 0.7mm red solid;
   height           : 278mm;
   page-break-after : always;
   position         : relative;
+}
+
+.notfirstpage {
+  padding-top: 8mm;
+}
+
+.firstpage {
+  padding-top: 2mm;
 }
 
 .deField {
