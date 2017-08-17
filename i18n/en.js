@@ -32,5 +32,6 @@ module.exports = {
 	"page": "Page",
 	"part": "Part",
 	"of": "of",
-	'close':'CLOSE'
+	'close':'CLOSE',
+  'apply_changes':'Apply changes'
 };
