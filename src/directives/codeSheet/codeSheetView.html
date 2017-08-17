@@ -1,9 +1,9 @@
 <div class="programName">{{ programName }} - {{ 'codes' | translate }}</div>
 
-<table class="container">
+<table>
   <tr>
     <td valign="top" ng-repeat="column in columns track by $index" style="width:{{columnWidth}}">
-      <table class="container">
+      <table>
         <tr ng-repeat="codesheetElement in column" ng-class="getClass(codesheetElement)">
           <td class="codeSheetCode" style="height:{{ rowHeight }}; width:{{widthOfCode}}">{{ codesheetElement.code }}</td>
           <td class="codeSheetLabel" style="height:{{ rowHeight }}; width:{{widthOfOption}}">{{ codesheetElement.label }}</td>
