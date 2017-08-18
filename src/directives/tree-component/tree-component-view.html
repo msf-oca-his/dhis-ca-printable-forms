@@ -1,2 +1,4 @@
-<js-tree ng-repeat="rootNode in rootNodes" index={{$index}} root-node="rootNode" selectable="true" on-changed="onTreeSelectionChanged(e, data)"></js-tree>
-<button ng-if="rootNodes.length > 0" ng-click="render()" class="btn btn-success hidden-print">{{ 'apply_changes' | translate}}</button>
+<h4 class="display-4 text-center" id="tree-heading" ng-if="rootNodes.length > 0">{{'tree_title' | translate}}</h4>
+<div class="tree"><js-tree ng-repeat="rootNode in rootNodes" index={{$index}} root-node="rootNode" selectable="true" on-changed="onTreeSelectionChanged(e, data)" show-icons="false"></js-tree>
+</div>
+<button ng-if="rootNodes.length > 0" ng-click="render()" class="btn btn-success btn-block hidden-print" id="apply-changes">{{ 'apply_changes' | translate}}</button>

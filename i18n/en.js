@@ -33,5 +33,6 @@ module.exports = {
 	"part": "Part",
 	"of": "of",
 	'close':'CLOSE',
-  'apply_changes':'Apply changes'
+  'apply_changes':'Apply changes',
+	'tree_title': 'Customize selections'
 };
