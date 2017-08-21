@@ -134,15 +134,16 @@ TallySheets.controller('TallySheetsController', ['$scope', 'DataSetService', 'Da
 		};
 		$scope.renderTemplates = function(templates) {
 			$scope.pages = [];
-      setTimeout(function(){
+			var render = function(){
         $scope.$apply();
         $q.when(templates ? templates : getTemplatesFromDHIS())
+					.then(customizeTemplates)
           .then(processTemplates)
           .then(addProcessedPagesToDOM)
           .catch(handleError)
-        	.then(releaseUI);
-      }.bind(this), 100);//giving the app enough time to load respective css like dataset.css or coversheet etc
+          .then(releaseUI);
+      }.bind(this);
+      setTimeout(render, 100);//giving the app enough time to load respective css like dataset.css or coversheet etc
 		};
-
 		var releaseUI = function(){}; //TODO: define this
 	}]);

@@ -7,7 +7,7 @@ describe("TallySheets ctrl", function() {
 	var mockedDataSetService;
 	var mockedDataSetProcessor;
 	var mockedProgramService;
-	var mockedCodesheetProcessor, mockedCoversheetProcessor, mockedRegisterProcessor;
+	var mockedCodesheetProcessor, mockedCoversheetProcessor, mockedRegisterProcessor, mockedTemplateCustomizationService;
 	var expectedPages;
 	var mockedValidationService;
 	var mockDataset;
@@ -66,7 +66,7 @@ describe("TallySheets ctrl", function() {
 			process: function() {
 				if(_.isEmpty(arguments[0]))
 					return [];
-				return expectedPages;
+				return {type: "dataset", templates: arguments[0]};
 			}
 		};
 
@@ -74,21 +74,26 @@ describe("TallySheets ctrl", function() {
       process: function() {
         if(_.isEmpty(arguments[0]))
           return [];
-        return "coversheet";
+        return {type: "coversheet", templates: arguments[0]};
       }
     };
     mockedCodesheetProcessor = {
       process: function() {
         if(_.isEmpty(arguments[0]))
           return [];
-        return "codesheet";
+        return {type: "codesheet", templates: arguments[0]};
       }
     };
     mockedRegisterProcessor = {
       process: function() {
         if(_.isEmpty(arguments[0]))
           return [];
-        return "register";
+        return {type: "register", templates: arguments[0]};
+      }
+    };
+    mockedTemplateCustomizationService ={
+      customizeTemplates : function() {
+        return ["customized templates"];
       }
     };
 		mockedValidationService = {
@@ -100,6 +105,7 @@ describe("TallySheets ctrl", function() {
 		$provide.value('OptionSetFactory', $q.when({}));
 		$provide.value('DataSetService', mockedDataSetService);
 		$provide.value('DataSetProcessor', mockedDataSetProcessor);
+		$provide.value('TemplateCustomizationService', mockedTemplateCustomizationService);
 		$provide.value('ProgramService', mockedProgramService);
 		$provide.value('CustomAttributeValidationService', mockedValidationService);
 		$provide.value('TemplatesToJsTreeNodesService', mockedTemplatesToJsTreeNodesService);
@@ -145,61 +151,119 @@ describe("TallySheets ctrl", function() {
         var template = { type: 'DataSet', data: { id: '143' }, displayName: "tally_ds1" };
         scope.selectedTemplatesType = 'DATASET';
         scope.renderTemplates([ template ]);
+        setTimeout(function() {
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual({ templates: [ template ], type: 'dataset' });
+          done();
+        }, 100)
+
+      });
+
+      describe("and customized", function() {
+        it("should render customized dataset", function(done) {
+          var template = { type: 'DataSet', data: { id: '143' }, displayName: "tally_ds1" };
+          scope.programMode = pageTypes.DATASET;
+          scope.selectedTemplatesType = 'DATASET';
+          scope.templatesCustomizations = [ "blah", "blah" ];
+          scope.renderTemplates([ template ]);
+          setTimeout(function() {
+            scope.$apply();
+            expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual({ type: "dataset", templates: ["customized templates"] });
+            done();
+          }, 100)
+
+        });
+      });
+    });
+    describe("when program is selected", function() {
+      var template;
+      beforeEach(function(){
+        template = { type: 'PROGRAM', data: { id: '143' }, displayName: "perpt_ds1" };
+        scope.selectedTemplatesType = 'PROGRAM';
+      });
+      it("should render coversheet", function(done) {
+        scope.programMode = pageTypes.COVERSHEET;
+        scope.renderTemplates([ template ]);
         setTimeout(function(){
           scope.$apply();
           expect(scope.spinnerShown).toEqual(false);
-          expect(scope.pages).toEqual(expectedPages);
+          expect(scope.pages).toEqual({templates: template, type: 'coversheet'});
+          done();
+        }, 100)
+
+      });
+      describe("and customized",function(){
+        it("should render customized coversheet", function(done) {
+          scope.programMode = pageTypes.COVERSHEET;
+          scope.renderTemplates([ template ]);
+          scope.templatesCustomizations = ["blah", "blah"];
+          setTimeout(function(){
+            scope.$apply();
+            expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual({type: "coversheet", templates: "customized templates"});
+            done();
+          }, 100)
+
+        });
+      });
+      it("should render codesheet", function(done) {
+        scope.programMode = pageTypes.CODESHEET;
+        scope.renderTemplates([ template ]);
+        setTimeout(function(){
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual({templates: template, type: 'codesheet'});
+          done();
+        }, 100)
+
+      });
+      describe("and customized",function(){
+        it("should render customized codesheet", function(done) {
+          scope.programMode = pageTypes.CODESHEET;
+          scope.renderTemplates([ template ]);
+          scope.templatesCustomizations = ["blah", "blah"];
+          setTimeout(function(){
+            scope.$apply();
+            expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual({type: "codesheet", templates: "customized templates"});
+            done();
+          }, 100)
+
+        });
+      });
+      it("should render register", function(done) {
+        scope.programMode = pageTypes.REGISTER;
+        scope.renderTemplates([ template ]);
+        setTimeout(function(){
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual({templates: template, type: 'register'});
           done();
         }, 100)
       });
-      describe("when program is selected", function() {
-      	var template;
-      	beforeEach(function(){
-          template = { type: 'PROGRAM', data: { id: '143' }, displayName: "perpt_ds1" };
-          scope.selectedTemplatesType = 'PROGRAM';
-				});
-        it("should render coversheet", function(done) {
-          scope.programMode = pageTypes.COVERSHEET;
-          scope.renderTemplates([ template ]);
-          setTimeout(function(){
-            scope.$apply();
-            expect(scope.spinnerShown).toEqual(false);
-            expect(scope.pages).toEqual("coversheet");
-            done();
-          }, 100)
-
-        });
-        it("should render codesheet", function(done) {
-          scope.programMode = pageTypes.CODESHEET;
-          scope.renderTemplates([ template ]);
-          setTimeout(function(){
-            scope.$apply();
-            expect(scope.spinnerShown).toEqual(false);
-            expect(scope.pages).toEqual("codesheet");
-            done();
-          }, 100)
-
-        });
-        it("should render register", function(done) {
+      describe("and customized",function(){
+        it("should render customized register", function(done) {
           scope.programMode = pageTypes.REGISTER;
           scope.renderTemplates([ template ]);
+          scope.templatesCustomizations = ["blah", "blah"];
           setTimeout(function(){
             scope.$apply();
             expect(scope.spinnerShown).toEqual(false);
-            expect(scope.pages).toEqual("register");
+            expect(scope.pages).toEqual({type: "register", templates: "customized templates"});
             done();
           }, 100)
+
         });
-
       });
-
-      it("should not render the template which is neither program nor dataset", function() {
-        scope.selectedTemplatesType = "testType";
-        scope.renderTemplates([ { id: 'blah', data: {}, displayName: "perPt_prog1" } ]);
-        scope.$apply();
-        expect(scope.spinnerShown).toEqual(false);
-        expect(scope.pages).toEqual([]);
-      });
+    });
+    it("should not render the template which is neither program nor dataset", function() {
+      scope.selectedTemplatesType = "testType";
+      scope.renderTemplates([ { id: 'blah', data: {}, displayName: "perPt_prog1" } ]);
+      scope.$apply();
+      expect(scope.spinnerShown).toEqual(false);
+      expect(scope.pages).toEqual([]);
     });
   });
 });

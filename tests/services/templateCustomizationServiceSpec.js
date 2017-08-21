@@ -12,7 +12,7 @@ describe("TemplateCustomizationService", function()
     });
     dataSet.name = 'dataSet';
     dataSet.sections = [
-      { dataElements: [ 's1de1', 's1de2', 's1de3' ] }, { dataElements: [ 's2de1', 's2de2', 's2de3' ] }
+      { dataElements: [ 's1de1', 's1de2', 's1de3' ] }, { dataElements: [ 's2de1', 's2de2', 's2de3' ]}, { dataElements: [ 's3de1', 's3de2', 's3de3' ] }
     ];
     customizations[0] = {partialSectionRemoval: {}, completeSectionRemoval: {}};
     expectedDataSets = [_.cloneDeep(dataSet)];
@@ -52,6 +52,16 @@ describe("TemplateCustomizationService", function()
         var actualCustomizedDataSets = templateCustomizationService.customizeTemplates([dataSet], customizations, pageTypes.DATASET);
         expectedDataSets[0].sections[0].dataElements = ['s1de2', 's1de3'];
         expectedDataSets[0].sections[1].dataElements = ['s2de2', 's2de3'];
+        expect(actualCustomizedDataSets).toEqual(expectedDataSets);
+      });
+    });
+    describe("when 2 sections are removed", function() {
+      it("should remove those 2 sections from render", function(){
+        customizations[0].partialSectionRemoval = {};
+        customizations[0].completeSectionRemoval[0]={};
+        customizations[0].completeSectionRemoval[1]={};
+        var actualCustomizedDataSets = templateCustomizationService.customizeTemplates([dataSet], customizations, pageTypes.DATASET);
+        _.pullAt(expectedDataSets[0].sections, [0, 1]);
         expect(actualCustomizedDataSets).toEqual(expectedDataSets);
       });
     });

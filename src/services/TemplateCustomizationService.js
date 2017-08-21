@@ -9,16 +9,16 @@ TallySheets.service('TemplateCustomizationService', [ 'PageTypes', function(Page
         else if(_.isEqual(templatesType, PageTypes.PROGRAM))
           _.pullAt(template.programStages[0].programStageSections[sectionIndex].programStageDataElements, _.keys(dataElementIndexesAsObjects));
       };
-      var removeSection = function(sectionIndex){
+      var removeSections = function(sectionIndexes){
         if(_.isEqual(templatesType, PageTypes.DATASET))
-          _.pullAt(template.sections, sectionIndex);
+          _.pullAt(template.sections, sectionIndexes);
         else if(_.isEqual(templatesType, PageTypes.PROGRAM))
-          _.pullAt(template.programStages[0].programStageSections, sectionIndex);
+          _.pullAt(template.programStages[0].programStageSections, sectionIndexes);
       };
       if(_.isEmpty(customizations[index]))
         return;
       _.map(customizations[index].partialSectionRemoval, removeDataElement);
-      _.map(_.keys(customizations[index].completeSectionRemoval), removeSection);
+       removeSections(_.keys(customizations[index].completeSectionRemoval));
     };
 
     _.map(customizedTemplates, customizeTemplate);
