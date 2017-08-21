@@ -3,14 +3,14 @@
     <td class="sno-header" style="width:{{widthOfSNOColumn}}; height:{{tableHeaderHeight}}">
       {{ 's_no' | translate }}
     </td>
-    <td class="deLabel" style="width:{{ registerColumn.renderType.width + units }};height:{{tableHeaderHeight}}"
+    <td class="deLabel" style="width:{{ ( registerColumn.renderType.width -1 )+ units }};height:{{tableHeaderHeight}}"
         ng-repeat="registerColumn in content">
-      {{ registerColumn.name | translate}}
+      {{ registerColumn.name}}
     </td>
   </tr>
   <tr ng-repeat="row in rows track by $index">
     <td class="sno-value" style="height:{{ rowHeight }};width:{{widthOfSNOColumn}}">{{ $index + 1 }}</td>
-    <td ng-repeat="registerColumn in content" class="deField" style="width:{{ registerColumn.renderType.width + units }};height:{{rowHeight}};">
+    <td ng-repeat="registerColumn in content" class="deField" style="width:{{ (registerColumn.renderType.width - 1) + units }};height:{{rowHeight}};">
     </td>
   </tr>
 </table>

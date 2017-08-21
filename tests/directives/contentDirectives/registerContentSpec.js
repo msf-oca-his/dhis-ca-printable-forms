@@ -28,7 +28,8 @@ describe("Register Content", function() {
 				pageHeaderHeight: 10,
 				textElementWidth: 50,
 				otherElementWidth: 30,
-				defaultColumnWidth:30
+				defaultColumnWidth:30,
+        widthOfSNOColumn: 10,
 			},
 			Metrics: {
 				mm: "mm"
@@ -47,9 +48,12 @@ describe("Register Content", function() {
 		$scope.programName = "programName";
 		dataElements = [{
 			id: "1234",
-			isResolved: Promise.resolve({}),
 			name: "dataElement",
-			type: "TEXT"
+			type: "TEXT",
+      renderType: {
+        code: 10,
+        width: 60
+      }
 		}];
 		$scope.modelContents = dataElements;
 		createElement()
@@ -59,21 +63,18 @@ describe("Register Content", function() {
 		$scope.modelContents = [
 			{
 				id: "1234",
-				isResolved: Promise.resolve({}),
 				name: "dataElement1",
 				displayName: "dataElement1",
 				type: "TEXT"
 			},
 			{
 				id: "1234",
-				isResolved: Promise.resolve({}),
 				name: "dataElement2",
 				displayName: "dataElement2",
-				type: "TEXT"
+				type: "TEXT",
 			},
 			{
 				id: "1234",
-				isResolved: Promise.resolve({}),
 				name: "dataElement3",
 				displayName: "dataElement3",
 				type: "TEXT"
@@ -93,22 +94,11 @@ describe("Register Content", function() {
 		expect(element.querySelectorAll(".sno-value")[0].style.height).toEqual(config.Register.dataEntryRowHeight + "mm")
 	});
 
-	describe("get class", function() {
-		it("should give de field text type if dataelement type is TEXT", function() {
-			var defaultRenderType =	{
-				code: "10",
-					width: 60
-			};
-			var registerColumn = {name:'Comments',renderType:defaultRenderType};
-			$scope.$digest();
-			expect(elementScope.getWidthOfRegisterColumn(registerColumn)).toEqual('60mm');
-		});
-
-		it("should give de general text type if dataelement type is not TEXT", function() {
-			var registerColumn = {name:'Comments'};
-			$scope.$digest();
-			expect(elementScope.getWidthOfRegisterColumn(registerColumn)).toEqual('30mm');
-		});
+	it("should assign width of data elements", function() {
+		dataElements[0].renderType.width = 100;
+		createElement();
+		$scope.$digest();
+		expect(element.querySelector('.deLabel').style.width).toBe("99mm");
 	});
 
 	it("should be able to identify number of rows it can hold", function() {
