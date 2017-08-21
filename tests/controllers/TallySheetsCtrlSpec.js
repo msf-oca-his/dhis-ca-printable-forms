@@ -141,13 +141,16 @@ describe("TallySheets ctrl", function() {
 	describe("render templates", function() {
 
     describe("when dataset is selected", function() {
-      it("should render dataset", function() {
+      it("should render dataset", function(done) {
         var template = { type: 'DataSet', data: { id: '143' }, displayName: "tally_ds1" };
         scope.selectedTemplatesType = 'DATASET';
         scope.renderTemplates([ template ]);
-        scope.$apply();
-        expect(scope.spinnerShown).toEqual(false);
-        expect(scope.pages).toEqual(expectedPages);
+        setTimeout(function(){
+          scope.$apply();
+          expect(scope.spinnerShown).toEqual(false);
+          expect(scope.pages).toEqual(expectedPages);
+          done();
+        }, 100)
       });
       describe("when program is selected", function() {
       	var template;
@@ -155,26 +158,37 @@ describe("TallySheets ctrl", function() {
           template = { type: 'PROGRAM', data: { id: '143' }, displayName: "perpt_ds1" };
           scope.selectedTemplatesType = 'PROGRAM';
 				});
-        it("should render coversheet", function() {
+        it("should render coversheet", function(done) {
           scope.programMode = pageTypes.COVERSHEET;
           scope.renderTemplates([ template ]);
-          scope.$apply();
-          expect(scope.spinnerShown).toEqual(false);
-          expect(scope.pages).toEqual("coversheet");
+          setTimeout(function(){
+            scope.$apply();
+            expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual("coversheet");
+            done();
+          }, 100)
+
         });
-        it("should render codesheet", function() {
+        it("should render codesheet", function(done) {
           scope.programMode = pageTypes.CODESHEET;
           scope.renderTemplates([ template ]);
-          scope.$apply();
-          expect(scope.spinnerShown).toEqual(false);
-          expect(scope.pages).toEqual("codesheet");
+          setTimeout(function(){
+            scope.$apply();
+            expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual("codesheet");
+            done();
+          }, 100)
+
         });
-        it("should render register", function() {
+        it("should render register", function(done) {
           scope.programMode = pageTypes.REGISTER;
           scope.renderTemplates([ template ]);
-          scope.$apply();
-          expect(scope.spinnerShown).toEqual(false);
-          expect(scope.pages).toEqual("register");
+          setTimeout(function(){
+            scope.$apply();
+            expect(scope.spinnerShown).toEqual(false);
+            expect(scope.pages).toEqual("register");
+            done();
+          }, 100)
         });
 
       });
