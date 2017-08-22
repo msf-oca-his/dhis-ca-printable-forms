@@ -1,7 +1,7 @@
 {
 	"version":"1.2",
-	"name":"Print Tally Sheets",
-	"description":"Print Tally Sheets",
+	"name":"Printable forms",
+	"description":"Printable forms",
 	"launch_path":"index.html",
 	"icons":{"16":null,
 	"48":"resources/img/Logo_48.png",
