@@ -44,7 +44,7 @@
     <link href="css/register.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'REGISTER'">
     <link href="css/codesheet.css" rel="stylesheet" type="text/css" ng-if="$parent.programMode == 'CODESHEET'">
     <div>
-      <div class="tree-container noprint">
+      <div class="tree-container noprint" ng-show="$parent.templates.length > 0">
         <tree-component class="noprint" templates="$parent.templates" templates-customizations="$parent.templatesCustomizations" selected-templates-type="selectedTemplatesType" on-render="renderTemplates(templates)"></tree-component>
       </div>
       <div class="pages">
