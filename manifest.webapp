@@ -1,6 +1,6 @@
 {
-	"version":"1.2",
-	"name":"Print Tally Sheets",
+	"version":"2.0",
+	"name":"Printable Forms - Tree",
 	"description":"Printable Forms - Tree",
 	"launch_path":"index.html",
 	"icons":{"16":null,
