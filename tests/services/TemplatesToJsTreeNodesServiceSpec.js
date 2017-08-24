@@ -1,12 +1,19 @@
 describe('TemplatesToJsTreeNodesServiceSpec', function() {
-	var templatesToJsTreeNodesService;
+	var templatesToJsTreeNodesService, mockedPrintFriendlyUtils = {};
 	var programAttributes, dataSetAttributes;
 	var dataSetTemplate, programTemplate, treeNodeTypes;
 	beforeEach(function() {
 		angular.module('d2HeaderBar', []);
 		module("TallySheets");
+		mockedPrintFriendlyUtils.getDataElementsToDisplay = function(dataElements){
+			return dataElements;
+		};
+    module(function($provide) {
+      $provide.value('PrintFriendlyUtils', mockedPrintFriendlyUtils);
+    });
 
-		inject(function($injector, TemplatesToJsTreeNodesService, DataSetAttributes, ProgramAttributes, TreeNodeTypes) {
+
+    inject(function($injector, TemplatesToJsTreeNodesService, DataSetAttributes, ProgramAttributes, TreeNodeTypes) {
 			templatesToJsTreeNodesService = TemplatesToJsTreeNodesService;
 			dataSetAttributes = DataSetAttributes;
 			programAttributes = ProgramAttributes;
@@ -81,7 +88,7 @@ describe('TemplatesToJsTreeNodesServiceSpec', function() {
     expect(treeNodeTypes.DATAELEMENT).toEqual(actualNode.children[1].children[0].type);
   });
 
-	it("should get correct path for inner dataelements and sections for programs",function() {
+	it("should get correct index for inner dataelements and sections for programs",function() {
 		programTemplate.programStages[0].programStageSections[1] = {programStageDataElements:[{},{},{}]};
 		var actualNode = templatesToJsTreeNodesService.getJsTreeNodes(programTemplate,'PROGRAM');
 		expect(1).toEqual(actualNode.children[1].children[1].index);

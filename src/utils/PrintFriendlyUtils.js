@@ -85,18 +85,16 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 		}
 	};
 
-	PrintFriendlyUtils.getDataElementsToDisplay = function(dataElements) {
-		if(!config.customAttributes.displayOptionUID) return dataElements;
-		var getOptionSetDataElements = function(dataElement) {
-			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
-				var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues,"displayOptionUID");
-				if(displayOptionAttribute) {
-					return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;
-				}
-			}
-			return true;
-		};
-		return _.filter(dataElements, getOptionSetDataElements);
-	};
+  PrintFriendlyUtils.getDataElementsToDisplay = function(dataElements) {//TODO: move this to templates preprocessor(new thing to be created)
+    if(!config.customAttributes.displayOptionUID) return dataElements;
+    var isDisplayableDataElement = function(dataElement) {
+      var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues,"displayOptionUID");
+      if(displayOptionAttribute) {
+        return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;
+      }
+      else return true;
+    };
+    return _.filter(dataElements, isDisplayableDataElement);
+  };
 	return PrintFriendlyUtils;
 }]);
