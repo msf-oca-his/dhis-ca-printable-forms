@@ -63,8 +63,11 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 					}
 					else if(PrintFriendlyUtils.isOptionSetSection(section, dataElementsKey))
 						return section.dataElements[0].options.length - Math.round(overFlow * optionSetNumberOfColumns / (configDataSet.defaultHeightOfDataElementLabel));
-					else
-						return section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (configDataSet.defaultHeightOfDataElementLabel));
+					else{
+            var elementsThatCanFit = section.dataElements.length - Math.round(overFlow * noOfDefaultTypeColumns / (configDataSet.defaultHeightOfDataElementLabel));
+            return elementsThatCanFit % 2 == 0 ? elementsThatCanFit : elementsThatCanFit - 1;
+					}
+
 				};
 
 				var breakAndAddSection = function(section, numberOfElementsThatCanFit) {
@@ -90,7 +93,6 @@ TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'Co
 					}
 					else {
 						var newSection = _.cloneDeep(section);
-						(numberOfElementsThatCanFit % noOfDefaultTypeColumns == 0) ? 0 : ++numberOfElementsThatCanFit;
 						newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
 						addSectionToPage(section, page.heightLeft);
 						addSectionToNewPage(newSection);
