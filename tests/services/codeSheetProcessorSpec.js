@@ -30,6 +30,10 @@ describe("CodeSheet Processor", function() {
 					options: {
 						none: '0'
 					}
+				},
+				hideInCodeSheet: {
+					id:'123',
+					associatedWith:['dataElement']
 				}
 			}
 		};

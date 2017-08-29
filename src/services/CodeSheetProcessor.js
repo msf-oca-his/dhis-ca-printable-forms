@@ -53,7 +53,8 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 	var getCodeSheetElements = function(program) {
 		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, dataElementKey));
 		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay(allDataElements);
-		_.map(allDataElements, function(dataElement) {
+		var filterAllHiddenDataElements= PrintFriendlyUtils.removeHiddenDataElementsInCodeSheet(allDataElements);
+		_.map(filterAllHiddenDataElements, function(dataElement) {
 			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
 				addNewCodeSheetHeading(dataElement.displayFormName);
 				_.map(dataElement.options, function(option) {

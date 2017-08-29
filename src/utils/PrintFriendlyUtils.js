@@ -76,7 +76,7 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 			var numberOfColumnsThatCanFitInThisSection = (overflow > 1) ? numberOfFittingColumns : numberOfFittingColumns - 1;
 			var newSection = _.cloneDeep(section);
 			newSection.categoryCombo.categoryOptionCombos = section.categoryCombo.categoryOptionCombos.splice(numberOfColumnsThatCanFitInThisSection);
-			_.map(newSection.dataElements, function(dataElement){
+			_.map(newSection.dataElements, function(dataElement) {
 				dataElement.greyedFieldIndexes = _.map(dataElement.greyedFieldIndexes, function(greyedFieldIndex) {
 					return greyedFieldIndex - numberOfColumnsThatCanFitInThisSection;
 				});
@@ -89,7 +89,7 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 		if(!config.customAttributes.displayOptionUID) return dataElements;
 		var getOptionSetDataElements = function(dataElement) {
 			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
-				var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues,"displayOptionUID");
+				var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "displayOptionUID");
 				if(displayOptionAttribute) {
 					return displayOptionAttribute.value != config.customAttributes.displayOptionUID.options.none;
 				}
@@ -97,6 +97,16 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 			return true;
 		};
 		return _.filter(dataElements, getOptionSetDataElements);
+	};
+
+	PrintFriendlyUtils.removeHiddenDataElementsInCodeSheet = function(dataElements) {
+		return _.filter(dataElements, function(dataElement) {
+			var hideInCoverSheet = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, 'hideInCodeSheet');
+			if(hideInCoverSheet) {
+				return hideInCoverSheet.value != 'true';
+			}
+			return true;
+		});
 	};
 	return PrintFriendlyUtils;
 }]);
