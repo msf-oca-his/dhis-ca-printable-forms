@@ -101,11 +101,8 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 
 	PrintFriendlyUtils.removeHiddenDataElementsInCodeSheet = function(dataElements) {
 		return _.filter(dataElements, function(dataElement) {
-			var hideInCoverSheet = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, 'hideInCodeSheet');
-			if(hideInCoverSheet) {
-				return hideInCoverSheet.value != 'true';
-			}
-			return true;
+			var hideInCodeSheet = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, 'hideInCodeSheet');
+			return hideInCodeSheet ? hideInCodeSheet.value != 'true' : true;
 		});
 	};
 	return PrintFriendlyUtils;

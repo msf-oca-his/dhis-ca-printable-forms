@@ -50,11 +50,8 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		currentRowIndex++;
 	};
 
-	var getCodeSheetElements = function(program) {
-		var allDataElements = _.flatten(_.map(program.programStages[0].programStageSections, dataElementKey));
-		allDataElements = PrintFriendlyUtils.getDataElementsToDisplay(allDataElements);
-		var filterAllHiddenDataElements= PrintFriendlyUtils.removeHiddenDataElementsInCodeSheet(allDataElements);
-		_.map(filterAllHiddenDataElements, function(dataElement) {
+	var processCodeSheetElements = function(program) {
+		var addDataElementToCodesheet = function(dataElement) {
 			if(dataElement.valueType == DhisConstants.ValueTypes.OPTIONSET) {
 				addNewCodeSheetHeading(dataElement.displayFormName);
 				_.map(dataElement.options, function(option) {
@@ -62,7 +59,14 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 				});
 				addNewCodeSheetGap();
 			}
-		});
+		};
+		_(program.programStages[0].programStageSections)
+			.map(dataElementKey)
+			.flatten()
+			.thru(PrintFriendlyUtils.getDataElementsToDisplay)
+			.thru(PrintFriendlyUtils.removeHiddenDataElementsInCodeSheet)
+			.map(addDataElementToCodesheet)
+			.value();
 	};
 
 	this.process = function(program) {
@@ -79,7 +83,7 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 		pages = [];
 		currentPageIndex = -1;
 		page = getNewPage();
-		getCodeSheetElements(program);
+		processCodeSheetElements(program);
 		return pages;
 	};
 }]);
