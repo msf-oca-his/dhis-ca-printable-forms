@@ -114,6 +114,10 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 					width: 80
 				}
 			}
+		},
+		hideInCodeSheet: {
+			id:'WMOkMFMI1kq',
+			associatedWith:['dataElement']
 		}
 	};
 	config.showUserRelatedFormsOnly = true;

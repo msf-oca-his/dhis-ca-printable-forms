@@ -15,6 +15,9 @@ describe("Print Friendly Utils", function() {
 					options: {
 						none: '0'
 					}
+				},
+				hideInCodeSheet: {
+					id: '12'
 				}
 			},
 			Delimiters: {
@@ -126,8 +129,8 @@ describe("Print Friendly Utils", function() {
 			testSections = [{
 				categoryCombo: {categoryOptionCombos: []},
 				isCatComb: true,
-				dataElements:[{
-					greyedFieldIndexes:[7,8]
+				dataElements: [{
+					greyedFieldIndexes: [7, 8]
 				}]
 			}
 			];
@@ -193,20 +196,66 @@ describe("Print Friendly Utils", function() {
 				expect(testSections[3].categoryCombo.categoryOptionCombos).toEqual([1, 2, 3, 4, 5]);
 			});
 
-			it("should substract number columns that can fit from the grey indexes array when columns got overflowed",function() {
-				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7,8];
+			it("should substract number columns that can fit from the grey indexes array when columns got overflowed", function() {
+				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5, 6, 7, 8];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
-				expect(testSections[1].dataElements[0].greyedFieldIndexes).toEqual([2,3]);
+				expect(testSections[1].dataElements[0].greyedFieldIndexes).toEqual([2, 3]);
 			});
 
-			it("should be same grey indexes array when columns not overflowed",function() {
+			it("should be same grey indexes array when columns not overflowed", function() {
 				testSections[0].categoryCombo.categoryOptionCombos = [1, 2, 3, 4, 5];
 				printFriendlyUtils.divideCatCombsIfNecessary(testSections, 0, "testKey");
-				expect(testSections[0].dataElements[0].greyedFieldIndexes).toEqual([7,8]);
+				expect(testSections[0].dataElements[0].greyedFieldIndexes).toEqual([7, 8]);
 			})
 
 		});
 
+	});
+
+	describe("apply hideInCodesheet to dataelements", function() {
+		var datElements,expectedDataElements;
+		beforeEach(function() {
+			datElements = [{
+				attributeValues: [{
+					value: 'true',
+					attribute:{
+						id:'12'
+					}
+				}]
+			}, {attributeValues:[{
+				value:'false',
+				attribute:{
+					id:'12'
+				}
+			}]}];
+
+			expectedDataElements = [
+				{attributeValues:[{
+					value:'false',
+					attribute:{
+						id:'12'
+					}
+				}]}
+			];
+		});
+
+
+		it("should hide the datalements when hideInCodeSheet is set to true", function() {
+			var actualDataElements=printFriendlyUtils.removeHiddenDataElementsInCodeSheet(datElements);
+			expect(expectedDataElements).toEqual(actualDataElements)
+		});
+
+		it("should show dataelement if it doesn't have hideInCodeSheet variable in config", function() {
+			datElements[2] = {
+				attributeValues:[{attribute:{id:'15'}}]
+			};
+			expectedDataElements.push({
+				attributeValues:[{attribute:{id:'15'}}]
+			});
+			var actualDataElements=printFriendlyUtils.removeHiddenDataElementsInCodeSheet(datElements);
+			expect(expectedDataElements).toEqual(actualDataElements)
+
+		})
 	});
 
 	xdescribe("applyDisplayOptionsToDataElements", function() {

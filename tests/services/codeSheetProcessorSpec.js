@@ -30,6 +30,10 @@ describe("CodeSheet Processor", function() {
 					options: {
 						none: '0'
 					}
+				},
+				hideInCodeSheet: {
+					id:'123',
+					associatedWith:['dataElement']
 				}
 			}
 		};
@@ -107,7 +111,7 @@ describe("CodeSheet Processor", function() {
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = {
 				id: "111",
 				displayFormName: "de1",
-				valueType: "INTEGER"
+				valueType: "INTEGER",
 			};
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[2] = {
 				id: "112",
