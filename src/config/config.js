@@ -116,7 +116,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			}
 		},
 		hideInCodeSheet: {
-			id:'CfFqDw7iYNY',
+			id:'WMOkMFMI1kq',
 			associatedWith:['dataElement']
 		}
 	};

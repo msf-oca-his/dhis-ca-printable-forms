@@ -10,13 +10,20 @@
         class="{{content.leftSideDataElements[$index].greyField ? 'greyDeField deField' : 'yesno' }}">
       <span ng-if="!leftSideDataElement.greyField">
       <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
-      <span class="checkbox-separator"></span>
+        <span class="checkbox-separator"></span>
       <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
       </span>
     </td>
 
+    <td ng-if="content.leftSideDataElements[$index].valueType==yesOnlyType"
+        style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};display:inline-block"
+        class="{{content.leftSideDataElements[$index].greyField ? 'greyDeField deField' : 'yesOnly' }}">
+      <span ng-if="!leftSideDataElement.greyField">
+      <input type="checkbox" class="pffcheckbox">{{ 'yesOnly' | translate }}</input>
+    </td>
+
     <td ng-class="{deField : true, greyDeField : leftSideDataElement.greyField}"
-        ng-if="content.leftSideDataElements[$index].valueType!=booleanType"
+        ng-if="content.leftSideDataElements[$index].valueType!=booleanType && content.leftSideDataElements[$index].valueType!=yesOnlyType"
         style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}">
     </td>
 
@@ -32,13 +39,21 @@
             style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};display:inline-block">
             <span ng-if="!content.rightSideDataElements[$index].greyField">
             <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
-            <span class="checkbox-separator"></span>
+              <span class="checkbox-separator"></span>
             <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
             </span>
         </td>
+
+        <td ng-if="content.rightSideDataElements[$index].valueType==yesOnlyType"
+            style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}};display:inline-block"
+            class="{{content.rightSideDataElements[$index].greyField ? 'greyDeField deField' : 'yesOnly' }}">
+          <span ng-if="!rightSideDataElements.greyField">
+          <input type="checkbox" class="pffcheckbox">{{ 'yesOnly' | translate }}</input>
+        </td>
+
         <td ng-class="{deField: true, greyDeField: content.rightSideDataElements[$index].greyField}"
             style="width:{{widthOfDataElementField}}; height:{{heightOfDataElement}}"
-            ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!=booleanType">
+            ng-if="content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!=booleanType&&content.rightSideDataElements[$index] && content.rightSideDataElements[$index].valueType!=yesOnlyType">
         </td>
     </span>
   </tr>

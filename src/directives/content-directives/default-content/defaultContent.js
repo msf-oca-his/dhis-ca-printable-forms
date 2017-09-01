@@ -7,6 +7,7 @@ TallySheets.directive('defaultContent', ['DhisConstants', 'Config', function(Dhi
 		},
 		link: function($scope) {
 			$scope.booleanType = DhisConstants.ValueTypes.BOOLEAN;
+			$scope.yesOnlyType = DhisConstants.ValueTypes.YES_ONLY;
 			$scope.widthOfDataElementLabel = config.DataSet.widthOfDataElement + config.Metrics.mm;
 			$scope.widthOfDataElementField = (((config.PageTypes.A4.Portrait.availableWidth - config.DataSet.gapBetweenColumnsInDefaultRendering) / config.DataSet.numberOfColumnsInDefaultRendering) - config.DataSet.widthOfDataElement) + config.Metrics.mm;
 			$scope.heightOfDataElement = config.DataSet.defaultHeightOfDataElementLabel + config.Metrics.mm;
