@@ -8,6 +8,10 @@ require("./directives/page-content/pageContent.js");
 require("./directives/tree-component/tree-component.js");
 
 require("./directives/content-directives/list/list.js");
+require("./directives/content-directives/default-content/boolean/boolean.js");
+require("./directives/content-directives/default-content/yes-only/yesOnly.js");
+require("./directives/content-directives/default-content/default-type/defaultType.js");
+require("./directives/content-directives/default-content/default-renderer/defaultRenderer.js");
 require("./directives/content-directives/default-content/defaultContent.js");
 require("./directives/content-directives/category-combo/categoryCombo.js");
 require("./directives/content-directives/section-title/sectionTitle.js");

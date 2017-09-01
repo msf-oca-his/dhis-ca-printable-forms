@@ -15,3 +15,13 @@ TallySheets.factory('ContentTypes', [function() {
 		comments       : { type: 'COMMENTS', renderer: 'comments' }
 	}
 }]);
+
+TallySheets.factory('DefaultContentTypes',[function() {
+	return {
+		TRUE_ONLY :{renderer:'yes-only'},
+		TEXT      :{renderer:'default-type'},
+		LONG_TEXT :{renderer:'default-type'},
+		NUMBER    :{renderer:'default-type'},
+		BOOLEAN   :{renderer:'boolean'}
+	}
+}]);

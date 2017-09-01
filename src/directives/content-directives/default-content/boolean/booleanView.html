@@ -1,0 +1,8 @@
+<div style="width:{{$parent.$parent.widthOfDataElementField}}; height:{{$parent.$parent.heightOfDataElement}};display:inline-block"
+    class="{{element.greyField ? 'greyDeField deField' : 'yesno' }}">
+      <span ng-if="!element.greyField">
+      <input type="checkbox" class="pffcheckbox">{{ 'yes' | translate }}</input>
+        <span class="checkbox-separator"></span>
+      <input type="checkbox" class="pffcheckbox">{{ 'no' | translate }}</input>
+      </span>
+</div>
