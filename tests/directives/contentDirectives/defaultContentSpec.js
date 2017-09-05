@@ -46,18 +46,25 @@ describe("defaultContentSpec", function() {
 		element = compile(element)($scope);
 		$scope.$digest();
 		expect(element[0].getElementsByClassName('left-row')[0].children[0].tagName).toEqual('BOOLEAN');
-		expect(element[0].getElementsByClassName('right-row')[0].children[0].tagName).toEqual('DEFAULT-TYPE')
+		expect(element[0].getElementsByClassName('right-row')[0].children[0].tagName).toEqual('DEFAULT-DATA-ELEMENT-TYPE')
 	});
 	it("should render all the default content types when more than two dataelements present",function() {
 		var element = angular.element('<default-content content="test_contents"></default-content>');
 		$scope.test_contents = {leftSideDataElements:[{valueType:'NUMBER'},{valueType:'LONG_TEXT'}],rightSideDataElements:[{valueType:'TRUE_ONLY'},{valueType:'TEXT'}]};
 		element = compile(element)($scope);
 		$scope.$digest();
-		expect(element[0].getElementsByClassName('left-row')[0].children[0].tagName).toEqual('DEFAULT-TYPE');
-		expect(element[0].getElementsByClassName('left-row')[1].children[0].tagName).toEqual('DEFAULT-TYPE');
+		expect(element[0].getElementsByClassName('left-row')[0].children[0].tagName).toEqual('DEFAULT-DATA-ELEMENT-TYPE');
+		expect(element[0].getElementsByClassName('left-row')[1].children[0].tagName).toEqual('DEFAULT-DATA-ELEMENT-TYPE');
 		expect(element[0].getElementsByClassName('right-row')[0].children[0].tagName).toEqual('YES-ONLY');
-		expect(element[0].getElementsByClassName('right-row')[1].children[0].tagName).toEqual('DEFAULT-TYPE')
+		expect(element[0].getElementsByClassName('right-row')[1].children[0].tagName).toEqual('DEFAULT-DATA-ELEMENT-TYPE')
 	});
+	it("should render other dataelemtn types as default types", function() {
+		var element = angular.element('<default-content content="test_contents"></default-content>');
+		$scope.test_contents = {leftSideDataElements:[{valueType:'testType'}]};
+		element = compile(element)($scope);
+		$scope.$digest();
+		expect(element[0].getElementsByClassName('left-row')[0].children[0].tagName).toEqual('DEFAULT-DATA-ELEMENT-TYPE');
+	})
 
 	
 });

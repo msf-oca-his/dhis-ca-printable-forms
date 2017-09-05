@@ -34,5 +34,8 @@ module.exports = {
 	"of": "of",
 	"close": "Close",
 	"apply_changes": "Apply changes",
-	"tree_title": "Customise the form"
+	"tree_title": "Customise the form",
+	"Yes_YesOnly":"Yes",
+	"Yes_YesNo":"yes",
+	"No_YesNo":"no"
 };

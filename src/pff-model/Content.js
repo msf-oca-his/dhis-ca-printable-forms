@@ -19,9 +19,9 @@ TallySheets.factory('ContentTypes', [function() {
 TallySheets.factory('DefaultContentTypes',[function() {
 	return {
 		TRUE_ONLY :{renderer:'yes-only'},
-		TEXT      :{renderer:'default-type'},
-		LONG_TEXT :{renderer:'default-type'},
-		NUMBER    :{renderer:'default-type'},
+		TEXT      :{renderer:'default-data-element-type'},
+		LONG_TEXT :{renderer:'default-data-element-type'},
+		NUMBER    :{renderer:'default-data-element-type'},
 		BOOLEAN   :{renderer:'boolean'}
 	}
 }]);

@@ -4,11 +4,11 @@
     <td class="deLabel general" style="width:{{widthOfDataElementLabel}}; height:{{heightOfDataElement}}">
       {{content.leftSideDataElements[$index].displayFormName}}
     </td>
-    <td default-renderer content="content.leftSideDataElements[$index]" class="left-row"></td>
+    <td dataelement-field content="content.leftSideDataElements[$index]" class="left-row"></td>
     <td class="default-section-divider" style="width:{{gapBetweenColumns}}">
     <td class="deLabel general" ng-if="content.rightSideDataElements[$index]" style="width:{{widthOfDataElementLabel}}; height:{{heightOfDataElement}}">
       {{content.rightSideDataElements[$index].displayFormName}}
     </td>
-    <td default-renderer content="content.rightSideDataElements[$index]" class="right-row"></td>
+    <td dataelement-field content="content.rightSideDataElements[$index]" class="right-row"></td>
   </tr>
 </table>
