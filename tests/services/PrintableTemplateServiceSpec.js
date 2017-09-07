@@ -74,7 +74,7 @@ describe("printable template service spec", function() {
 
 		dataSets =
 			[{
-				displayName: "ds1",
+				displayName: "ds2",
 				attributeValues: [{
 					value: "true",
 					attribute: {
@@ -84,7 +84,7 @@ describe("printable template service spec", function() {
 				}]
 			},
 				{
-					displayName: "ds2",
+					displayName: "ds1",
 					attributeValues: [{
 						value: "false",
 						attribute: {
@@ -94,7 +94,7 @@ describe("printable template service spec", function() {
 					}]
 				}];
 		programs = [{
-			displayName: "prog1",
+			displayName: "prog2",
 			attributeValues: [{
 				value: "true",
 				attribute: {
@@ -103,7 +103,7 @@ describe("printable template service spec", function() {
 				}
 			}]
 		}, {
-			displayName: "prog2",
+			displayName: "prog1",
 			attributeValues: [{
 				value: "false",
 				attribute: {
@@ -156,10 +156,10 @@ describe("printable template service spec", function() {
 				config.customAttributes = {};
 				config.showUserRelatedFormsOnly = false;
 				var expectedTemplates = [
-					new template("DataSet", dataSets[0], "dataset_prefixds1"),
-					new template("DataSet", dataSets[1], "dataset_prefixds2"),
-					new template("Program", programs[0], "program_prefixprog1"),
-					new template("Program", programs[1], "program_prefixprog2"),
+					new template("DataSet", dataSets[1], "dataset_prefixds1"),
+					new template("DataSet", dataSets[0], "dataset_prefixds2"),
+					new template("Program", programs[1], "program_prefixprog1"),
+					new template("Program", programs[0], "program_prefixprog2"),
 				];
 				printableTemplateService.getTemplates().then(function(templates) {
 
@@ -173,8 +173,8 @@ describe("printable template service spec", function() {
 				config.customAttributes.printFlagUID = {id: '1'};
 				config.showUserRelatedFormsOnly = false;
 				var expectedTemplates = [
-					new template("DataSet", dataSets[0], "dataset_prefixds1"),
-					new template("Program", programs[0], "program_prefixprog1"),
+					new template("DataSet", dataSets[0], "dataset_prefixds2"),
+					new template("Program", programs[0], "program_prefixprog2"),
 				];
 				printableTemplateService.getTemplates().then(function(templates) {
 					expect(templates).toEqual(expectedTemplates);
@@ -187,7 +187,7 @@ describe("printable template service spec", function() {
 				config.customAttributes.printFlagUID = {id: "1"};
 				dataSets[0].attributeValues[0].value = "false";
 				var expectedTemplates = [
-					new template("Program", programs[0], "program_prefixprog1")
+					new template("Program", programs[0], "program_prefixprog2")
 				];
 				printableTemplateService.getTemplates().then(function(templates) {
 					expect(templates).toEqual(expectedTemplates);
@@ -237,11 +237,22 @@ describe("printable template service spec", function() {
 			scope.$apply();
 		});
 
+    it("should sort templates", function(done) {
+      printableTemplateService.getTemplates().then(function(templates) {
+        expect(templates[0].displayName).toBe("dataset_prefixds1");
+        expect(templates[1].displayName).toBe("dataset_prefixds2");
+        expect(templates[2].displayName).toBe("program_prefixprog1");
+        expect(templates[3].displayName).toBe("program_prefixprog2");
+        done();
+      });
+      scope.$apply();
+    });
+
 		it("should give the templtes based on users orgunit", function(done) {
 			config.showUserRelatedFormsOnly = true;
 			var actualTemplates = [
-				new template("DataSet", dataSets[1], "dataset_prefixds2"),
-				new template("Program", programs[1], "program_prefixprog2")
+				new template("DataSet", dataSets[1], "dataset_prefixds1"),
+				new template("Program", programs[1], "program_prefixprog1")
 			];
 			printableTemplateService.getTemplates().then(function(templates) {
 				expect(templates).toEqual(actualTemplates);

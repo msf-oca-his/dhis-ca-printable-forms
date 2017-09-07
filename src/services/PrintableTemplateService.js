@@ -61,10 +61,12 @@ TallySheets.service('PrintableTemplateService', ['DataSetService', 'ProgramServi
 			var programs = config.customAttributes.printFlagUID ? _.filter(dataSetsAndPrograms[1], isPrintableTemplate) : dataSetsAndPrograms[1];
 
 			var dataSetTemplates = _(dataSets)
+				.sortBy('displayName')
 				.map(prepareDataSetTemplate)
 				.value();
 
 			var programTemplates = _(programs)
+        .sortBy('displayName')
 				.map(prepareProgramTemplate)
 				.value();
 			return _.flatten([dataSetTemplates, programTemplates]);
