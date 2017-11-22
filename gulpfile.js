@@ -63,7 +63,7 @@ APP = {
 
 DEST = {
 	target: "target",
-	prodZip: "print_tally_sheets.zip"
+	prodZip: "ca-printable-forms.zip"
 };
 
 TEMP = {
