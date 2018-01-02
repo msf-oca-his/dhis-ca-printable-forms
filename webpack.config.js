@@ -1,5 +1,6 @@
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var webpack = require('webpack');
+var path = require('path');
 module.exports = {
 	entry: {
 		dependencies: "./src/dependencies.js",
@@ -27,10 +28,17 @@ module.exports = {
 		})],
 
 	output: {
-		path: './.temp',
+		path: path.join(__dirname, ".temp"),
 		filename: "[name].js"
 	},
 	module: {
-		loaders: [{test: /\.html$/, loader: "raw-loader"}]
+		rules: [{
+            test: /\.html$/,
+			use: [
+				{
+					loader: "raw-loader"
+				}
+			]
+		}]
 	}
 };
