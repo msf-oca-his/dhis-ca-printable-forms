@@ -20,6 +20,9 @@ describe("Page Directive", function() {
 		config = {
 			customAttributes: {
 				displayOptionUID: {}
+			},
+			Coversheet:{
+				maximumCharLengthForHeader: 10
 			}
 		};
 

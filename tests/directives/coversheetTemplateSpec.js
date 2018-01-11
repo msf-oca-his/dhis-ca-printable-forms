@@ -17,6 +17,9 @@ describe("Coversheet Template", function() {
 		config = {
 			customAttributes: {
 				displayOptionUID: {}
+			},
+			Coversheet: {
+				maximumCharLengthForHeader: 10
 			}
 		};
 		module(function($provide, $translateProvider) {
@@ -27,7 +30,7 @@ describe("Coversheet Template", function() {
 			$translateProvider.use('en');
 		});
 		inject(function($compile, $rootScope) {
-			$scope = $rootScope.$new();
+			$scope = $rootScope.$new().$new().$new();
 			compile = $compile;
 		});
 
@@ -45,6 +48,7 @@ describe("Coversheet Template", function() {
 		};
 
 		$scope.programName = "programName";
+		$scope.$parent.$parent.page = {type:'COVERSHEET'};
 		$scope.header = "health_structure";
 		$scope.modelContents = section;
 		createElement();

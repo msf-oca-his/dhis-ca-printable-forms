@@ -9,7 +9,7 @@ TallySheets.directive('coversheetTemplate', ['Config', function(config) {
 		},
 		link: function($scope) {
 			if(config.customAttributes.displayOptionUID)
-				$scope.displayOptions = config.customAttributes.displayOptionUID.options;
+				$scope.displayOptions = config.customAttributes.displayOptionUID.options
 		}
 	}
 }]);

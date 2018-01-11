@@ -1,7 +1,11 @@
 describe("Register Template", function() {
 	var compile, element;
 	var $scope = {}, elementScope;
-	var config = {};
+	var config = {
+		Coversheet: {
+			maximumCharLengthForHeader: 10
+		}
+	};
 	var dataElements;
 
 	function createElement() {
@@ -19,19 +23,22 @@ describe("Register Template", function() {
 
 
 		inject(function($compile, $rootScope) {
-			$scope = $rootScope.$new();
+			$scope = $rootScope.$new().$new().$new();
 			compile = $compile;
 		});
 
 		$scope.programName = "programName";
+		$scope.$parent.$parent.page = {type:'REGISTER'};
 		$scope.header = "health_structure";
 		$scope.modelContents = dataElements;
 		createElement()
 	});
 
-	it("should display the name of program", function() {
+	it("should display the name of program and codes as static text", function() {
 		$scope.$digest();
-		expect(element.innerHTML).toContain($scope.programName)
+		var element1 = compile('<linelist-header programName="testProgram1"></linelist-header>')($scope);
+		$scope.$apply();
+		expect(element1[0].outerHTML).toContain("testProgram1")
 	});
 
 	it("should display the header", function() {

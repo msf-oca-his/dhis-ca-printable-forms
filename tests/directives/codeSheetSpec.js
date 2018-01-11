@@ -30,6 +30,9 @@ describe("CodeSheet Template", function() {
 				rowHeight: 6,
 				numberOfColumns: 3,
 				pageNumberHeight: 10
+			},
+			Coversheet: {
+				maximumCharLengthForHeader: 10
 			}
 		};
 		module(function($provide, $translateProvider) {
@@ -41,11 +44,12 @@ describe("CodeSheet Template", function() {
 		});
 
 		inject(function($compile, $rootScope) {
-			$scope = $rootScope.$new();
+			$scope = $rootScope.$new().$new().$new();
 			compile = $compile;
 		});
 
-		$scope.programName = "programName";
+		$scope.programName = "programName2";
+		$scope.$parent.$parent.page = {type:'CODESHEET'};
 		$scope.pageColumns = [[
 			{code: "Code", label: "dataElement", type: "HEADING"},
 			{code: 1, label: "option1", type: "LABEL"},
@@ -57,7 +61,10 @@ describe("CodeSheet Template", function() {
 
 	it("should display the name of program", function() {
 		$scope.$digest();
-		expect(element.innerHTML).toContain($scope.programName + " - Codes")
+		var element1 = compile('<linelist-header programName="testProgram1"></linelist-header>')($scope);
+		$scope.$apply();
+		expect(element1[0].outerHTML).toContain("testProgram1")
+		expect(element1[0].outerHTML).toContain("Codes");
 	});
 
 	it("should apply row height to each row in the table", function() {

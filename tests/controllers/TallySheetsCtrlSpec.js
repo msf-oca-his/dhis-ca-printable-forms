@@ -180,7 +180,7 @@ describe("TallySheets ctrl", function() {
     describe("when program is selected", function() {
       var template;
       beforeEach(function(){
-        template = { type: 'PROGRAM', data: { id: '143' }, displayName: "perpt_ds1" };
+        template = { type: 'PROGRAM', data: {id: '143' }, displayName: "perpt_ds1" };
         scope.selectedTemplatesType = 'PROGRAM';
       });
       it("should render coversheet", function(done) {
@@ -194,7 +194,67 @@ describe("TallySheets ctrl", function() {
         }, 100)
 
       });
-      describe("and customized",function(){
+
+	    it("should cache the program when the program gets selected", function(done) {
+		    var template = { type: 'PROGRAM', id: '143', displayName: "perpt_ds1" };
+		    scope.programMode = pageTypes.COVERSHEET;
+		    scope.renderTemplates([template]);
+		    setTimeout(function(){
+			    scope.$apply();
+			    expect(scope.cachedProgramNames).toEqual([template]);
+			    done();
+		    }, 100)
+	    });
+
+	    it("should not cache the program If it is already get selected", function(done) {
+		    var template = { type: 'PROGRAM', id: '143', displayName: "perpt_ds1" };
+		    scope.programMode = pageTypes.COVERSHEET;
+		    scope.renderTemplates([template]);
+		    setTimeout(function() {
+			    scope.$apply();
+			    scope.renderTemplates([template]);
+			    setTimeout(function() {
+				    scope.$apply();
+				    expect(scope.cachedProgramNames).toEqual([template]);
+				    done();
+			    },100)
+		    },100)
+	    });
+	    
+	    it("should add the programs to cache when multiple new programs get selected",function(done) {
+		    var template = { type: 'PROGRAM', id: '143', displayName: "perpt_ds1" };
+		    scope.programMode = pageTypes.COVERSHEET;
+		    scope.renderTemplates([template]);
+		    setTimeout(function() {
+			    scope.$apply();
+			    var template1 = { type: 'PROGRAM', data: { id: '153' }, displayName: "perpt_ds2" };
+			    scope.renderTemplates([template1]);
+			    setTimeout(function() {
+				    scope.$apply();
+				    expect(scope.cachedProgramNames).toEqual([template,template1]);
+				    done();
+			    },100)
+		    },100)
+	    });
+	    
+	    it("should take display name from cached program if selected template already present in cached list", function(done) {
+		    var template = { type: 'PROGRAM', id: '143', displayName: "perpt_ds1" };
+		     scope.programMode = pageTypes.COVERSHEET;
+		    scope.renderTemplates([template]);
+		    setTimeout(function() {
+			    scope.$apply();
+			    scope.cachedProgramNames[0].displayName = "changedDisplayName";
+			    scope.renderTemplates([template]);
+			    setTimeout(function() {
+				    scope.$apply();
+				    expectedPages = {type:'coversheet',templates:{type:'PROGRAM',id:'143',displayName:'changedDisplayName'}};
+				    expect(scope.pages).toEqual(expectedPages);
+				    done();
+			    },100)
+		    },100)
+	    });
+      
+	    describe("and customized",function(){
         it("should render customized coversheet", function(done) {
           scope.programMode = pageTypes.COVERSHEET;
           scope.renderTemplates([ template ]);
@@ -265,5 +325,6 @@ describe("TallySheets ctrl", function() {
       expect(scope.spinnerShown).toEqual(false);
       expect(scope.pages).toEqual([]);
     });
-  });
+
+	});
 });

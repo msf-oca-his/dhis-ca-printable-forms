@@ -2,6 +2,7 @@ require("./directives/template-selector/templateSelector.js");
 require("./directives/page/page.js");
 require("./directives/dataset-template/dataSetTemplate.js");
 require("./directives/coversheet-template/coversheetTemplate.js");
+require("./directives/linelist-header/linelistHeader.js");
 require("./directives/register-template/registerTemplate.js");
 require("./directives/codeSheet/codeSheet.js");
 require("./directives/page-content/pageContent.js");

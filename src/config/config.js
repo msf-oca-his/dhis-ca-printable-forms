@@ -32,7 +32,8 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		gapBetweenSections: 5,
 		heightOfSectionTitle: 7,
 		heightOfProgramTitle: 10,
-		commentsHeight: 30
+		commentsHeight: 30,
+		maximumCharLengthForHeader: 20
 	};
 	config.DataSet = {
 		heightOfCatCombTableHeader: 15,
@@ -116,7 +117,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			}
 		},
 		hideInCodeSheet: {
-			id:'CfFqDw7iYNY',
+			id:'uyoB0qFb2Ia',
 			associatedWith:['dataElement']
 		}
 	};
