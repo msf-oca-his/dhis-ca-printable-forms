@@ -47,6 +47,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		numberOfCOCColumns: 5,
 		widthOfCategoryOptionCombo: 30,
 		widthOfDataElement: 40,
+		maximumCharLengthForHeader: 20,
 		numberOfColumnsInDefaultRendering: 2 //TODO: app can only render 2, do not change this until its supported.
 	};
 	config.CodeSheet = {
@@ -117,7 +118,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			}
 		},
 		hideInCodeSheet: {
-			id:'uyoB0qFb2Ia',
+			id:'cWxeHnQAOTI',
 			associatedWith:['dataElement']
 		}
 	};

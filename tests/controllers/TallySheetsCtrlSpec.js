@@ -201,7 +201,7 @@ describe("TallySheets ctrl", function() {
 		    scope.renderTemplates([template]);
 		    setTimeout(function(){
 			    scope.$apply();
-			    expect(scope.cachedProgramNames).toEqual([template]);
+			    expect(scope.cachedTemplates).toEqual([template]);
 			    done();
 		    }, 100)
 	    });
@@ -215,7 +215,7 @@ describe("TallySheets ctrl", function() {
 			    scope.renderTemplates([template]);
 			    setTimeout(function() {
 				    scope.$apply();
-				    expect(scope.cachedProgramNames).toEqual([template]);
+				    expect(scope.cachedTemplates).toEqual([template]);
 				    done();
 			    },100)
 		    },100)
@@ -231,7 +231,7 @@ describe("TallySheets ctrl", function() {
 			    scope.renderTemplates([template1]);
 			    setTimeout(function() {
 				    scope.$apply();
-				    expect(scope.cachedProgramNames).toEqual([template,template1]);
+				    expect(scope.cachedTemplates).toEqual([template,template1]);
 				    done();
 			    },100)
 		    },100)
@@ -243,7 +243,7 @@ describe("TallySheets ctrl", function() {
 		    scope.renderTemplates([template]);
 		    setTimeout(function() {
 			    scope.$apply();
-			    scope.cachedProgramNames[0].displayName = "changedDisplayName";
+			    scope.cachedTemplates[0].displayName = "changedDisplayName";
 			    scope.renderTemplates([template]);
 			    setTimeout(function() {
 				    scope.$apply();

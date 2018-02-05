@@ -1,11 +1,11 @@
-describe("CodeSheet Template", function() {
+describe("Dataset title Template", function() {
 	var compile, element;
 	var $scope = {}, elementScope;
 	var config = {};
 	var rootScope;
 
 	function createElement() {
-		element = angular.element('<linelist-header program-name="programName"></linelist-header>');
+		element = angular.element('<dataset-title content="testcontent"></dataset-title>');
 		element = compile(element)($scope);
 		elementScope = element.scope().$$childHead;
 		element = element[0];
@@ -14,7 +14,7 @@ describe("CodeSheet Template", function() {
 	beforeEach(function() {
 		module("TallySheets");
 		config = {
-			Coversheet: {
+			DataSet: {
 				maximumCharLengthForHeader: 10
 			}
 		};
@@ -24,45 +24,56 @@ describe("CodeSheet Template", function() {
 		});
 
 		inject(function($compile, $rootScope) {
-			rootScope = $rootScope;
-			$scope = $rootScope.$new().$new().$new();
+			rootScope=$rootScope;
+			$scope = $rootScope.$new();
 			compile = $compile;
 		});
 
 		rootScope.renderTemplates=function() {
 			return [];
 		};
-		
-		$scope.$parent.$parent.page = {type:'CODESHEET'};
-		createElement();
+
+		// createElement();
 	});
 
 	it("should call update method when user tries to edit the header name", function() {
+		element = angular.element('<dataset-title content="testcontent"></dataset-title>');
+		$scope.testcontent = {title:"hello"};
+		element = compile(element)($scope);
+		elementScope = element.scope().$$childHead;
+		element = element[0];
 		spyOn(elementScope,'update');
 		var input = element.querySelector('input');
 		angular.element(input).triggerHandler('blur');
 		elementScope.$apply();
 		expect(elementScope.update).toHaveBeenCalled();
 	});
-	
+
 	it("should take previous header name when user enters empty header name", function() {
-		elementScope.programName="testProgram";
+		element = angular.element('<dataset-title content="testcontent"></dataset-title>');
+		$scope.testcontent = {title:"testdsname"};
+		element = compile(element)($scope);
+		elementScope = element.scope().$$childHead;
+		element = element[0];
 		var input = element.querySelector('input');
 		elementScope.headerName="";
 		elementScope.$apply();
 		angular.element(input).triggerHandler('blur');
-		expect(elementScope.headerName).toEqual("testProgram");
+		expect(elementScope.headerName).toEqual("testdsname");
 	});
-	
+
 	it("should save the edited header name",function() {
-		rootScope.cachedTemplates = [{displayName:'testProgram'}];
+		rootScope.cachedTemplates = [{displayName:'testdsname'}];
+		element = angular.element('<dataset-title content="testcontent"></dataset-title>');
+		$scope.testcontent = {title:"testdsname"};
+		element = compile(element)($scope);
+		elementScope = element.scope().$$childHead;
+		element = element[0];
 		spyOn(rootScope,'renderTemplates');
-		elementScope.programName="testProgram";
 		var input = element.querySelector('input');
-		elementScope.headerName="changedProgram";
+		elementScope.headerName="changedds";
 		angular.element(input).triggerHandler('blur');
 		elementScope.$apply();
-		expect(elementScope.programName).toEqual('changedProgram');
-		expect(rootScope.cachedTemplates[0]).toEqual({displayName:'changedProgram'});
+		expect(rootScope.cachedTemplates[0]).toEqual({displayName:'changedds'});
 	})
 });

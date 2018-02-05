@@ -1,1 +1,3 @@
-<div class="datasetName">{{content.title}}</div>
+<div class="datasetName">
+  <input class="inline-edit" ng-model="headerName" ng-blur="update()" maxlength="{{maxLength}}" />
+</div>

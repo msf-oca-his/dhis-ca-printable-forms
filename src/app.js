@@ -6,17 +6,17 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 	};
 }]);
 
-TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
+TallySheets.controller('TallySheetsController', ['$scope', '$rootScope', 'DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
 	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
 	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes', 'TemplateCustomizationService',
-	function($scope,$rootScope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
+	function($scope, $rootScope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
 		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes, TemplateCustomizationService) {
 
 		$scope.appLoadingFailed = appLoadingFailed;
 		$scope.spinnerShown = false;
 		$scope.PageTypes = PageTypes;
-		$rootScope.cachedProgramNames = [];
+		$rootScope.cachedTemplates = [];
 		$scope.templatesCustomizations = [];
 		$scope.templatesType = '';
 		$scope.inlineAlert = {
@@ -69,23 +69,36 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			ExportToExcel.process(tableId, $scope.pages[0].datasetName, $scope.pages[0].programName);
 		};
 
+		var addTemplatesDisplayNameFromCache = function(templates) {
+
+			var addTemplateDisplayNameFromCache = function(template) {
+
+				var cachedTemplate = _($rootScope.cachedTemplates).find({'id': template.id});
+
+				if(_.isEmpty(cachedTemplate)) $rootScope.cachedTemplates.push(template);
+
+				else template.displayName = cachedTemplate.displayName;
+			};
+			
+			_.map(templates,addTemplateDisplayNameFromCache);
+		};
+
 		var processDataSets = function(dataSets) {
 			$scope.spinnerShown = true;
 			$scope.programMode = null;
+
+			addTemplatesDisplayNameFromCache(dataSets);
+
 			return DataSetProcessor.process(dataSets);
 		};
-		
-		var getPages = function(program, programMode) {
-			
-			var cachedProgram = _($scope.cachedProgramNames).find({'id': program.id});
-			
-			if(_.isEmpty(cachedProgram)) $scope.cachedProgramNames.push(program);
-			else program.displayName = cachedProgram.displayName;
 
+		var getPages = function(program, programMode) {
+
+			addTemplatesDisplayNameFromCache([program]);
 			//TODO: get rid of switch statements
 			switch(programMode) {
 				case PageTypes.COVERSHEET :
-					return  CoversheetProcessor.process(program);
+					return CoversheetProcessor.process(program);
 				case PageTypes.REGISTER:
 					return RegisterProcessor.process(program);
 				case PageTypes.CODESHEET:
@@ -97,7 +110,7 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			if($scope.programMode == null)
 				return;
 			$scope.spinnerShown = true;
-			return getPages(_.cloneDeep(programs[0]),$scope.programMode);
+			return getPages(_.cloneDeep(programs[0]), $scope.programMode);
 		};
 
 		var addProcessedPagesToDOM = function(pages) {
@@ -129,34 +142,34 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			$scope.templates = templates;
 			$rootScope.renderTemplates();
 			$scope.$broadcast('templatesSelectionChanged', templates, action, position);
-    };
-		var customizeTemplates = function(templates){
+		};
+		var customizeTemplates = function(templates) {
 			if(_.isEmpty($scope.templatesCustomizations))
 				return templates;
-      return TemplateCustomizationService.customizeTemplates(templates, $scope.templatesCustomizations, $scope.selectedTemplatesType);
+			return TemplateCustomizationService.customizeTemplates(templates, $scope.templatesCustomizations, $scope.selectedTemplatesType);
 		};
-		var getTemplatesFromDHIS = function(){
+		var getTemplatesFromDHIS = function() {
 			var templateIds = _($scope.templates)
-													.map('data.id')
-													.map(_.cloneDeep)
-													.value();
+				.map('data.id')
+				.map(_.cloneDeep)
+				.value();
 			if($scope.selectedTemplatesType == PageTypes.DATASET)
-        return $q.all(_.map(templateIds, DataSetService.getReferentialDataSetById));
+				return $q.all(_.map(templateIds, DataSetService.getReferentialDataSetById));
 			else if($scope.selectedTemplatesType == PageTypes.PROGRAM)
-        return $q.all(_.map(templateIds, ProgramService.getProgramById));
+				return $q.all(_.map(templateIds, ProgramService.getProgramById));
 		};
 		$rootScope.renderTemplates = function(templates) {
 			$scope.pages = [];
-			var render = function(){
-        $scope.$apply();
-        $q.when(templates ? templates : getTemplatesFromDHIS())
+			var render = function() {
+				$scope.$apply();
+				$q.when(templates ? templates : getTemplatesFromDHIS())
 					.then(customizeTemplates)
-          .then(processTemplates)
-          .then(addProcessedPagesToDOM)
-          .catch(handleError)
-          .then(releaseUI);
-      }.bind(this);
-      setTimeout(render, 100);//giving the app enough time to load respective css like dataset.css or coversheet etc
+					.then(processTemplates)
+					.then(addProcessedPagesToDOM)
+					.catch(handleError)
+					.then(releaseUI);
+			}.bind(this);
+			setTimeout(render, 100);//giving the app enough time to load respective css like dataset.css or coversheet etc
 		};
-		var releaseUI = function(){}; //TODO: define this
+		var releaseUI = function() {}; //TODO: define this
 	}]);
