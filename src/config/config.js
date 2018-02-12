@@ -33,7 +33,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		heightOfSectionTitle: 7,
 		heightOfProgramTitle: 10,
 		commentsHeight: 30,
-		maximumCharLengthForHeader: 20
+		maximumCharLengthForHeader: 90
 	};
 	config.DataSet = {
 		heightOfCatCombTableHeader: 15,
@@ -47,7 +47,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		numberOfCOCColumns: 5,
 		widthOfCategoryOptionCombo: 30,
 		widthOfDataElement: 40,
-		maximumCharLengthForHeader: 20,
+		maximumCharLengthForHeader: 90,
 		numberOfColumnsInDefaultRendering: 2 //TODO: app can only render 2, do not change this until its supported.
 	};
 	config.CodeSheet = {
