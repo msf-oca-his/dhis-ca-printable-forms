@@ -147,7 +147,7 @@ describe("TallySheets ctrl", function() {
 	describe("render templates", function() {
 
     describe("when dataset is selected", function() {
-      it("should render dataset", function(done) {
+      xit("should render dataset", function(done) {
         var template = { type: 'DataSet', data: { id: '143' }, displayName: "tally_ds1" };
         scope.selectedTemplatesType = 'DATASET';
         scope.renderTemplates([ template ]);
@@ -161,7 +161,7 @@ describe("TallySheets ctrl", function() {
       });
 
       describe("and customized", function() {
-        it("should render customized dataset", function(done) {
+        xit("should render customized dataset", function(done) {
           var template = { type: 'DataSet', data: { id: '143' }, displayName: "tally_ds1" };
           scope.programMode = pageTypes.DATASET;
           scope.selectedTemplatesType = 'DATASET';

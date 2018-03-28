@@ -1,6 +1,6 @@
 TallySheets.service('DataSetProcessor', ['Config', 'DataSetPage', 'Content', 'ContentTypes', 'PrintFriendlyUtils', 'DefaultContent',
-	'OptionSetContent', 'CatCombContent', 'DatasetTitle', 'DhisConstants', function(config, DataSetPage, Content, ContentTypes, PrintFriendlyUtils, DefaultContent,
-		OptionSetContent, CatCombContent, DatasetTitle, DhisConstants) {
+	'OptionSetContent', 'CatCombContent', 'DatasetTitle', 'DhisConstants','ComponentProcessor', function(config, DataSetPage, Content, ContentTypes, PrintFriendlyUtils, DefaultContent,
+		OptionSetContent, CatCombContent, DatasetTitle, DhisConstants,ComponentProcessor) {
 		var pages = [];
 		var currentPageIndex;
 		var page;

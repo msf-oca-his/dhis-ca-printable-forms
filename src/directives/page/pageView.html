@@ -1,4 +1,7 @@
 <div class="subpage {{pageNumber > 1 ? 'notfirstpage' : 'firstpage'}}">
+
+  <page-components components="page.components" width="page.width"></page-components>
+
   <dataset-template ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset-template>
 
   <coversheet-template ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></coversheet-template>

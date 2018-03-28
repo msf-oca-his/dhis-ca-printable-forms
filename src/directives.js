@@ -6,7 +6,15 @@ require("./directives/linelist-header/linelistHeader.js");
 require("./directives/register-template/registerTemplate.js");
 require("./directives/codeSheet/codeSheet.js");
 require("./directives/page-content/pageContent.js");
+require("./directives/page-component/pageComponent.js");
+require("./directives/page-components/pageComponents.js");
 require("./directives/tree-component/tree-component.js");
+require("./directives/components/header/header.js");
+require("./directives/components/title/templateTitle.js");
+require("./directives/components/textField/textField.js");
+require("./directives/components/sectionTitle/sectionTitle.js");
+require("./directives/components/section/section.js");
+
 
 require("./directives/content-directives/list/list.js");
 require("./directives/content-directives/boolean/boolean.js");

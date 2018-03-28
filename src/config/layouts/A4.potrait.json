@@ -1,0 +1,62 @@
+{
+  "height": 278,
+  "width": 200,
+
+  "components": {
+
+    "border": {
+      "top": 15,
+      "left": 15,
+      "bottom": 15,
+      "right": 15
+    },
+
+    "section": {
+      "gapBetweenSections": 3,
+      "titleHeight": 9
+    },
+
+    "dataSetTitle": {
+      "height": 7,
+      "maximumCharLength": 90
+    },
+
+    "programTitle": {
+      "titleHeight": 10,
+      "maximumCharLength": 90
+    },
+
+    "text": {
+      "height": 19,
+      "labelWidth": 40,
+      "inputFieldMarginTop": 10
+    },
+
+    "longText": {
+      "labelHeight": 100,
+      "inputFieldMarginTop": 30
+    },
+
+    "boolean": {
+      "labelHeight": 100,
+      "optionHeight": 297,
+      "optionWidth": 100
+    },
+
+    "catComb": {
+      "heightOfTableHeader": 15,
+      "heightOfDataElement": 12,
+      "maxNumberOfColumns": 6,
+      "gapBetweenColumns": 10,
+      "widthOfCategoryOptionCombo": 30
+    },
+
+    "header":{
+      "height": 9
+    },
+
+    "comments": {
+      "height":30
+    }
+  }
+}

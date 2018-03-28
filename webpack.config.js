@@ -19,7 +19,8 @@ module.exports = {
 			// { from: './src/app.js', to: './app.js' },
 			{from: './src/config/config.js', to: './config.js'},
 			{from: './src/config/CalculatedConfig.js', to: './calculatedConfig.js'},
-			{from: './src/index.html', to: './index.html'}
+			{from: './src/index.html', to: './index.html'},
+			{from: './src/config/layouts/A4.potrait.json', to:'./A4.potrait.json'}
 		]),
 		new webpack.DefinePlugin({
 			'process.env': {

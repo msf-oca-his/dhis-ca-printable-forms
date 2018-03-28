@@ -5,6 +5,18 @@ var Page = function(template) {
 	_.assignIn(this, template);
 };
 
+var pageComponent = function(height, width) {
+	this.height = height;
+	this.width = width;
+	this.components = [];
+};
+
+TallySheets.factory('PageComponent', [function() {
+	return function PageComponent(height, width) {
+		return new pageComponent(height, width);
+	}
+}]);
+
 TallySheets.factory('DataSetPage', ['Config', 'PageTypes', function(config, PageTypes) {
 	return function DataSetPage() {
 		var dataSetPage = {};

@@ -8,10 +8,10 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 
 TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetService', 'DataSetProcessor', 'ProgramService', 'CoversheetProcessor',
 	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
-	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes', 'TemplateCustomizationService',
-	function($scope,$rootScope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
+	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes', 'TemplateCustomizationService','ComponentProcessor',
+	function($scope, $rootScope, DataSetService, DataSetProcessor, ProgramService, CoversheetProcessor, RegisterProcessor,
 		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
-		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes, TemplateCustomizationService) {
+		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes, TemplateCustomizationService,ComponentProcessor) {
 
 		$scope.appLoadingFailed = appLoadingFailed;
 		$scope.spinnerShown = false;
@@ -69,10 +69,27 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			ExportToExcel.process(tableId, $scope.pages[0].datasetName, $scope.pages[0].programName);
 		};
 
-		var processDataSets = function(dataSets) {
+		var addTemplatesDisplayNameFromCache = function(templates) {
+
+			var addTemplateDisplayNameFromCache = function(template) {
+
+				var cachedTemplate = _($rootScope.cachedTemplates).find({'id': template.id});
+
+				if(_.isEmpty(cachedTemplate)) $rootScope.cachedTemplates.push(template);
+
+				else template.displayName = cachedTemplate.displayName;
+			};
+
+			_.map(templates, addTemplateDisplayNameFromCache);
+		};
+
+		var processDataSets = function(dataSets,config) {
 			$scope.spinnerShown = true;
 			$scope.programMode = null;
-			return DataSetProcessor.process(dataSets);
+
+			addTemplatesDisplayNameFromCache(dataSets);
+			
+			return ComponentProcessor.processComponents(dataSets, config);
 		};
 		
 		var getPages = function(program, programMode) {
@@ -110,7 +127,11 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 
 		var processTemplates = function(templates) {
 			if($scope.selectedTemplatesType == PageTypes.DATASET)
-				return processDataSets(templates);
+				return $q.when({})
+					.then(getConfig)
+					.then(function(config) {
+						return processDataSets(templates,config);
+					});
 			else if($scope.selectedTemplatesType == PageTypes.PROGRAM)
 				return processPrograms(templates);
 			else return [];
@@ -135,7 +156,24 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 				return templates;
       return TemplateCustomizationService.customizeTemplates(templates, $scope.templatesCustomizations, $scope.selectedTemplatesType);
 		};
-		var getTemplatesFromDHIS = function(){
+
+		var getConfig = function() {
+			var defer = $q.defer();
+			var xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open('GET', 'A4.potrait.json', true);
+			xobj.onreadystatechange = function() {
+				if(xobj.readyState == 4 && xobj.status == "200") {
+					// .open will NOT return a value but simply returns undefined in async mode so use a callback
+					return defer.resolve(JSON.parse(xobj.responseText));
+
+				}
+			};
+			xobj.send(null);
+			return defer.promise;
+		};
+		
+		var getTemplatesFromDHIS = function() {
 			var templateIds = _($scope.templates)
 													.map('data.id')
 													.map(_.cloneDeep)
