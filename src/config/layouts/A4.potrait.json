@@ -1,6 +1,6 @@
 {
-  "height": 278,
-  "width": 200,
+  "height": 297,
+  "width": 210,
 
   "components": {
 
@@ -52,7 +52,11 @@
     },
 
     "header":{
-      "height": 9
+      "height": 19
+    },
+
+    "graceHeight": {
+      "height":5
     },
 
     "comments": {

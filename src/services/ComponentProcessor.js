@@ -48,7 +48,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		processSection(section);
 
 		addNewPage();
-
+		
+		addTitle(currentTemplate.displayName);
+		
 		processSection(newSection);
 	};
 
@@ -63,8 +65,6 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 			addNewPage();
 
 			addTitle(currentTemplate.displayName);
-
-			addHeader();
 
 			processSection(section)
 		}
@@ -119,6 +119,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		pages.push(page);
 
 		removeBorders();
+
+		addHeader();
 	};
 
 	this.processComponents = function(templates, config) {
@@ -131,12 +133,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 		_.map(templates, function(template) {
 			
-			currentTemplate = template;
-
 			addTitle(template.displayName);
 
-			addHeader();
-			
 			currentTemplate = template;
 			
 			_.map(template.sections, processSection);
