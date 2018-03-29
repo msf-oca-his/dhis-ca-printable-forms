@@ -14,6 +14,7 @@ require("./directives/components/title/templateTitle.js");
 require("./directives/components/textField/textField.js");
 require("./directives/components/sectionTitle/sectionTitle.js");
 require("./directives/components/section/section.js");
+require("./directives/components/long-text-field/longTextField.js");
 
 
 require("./directives/content-directives/list/list.js");

@@ -18,6 +18,7 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 		$scope.PageTypes = PageTypes;
 		$rootScope.cachedProgramNames = [];
 		$scope.templatesCustomizations = [];
+		var portraitConfig;
 		$scope.templatesType = '';
 		$scope.inlineAlert = {
 			message: '',
@@ -89,9 +90,22 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 
 			addTemplatesDisplayNameFromCache(dataSets);
 			
+			console.log(dataSets)
+			
 			return ComponentProcessor.processComponents(dataSets, config);
 		};
-		
+		var prepareComponent = function(program) {
+			_.map(program.programStages[0].programStageSections,function(section) {
+				section.dataElements = _.cloneDeep(section.programStageDataElements);
+			});
+			
+			_.map(program.programStages[0],function(sections) {
+				program.sections = sections;
+			});
+			
+			return program
+		};
+
 		var getPages = function(program, programMode) {
 			
 			var cachedProgram = _($scope.cachedProgramNames).find({'id': program.id});
@@ -102,7 +116,12 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			//TODO: get rid of switch statements
 			switch(programMode) {
 				case PageTypes.COVERSHEET :
-					return  CoversheetProcessor.process(program);
+					program = prepareComponent(program);
+					return $q.when({})
+						.then(getConfig)
+						.then(function(config) {
+							return ComponentProcessor.processComponents([program],config);
+						});
 				case PageTypes.REGISTER:
 					return RegisterProcessor.process(program);
 				case PageTypes.CODESHEET:

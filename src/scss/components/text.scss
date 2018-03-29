@@ -3,9 +3,18 @@
   height: 4mm;
 }
 
+.input-field {
+  border-bottom: 1px solid #000000;
+}
+
 .text-input {
   height: 3mm;
   margin: 2mm 0 4mm 0;
+}
+
+.long-text-input {
+  height: 6mm;
+  margin: 8mm 0 4mm 0;
 }
 
 .header-component {

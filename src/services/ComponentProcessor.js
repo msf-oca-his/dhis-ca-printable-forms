@@ -1,11 +1,11 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, Section, PageComponent) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, Section, PageComponent) {
 
 	var pages = [];
 
 	var page;
 
 	var componentTemplates;
-	
+
 	var currentTemplate;
 
 	var componentConfig;
@@ -17,29 +17,91 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		section.left.height = section.left.height - componentConfig.components.section.titleHeight;
 	};
 
-	var addTextFields = function(dataElement, section) {
+	var addTextField = function(dataElement, section) {
 
 		if(section.left.height > 0) {
 
 			section.left.components.push(new TextField(dataElement));
 
-			section.left.height -= componentConfig.components.text.height;
+			section.left.height -= componentConfig.components.TEXT.height;
 		} else {
 
 			section.right.components.push(new TextField(dataElement));
 
-			section.right.height -= componentConfig.components.text.height;
+			section.right.height -= componentConfig.components.TEXT.height;
+		}
+	};
+
+	var addLongTextField = function(dataElement, section) {
+
+		if(section.left.height > 0) {
+
+			section.left.components.push(new LongTextField(dataElement));
+
+			section.left.height -= componentConfig.components.LONG_TEXT.height;
+		} else {
+
+			section.right.components.push(new LongTextField(dataElement));
+
+			section.right.height -= componentConfig.components.LONG_TEXT.height;
+		}
+	};
+
+	var getType = function(type) {
+		switch(type) {
+			case "LONG_TEXT" :
+				return "LONG_TEXT";
+			default:
+				return "TEXT"
 		}
 	};
 
 	var getHeightFor = function(section) {
 
-		return Math.ceil(section.dataElements.length / 2) * componentConfig.components["text"].height + componentConfig.components.section.titleHeight;
+		var height = 0;
+
+		var longTextElements = _.filter(section.dataElements, function(dataElement) {
+
+			return getType(dataElement.valueType) == 'LONG_TEXT';
+
+		});
+
+		height += Math.ceil(section.dataElements.length / 2) * componentConfig.components.TEXT.height; //minimum height
+
+		height += longTextElements.length * (componentConfig.components.LONG_TEXT.height - componentConfig.components.TEXT.height);
+
+		return height + componentConfig.components.section.titleHeight;
 	};
 
 	var breakAndAddSection = function(section) {
 
-		var numberOfComponentsThatCanFit = Math.floor((page.height - componentConfig.components.section.titleHeight) / componentConfig.components["text"].height) * 2;
+		var numberOfElementfit = function() {
+			var count = 0;
+
+			var leftPageHeight = page.height - componentConfig.components.section.titleHeight;
+
+			var rightPageHeight = leftPageHeight;
+
+			var leftCount = 0, rightCount = 0;
+
+			_.map(section.dataElements, function(dataElement) {
+
+				if(leftPageHeight > componentConfig.components[getType(dataElement.valueType)].height) {
+					
+					leftPageHeight -= componentConfig.components[getType(dataElement.valueType)].height;
+					
+					leftCount++;
+				} else if(rightPageHeight > componentConfig.components[getType(dataElement.valueType)].height) {
+					
+					rightPageHeight -= componentConfig.components[getType(dataElement.valueType)].height;
+					
+					rightCount++;
+				}
+			});
+			return (leftCount < rightCount) ? leftCount : rightCount;
+		};
+
+		var numberOfComponentsThatCanFit = numberOfElementfit() * 2;
 
 		var newSection = _.cloneDeep(section);
 
@@ -48,9 +110,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		processSection(section);
 
 		addNewPage();
-		
+
 		addTitle(currentTemplate.displayName);
-		
+
 		processSection(newSection);
 	};
 
@@ -75,7 +137,13 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 			_.map(section.dataElements, function(dataElement) {
 
-				addTextFields(dataElement, sectionComponent);
+				if(getType(dataElement.valueType) == 'TEXT')
+
+					addTextField(dataElement, sectionComponent);
+
+				if(getType(dataElement.valueType) == 'LONG_TEXT')
+
+					addLongTextField(dataElement, sectionComponent)
 
 			});
 
@@ -132,16 +200,16 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		addNewPage();
 
 		_.map(templates, function(template) {
-			
+
 			addTitle(template.displayName);
 
 			currentTemplate = template;
-			
+
 			_.map(template.sections, processSection);
 
 			return pages;
 		});
-		
+
 		return pages;
 	}
 

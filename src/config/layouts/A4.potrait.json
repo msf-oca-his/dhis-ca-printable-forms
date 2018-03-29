@@ -26,14 +26,15 @@
       "maximumCharLength": 90
     },
 
-    "text": {
+    "TEXT": {
       "height": 19,
       "labelWidth": 40,
       "inputFieldMarginTop": 10
     },
 
-    "longText": {
-      "labelHeight": 100,
+    "LONG_TEXT": {
+      "height": 28,
+      "labelWidth": 40,
       "inputFieldMarginTop": 30
     },
 

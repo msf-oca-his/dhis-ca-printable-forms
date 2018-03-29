@@ -13,3 +13,4 @@ require('./Components/SectionTitle.js');
 require('./Components/TextField.js');
 require('./Components/TemplateTitle.js');
 require('./Components/Section.js');
+require('./Components/LongTextField.js');
