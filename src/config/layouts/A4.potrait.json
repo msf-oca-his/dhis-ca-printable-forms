@@ -38,10 +38,8 @@
       "inputFieldMarginTop": 30
     },
 
-    "boolean": {
-      "labelHeight": 100,
-      "optionHeight": 297,
-      "optionWidth": 100
+    "BOOLEAN": {
+      "height": 28
     },
 
     "catComb": {

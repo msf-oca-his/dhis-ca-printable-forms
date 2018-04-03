@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, Section, PageComponent) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, Section, PageComponent) {
 
 	var pages = [];
 
@@ -47,10 +47,27 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		}
 	};
 
+	var addBooleanField = function(dataElement, section) {
+
+		if(section.left.height > 0) {
+
+			section.left.components.push(new BooleanField(dataElement));
+
+			section.left.height -= componentConfig.components.BOOLEAN.height;
+		} else {
+
+			section.right.components.push(new BooleanField(dataElement));
+
+			section.right.height -= componentConfig.components.BOOLEAN.height;
+		}
+	};
+
 	var getType = function(type) {
 		switch(type) {
 			case "LONG_TEXT" :
 				return "LONG_TEXT";
+            case "BOOLEAN" :
+                return "BOOLEAN";
 			default:
 				return "TEXT"
 		}
@@ -66,7 +83,13 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 		});
 
+		var booleanElements = _.filter(section.dataElements, function (dataElement) {
+            return getType(dataElement.valueType) == 'BOOLEAN';
+        });
+
 		height += Math.ceil(section.dataElements.length / 2) * componentConfig.components.TEXT.height; //minimum height
+
+        height += Math.ceil(booleanElements.length / 2) * (componentConfig.components.BOOLEAN.height - componentConfig.components.TEXT.height);
 
 		height += longTextElements.length * (componentConfig.components.LONG_TEXT.height - componentConfig.components.TEXT.height);
 
@@ -76,7 +99,6 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	var breakAndAddSection = function(section) {
 
 		var numberOfElementfit = function() {
-			var count = 0;
 
 			var leftPageHeight = page.height - componentConfig.components.section.titleHeight;
 
@@ -144,6 +166,10 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 				if(getType(dataElement.valueType) == 'LONG_TEXT')
 
 					addLongTextField(dataElement, sectionComponent)
+
+				if(getType(dataElement.valueType) == 'BOOLEAN')
+
+					addBooleanField(dataElement, sectionComponent)
 
 			});
 
