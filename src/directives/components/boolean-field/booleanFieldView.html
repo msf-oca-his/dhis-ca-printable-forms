@@ -1,15 +1,13 @@
-<div style="getDefaultStyle()">
-    <div class="deLabel text-label general" class="right-row {{component.greyField ? 'greyDeField deField' : 'yesno' }}">
+<div>
+    <div class="text-label general {{component.greyField ? 'greyDeField deField' : '' }}">
         {{component.displayFormName}}
     </div>
-    <div>
-        <span ng-if="!component.greyField">
-            <div>
-                <input type="checkbox" class="pffcheckbox">{{ 'Yes_YesNo' | translate }}</input>
-            </div>
-            <div>
-                <input type="checkbox" class="pffcheckbox">{{ 'No_YesNo' | translate }}</input>
-            </div>
-        </span>
+    <div ng-if="!component.greyField" class="boolean-field">
+        <div>
+            <input type="checkbox" class="boolean-field-checkbox option-container">{{ 'Yes_YesNo' | translate }}</input>
+        </div>
+        <div>
+            <input type="checkbox" class="boolean-field-checkbox option-container">{{ 'No_YesNo' | translate }}</input>
+        </div>
     </div>
 </div>
