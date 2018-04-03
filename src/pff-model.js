@@ -15,3 +15,4 @@ require('./Components/TemplateTitle.js');
 require('./Components/Section.js');
 require('./Components/LongTextField.js');
 require('./Components/BooleanField.js');
+require('./Components/YesOnlyField.js');

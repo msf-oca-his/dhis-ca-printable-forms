@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, Section, PageComponent) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, Section, PageComponent) {
 
 	var pages = [];
 
@@ -62,12 +62,29 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		}
 	};
 
+	var addYesOnlyField = function(dataElement, section) {
+
+		if(section.left.height > 0) {
+
+			section.left.components.push(new YesOnlyField(dataElement));
+
+			section.left.height -= componentConfig.components.YES_ONLY.height;
+		} else {
+
+			section.right.components.push(new YesOnlyField(dataElement));
+
+			section.right.height -= componentConfig.components.YES_ONLY.height;
+		}
+	};
+
 	var getType = function(type) {
 		switch(type) {
 			case "LONG_TEXT" :
 				return "LONG_TEXT";
             case "BOOLEAN" :
                 return "BOOLEAN";
+            case "TRUE_ONLY" :
+                return "YES_ONLY";
 			default:
 				return "TEXT"
 		}
@@ -87,9 +104,15 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
             return getType(dataElement.valueType) == 'BOOLEAN';
         });
 
+		var yesOnlyElements = _.filter(section.dataElements, function (dataElement) {
+            return getType(dataElement.valueType) == 'YES_ONLY';
+        });
+
 		height += Math.ceil(section.dataElements.length / 2) * componentConfig.components.TEXT.height; //minimum height
 
         height += Math.ceil(booleanElements.length / 2) * (componentConfig.components.BOOLEAN.height - componentConfig.components.TEXT.height);
+
+        height += Math.ceil(yesOnlyElements.length / 2) * (componentConfig.components.YES_ONLY.height - componentConfig.components.TEXT.height);
 
 		height += longTextElements.length * (componentConfig.components.LONG_TEXT.height - componentConfig.components.TEXT.height);
 
@@ -170,6 +193,10 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 				if(getType(dataElement.valueType) == 'BOOLEAN')
 
 					addBooleanField(dataElement, sectionComponent)
+
+				if(getType(dataElement.valueType) == 'YES_ONLY')
+
+					addYesOnlyField(dataElement, sectionComponent)
 
 			});
 

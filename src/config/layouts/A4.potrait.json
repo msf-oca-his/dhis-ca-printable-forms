@@ -42,6 +42,10 @@
       "height": 28
     },
 
+    "YES_ONLY": {
+      "height": 28
+    },
+
     "catComb": {
       "heightOfTableHeader": 15,
       "heightOfDataElement": 12,
