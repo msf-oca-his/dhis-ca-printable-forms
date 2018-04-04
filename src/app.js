@@ -109,10 +109,10 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 
 		var getPages = function(program, programMode) {
 
-			var cachedProgram = _($scope.cachedProgramNames).find({'id': program.id});
+			var cachedTemplates = _($scope.cachedTemplates).find({'id': program.id});
 
-			if(_.isEmpty(cachedProgram)) $scope.cachedProgramNames.push(program);
-			else program.displayName = cachedProgram.displayName;
+			if(_.isEmpty(cachedTemplates)) $scope.cachedTemplates.push(program);
+			else program.displayName = cachedTemplates.displayName;
 
 			//TODO: get rid of switch statements
 			switch(programMode) {
