@@ -1,0 +1,75 @@
+// Header
+.header-pane-wrapper {
+  width: 87mm;
+  display: inline-block;
+  vertical-align: top;
+}
+
+// Section Title
+.section-title {
+  height: 7mm;
+  margin: 1mm 0 1mm 0;
+  font-size: 3mm;
+  padding-top: 1mm;
+  border: 2px solid #000000;
+}
+
+// Boolean
+.boolean-label {
+  margin: 4mm 0 2mm 0;
+  height: 5mm;
+}
+
+.boolean-field-checkbox {
+  margin-right : 2mm !important;
+}
+
+.boolean-field {
+  height: 6mm;
+}
+
+.option-container {
+  margin-bottom: 2mm;
+}
+
+// Text
+.text-label {
+  margin: 4mm 0 2mm 0;
+  height: 4mm;
+}
+
+.input-field {
+  border-bottom: 1px solid #000000;
+}
+
+.text-input {
+  height: 3mm;
+  margin: 2mm 0 4mm 0;
+}
+
+.long-text-input {
+  height: 6mm;
+  margin: 8mm 0 4mm 0;
+}
+
+.header-component {
+  height: 4mm;
+  margin: 3mm 0 2mm 0;
+  font-size: 3mm;
+}
+
+.title-component {
+  height: 5mm;
+  margin: 1mm 0 1mm 0;
+  font-size: 3mm;
+}
+
+// Yes Only
+.yes-only-label {
+  margin: 4mm 0 2mm 0;
+  height: 4mm;
+}
+
+.yes-only-field {
+  height: 6mm;
+}
