@@ -11,69 +11,72 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	var componentConfig;
 
 	var addSectionTitle = function(title, section) {
-
-		page.components.push(new SectionTitle(title));
-
-		section.left.height = section.left.height - componentConfig.components.section.titleHeight;
+        var titleHeight = componentConfig.components.section.titleHeight;
+		page.components.push(new SectionTitle(title, titleHeight));
+        section.left.height = section.left.height - titleHeight;
 	};
 
 	var addTextField = function(dataElement, section) {
 
-		if(section.left.height > 0) {
+        var textFieldHeight = componentConfig.components.TEXT.height;
+        if(section.left.height > 0) {
 
-			section.left.components.push(new TextField(dataElement));
+			section.left.components.push(new TextField(dataElement, textFieldHeight));
 
-			section.left.height -= componentConfig.components.TEXT.height;
+			section.left.height -= textFieldHeight;
 		} else {
 
-			section.right.components.push(new TextField(dataElement));
+			section.right.components.push(new TextField(dataElement, textFieldHeight));
 
-			section.right.height -= componentConfig.components.TEXT.height;
+			section.right.height -= textFieldHeight;
 		}
 	};
 
 	var addLongTextField = function(dataElement, section) {
 
-		if(section.left.height > 0) {
+        var longTextFieldHeight = componentConfig.components.LONG_TEXT.height;
+        if(section.left.height > 0) {
 
-			section.left.components.push(new LongTextField(dataElement));
+			section.left.components.push(new LongTextField(dataElement, longTextFieldHeight));
 
-			section.left.height -= componentConfig.components.LONG_TEXT.height;
+			section.left.height -= longTextFieldHeight;
 		} else {
 
-			section.right.components.push(new LongTextField(dataElement));
+			section.right.components.push(new LongTextField(dataElement, longTextFieldHeight));
 
-			section.right.height -= componentConfig.components.LONG_TEXT.height;
+			section.right.height -= longTextFieldHeight;
 		}
 	};
 
 	var addBooleanField = function(dataElement, section) {
 
-		if(section.left.height > 0) {
+        var booleanFieldHeight = componentConfig.components.BOOLEAN.height;
+        if(section.left.height > 0) {
 
-			section.left.components.push(new BooleanField(dataElement));
+			section.left.components.push(new BooleanField(dataElement, booleanFieldHeight));
 
-			section.left.height -= componentConfig.components.BOOLEAN.height;
+			section.left.height -= booleanFieldHeight;
 		} else {
 
-			section.right.components.push(new BooleanField(dataElement));
+			section.right.components.push(new BooleanField(dataElement, booleanFieldHeight));
 
-			section.right.height -= componentConfig.components.BOOLEAN.height;
+			section.right.height -= booleanFieldHeight;
 		}
 	};
 
 	var addYesOnlyField = function(dataElement, section) {
 
-		if(section.left.height > 0) {
+        var yesOnlyFieldHeight = componentConfig.components.YES_ONLY.height;
+        if(section.left.height > 0) {
 
-			section.left.components.push(new YesOnlyField(dataElement));
+			section.left.components.push(new YesOnlyField(dataElement, yesOnlyFieldHeight));
 
-			section.left.height -= componentConfig.components.YES_ONLY.height;
+			section.left.height -= yesOnlyFieldHeight;
 		} else {
 
-			section.right.components.push(new YesOnlyField(dataElement));
+			section.right.components.push(new YesOnlyField(dataElement, yesOnlyFieldHeight));
 
-			section.right.height -= componentConfig.components.YES_ONLY.height;
+			section.right.height -= yesOnlyFieldHeight;
 		}
 	};
 
@@ -213,17 +216,15 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	};
 
 	var addHeader = function() {
-
-		page.components.push(new Header());
-
-		page.height = page.height - componentConfig.components.header.height;
+        var headerHeight = componentConfig.components.header.height;
+		page.components.push(new Header(headerHeight));
+        page.height = page.height - headerHeight;
 	};
 
 	var addTitle = function(title) {
-
-		page.components.push(new TemplateTitle(title));
-
-		page.height = page.height - componentConfig.components.dataSetTitle.height;
+        var titleHeight = componentConfig.components.dataSetTitle.height;
+		page.components.push(new TemplateTitle(title, titleHeight));
+        page.height = page.height - titleHeight;
 	};
 
 	var removeBorders = function() {
