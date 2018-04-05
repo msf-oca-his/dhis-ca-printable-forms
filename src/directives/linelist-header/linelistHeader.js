@@ -13,11 +13,11 @@ TallySheets.directive('linelistHeader', ['$rootScope', 'Config', function($rootS
 				if(_.isEmpty($scope.headerName)) {
 					$scope.headerName = $scope.programName;
 				} else {
-					_.map($rootScope.cachedProgramNames, function(cachedProgram) {
-						if(cachedProgram.displayName == $scope.programName) {
-							cachedProgram.displayName = $scope.headerName;
+					_.map($rootScope.cachedTemplates, function(cachedTemplate) {
+						if(cachedTemplate.displayName == $scope.programName) {
+							cachedTemplate.displayName = $scope.headerName;
 							$scope.programName = $scope.headerName;
-							$rootScope.renderTemplates([cachedProgram]);
+							$rootScope.renderTemplates([cachedTemplate]);
 						}
 					});
 				}

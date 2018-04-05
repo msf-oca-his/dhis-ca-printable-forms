@@ -101,7 +101,7 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			});
 			
 			_.map(program.programStages[0],function(sections) {
-				program.sections = sections;
+				program.sections = _.cloneDeep(sections);
 			});
 
 			return program
