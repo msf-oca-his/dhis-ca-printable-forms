@@ -121,6 +121,6 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 			associatedWith:['dataElement']
 		}
 	};
-	config.showUserRelatedFormsOnly = true;
+	config.showUserRelatedFormsOnly = false;
 	return CalculatedConfig.getConfig(config);
 }]);

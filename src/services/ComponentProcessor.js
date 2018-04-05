@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, Section, PageComponent) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, Section, PageComponent) {
 
 	var pages = [];
 
@@ -90,6 +90,23 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 			section.right.height -= yesOnlyFieldHeight;
 		}
 	};
+	
+	var addCommentField = function(dataElement, section) {
+
+		var commentFieldHeight = componentConfig.components.COMMENT.height;
+
+		if(section.left.height > 0) {
+
+			section.left.components.push(new CommentField(dataElement, commentFieldHeight));
+
+			section.left.height -= commentFieldHeight;
+		} else {
+
+			section.right.components.push(new CommentField(dataElement, commentFieldHeight));
+
+			section.right.height -= commentFieldHeight;
+		}
+	};
 
 	var getType = function(type) {
 		switch(type) {
@@ -99,6 +116,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 				return "BOOLEAN";
 			case "TRUE_ONLY" :
 				return "YES_ONLY";
+			case "COMMENT":
+				return "COMMENT";
 			default:
 				return "TEXT"
 		}
@@ -235,6 +254,10 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 				if(getType(dataElement.valueType) == 'YES_ONLY')
 
 					addYesOnlyField(dataElement, sectionComponent)
+
+				if(getType(dataElement.valueType) == 'COMMENT')
+
+					addCommentField(dataElement, sectionComponent)
 
 			});
 

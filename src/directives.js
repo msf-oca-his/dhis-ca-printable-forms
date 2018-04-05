@@ -17,6 +17,7 @@ require("./directives/components/section/section.js");
 require("./directives/components/long-text-field/longTextField.js");
 require("./directives/components/boolean-field/booleanField.js");
 require("./directives/components/yes-only-field/yesOnlyField.js");
+require("./directives/components/comment-field/commentField.js");
 
 
 require("./directives/content-directives/list/list.js");

@@ -106,6 +106,19 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 
 			return program
 		};
+		
+		var addCommentsSectionTo = function(program) {
+			var comments = {
+				displayName: 'Comments',
+				name: 'Comments',
+				dataElements: [{
+					displayFormName: 'Comments',
+					name: 'Comments',
+					valueType: 'COMMENT'
+				}]
+ 			};
+			program.sections.push(comments);
+		};
 
 		var getPages = function(program, programMode) {
 
@@ -121,6 +134,7 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 					return $q.when({})
 						.then(getConfig)
 						.then(function(config) {
+							addCommentsSectionTo(program);
 							return ComponentProcessor.processComponents([program],config);
 						});
 				case PageTypes.REGISTER:
