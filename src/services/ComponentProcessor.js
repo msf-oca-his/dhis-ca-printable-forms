@@ -212,7 +212,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 	var preCheckToAddTemplateTitle = function(section) {
 		
-		if(!isDataElementPresent(section)) {
+		if(!isDataElementPresent(section.dataElements)) {
 			
 			return false;
 		}
