@@ -7,9 +7,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	var currentTemplate;
 
 	var componentConfig;
-	
+
 	var isFirstSectionInTemplate;
-	
+
 	var isNewPage;
 
 	var addSectionTitle = function(title, section) {
@@ -90,7 +90,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 			section.right.height -= yesOnlyFieldHeight;
 		}
 	};
-	
+
 	var addCommentField = function(dataElement, section) {
 
 		var commentFieldHeight = componentConfig.components.COMMENT.height;
@@ -149,7 +149,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		});
 
 		var totalHeight = (height / 2) + componentConfig.components.sectionTitle.height;
-		
+
 		return predictSectionHeight(section, totalHeight);
 	};
 
@@ -162,7 +162,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 			var rightPageHeight = leftPageHeight;
 
 			var leftCount = 0, rightCount = 0;
-			
+
 			var isLeftProcessingDone = false;
 
 			_.map(section.dataElements, function(dataElement) {
@@ -173,16 +173,16 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 					leftCount++;
 				}
-				
-				else if((rightPageHeight-leftPageHeight) > componentConfig.components[getType(dataElement.valueType)].height) {
-					
+
+				else if((rightPageHeight - leftPageHeight) > componentConfig.components[getType(dataElement.valueType)].height) {
+
 					isLeftProcessingDone = true;
-					
+
 					rightPageHeight -= componentConfig.components[getType(dataElement.valueType)].height;
-					
+
 					rightCount++;
 				}
-				
+
 			});
 			return leftCount + rightCount;
 		};
@@ -197,30 +197,45 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 		addNewPage();
 
-		addTitle(currentTemplate.displayName);
+		if(!isFirstSectionInTemplate)
+
+			addTitle(currentTemplate.displayName);
 
 		processSection(newSection);
 	};
 
 	var isDataElementPresent = function(dataElements) {
+
 		return dataElements.length > 0;
+
 	};
-	
+
+	var preCheckToAddTemplateTitle = function(section) {
+		
+		if(!isDataElementPresent(section)) {
+			
+			return false;
+		}
+		var minimumHeight = componentConfig.components.templateTitle.height + componentConfig.components.sectionTitle.height + componentConfig.components[getType(section.dataElements[0])].height;
+		
+		return page.height > minimumHeight;
+};
+
 	var processSection = function(section) {
 
 		var sectionHeight = getHeightFor(section);
 
 		var sectionComponent = new Section(sectionHeight);
-		
+
 		if(isFirstSectionInTemplate) {
 
-			if((page.height - componentConfig.components.templateTitle.height) > sectionHeight ) {
+			if(preCheckToAddTemplateTitle(section)) {
 
 				addTitle(currentTemplate.displayName);
+
+				isFirstSectionInTemplate = false;
 			}
-			
-			isFirstSectionInTemplate = false;
-		}
+		};
 
 		if(page.height < componentConfig.components.sectionTitle.height) {
 
@@ -232,9 +247,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		}
 
 		else if(sectionHeight < page.height) {
-			
-			if (isDataElementPresent(section.dataElements))
-				
+
+			if(isDataElementPresent(section.dataElements))
+
 				addSectionTitle(section.displayName, sectionComponent);
 
 			_.map(section.dataElements, function(dataElement) {
@@ -312,7 +327,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		addNewPage();
 
 		_.map(templates, function(template) {
-			
+
 			isFirstSectionInTemplate = true;
 
 			currentTemplate = template;
@@ -325,4 +340,5 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		return pages;
 	}
 
-}]);
+}])
+;
