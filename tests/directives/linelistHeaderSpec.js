@@ -55,7 +55,7 @@ describe("CodeSheet Template", function() {
 	});
 	
 	it("should save the edited header name",function() {
-		rootScope.cachedProgramNames = [{displayName:'testProgram'}];
+		rootScope.cachedTemplates = [{displayName:'testProgram'}];
 		spyOn(rootScope,'renderTemplates');
 		elementScope.programName="testProgram";
 		var input = element.querySelector('input');
@@ -63,6 +63,6 @@ describe("CodeSheet Template", function() {
 		angular.element(input).triggerHandler('blur');
 		elementScope.$apply();
 		expect(elementScope.programName).toEqual('changedProgram');
-		expect(rootScope.cachedProgramNames[0]).toEqual({displayName:'changedProgram'});
+		expect(rootScope.cachedTemplates[0]).toEqual({displayName:'changedProgram'});
 	})
 });
