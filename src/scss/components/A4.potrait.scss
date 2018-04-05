@@ -7,10 +7,9 @@
 
 // Section Title
 .section-title {
-  height: 7mm;
-  margin: 1mm 0 1mm 0;
+  margin: 3mm 0 0mm 0;
   font-size: 3mm;
-  padding-top: 1mm;
+  padding: 1mm 2mm 1mm;
   border: 2px solid #000000;
 }
 
@@ -25,7 +24,7 @@
 }
 
 .boolean-field {
-  height: 6mm;
+  height: 20mm;
 }
 
 .option-container {
@@ -34,43 +33,42 @@
 
 // Text
 .text-label {
-  margin: 4mm 0 2mm 0;
-  height: 4mm;
+  height: 10mm;
+  padding: 3mm 0 3mm 0;
+}
+
+.text-input {
+  height: 10mm;
+  padding: 3mm 0 3mm 0;
 }
 
 .input-field {
   border-bottom: 1px solid #000000;
 }
 
-.text-input {
-  height: 3mm;
-  margin: 2mm 0 4mm 0;
-}
+/*long text*/
 
 .long-text-input {
-  height: 6mm;
-  margin: 8mm 0 4mm 0;
+  height: 20mm;
+  padding: 16mm 0 8mm 0;
+}
+
+/* header */
+
+.header-new {
+  height: 30mm;
 }
 
 .header-component {
-  height: 4mm;
-  margin: 3mm 0 2mm 0;
+  height: 6mm;
+  padding: 1.5mm 0 1.5mm 0;
   font-size: 3mm;
 }
 
+/* title */
+
 .title-component {
-  height: 5mm;
+  padding: 2mm 0 2mm 0;
   font-weight   : 600;
   font-size     : 4mm;
-  margin-bottom : 5mm
-}
-
-// Yes Only
-.yes-only-label {
-  margin: 4mm 0 2mm 0;
-  height: 4mm;
-}
-
-.yes-only-field {
-  height: 6mm;
 }

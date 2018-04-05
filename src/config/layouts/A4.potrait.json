@@ -11,39 +11,37 @@
       "right": 15
     },
 
-    "section": {
-      "gapBetweenSections": 3,
-      "titleHeight": 9
+    "header":{
+      "height": 30
     },
 
-    "dataSetTitle": {
+    "templateTitle": {
       "height": 10,
       "maximumCharLength": 90
     },
 
-    "programTitle": {
-      "titleHeight": 10,
-      "maximumCharLength": 90
+    "sectionTitle": {
+      "height": 10
     },
 
     "TEXT": {
-      "height": 19,
-      "labelWidth": 40,
-      "inputFieldMarginTop": 10
+      "height": 20
     },
 
     "LONG_TEXT": {
-      "height": 28,
-      "labelWidth": 40,
-      "inputFieldMarginTop": 30
+      "height": 30
     },
 
     "BOOLEAN": {
-      "height": 28
+      "height": 30
     },
 
     "YES_ONLY": {
-      "height": 28
+      "height": 20
+    },
+
+    "comments": {
+      "height":30
     },
 
     "catComb": {
@@ -52,18 +50,6 @@
       "maxNumberOfColumns": 6,
       "gapBetweenColumns": 10,
       "widthOfCategoryOptionCombo": 30
-    },
-
-    "header":{
-      "height": 19
-    },
-
-    "graceHeight": {
-      "height":5
-    },
-
-    "comments": {
-      "height":30
     }
   }
 }

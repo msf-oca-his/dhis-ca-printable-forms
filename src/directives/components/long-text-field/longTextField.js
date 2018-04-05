@@ -6,9 +6,6 @@ TallySheets.directive('longTextField', [function() {
 			component: '='
 		},
 		link: function($scope) {
-			$scope.getStyles = function() {
-				return "height:" + $scope.height + "mm";
-			}
 		}
 	};
 }]);
