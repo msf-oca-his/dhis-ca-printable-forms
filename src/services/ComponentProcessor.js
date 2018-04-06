@@ -12,8 +12,6 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 	var isFirstSectionInTemplate;
 
-	var isNewPage;
-
 	var addSectionTitle = function(title, section) {
 
 		var titleHeight = componentConfig.components.sectionTitle.height;
@@ -110,29 +108,28 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		}
 	};
 
-	var getType = function(type) {
-		switch(type) {
-			case "LONG_TEXT" :
-				return "LONG_TEXT";
-			case "BOOLEAN" :
-				return "BOOLEAN";
-			case "TRUE_ONLY" :
-				return "YES_ONLY";
-			case "COMMENT":
-				return "COMMENT";
-			default:
-				return "TEXT"
+    var addFieldTypeOf = {
+        "LONG_TEXT": addLongTextField,
+        "BOOLEAN": addBooleanField,
+        "YES_ONLY": addYesOnlyField,
+        "COMMENT": addCommentField,
+        "TEXT": addTextField
+    }
+
+    var getType = function(type) {
+		var types = {
+			"LONG_TEXT": "LONG_TEXT",
+			"BOOLEAN": "BOOLEAN",
+			"TRUE_ONLY": "YES_ONLY",
+			"COMMENT": "COMMENT"
 		}
+		return types[type] ? types[type] : "TEXT";
 	};
 
 	var predictSectionHeight = function(section, leftHeight) {
-
 		var overFlowedHeight = leftHeight - componentConfig.components.sectionTitle.height;
-
 		_.map(section.dataElements, function(dataElement) {
-
 			if(overFlowedHeight > 0) {
-
 				overFlowedHeight -= (componentConfig.components[getType(dataElement.valueType)].height);
 			}
 		});
@@ -141,17 +138,11 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	};
 
 	var getHeightFor = function(section) {
-
 		var height = 0;
-
 		_.map(section.dataElements, function(dataElement) {
-
 			height += componentConfig.components[getType(dataElement.valueType)].height;
-
 		});
-
 		var totalHeight = (height / 2) + componentConfig.components.sectionTitle.height;
-
 		return predictSectionHeight(section, totalHeight);
 	};
 
@@ -252,37 +243,13 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		else if(sectionHeight < page.height) {
 
 			if(isDataElementPresent(section.dataElements))
-
 				addSectionTitle(section.displayName, sectionComponent);
 
 			_.map(section.dataElements, function(dataElement) {
-
-				if(getType(dataElement.valueType) == 'TEXT')
-
-					addTextField(dataElement, sectionComponent);
-
-				if(getType(dataElement.valueType) == 'LONG_TEXT')
-
-					addLongTextField(dataElement, sectionComponent)
-
-				if(getType(dataElement.valueType) == 'BOOLEAN')
-
-					addBooleanField(dataElement, sectionComponent)
-
-				if(getType(dataElement.valueType) == 'YES_ONLY')
-
-					addYesOnlyField(dataElement, sectionComponent)
-
-				if(getType(dataElement.valueType) == 'COMMENT')
-
-					addCommentField(dataElement, sectionComponent)
-
+                addFieldTypeOf[getType(dataElement.valueType)](dataElement, sectionComponent)
 			});
-
 			page.components.push(sectionComponent);
-
 			page.height = page.height - sectionHeight;
-
 		}
 		else {
 
