@@ -1,7 +1,8 @@
 TallySheets.factory('Header', [function() {
-	return function Header(height) {
+	return function Header(templateType,height) {
 		this.name = 'header';
-        this.height = height;
+		this.height = height;
+		this.templateType = templateType;
 		return this;
 	}
 }]);

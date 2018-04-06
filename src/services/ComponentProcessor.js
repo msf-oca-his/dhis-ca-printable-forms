@@ -3,6 +3,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	var pages = [];
 
 	var page;
+	
+	var templateType;
 
 	var currentTemplate;
 
@@ -211,15 +213,15 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	};
 
 	var preCheckToAddTemplateTitle = function(section) {
-		
+
 		if(!isDataElementPresent(section.dataElements)) {
-			
+
 			return false;
 		}
 		var minimumHeight = componentConfig.components.templateTitle.height + componentConfig.components.sectionTitle.height + componentConfig.components[getType(section.dataElements[0])].height;
-		
+
 		return page.height > minimumHeight;
-};
+	};
 
 	var processSection = function(section) {
 
@@ -235,7 +237,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 				isFirstSectionInTemplate = false;
 			}
-		};
+		}
+		;
 
 		if(page.height < componentConfig.components.sectionTitle.height) {
 
@@ -289,8 +292,14 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	};
 
 	var addHeader = function() {
-		var headerHeight = componentConfig.components.header.height;
-		page.components.push(new Header(headerHeight));
+		var headerHeight;
+		
+		if(templateType == "DataSet")
+			headerHeight = componentConfig.components.header.height;
+		else
+			headerHeight = componentConfig.components.header.height / 2;
+
+		page.components.push(new Header(templateType, headerHeight));
 		page.height = page.height - headerHeight;
 	};
 
@@ -323,6 +332,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		pages = [];
 
 		componentConfig = config;
+		
+		templateType = templates[0].constructor.name;
 
 		addNewPage();
 

@@ -1,4 +1,4 @@
-<div style="height: {{component.height}}">
+<div style="height: {{component.height}}" ng-if="component.templateType == 'DataSet'">
     <div class="pane-separator header-pane-wrapper">
         <div>
             <div class="header-component">
@@ -23,6 +23,17 @@
         <div>
             <div class="header-component">
                 {{ 'end_date' | translate }}
+            </div>
+            <div class="text-input input-field" ></div>
+        </div>
+    </div>
+</div>
+
+<div style="height: {{component.height}}" ng-if="component.templateType != 'DataSet'">
+    <div class="pane-separator header-pane-wrapper">
+        <div>
+            <div class="header-component">
+                {{ 'health_structure' | translate }}
             </div>
             <div class="text-input input-field" ></div>
         </div>
