@@ -83,7 +83,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 			"BOOLEAN": "BOOLEAN",
 			"TRUE_ONLY": "YES_ONLY",
 			"COMMENT": "COMMENT"
-		}
+		};
 		return types[type] ? types[type] : "TEXT";
 	};
 
@@ -110,19 +110,20 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		var numberOfElementfit = function() {
 			var leftPageHeight = page.height - componentConfig.components.sectionTitle.height;
 			var rightPageHeight = leftPageHeight;
-			var leftCount = 0, rightCount = 0;
-			var isLeftProcessingDone = false;
-			_.map(section.dataElements, function(dataElement) {
-				if(!isLeftProcessingDone && leftPageHeight > componentConfig.components[getType(dataElement.valueType)].height) {
-					leftPageHeight -= componentConfig.components[getType(dataElement.valueType)].height;
-					leftCount++;
-				}
-				else if((rightPageHeight - leftPageHeight) > componentConfig.components[getType(dataElement.valueType)].height) {
-					isLeftProcessingDone = true;
-					rightPageHeight -= componentConfig.components[getType(dataElement.valueType)].height;
-					rightCount++;
-				}
-			});
+			var index = 0;
+			var leftCount = 0;
+			while(leftPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height) {
+				leftPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].height;
+				leftCount++;
+				index++;
+			};
+			var rightPageHeight = rightPageHeight - leftPageHeight;
+			var rightCount = 0;
+			while(rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height ) {
+				rightPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].height;
+				rightCount++;
+				index++;
+			};
 			return leftCount + rightCount;
 		};
 
