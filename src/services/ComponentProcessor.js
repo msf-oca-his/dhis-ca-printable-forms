@@ -6,6 +6,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 	var currentTemplate;
 	var componentConfig;
 	var isFirstSectionInTemplate;
+    var addGraceHeight = 0;
 
 	var addSectionTitle = function(title, section) {
 		var titleHeight = componentConfig.components.sectionTitle.height;
@@ -80,12 +81,18 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
         }
     };
 
-	var addOptionField = function (option,section) {
+	var addOptionField = function (dataElement,option,section) {
 		var optionHeight = componentConfig.components.OPTIONSET.optionHeight;
+        var optionLabelFieldHeight = componentConfig.components.OPTIONSET.optionLabelHeight;
         if(section.left.height > 0) {
             section.left.components.push(new OptionField(option, optionHeight));
             section.left.height -= optionHeight;
         } else {
+        	if(section.right.components.length ==0) {
+        		dataElement.displayFormName = dataElement.displayFormName + "  (Contd....)";
+                section.right.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
+			}
+
             section.right.components.push(new OptionField(option, optionHeight));
             section.right.height -= optionHeight;
         }
@@ -94,7 +101,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 	var addOptionSetField = function (dataElement, section) {
 		addOptionLabelField(dataElement,section);
 		_.map(dataElement.options, function (option) {
-			addOptionField(option, section);
+			addOptionField(dataElement,option, section);
         });
 	};
 
@@ -120,21 +127,26 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 
 	var predictSectionHeight = function(section, leftHeight) {
 		var overFlowedHeight = leftHeight - componentConfig.components.sectionTitle.height;
+
 		_.map(section.dataElements, function(dataElement) {
 
-			if(overFlowedHeight > 0) {
+			if(overFlowedHeight > -(addGraceHeight?0:addGraceHeight)) {
 
 				if(dataElement.valueType == "OPTIONSET") {
 
 					overFlowedHeight -= componentConfig.components[getType(dataElement.valueType)].optionLabelHeight;
 
+                    addGraceHeight = componentConfig.components[getType(dataElement.valueType)].optionLabelHeight;
+
 					_.map(dataElement.options, function (option) {
 
-						if(overFlowedHeight > 0) {
+						if(overFlowedHeight > -(addGraceHeight)) {
 
 							overFlowedHeight -= componentConfig.components[getType(dataElement.valueType)].optionHeight;
 						}
-					})
+					});
+
+
 				} else {
                     overFlowedHeight -= (componentConfig.components[getType(dataElement.valueType)].height);
 				}
@@ -166,7 +178,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 
 	var breakAndAddSection = function(section) {
 		var numberOfElementfit = function() {
-			var leftPageHeight = page.height - componentConfig.components.sectionTitle.height;
+			var leftPageHeight = page.height - componentConfig.components.sectionTitle.height-addGraceHeight;
 			var rightPageHeight = leftPageHeight;
 			var index = 0;
 			var leftCount = 0;
@@ -234,8 +246,6 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
                         if(optionIndex < section.dataElements[index].options.length) {
                             var newDataElement = _.cloneDeep(section.dataElements[index]);
                             newDataElement.options = section.dataElements[index].options.splice(optionIndex);
-                            if(!newDataElement.displayFormName.includes("Contd"))
-                            	newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
                             section.dataElements.splice(index+1,0,newDataElement);
                         }
                         rightCount++;
