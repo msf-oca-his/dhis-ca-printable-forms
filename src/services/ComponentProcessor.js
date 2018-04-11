@@ -88,7 +88,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
             section.left.components.push(new OptionField(option, optionHeight));
             section.left.height -= optionHeight;
         } else {
-        	if(section.right.components.length ==0) {
+        	if((section.right.components.length ==0) && !dataElement.displayFormName.includes("  (Contd....)")) {
         		dataElement.displayFormName = dataElement.displayFormName + "  (Contd....)";
                 section.right.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
 			}
@@ -186,7 +186,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 
 				if(section.dataElements[index].valueType == 'OPTIONSET') {
 
-					if(leftPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight) {
+					if(leftPageHeight >= (componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight+componentConfig.components[getType(section.dataElements[index].valueType)].optionHeight)) {
                         leftPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight;
                         var options = section.dataElements[index].options;
                         var optionIndex = 0;
@@ -202,7 +202,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 						if(optionIndex < section.dataElements[index].options.length) {
                             var newDataElement = _.cloneDeep(section.dataElements[index]);
                             newDataElement.options = section.dataElements[index].options.splice(optionIndex);
-                            newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
+                            if(!newDataElement.displayFormName.includes("  (Contd....)"))
+                                newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
                             newDataElement.isDuplicate = true;
                             section.dataElements.splice(index+1,0,newDataElement);
 						}
@@ -231,7 +232,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 
                 if(section.dataElements[index].valueType == 'OPTIONSET') {
 
-                    if(rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight) {
+                    if(rightPageHeight >= (componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight+componentConfig.components[getType(section.dataElements[index].valueType)].optionHeight)) {
                         rightPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight;
                         var options = section.dataElements[index].options;
                         var optionIndex = 0;
@@ -246,6 +247,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
                         if(optionIndex < section.dataElements[index].options.length) {
                             var newDataElement = _.cloneDeep(section.dataElements[index]);
                             newDataElement.options = section.dataElements[index].options.splice(optionIndex);
+							if(!newDataElement.displayFormName.includes("  (Contd....)"))
+                            	newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
                             section.dataElements.splice(index+1,0,newDataElement);
                         }
                         rightCount++;
