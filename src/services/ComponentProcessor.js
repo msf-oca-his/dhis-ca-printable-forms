@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, Section, PageComponent) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField','OptionLabelField','OptionField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField,OptionLabelField,OptionField, Section, PageComponent) {
 
 	var pages = [];
 	var page;
@@ -69,20 +69,51 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		}
 	};
 
+	var addOptionLabelField = function (dataElement, section) {
+        var optionLabelFieldHeight = componentConfig.components.OPTIONSET.optionLabelHeight;
+		if(section.left.height > 0) {
+            section.left.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
+            section.left.height -= optionLabelFieldHeight;
+        } else {
+            section.right.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
+            section.right.height -= optionLabelFieldHeight;
+        }
+    };
+
+	var addOptionField = function (option,section) {
+		var optionHeight = componentConfig.components.OPTIONSET.optionHeight;
+        if(section.left.height > 0) {
+            section.left.components.push(new OptionField(option, optionHeight));
+            section.left.height -= optionHeight;
+        } else {
+            section.right.components.push(new OptionField(option, optionHeight));
+            section.right.height -= optionHeight;
+        }
+	};
+
+	var addOptionSetField = function (dataElement, section) {
+		addOptionLabelField(dataElement,section);
+		_.map(dataElement.options, function (option) {
+			addOptionField(option, section);
+        });
+	};
+
     var addFieldTypeOf = {
         "LONG_TEXT": addLongTextField,
         "BOOLEAN": addBooleanField,
         "YES_ONLY": addYesOnlyField,
         "COMMENT": addCommentField,
+		"OPTIONSET": addOptionSetField,
         "TEXT": addTextField
-    }
+    };
 
     var getType = function(type) {
 		var types = {
 			"LONG_TEXT": "LONG_TEXT",
 			"BOOLEAN": "BOOLEAN",
 			"TRUE_ONLY": "YES_ONLY",
-			"COMMENT": "COMMENT"
+			"COMMENT": "COMMENT",
+			"OPTIONSET":"OPTIONSET"
 		};
 		return types[type] ? types[type] : "TEXT";
 	};
@@ -90,17 +121,44 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 	var predictSectionHeight = function(section, leftHeight) {
 		var overFlowedHeight = leftHeight - componentConfig.components.sectionTitle.height;
 		_.map(section.dataElements, function(dataElement) {
+
 			if(overFlowedHeight > 0) {
-				overFlowedHeight -= (componentConfig.components[getType(dataElement.valueType)].height);
+
+				if(dataElement.valueType == "OPTIONSET") {
+
+					overFlowedHeight -= componentConfig.components[getType(dataElement.valueType)].optionLabelHeight;
+
+					_.map(dataElement.options, function (option) {
+
+						if(overFlowedHeight > 0) {
+
+							overFlowedHeight -= componentConfig.components[getType(dataElement.valueType)].optionHeight;
+						}
+					})
+				} else {
+                    overFlowedHeight -= (componentConfig.components[getType(dataElement.valueType)].height);
+				}
 			}
 		});
 		return leftHeight + Math.abs(overFlowedHeight);
 	};
 
+	var getHeightOfOptionSet = function (dataElement) {
+		var height = 0;
+        height += componentConfig.components[getType(dataElement.valueType)].optionLabelHeight + (componentConfig.components[getType(dataElement.valueType)].optionLabelHeight * (dataElement.options.length));
+        return height;
+    };
+
 	var getHeightFor = function(section) {
 		var height = 0;
 		_.map(section.dataElements, function(dataElement) {
-			height += componentConfig.components[getType(dataElement.valueType)].height;
+			if(dataElement.valueType == "OPTIONSET") {
+				var optionSetHeight = getHeightOfOptionSet(dataElement);
+				componentConfig.components[getType(dataElement.valueType)].height = optionSetHeight;
+				height += optionSetHeight;
+				} else {
+                height += componentConfig.components[getType(dataElement.valueType)].height;
+			}
 		});
 		var totalHeight = (height / 2) + componentConfig.components.sectionTitle.height;
 		return predictSectionHeight(section, totalHeight);
@@ -112,14 +170,91 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 			var rightPageHeight = leftPageHeight;
 			var index = 0;
 			var leftCount = 0;
-			while(leftPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height) {
-				leftPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].height;
-				leftCount++;
-				index++;
+			while(index < section.dataElements.length) {
+
+				if(section.dataElements[index].valueType == 'OPTIONSET') {
+
+					if(leftPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight) {
+                        leftPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight;
+                        var options = section.dataElements[index].options;
+                        var optionIndex = 0;
+                        while(optionIndex < options.length) {
+                        	if(leftPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].optionHeight) {
+                                leftPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].optionHeight;
+                                optionIndex++;
+                            }
+                        	else
+                        		break;
+						}
+
+						if(optionIndex < section.dataElements[index].options.length) {
+                            var newDataElement = _.cloneDeep(section.dataElements[index]);
+                            newDataElement.options = section.dataElements[index].options.splice(optionIndex);
+                            newDataElement.isDuplicate = true;
+                            section.dataElements.splice(index+1,0,newDataElement);
+						}
+						leftCount++;
+                        index++;
+					}  else {
+
+						break;
+					}
+				}
+
+				else if(leftPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height) {
+                    leftPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].height;
+                    leftCount++;
+                    index++;
+				} else {
+					break;
+				}
+
 			};
-			var rightPageHeight = rightPageHeight - leftPageHeight;
-			var rightCount = 0;
-			while(rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height ) {
+
+            var rightPageHeight = rightPageHeight - leftPageHeight;
+            var rightCount = 0;
+
+            while(index < section.dataElements.length) {
+
+                if(section.dataElements[index].valueType == 'OPTIONSET') {
+
+                    if(rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight) {
+                        rightPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].optionLabelHeight;
+                        var options = section.dataElements[index].options;
+                        var optionIndex = 0;
+                        while(optionIndex < options.length) {
+                            if(rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].optionHeight) {
+                                rightPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].optionHeight;
+                                optionIndex++;
+                            }
+                            else
+                                break;
+                        }
+                        if(optionIndex < section.dataElements[index].options.length) {
+                            var newDataElement = _.cloneDeep(section.dataElements[index]);
+                            newDataElement.options = section.dataElements[index].options.splice(optionIndex);
+                            newDataElement.isDuplicate = true;
+                            section.dataElements.splice(index+1,0,newDataElement);
+                        }
+                        rightCount++;
+                        index++;
+                    } else {
+
+                        break;
+                    }
+                }
+
+                else if(rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height) {
+                    rightPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].height;
+                    rightCount++;
+                    index++;
+                } else {
+                	break;
+				}
+
+            };
+
+			while((index < section.dataElements.length) && rightPageHeight >= componentConfig.components[getType(section.dataElements[index].valueType)].height ) {
 				rightPageHeight -= componentConfig.components[getType(section.dataElements[index].valueType)].height;
 				rightCount++;
 				index++;

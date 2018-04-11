@@ -17,3 +17,5 @@ require('./Components/LongTextField.js');
 require('./Components/BooleanField.js');
 require('./Components/YesOnlyField.js');
 require('./Components/CommentField.js');
+require('./Components/OptionLabelField.js');
+require('./Components/OptionField.js');

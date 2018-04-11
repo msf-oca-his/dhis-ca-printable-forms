@@ -44,6 +44,12 @@
       "height":30
     },
 
+    "OPTIONSET": {
+      "height": "",
+      "optionLabelHeight":10,
+      "optionHeight":10
+    },
+
     "catComb": {
       "heightOfTableHeader": 15,
       "heightOfDataElement": 12,

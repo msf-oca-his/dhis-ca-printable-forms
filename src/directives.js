@@ -18,6 +18,8 @@ require("./directives/components/long-text-field/longTextField.js");
 require("./directives/components/boolean-field/booleanField.js");
 require("./directives/components/yes-only-field/yesOnlyField.js");
 require("./directives/components/comment-field/commentField.js");
+require("./directives/components/option-field/optionField.js");
+require("./directives/components/option-label-field/optionLabelField");
 
 
 require("./directives/content-directives/list/list.js");
