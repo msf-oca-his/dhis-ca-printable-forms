@@ -12,6 +12,7 @@ describe("TallySheets ctrl", function() {
 	var mockedValidationService;
 	var mockDataset;
 	var pageTypes;
+	var mockedComponentProcessor;
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -70,6 +71,14 @@ describe("TallySheets ctrl", function() {
 			}
 		};
 
+        mockedComponentProcessor = {
+            processComponents: function() {
+                if(_.isEmpty(arguments[0]))
+                    return [];
+                return {type: "dataset", templates: arguments[0]};
+            }
+        }
+
     mockedCoversheetProcessor = {
       process: function() {
         if(_.isEmpty(arguments[0]))
@@ -105,6 +114,7 @@ describe("TallySheets ctrl", function() {
 		$provide.value('OptionSetFactory', $q.when({}));
 		$provide.value('DataSetService', mockedDataSetService);
 		$provide.value('DataSetProcessor', mockedDataSetProcessor);
+		$provide.value('ComponentProcessor',mockedComponentProcessor)
 		$provide.value('TemplateCustomizationService', mockedTemplateCustomizationService);
 		$provide.value('ProgramService', mockedProgramService);
 		$provide.value('CustomAttributeValidationService', mockedValidationService);

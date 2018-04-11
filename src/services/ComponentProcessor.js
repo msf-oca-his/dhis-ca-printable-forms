@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField','OptionLabelField','OptionField', 'Section', 'PageComponent', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField,OptionLabelField,OptionField, Section, PageComponent) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField','OptionLabelField','OptionField', 'Section', 'PageComponent','PrintFriendlyUtils', function(TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField,OptionLabelField,OptionField, Section, PageComponent,PrintFriendlyUtils) {
 
 	var pages = [];
 	var page;
@@ -320,7 +320,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
 	var addHeader = function() {
 		var headerHeight;
-		
+
 		if(templateType == "DataSet")
 			headerHeight = componentConfig.components.header.height;
 		else
@@ -356,6 +356,13 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 		_.map(templates, function(template) {
 			isFirstSectionInTemplate = true;
 			currentTemplate = template;
+			_.map(template.sections,function (section) {
+                section.dataElements = PrintFriendlyUtils.getDataElementsToDisplay(section.dataElements);
+                _.map(section.dataElements, function (dataElement) {
+					var isListType = PrintFriendlyUtils.isListTypeDataElement(dataElement);
+					if(!isListType) dataElement.valueType="TEXT";
+                })
+            });
 			_.map(template.sections, processSection);
 			return pages;
 		});
