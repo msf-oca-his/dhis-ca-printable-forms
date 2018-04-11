@@ -190,6 +190,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 						if(optionIndex < section.dataElements[index].options.length) {
                             var newDataElement = _.cloneDeep(section.dataElements[index]);
                             newDataElement.options = section.dataElements[index].options.splice(optionIndex);
+                            newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
                             newDataElement.isDuplicate = true;
                             section.dataElements.splice(index+1,0,newDataElement);
 						}
@@ -233,7 +234,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                         if(optionIndex < section.dataElements[index].options.length) {
                             var newDataElement = _.cloneDeep(section.dataElements[index]);
                             newDataElement.options = section.dataElements[index].options.splice(optionIndex);
-                            newDataElement.isDuplicate = true;
+                            if(!newDataElement.displayFormName.includes("Contd"))
+                            	newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
                             section.dataElements.splice(index+1,0,newDataElement);
                         }
                         rightCount++;
