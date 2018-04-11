@@ -45,16 +45,18 @@
     },
 
     "OPTIONSET": {
-      "height": "20",
+      "height": 20,
       "optionLabelHeight":10,
       "optionHeight":10
     },
 
-    "catComb": {
-      "heightOfTableHeader": 15,
+    "CAT_COMB": {
+      "heightOfCatCombTableHeader": 15,
       "heightOfDataElement": 12,
-      "maxNumberOfColumns": 6,
+      "widthOfDataElement": 40,
+      "maxNumberOfColumns": 5,
       "gapBetweenColumns": 10,
+      "gapBetweenSectionAndTable": 4,
       "widthOfCategoryOptionCombo": 30
     }
   }

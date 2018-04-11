@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'OptionLabelField', 'OptionField', 'Section', 'PageComponent', 'PrintFriendlyUtils', function (TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, OptionLabelField, OptionField, Section, PageComponent, PrintFriendlyUtils) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'OptionLabelField', 'OptionField', 'Section', 'PageComponent', 'PrintFriendlyUtils', 'CatCombProcessor', 'CatCombSection', function (TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, OptionLabelField, OptionField, Section, PageComponent, PrintFriendlyUtils, CatCombProcessor, CatCombSection) {
 
     var pages = [];
     var page;
@@ -209,7 +209,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     };
 
     var breakAndAddSection = function (section) {
-        var numberOfComponentsThatCanFit = numberOfElementsThatCanFitIn(section);
+        var numberOfComponentsThatCanFit = CatCombProcessor.isCatCombSection(section) ?
+            CatCombProcessor.getNumberOfElementCanFitOnPage(page.height, componentConfig) :
+            numberOfElementsThatCanFitIn(section);
         var newSection = _.cloneDeep(section);
         newSection.dataElements = section.dataElements.splice(numberOfComponentsThatCanFit);
         processSection(section);
@@ -227,7 +229,11 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         if (!isNotEmpty(section.dataElements)) {
             return false;
         }
-        var minimumHeight = componentConfig.components.templateTitle.height + componentConfig.components.sectionTitle.height + componentConfig.components[getRenderedType(section.dataElements[0])].height;
+        var minimumHeight = 0;
+        if (CatCombProcessor.isCatCombSection(section))
+            minimumHeight = CatCombProcessor.getSingleRowHeightForNewSection(componentConfig) + componentConfig.components.templateTitle.height;
+        else
+            minimumHeight = componentConfig.components.templateTitle.height + componentConfig.components.sectionTitle.height + componentConfig.components[getRenderedType(section.dataElements[0])].height;
         return page.height > minimumHeight;
     };
 
@@ -240,7 +246,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         };
     };
 
-    var addCurrentSectionToPage = function (section, sectionComponent, sectionHeight) {
+    var processDefaultElements = function (sectionComponent, section) {
         var render = function (dataElement) {
             addDataElementToSection[getRenderedType(dataElement.valueType)](dataElement, sectionComponent)
         };
@@ -248,7 +254,14 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
             addSectionTitle(section.displayName, sectionComponent);
         }
         _.map(section.dataElements, render);
+    };
+
+    var addCurrentSectionToPage = function (section, sectionComponent, sectionHeight) {
+        (sectionComponent.name === 'cat-comb-section') ?
+            CatCombProcessor.processSection(componentConfig, section, sectionComponent) :
+            processDefaultElements(sectionComponent, section);
         page.components.push(sectionComponent);
+        page.components = _.flattenDeep(page.components);
         page.height = page.height - sectionHeight;
     };
 
@@ -261,9 +274,15 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
     var processSection = function (section) {
         addTemplateTitle(section);
-        var sectionHeight = calculateHeightForCurrent(section);
-        var sectionComponent = new Section(sectionHeight);
-        if (page.height < componentConfig.components.sectionTitle.height) {
+        var sectionHeight =
+            CatCombProcessor.isCatCombSection(section) ? CatCombProcessor.getHeightFor(section, componentConfig) :
+                calculateHeightForCurrent(section);
+        var sectionComponent = CatCombProcessor.isCatCombSection(section) ?
+            new CatCombSection(sectionHeight) : new Section(sectionHeight);
+        if (CatCombProcessor.isCatCombSection(section) && page.height < CatCombProcessor.getSingleRowHeightForNewSection(componentConfig)) {
+            addSectionToNewPage(section);
+        }
+        else if (page.height < componentConfig.components.sectionTitle.height) {
             addSectionToNewPage(section);
         }
         else if (sectionHeight < page.height) {

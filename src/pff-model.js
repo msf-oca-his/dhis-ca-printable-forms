@@ -13,6 +13,8 @@ require('./Components/SectionTitle.js');
 require('./Components/TextField.js');
 require('./Components/TemplateTitle.js');
 require('./Components/Section.js');
+require('./Components/CatCombSection.js');
+require('./Components/CatCombField.js');
 require('./Components/LongTextField.js');
 require('./Components/BooleanField.js');
 require('./Components/YesOnlyField.js');

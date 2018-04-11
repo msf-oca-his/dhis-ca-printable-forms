@@ -3,6 +3,7 @@ require("./services/UserService.js");
 require("./services/PrintableTemplateService.js");
 require("./services/CoversheetProcessor.js");
 require("./services/ComponentProcessor.js");
+require("./services/CatCombProcessor.js");
 require("./services/RegisterProcessor.js");
 require("./services/CodeSheetProcessor.js");
 require("./services/CustomAttributeValidationService.js");

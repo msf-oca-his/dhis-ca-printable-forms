@@ -1,0 +1,22 @@
+<div>
+    <table style="height: {{ component.height + 'mm'}}; width:{{getTableWidth(component.catCombOptions)}};
+table-layout: fixed; margin-top: {{ topMargin }}" border="1">
+        <thead>
+            <tr style="height: {{heightOfTableHeader}};">
+                <th ng-style="{ height: heightOfDataElement, width: widthOfDataElementField, border: 'none' }"></th>
+                <th style="width: {{ widthOfDataElementField }}"
+                    ng-repeat="catCombOption in component.catCombOptions"
+                    ng-bind-html="catCombOption | to_trusted_html">
+                </th>
+            </tr>
+        </thead>
+        <tr ng-repeat="dataElement in component.dataElements" style="height: {{ heightOfDataElement }}">
+
+            <td class="catComb" style="width: {{widthOfDataElementLabel}};">
+                {{dataElement.displayFormName}}
+            </td>
+            <td ng-repeat="catCombOption in component.catCombOptions" style="width: {{ widthOfDataElementField }}">
+            </td>
+        </tr>
+    </table>
+</div>

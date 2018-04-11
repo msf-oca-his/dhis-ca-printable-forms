@@ -20,6 +20,8 @@ require("./directives/components/yes-only-field/yesOnlyField.js");
 require("./directives/components/comment-field/commentField.js");
 require("./directives/components/option-field/optionField.js");
 require("./directives/components/option-label-field/optionLabelField");
+require("./directives/components/cat-comb-section/catCombSection.js");
+require("./directives/components/cat-comb-field/catCombField.js");
 
 
 require("./directives/content-directives/list/list.js");
