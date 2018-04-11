@@ -237,8 +237,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                 addTitle(currentTemplate.displayName);
                 isFirstSectionInTemplate = false;
             }
-        }
-        ;
+        };
     };
 
     var addCurrentSectionToPage = function (section, sectionComponent, sectionHeight) {
