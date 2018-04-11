@@ -126,27 +126,18 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 	};
 
 	var predictSectionHeight = function(section, leftHeight) {
+        addGraceHeight = 0;
 		var overFlowedHeight = leftHeight - componentConfig.components.sectionTitle.height;
-
 		_.map(section.dataElements, function(dataElement) {
-
-			if(overFlowedHeight > -(addGraceHeight?0:addGraceHeight)) {
-
+			if(overFlowedHeight > 0) {
 				if(dataElement.valueType == "OPTIONSET") {
-
 					overFlowedHeight -= componentConfig.components[getType(dataElement.valueType)].optionLabelHeight;
-
-                    addGraceHeight = componentConfig.components[getType(dataElement.valueType)].optionLabelHeight;
-
+					addGraceHeight = componentConfig.components[getType(dataElement.valueType)].optionLabelHeight;
 					_.map(dataElement.options, function (option) {
-
-						if(overFlowedHeight > -(addGraceHeight)) {
-
+						if((overFlowedHeight + addGraceHeight)> 0) {
 							overFlowedHeight -= componentConfig.components[getType(dataElement.valueType)].optionHeight;
 						}
 					});
-
-
 				} else {
                     overFlowedHeight -= (componentConfig.components[getType(dataElement.valueType)].height);
 				}
@@ -361,6 +352,16 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 		addHeader();
 	};
 
+	var filterDataElementsToDisplay = function (sections) {
+        _.map(sections,function (section) {
+            section.dataElements = PrintFriendlyUtils.getDataElementsToDisplay(section.dataElements);
+            _.map(section.dataElements, function (dataElement) {
+                var isListType = PrintFriendlyUtils.isListTypeDataElement(dataElement);
+                if(!isListType) dataElement.valueType="TEXT";
+            })
+        });
+    };
+
 	this.processComponents = function(templates, config) {
 		pages = [];
 		componentConfig = config;
@@ -369,13 +370,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle','Header', 'SectionTit
 		_.map(templates, function(template) {
 			isFirstSectionInTemplate = true;
 			currentTemplate = template;
-			_.map(template.sections,function (section) {
-                section.dataElements = PrintFriendlyUtils.getDataElementsToDisplay(section.dataElements);
-                _.map(section.dataElements, function (dataElement) {
-					var isListType = PrintFriendlyUtils.isListTypeDataElement(dataElement);
-					if(!isListType) dataElement.valueType="TEXT";
-                })
-            });
+			filterDataElementsToDisplay(template.sections);
 			_.map(template.sections, processSection);
 			return pages;
 		});

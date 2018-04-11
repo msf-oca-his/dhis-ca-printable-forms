@@ -45,7 +45,7 @@
     },
 
     "OPTIONSET": {
-      "height": "",
+      "height": "20",
       "optionLabelHeight":10,
       "optionHeight":10
     },
