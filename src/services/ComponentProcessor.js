@@ -98,8 +98,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
             section.left.components.push(new OptionField(option, optionHeight));
             section.left.height -= optionHeight;
         } else {
-            if ((section.right.components.length == 0) && !dataElement.displayFormName.includes("  (Contd....)")) {
-                dataElement.displayFormName = dataElement.displayFormName + "  (Contd....)";
+            if ((section.right.components.length == 0)) {
+                dataElement.displayFormName =(!dataElement.displayFormName.includes("  (Contd....)"))?dataElement.displayFormName + "  (Contd....)":dataElement.displayFormName;
                 section.right.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
             }
             section.right.components.push(new OptionField(option, optionHeight));
