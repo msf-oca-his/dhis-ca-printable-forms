@@ -255,6 +255,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     var addSectionToNewPage = function (section) {
         addNewPage();
         addTitle(currentTemplate.displayName);
+        isFirstSectionInTemplate = false;
         processSection(section);
     };
 
