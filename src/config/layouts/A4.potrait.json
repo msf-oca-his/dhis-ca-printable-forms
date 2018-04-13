@@ -58,6 +58,10 @@
       "gapBetweenColumns": 10,
       "gapBetweenSectionAndTable": 4,
       "widthOfCategoryOptionCombo": 30
+    },
+
+    "FOOTER": {
+      "height": 20
     }
   }
 }
