@@ -54,7 +54,7 @@
       "heightOfCatCombTableHeader": 15,
       "heightOfDataElement": 12,
       "widthOfDataElement": 40,
-      "maxNumberOfColumns": 5,
+      "maxNumberOfColumns": 4,
       "gapBetweenColumns": 10,
       "gapBetweenSectionAndTable": 4,
       "widthOfCategoryOptionCombo": 30

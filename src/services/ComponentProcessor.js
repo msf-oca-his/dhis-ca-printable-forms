@@ -7,6 +7,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     var componentConfig;
     var isFirstSectionInTemplate;
     var addGraceHeight = 0; //extra height that will get added by overflowing option set causes addition of option label increases the height
+    var isContinuedCatCombSection = false;
+
     var getRenderedType = function (type) {
         var types = {
             "LONG_TEXT": "LONG_TEXT",
@@ -213,9 +215,20 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
             CatCombProcessor.getNumberOfElementCanFitOnPage(page.height, componentConfig) :
             numberOfElementsThatCanFitIn(section);
         var newSection = _.cloneDeep(section);
-        newSection.dataElements = section.dataElements.splice(numberOfComponentsThatCanFit);
+
+        if (CatCombProcessor.isCatCombSection(section)) {
+            newSection = CatCombProcessor.getNewSection(section, componentConfig, page.height);
+        } else {
+            newSection.dataElements = section.dataElements.splice(numberOfComponentsThatCanFit);
+        }
         processSection(section);
-        addNewPage();
+        
+        if (CatCombProcessor.isCatCombSection(section) && CatCombProcessor.getNumberOfElementCanFitOnPage(page.height, componentConfig) > 0) {
+            isContinuedCatCombSection = true;
+        } else {
+            isContinuedCatCombSection = false;
+            addNewPage();
+        }
         if (!isFirstSectionInTemplate)
             addTitle(currentTemplate.displayName);
         processSection(newSection);
@@ -258,7 +271,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
     var addCurrentSectionToPage = function (section, sectionComponent, sectionHeight) {
         (sectionComponent.name === 'cat-comb-section') ?
-            CatCombProcessor.processSection(componentConfig, section, sectionComponent) :
+            CatCombProcessor.processSection(componentConfig, section, sectionComponent, isContinuedCatCombSection) :
             processDefaultElements(sectionComponent, section);
         page.components.push(sectionComponent);
         page.components = _.flattenDeep(page.components);
@@ -284,6 +297,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         }
         else if (page.height < componentConfig.components.sectionTitle.height) {
             addSectionToNewPage(section);
+        }
+        else if (CatCombProcessor.isCatCombSection(section) && !CatCombProcessor.canOptionFitOnOneRow(section, componentConfig)) {
+            breakAndAddSection(section, sectionHeight);
         }
         else if (sectionHeight < page.height) {
             addCurrentSectionToPage(section, sectionComponent, sectionHeight);
