@@ -15,7 +15,10 @@ table-layout: fixed; margin-top: {{ topMargin }}" border="1" class="text-center"
             <td class="catComb" style="width: {{widthOfDataElementLabel}};">
                 {{dataElement.displayFormName}}
             </td>
-            <td ng-repeat="catCombOption in component.catCombOptions" style="width: {{ widthOfDataElementField }}">
+            <td ng-repeat="catCombOption in component.catCombOptions"
+                style="width: {{ widthOfDataElementField }}"
+                class="{{ isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes) ? 'greyDeField' : '' }}"
+            >
             </td>
         </tr>
     </table>
