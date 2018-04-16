@@ -10,7 +10,7 @@ table-layout: fixed; margin-top: {{ topMargin }}" border="1" class="text-center"
                 </th>
             </tr>
         </thead>
-        <tr ng-repeat="dataElement in component.dataElements" style="height: {{ heightOfDataElement }}">
+        <tr ng-repeat="dataElement in component.dataElements" style="height: {{ heightOfDataElement }}; overflow: hidden">
 
             <td class="catComb" style="width: {{widthOfDataElementLabel}};">
                 {{dataElement.displayFormName}}

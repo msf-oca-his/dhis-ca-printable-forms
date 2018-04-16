@@ -312,9 +312,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     var addHeader = function () {
         var headerHeight;
         headerHeight = (templateType == "DataSet") ? componentConfig.components.header.height : componentConfig.components.header.height / 2;
-        var footerHeight = componentConfig.components.FOOTER.height;
         page.components.push(new Header(templateType, headerHeight));
-        page.height = page.height - headerHeight - footerHeight;
+        page.height = page.height - headerHeight;
     };
 
     var addTitle = function (title) {
