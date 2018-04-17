@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'OptionLabelField', 'OptionField', 'Section', 'PageComponent', 'PrintFriendlyUtils', 'CatCombProcessor', 'CatCombSection', function (TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, OptionLabelField, OptionField, Section, PageComponent, PrintFriendlyUtils, CatCombProcessor, CatCombSection) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'OptionLabelField', 'OptionField', 'Section', 'PageComponent', 'PrintFriendlyUtils', 'CatCombProcessor', 'CatCombSection','Footer', function (TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, OptionLabelField, OptionField, Section, PageComponent, PrintFriendlyUtils, CatCombProcessor, CatCombSection, Footer) {
 
     var pages = [];
     var page;
@@ -228,9 +228,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         } else {
             isContinuedCatCombSection = false;
             addNewPage();
+            if (!isFirstSectionInTemplate)
+                addTitle(currentTemplate.displayName);
         }
-        if (!isFirstSectionInTemplate)
-            addTitle(currentTemplate.displayName);
         processSection(newSection);
     };
 
@@ -282,6 +282,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         addNewPage();
         addTitle(currentTemplate.displayName);
         isFirstSectionInTemplate = false;
+        isContinuedCatCombSection=false;
         processSection(section);
     };
 
@@ -327,11 +328,16 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         page.width = page.width - componentConfig.components.border.left - componentConfig.components.border.right;
     };
 
+    var removeFooterHeight = function () {
+        page.height -= componentConfig.components.FOOTER.height;
+    };
+
     var addNewPage = function () {
         page = new PageComponent(componentConfig.height, componentConfig.width);
         pages.push(page);
         removeBorders();
         addHeader();
+        removeFooterHeight();
     };
 
     var isListTypeDataElement = function (dataElement) {
@@ -341,6 +347,10 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     var applyDisplayOptionAttributeToDataElementsIn = function (section) {
         section.dataElements = PrintFriendlyUtils.getDataElementsToDisplay(section.dataElements);
         _.map(section.dataElements, isListTypeDataElement);
+    };
+
+    var addFooter = function (page, pageNumber, pages) {
+        page.components.push(new Footer(componentConfig.components.FOOTER.height, pageNumber + 1, pages.length));
     };
 
     var processTemplate = function (template) {
@@ -357,6 +367,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         templateType = templates[0].constructor.name;
         addNewPage();
         _.map(templates, processTemplate);
+        _.forEach(pages,addFooter);
         return pages;
     };
 }]);

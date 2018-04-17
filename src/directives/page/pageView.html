@@ -13,9 +13,6 @@
   </div>
 
 
-  <div class="page-number" ng-if="page.type!=$parent.PageTypes.REGISTER">
-    {{ 'page' | translate }} {{pageNumber}} {{ 'of' | translate }} {{totalPages}}
-  </div>
   <div class="page-number" ng-if="page.type==$parent.PageTypes.REGISTER">
     {{ 'part' | translate }} {{pageNumber}} {{ 'of' | translate }} {{totalPages}}
   </div>

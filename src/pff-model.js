@@ -21,3 +21,4 @@ require('./Components/YesOnlyField.js');
 require('./Components/CommentField.js');
 require('./Components/OptionLabelField.js');
 require('./Components/OptionField.js');
+require('./Components/Footer.js');

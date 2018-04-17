@@ -24,10 +24,16 @@
 }
 //..........................
 // Section Title
+
+.section-title-wrapper {
+  padding: 3mm 0 0 0;
+}
+
 .section-title {
-  margin: 3mm 0 0mm 0;
+  height: 7mm;
   font-size: 3mm;
   padding: 1mm 2mm 1mm;
+  display: block;
   border: 2px solid #000000;
 }
 //....................
@@ -92,4 +98,20 @@
 //Cat Comb
 .text-center {
   text-align: center;
+}
+
+// Footer
+
+.page-info {
+  float: right;
+  padding-top: 4mm;
+}
+
+.footer-wrapper {
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  bottom: 0;
+  right: 20mm;
+
 }

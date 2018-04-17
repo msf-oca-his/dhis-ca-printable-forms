@@ -4,22 +4,23 @@ table-layout: fixed; margin-top: {{ topMargin }}" border="1" class="text-center"
         <thead>
             <tr style="height: {{heightOfTableHeader}};">
                 <th ng-style="{ height: heightOfDataElement, width: widthOfDataElementField, border: 'none' }"></th>
-                <th style="width: {{ widthOfDataElementField }}"
+                <th style="width: {{ widthOfDataElementField }};text-align: center;"
                     ng-repeat="catCombOption in component.catCombOptions"
                     ng-bind-html="catCombOption | to_trusted_html">
                 </th>
             </tr>
         </thead>
-        <tr ng-repeat="dataElement in component.dataElements" style="height: {{ heightOfDataElement }}; overflow: hidden">
 
-            <td class="catComb" style="width: {{widthOfDataElementLabel}};">
-                {{dataElement.displayFormName}}
-            </td>
-            <td ng-repeat="catCombOption in component.catCombOptions"
-                style="width: {{ widthOfDataElementField }}"
-                class="{{ isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes) ? 'greyDeField' : '' }}"
-            >
-            </td>
+        <tr ng-repeat="dataElement in component.dataElements">
+            <td class="catComb" style="width: {{widthOfDataElementLabel}};height:{{ heightOfDataElement }};">
+                    <div style="height:{{ heightOfDataElement }} ; overflow:hidden;">
+                    {{dataElement.displayFormName}}
+                    </div>
+                </td>
+                <td ng-repeat="catCombOption in component.catCombOptions"
+                    style="width: {{ widthOfDataElementField }};"
+                    class="{{ isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes) ? 'greyDeField' : '' }}">
+                </td>
         </tr>
     </table>
 </div>
