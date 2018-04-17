@@ -1,4 +1,4 @@
-<div style="height: {{component.height}}" ng-if="component.templateType == 'DataSet'">
+<div style="height: {{component.height + 'mm'}}" ng-if="component.templateType == 'DataSet'">
     <div class="pane-separator header-pane-wrapper">
         <div>
             <div class="header-component">
@@ -29,7 +29,7 @@
     </div>
 </div>
 
-<div style="height: {{component.height}}" ng-if="component.templateType != 'DataSet'">
+<div style="height: {{component.height + 'mm'}}" ng-if="component.templateType != 'DataSet'">
     <div class="pane-separator header-pane-wrapper">
         <div>
             <div class="header-component">

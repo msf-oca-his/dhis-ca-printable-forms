@@ -302,7 +302,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         else if (CatCombProcessor.isCatCombSection(section) && !CatCombProcessor.canOptionFitOnOneRow(section, componentConfig)) {
             breakAndAddSection(section, sectionHeight);
         }
-        else if (sectionHeight < page.height) {
+        else if (sectionHeight <= page.height) {
             addCurrentSectionToPage(section, sectionComponent, sectionHeight);
         }
         else {
@@ -329,7 +329,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     };
 
     var removeFooterHeight = function () {
-        page.height -= componentConfig.components.FOOTER.height;
+        page.height = page.height - componentConfig.components.FOOTER.height;
     };
 
     var addNewPage = function () {
