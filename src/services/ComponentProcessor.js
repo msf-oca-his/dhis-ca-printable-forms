@@ -247,7 +247,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
             minimumHeight = CatCombProcessor.getSingleRowHeightForNewSection(componentConfig) + componentConfig.components.templateTitle.height;
         else
             minimumHeight = componentConfig.components.templateTitle.height + componentConfig.components.sectionTitle.height + componentConfig.components[getRenderedType(section.dataElements[0])].height;
-        return page.height > minimumHeight;
+        return page.height >= minimumHeight;
     };
 
     var addTemplateTitle = function (section) {
@@ -293,16 +293,18 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                 calculateHeightForCurrent(section);
         var sectionComponent = CatCombProcessor.isCatCombSection(section) ?
             new CatCombSection(sectionHeight) : new Section(sectionHeight);
-        if (CatCombProcessor.isCatCombSection(section) && page.height < CatCombProcessor.getSingleRowHeightForNewSection(componentConfig)) {
+
+        var titleHeight = (isFirstSectionInTemplate)?componentConfig.components.templateTitle.height:0;
+        if (CatCombProcessor.isCatCombSection(section) && page.height < (CatCombProcessor.getSingleRowHeightForNewSection(componentConfig)+titleHeight)) {
             addSectionToNewPage(section);
         }
-        else if (page.height < componentConfig.components.sectionTitle.height) {
+        else if (page.height < (componentConfig.components.sectionTitle.height+titleHeight)) {
             addSectionToNewPage(section);
         }
         else if (CatCombProcessor.isCatCombSection(section) && !CatCombProcessor.canOptionFitOnOneRow(section, componentConfig)) {
             breakAndAddSection(section, sectionHeight);
         }
-        else if (sectionHeight <= page.height) {
+        else if ((sectionHeight+titleHeight) <= page.height) {
             addCurrentSectionToPage(section, sectionComponent, sectionHeight);
         }
         else {

@@ -25,6 +25,7 @@ TallySheets.service('CatCombProcessor', ['DhisConstants', 'SectionTitle', 'CatCo
         } else {
             newSection.dataElements = section.dataElements.splice(numberOfElementsThatCanFit);
         }
+        newSection.isDuplicate = true;
         return newSection;
     };
 
@@ -65,7 +66,7 @@ TallySheets.service('CatCombProcessor', ['DhisConstants', 'SectionTitle', 'CatCo
     };
 
     this.processSection = function (config, section, sectionComponent, isContinued) {
-        if (isDataElementPresent(section.dataElements) && !isContinued) {
+        if (isDataElementPresent(section.dataElements) && (!isContinued || !section.isDuplicate)) {
             var titleHeight = config.components.sectionTitle.height;
             sectionComponent.components.push(addCatCombTitle(titleHeight, section.displayName, sectionComponent));
         }
