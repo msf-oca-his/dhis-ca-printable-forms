@@ -343,7 +343,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     };
 
     var isListTypeDataElement = function (dataElement) {
-        if (!(PrintFriendlyUtils.isListTypeDataElement(dataElement))) dataElement.valueType = "TEXT";
+        if (!(PrintFriendlyUtils.isListTypeDataElement(dataElement)) || dataElement.greyField) dataElement.valueType = "TEXT";
     };
 
     var applyDisplayOptionAttributeToDataElementsIn = function (section) {
