@@ -93,26 +93,34 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         }
     };
 
-    var addOptionField = function (dataElement, option, section) {
+    var addOptionField = function (dataElement, option, section,index) {
         var optionHeight = componentConfig.components.OPTIONSET.optionHeight;
         var optionLabelFieldHeight = componentConfig.components.OPTIONSET.optionLabelHeight;
         if (section.left.height > 0) {
             section.left.components.push(new OptionField(option, optionHeight));
             section.left.height -= optionHeight;
         } else {
-            if ((section.right.components.length == 0)) {
+            if((section.right.components.length == 0) && (index == (dataElement.options.length-1))) {
+                section.left.components.push(new OptionField(option, optionHeight));
+                section.left.height -= optionHeight;
+            }
+            else if ((section.right.components.length == 0)) {
                 dataElement.displayFormName =(!dataElement.displayFormName.includes("  (Contd....)"))?dataElement.displayFormName + "  (Contd....)":dataElement.displayFormName;
                 section.right.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
+                section.right.components.push(new OptionField(option, optionHeight));
+                section.right.height -= optionHeight;
             }
-            section.right.components.push(new OptionField(option, optionHeight));
-            section.right.height -= optionHeight;
+            else {
+                section.right.components.push(new OptionField(option, optionHeight));
+                section.right.height -= optionHeight;
+            }
         }
     };
 
     var addOptionSetField = function (dataElement, section) {
         addOptionLabelField(dataElement, section);
-        _.map(dataElement.options, function (option) {
-            addOptionField(dataElement, option, section);
+        _.map(dataElement.options, function (option,index) {
+            addOptionField(dataElement, option, section,index);
         });
     };
 
@@ -182,6 +190,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                     }
                     if (optionIndex < section.dataElements[count].options.length) {
                         var newDataElement = _.cloneDeep(section.dataElements[count]);
+                        if(optionIndex == (section.dataElements[count].options.length-1)) {
+                                optionIndex -= 1;
+                        }
                         newDataElement.options = section.dataElements[count].options.splice(optionIndex);
                         if (!newDataElement.displayFormName.includes("  (Contd....)"))
                             newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
