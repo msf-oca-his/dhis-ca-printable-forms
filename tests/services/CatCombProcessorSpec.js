@@ -1,5 +1,5 @@
 describe("CatComb Processor", function() {
-    var catCombProcessor, DhisConstants, SectionTitle, CatCombField, config, catCombPage;
+    var catCombProcessor, DhisConstants, SectionTitle, CatCombField, config;
     var CatCombSection = function() {
         this.name = "cat-comb-section";
         this.height = 200;
