@@ -17,7 +17,7 @@ describe('Component Processor', function () {
         CatCombSection,
         Footer;
 
-    CatCombProcessor = {};
+    CatCombProcessor = PrintFriendlyUtils = {};
 
 
     Section = function (height) {
@@ -155,8 +155,95 @@ describe('Component Processor', function () {
             };
 
             var pages = componentProcessor.processComponents([testDataSet], config);
-            console.log(pages);
             expect(pages.length).toEqual(1);
+        });
+
+        it('should show two templates on same page', function () {
+            PrintFriendlyUtils.isListTypeDataElement = function () {
+                return true
+            };
+            PrintFriendlyUtils.getDataElementsToDisplay = function (dataElements) {
+                return dataElements;
+            };
+            CatCombProcessor.isCatCombSection = function () { return false; };
+
+            var testDataSet = {
+                id: "123",
+                name: "test dataset",
+                displayName: "test dataset",
+                sections: [{
+                    name: "section",
+                    id: "134",
+                    dataElements: [{
+                        name: "dataElement",
+                        id: "1234",
+                    }]
+                }],
+                type: "dataset"
+            };
+
+            var testDataSet2 = {
+                id: "124",
+                name: "test dataset2",
+                displayName: "test dataset2",
+                sections: [{
+                    name: "section1",
+                    id: "135",
+                    dataElements: [{
+                        name: "dataElement1",
+                        id: "1235"
+                    }]
+                }],
+                type: "dataset"
+            };
+
+            var pages = componentProcessor.processComponents([testDataSet, testDataSet2], config);
+            expect(pages.length).toEqual(1);
+            expect(pages[0].components[0].name).toEqual('header');
+            expect(pages[0].components[1].name).toEqual('template-title');
+            expect(pages[0].components[1].section).toEqual('test dataset');
+            expect(pages[0].components[2].name).toEqual('section-title');
+            expect(pages[0].components[3].name).toEqual('section');
+            expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+            expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
+            expect(pages[0].components[4].section).toEqual('test dataset2');
+            expect(pages[0].height).toEqual(152);
+        });
+
+        it('should create two pages when templates are overflowing', function () {
+            config.height = 105;
+            var templates = [
+                {
+                    id: "123",
+                    name: "test dataset",
+                    displayName: "test dataset",
+                    sections: [{
+                        name: "section",
+                        id: "134",
+                        dataElements: [{
+                            name: "dataElement",
+                            id: "1234",
+                        }]
+                    }],
+                    type: "dataset"
+                },
+                {
+                    id: "124",
+                    name: "test dataset2",
+                    displayName: "test dataset2",
+                    sections: [{
+                        name: "section1",
+                        id: "135",
+                        dataElements: [{
+                            name: "dataElement1",
+                            id: "1235"
+                        }]
+                    }],
+                    type: "dataset"
+                }
+            ];
+            var pages = componentProcessor.processComponents(templates, config);
+            expect(pages.length).toEqual(2);
         });
     });
 });
