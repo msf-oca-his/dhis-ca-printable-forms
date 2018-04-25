@@ -126,7 +126,7 @@ describe('Component Processor', function () {
         CommentField = function(section) { return { name: 'comment-field', section: section }; };
         OptionLabelField = function(section) { return { name: 'option-label-field', section: section }; };
         OptionField = function(section) { return { name: 'option-field', section: section }; };
-        CatCombSection = function(section) { return { name: 'cat-comb-section', section: section }; };
+        CatCombSection = function(section) { this.name = 'cat-comb-section'; this.components = []; };
         Footer = function(section) { return { name: 'footer', section: section }; };
         PageComponent = function(height, width) { return { height: height, width: width, components: [] } };
         module(function($provide, $translateProvider) {
@@ -232,6 +232,12 @@ describe('Component Processor', function () {
                         dataElements: [{
                             name: "dataElement",
                             id: "1234",
+                        }, {
+                            name: "dataElement2",
+                            id: "12341",
+                        }, {
+                            name: "dataElement3",
+                            id: "12342",
                         }]
                     }],
                     type: "dataset"
@@ -252,7 +258,12 @@ describe('Component Processor', function () {
                 }
             ];
             var pages = componentProcessor.processComponents(templates, config);
-            expect(pages.length).toEqual(2);
+            expect(pages.length).toEqual(3);
+            expect(pages[0].components[1].section).toEqual('test dataset');
+            expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
+            expect(pages[1].components[1].section).toEqual('test dataset');
+            expect(pages[0].components[3].right.components[0].section.id).toEqual('12341');
+            expect(pages[2].components[1].section).toEqual('test dataset2');
         });
     });
 
@@ -363,8 +374,74 @@ describe('Component Processor', function () {
                 expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
             })
 
-        })
+        });
 
+        describe('Processing Of Cat Comb', function () {
+            it('should process section for cat comb', function () {
+                var templates = [
+                    {
+                        sections: [{
+                            name: "section",
+                            displayName: "section",
+                            id: "134",
+                            categoryCombo: {
+                                id: "154",
+                                categoryOptionCombos: ["female<br><12", "male<br><10"],
+                                name: "catcomb"
+                            },
+                            dataElements: [{
+                                name: "dataElement",
+                                displayFormName: "dataElement",
+                                id: "1234",
+                                valueType: "TEXT",
+                                categoryCombo: {
+                                    id: "154",
+                                    categoryOptionCombos: ["female<br><12", "male<br><10"],
+                                    name: "catcomb"
+                                }
+                            }, {
+                                name: "dataElement2",
+                                displayFormName: "dataElement2",
+                                id: "1235",
+                                valueType: "TEXT",
+                                categoryCombo: {
+                                    id: "155",
+                                    categoryOptionCombos: ["female<br><12", "male<br><10"],
+                                    name: "catcomb"
+                                }
+                            }]
+                        }]
+                    }
+                ];
+                CatCombProcessor.isCatCombSection = function (section) {
+                    return true;
+                };
+
+                CatCombProcessor.getHeightFor = function (section) {
+                    return 50;
+                };
+
+                CatCombProcessor.getSingleRowHeightForNewSection = function(section) {
+                    return 45;
+                };
+
+                CatCombProcessor.processSection = function (config, section, sectionComponent) {
+                    sectionComponent.components.push({ name: 'cat-comb-field' });
+                };
+
+                CatCombProcessor.canOptionFitOnOneRow = function () { return true; };
+
+                PrintFriendlyUtils.getDataElementsToDisplay = function (dataElements) {
+                    return dataElements;
+                };
+
+                var pages = componentProcessor.processComponents(templates, config);
+                expect(pages.length).toEqual(1);
+                expect(pages[0].height).toEqual(172);
+                expect(pages[0].components[2].name).toEqual('cat-comb-section');
+                expect(pages[0].components[2].components[0].name).toEqual('cat-comb-field');
+            });
+        });
 
     })
 });
