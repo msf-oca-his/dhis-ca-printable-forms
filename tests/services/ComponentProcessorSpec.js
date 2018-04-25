@@ -15,12 +15,21 @@ describe('Component Processor', function () {
         PrintFriendlyUtils,
         CatCombProcessor,
         CatCombSection,
-        Footer;
+        Footer,
+        config;
 
-    CatCombProcessor = PrintFriendlyUtils = {};
+    CatCombProcessor = {};
+    PrintFriendlyUtils = {
+        getDataElementsToDisplay: function (dataElements) {
+            return dataElements;
+        },
+        isListTypeDataElement: function () {
+            return true;
+        }
+    };
 
 
-    Section = function (height) {
+        Section = function (height) {
         this.name = "section";
         this.left = {
             height: height,
@@ -246,4 +255,116 @@ describe('Component Processor', function () {
             expect(pages.length).toEqual(2);
         });
     });
+
+    describe('Processing of Option sets', function () {
+        function DataSet(data) {
+            _.assign(this,data);
+        }
+        var templates = [new DataSet({
+            id:'1',
+            displayName:'testde',
+            sections:[{name:'section1', id:'2',
+                        dataElements:[{name:"de", displayFormName:'test', id:1, valueType: "OPTIONSET",
+                                        options: [{name:"option1", value:10},{name:"option1",value:10}]}]}],
+        })];
+
+        CatCombProcessor = {
+            isCatCombSection: function () {
+                return false;
+            }
+        };
+
+        it("should render the option sets with option label field and option field as components", function () {
+            config.height = 200;
+            var pages = componentProcessor.processComponents(templates, config);
+            expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+            expect(pages[0].components[3].left.components[1].name).toEqual("option-field")
+        });
+
+        it("should repeat the option field name when it splits to right component", function () {
+            config.height = 200;
+            var newTemplates = _.cloneDeep(templates);
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            var pages = componentProcessor.processComponents(newTemplates, config);
+            expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+            expect(pages[0].components[3].right.components[0].name).toEqual('option-label-field');
+        });
+
+        it("option label field name should contain 'includes' when it splits to right component", function () {
+            config.height = 200;
+            var newTemplates = _.cloneDeep(templates);
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            var pages = componentProcessor.processComponents(newTemplates, config);
+            expect(pages[0].components[3].right.components[0].section.displayFormName).toEqual('test  (Contd....)');
+        });
+
+        it("should not render the single option set on right component",function () {
+            config.height = 200;
+            var newTemplates = _.cloneDeep(templates);
+            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+            var pages = componentProcessor.processComponents(newTemplates, config);
+            expect(pages[0].components[3].left.components.length).toEqual(4);
+        });
+
+        it("should add option label field when page breaks happens and also includes 'contd...", function () {
+            config.height = 180;
+            var newTemplates = _.cloneDeep(templates);
+            newTemplates[0].sections =[{id:'section',name:'section',displayFormName:"blah", dataElements:[]}];
+            newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
+            newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
+            newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
+            newTemplates[0].sections[0].dataElements.push({name:'blah', displayFormName:"blah",id:"1",valueType:"OPTIONSET",
+                                                            options:[{name:"option1", value:10},
+                                                                {name:"option1", value:10},
+                                                                {name:"option1", value:10},
+                                                                {name:"option1", value:10}
+                                                            ]});
+            var pages = componentProcessor.processComponents(newTemplates, config);
+            expect(pages[1].components[3].left.components[0].name).toEqual('option-label-field');
+            expect(pages[1].components[3].left.components[0].section.displayFormName).toEqual('blah  (Contd....)');
+        });
+
+        describe("DisplayOptionUID custom attribute", function () {
+            it("should render option set as text when it is greyed when custom attribute set to list", function () {
+                config.height = 180;
+                PrintFriendlyUtils.isListTypeDataElement = function () {
+                    return true;
+                };
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].greyField = true;
+                var pages = componentProcessor.processComponents(newTemplates, config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+            });
+
+            it("should render as list when option set is not greyed and custom attribute set to list",function () {
+                    config.height = 180;
+                    PrintFriendlyUtils.isListTypeDataElement = function () {
+                        return true;
+                    };
+                    var newTemplates = _.cloneDeep(templates);
+                    newTemplates[0].sections[0].dataElements[0].greyField = false;
+                    var pages = componentProcessor.processComponents(newTemplates, config);
+                    expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+            });
+
+            it("custom attribute should not effect rendering of other data elements", function () {
+                config.height = 180;
+                PrintFriendlyUtils.isListTypeDataElement = function () {
+                    return true;
+                };
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].greyField = false;
+                newTemplates[0].sections[0].dataElements[0].valueType = "LONG_TEXT";
+                var pages = componentProcessor.processComponents(newTemplates, config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
+            })
+
+        })
+
+
+    })
 });
