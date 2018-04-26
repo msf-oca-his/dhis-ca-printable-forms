@@ -267,7 +267,7 @@ describe('Component Processor', function () {
         });
     });
 
-    describe('Processing of Option sets', function () {
+    describe('Processing of all Components', function () {
         function DataSet(data) {
             _.assign(this,data);
         }
@@ -285,58 +285,60 @@ describe('Component Processor', function () {
             }
         };
 
-        it("should render the option sets with option label field and option field as components", function () {
-            config.height = 200;
-            var pages = componentProcessor.processComponents(templates, config);
-            expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
-            expect(pages[0].components[3].left.components[1].name).toEqual("option-field")
-        });
+        describe("Processing of Option sets", function () {
+            it("should render the option sets with option label field and option field as components", function () {
+                config.height = 200;
+                var pages = componentProcessor.processComponents(templates, config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+                expect(pages[0].components[3].left.components[1].name).toEqual("option-field")
+            });
 
-        it("should repeat the option field name when it splits to right component", function () {
-            config.height = 200;
-            var newTemplates = _.cloneDeep(templates);
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            var pages = componentProcessor.processComponents(newTemplates, config);
-            expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
-            expect(pages[0].components[3].right.components[0].name).toEqual('option-label-field');
-        });
+            it("should repeat the option field name when it splits to right component", function () {
+                config.height = 200;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                var pages = componentProcessor.processComponents(newTemplates, config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+                expect(pages[0].components[3].right.components[0].name).toEqual('option-label-field');
+            });
 
-        it("option label field name should contain 'includes' when it splits to right component", function () {
-            config.height = 200;
-            var newTemplates = _.cloneDeep(templates);
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            var pages = componentProcessor.processComponents(newTemplates, config);
-            expect(pages[0].components[3].right.components[0].section.displayFormName).toEqual('test  (Contd....)');
-        });
+            it("option label field name should contain 'includes' when it splits to right component", function () {
+                config.height = 200;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                var pages = componentProcessor.processComponents(newTemplates, config);
+                expect(pages[0].components[3].right.components[0].section.displayFormName).toEqual('test  (Contd....)');
+            });
 
-        it("should not render the single option set on right component",function () {
-            config.height = 200;
-            var newTemplates = _.cloneDeep(templates);
-            newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-            var pages = componentProcessor.processComponents(newTemplates, config);
-            expect(pages[0].components[3].left.components.length).toEqual(4);
-        });
+            it("should not render the single option set on right component",function () {
+                config.height = 200;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
+                var pages = componentProcessor.processComponents(newTemplates, config);
+                expect(pages[0].components[3].left.components.length).toEqual(4);
+            });
 
-        it("should add option label field when page breaks happens and also includes 'contd...", function () {
-            config.height = 180;
-            var newTemplates = _.cloneDeep(templates);
-            newTemplates[0].sections =[{id:'section',name:'section',displayFormName:"blah", dataElements:[]}];
-            newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
-            newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
-            newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
-            newTemplates[0].sections[0].dataElements.push({name:'blah', displayFormName:"blah",id:"1",valueType:"OPTIONSET",
-                                                            options:[{name:"option1", value:10},
-                                                                {name:"option1", value:10},
-                                                                {name:"option1", value:10},
-                                                                {name:"option1", value:10}
-                                                            ]});
-            var pages = componentProcessor.processComponents(newTemplates, config);
-            expect(pages[1].components[3].left.components[0].name).toEqual('option-label-field');
-            expect(pages[1].components[3].left.components[0].section.displayFormName).toEqual('blah  (Contd....)');
+            it("should add option label field when page breaks happens and also includes 'contd...", function () {
+                config.height = 180;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections =[{id:'section',name:'section',displayFormName:"blah", dataElements:[]}];
+                newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
+                newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
+                newTemplates[0].sections[0].dataElements.push({displayFormName:"de",id:"1",valueType:"LONG_TEXT"});
+                newTemplates[0].sections[0].dataElements.push({name:'blah', displayFormName:"blah",id:"1",valueType:"OPTIONSET",
+                    options:[{name:"option1", value:10},
+                        {name:"option1", value:10},
+                        {name:"option1", value:10},
+                        {name:"option1", value:10}
+                    ]});
+                var pages = componentProcessor.processComponents(newTemplates, config);
+                expect(pages[1].components[3].left.components[0].name).toEqual('option-label-field');
+                expect(pages[1].components[3].left.components[0].section.displayFormName).toEqual('blah  (Contd....)');
+            });
         });
 
         describe("DisplayOptionUID custom attribute", function () {
@@ -375,6 +377,61 @@ describe('Component Processor', function () {
             })
 
         });
+
+        describe("Processing of boolean components", function () {
+
+            it("should render the boolean component", function () {
+                config.height = 180;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].valueType = 'BOOLEAN';
+                var pages = componentProcessor.processComponents(newTemplates,config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('boolean-field');
+
+            });
+        });
+
+        describe('processing of long text components', function () {
+
+            it("should render the long text components",function () {
+                config.height = 180;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].valueType = 'LONG_TEXT';
+                var pages = componentProcessor.processComponents(newTemplates,config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
+            })
+        });
+
+        describe('Processing of Text elements', function () {
+
+            it("should render the text components",function () {
+                config.height = 180;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].valueType = 'TEXT';
+                var pages = componentProcessor.processComponents(newTemplates,config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+            });
+
+            it("should render as text components for other components", function () {
+                config.height = 180;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].valueType = 'OTHER_TYPE';
+                var pages = componentProcessor.processComponents(newTemplates,config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+            })
+        });
+
+        describe("Processing of yes only components", function () {
+
+            it("should render the yes only components",function () {
+                config.height = 180;
+                var newTemplates = _.cloneDeep(templates);
+                newTemplates[0].sections[0].dataElements[0].valueType = 'TRUE_ONLY';
+                var pages = componentProcessor.processComponents(newTemplates,config);
+                expect(pages[0].components[3].left.components[0].name).toEqual('yes-only-field');
+            })
+        });
+
+
 
         describe('Processing Of Cat Comb', function () {
             it('should process section for cat comb', function () {
@@ -443,5 +500,15 @@ describe('Component Processor', function () {
             });
         });
 
-    })
+
+        describe("processing of comment field", function () {
+
+            it("should add comment field for programs at the end of the page", function () {
+
+
+
+            });
+        })
+
+    });
 });
