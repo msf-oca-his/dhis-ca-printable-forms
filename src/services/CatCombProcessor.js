@@ -1,4 +1,4 @@
-TallySheets.service('CatCombProcessor', ['DhisConstants', 'SectionTitle', 'CatCombField', function(DhisConstants, SectionTitle, CatCombField) {
+TallySheets.service('CatCombProcessor', ['DhisConstants', 'SectionTitle', 'CatCombField','Config', function(DhisConstants, SectionTitle, CatCombField,Config) {
 
     var addCatCombTitle = function (titleHeight, title, section) {
         section.height -= titleHeight;
@@ -29,14 +29,15 @@ TallySheets.service('CatCombProcessor', ['DhisConstants', 'SectionTitle', 'CatCo
         return newSection;
     };
 
-    var addLineBreakAfterEachCategoryOption = function(categoryOptionCombos, config) {
+    var addLineBreakAfterEachCategoryOption = function(categoryOptionCombos) {
         return _.map(categoryOptionCombos, function(categoryOptionCombo) {
-            return categoryOptionCombo.toString().replace(/,/g, config.Delimiters.categoryOptionComboDelimiter);
+            categoryOptionCombo.displayName = categoryOptionCombo.displayName.toString().replace(/,/g, Config.Delimiters.categoryOptionComboDelimiter);
+            return categoryOptionCombo;
         });
     };
 
     var canOptionFitOnOneRow = function (section, config) {
-        var categoryOptions = addLineBreakAfterEachCategoryOption(section.categoryCombo.categoryOptionCombos, config);
+        var categoryOptions = addLineBreakAfterEachCategoryOption(section.categoryCombo.categoryOptionCombos);
         return categoryOptions.length <= config.components.CAT_COMB.maxNumberOfColumns;
     };
 

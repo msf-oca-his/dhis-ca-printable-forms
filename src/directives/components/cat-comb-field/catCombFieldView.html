@@ -2,11 +2,12 @@
     <table style="height: {{ component.height + 'mm'}}; width:{{getTableWidth(component.catCombOptions)}};
 table-layout: fixed; margin-top: {{ topMargin }}" border="1" class="text-center">
         <thead>
-        <tr style="height: {{heightOfTableHeader}};">
+        <tr class="catcomb-table-header" style="height: {{heightOfTableHeader}};">
             <th ng-style="{ height: heightOfDataElement, width: widthOfDataElementField, border: 'none' }"></th>
-            <th style="width: {{ widthOfDataElementField }};text-align: center;"
+            <th ng-class="{catCombGroupBorder:catCombOption.isEnd == true}" style="width: {{ widthOfDataElementField
+            }};text-align: center;"
                 ng-repeat="catCombOption in component.catCombOptions"
-                ng-bind-html="catCombOption | to_trusted_html">
+                ng-bind-html="catCombOption.displayName | to_trusted_html">
             </th>
         </tr>
         </thead>
@@ -20,6 +21,7 @@ table-layout: fixed; margin-top: {{ topMargin }}" border="1" class="text-center"
             </td>
             <td ng-repeat="catCombOption in component.catCombOptions"
                 style="width: {{ widthOfDataElementField }}; height: {{ heightOfDataElement }};"
+                ng-class="{catCombGroupBorder:catCombOption.isEnd == true}"
                 class="{{ isGreyFieldCatCombOption($index,dataElement.greyedFieldIndexes) ? 'greyDeField' : '' }}"
             >
             </td>
