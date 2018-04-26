@@ -1,5 +1,5 @@
 describe("CatComb Processor", function() {
-    var catCombProcessor, DhisConstants, SectionTitle, CatCombField, config;
+    var catCombProcessor, DhisConstants, SectionTitle, CatCombField, config,mockedMainConfig;
     var CatCombSection = function() {
         this.name = "cat-comb-section";
         this.height = 200;
@@ -9,6 +9,11 @@ describe("CatComb Processor", function() {
     beforeEach(function () {
         angular.module('d2HeaderBar', []);
         module("TallySheets");
+        mockedMainConfig = {
+            Delimiters: {
+                categoryOptionComboDelimiter: "<br>"
+            }
+        };
         config = {
             "height": 297,
             "width": 210,
@@ -90,6 +95,7 @@ describe("CatComb Processor", function() {
             $provide.value('DhisConstants', DhisConstants);
             $provide.value('SectionTitle', SectionTitle);
             $provide.value('CatCombField', CatCombField);
+            $provide.value('Config', mockedMainConfig);
         });
 
     });
@@ -107,7 +113,7 @@ describe("CatComb Processor", function() {
                     id: "134",
                     categoryCombo: {
                         id: "154",
-                        categoryOptionCombos: ["female<br><12", "male<br><10"],
+                        categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                         name: "catcomb"
                     },
                     dataElements: [{
@@ -117,7 +123,7 @@ describe("CatComb Processor", function() {
                         valueType: "TEXT",
                         categoryCombo: {
                             id: "154",
-                            categoryOptionCombos: ["female<br><12", "male<br><10"],
+                            categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                             name: "catcomb"
                         }
                     }],
@@ -138,7 +144,7 @@ describe("CatComb Processor", function() {
                 id: "134",
                 categoryCombo: {
                     id: "154",
-                    categoryOptionCombos: ["female<br><12", "male<br><10"],
+                    categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                     name: "catcomb"
                 },
                 dataElements: [{
@@ -185,7 +191,7 @@ describe("CatComb Processor", function() {
                 id: "134",
                 categoryCombo: {
                     id: "154",
-                    categoryOptionCombos: ["female<br><12", "male<br><10"],
+                    categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                     name: "catcomb"
                 },
                 dataElements: [{
@@ -195,7 +201,7 @@ describe("CatComb Processor", function() {
                     valueType: "TEXT",
                     categoryCombo: {
                         id: "154",
-                        categoryOptionCombos: ["female<br><12", "male<br><10"],
+                        categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                         name: "catcomb"
                     }
                 }]
@@ -216,14 +222,23 @@ describe("CatComb Processor", function() {
         it('should provide status whether options can fit on one row or not', function () {
             var section = {
                 categoryCombo: {
-                    categoryOptionCombos: ['<5, male', '>5, male', '<5, female', '>5 female', '<10 male', '>10 male']
+                    categoryOptionCombos: [
+                        {displayName:'<5, male'},
+                        {displayName:'>5, male'},
+                        {displayName:'<5, female'},
+                        {displayName:'>5 female'},
+                        {displayName:'<10 male'},
+                        {displayName:'>10 male'}]
                 }
             };
             expect(catCombProcessor.canOptionFitOnOneRow(section, config)).toBeFalsy();
 
             section = {
                 categoryCombo: {
-                    categoryOptionCombos: ['<5, male', '>5, male', '<5, female']
+                    categoryOptionCombos: [
+                        {displayName:'<5, male'},
+                        {displayName:'>5, male'},
+                        {displayName:'<5, female'}]
                 }
             };
             expect(catCombProcessor.canOptionFitOnOneRow(section, config)).toBeTruthy();
@@ -238,7 +253,7 @@ describe("CatComb Processor", function() {
                 id: "134",
                 categoryCombo: {
                     id: "154",
-                    categoryOptionCombos: ["female<br><12", "male<br><10"],
+                    categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                     name: "catcomb"
                 },
                 dataElements: [{
@@ -248,7 +263,7 @@ describe("CatComb Processor", function() {
                     valueType: "TEXT",
                     categoryCombo: {
                         id: "154",
-                        categoryOptionCombos: ["female<br><12", "male<br><10"],
+                        categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                         name: "catcomb"
                     }
                 }, {
@@ -258,7 +273,7 @@ describe("CatComb Processor", function() {
                     valueType: "TEXT",
                     categoryCombo: {
                         id: "155",
-                        categoryOptionCombos: ["female<br><12", "male<br><10"],
+                        categoryOptionCombos: [{displayName:"female<br><12",isEnd:false},{displayName:"male<br><10",isEnd:true}],
                         name: "catcomb"
                     }
                 }]
