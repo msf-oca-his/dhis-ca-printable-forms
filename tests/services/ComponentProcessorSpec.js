@@ -504,9 +504,29 @@ describe('Component Processor', function () {
         describe("processing of comment field", function () {
 
             it("should add comment field for programs at the end of the page", function () {
-
-
-
+                var testProgram = {
+                    id: "123",
+                    name: "test program",
+                    displayName: "test program",
+                    sections: [
+                        {
+                            displayName: 'Comments',
+                            name: 'Comments',
+                            dataElements: [{
+                                displayFormName: 'Comments',
+                                name: 'Comments',
+                                valueType: 'COMMENT'
+                            }]
+                        }
+                    ],
+                    programStages: [{programStageSections: []}],
+                    type: "program"
+                };
+                CatCombProcessor.isCatCombSection = function (section) { return false; };
+                var pages = componentProcessor.processComponents([testProgram], config);
+                expect(pages[0].components[2].section).toEqual('Comments');
+                expect(pages[0].components[3].left.components[0].name).toEqual('comment-field');
+                expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('Comments');
             });
         })
 
