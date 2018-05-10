@@ -4,7 +4,7 @@ TallySheets.factory('Config', [function() {
 
 	config.A4 = {
 		LandScape: "src/layouts/A4.landscape.json",
-		Portrait: "src/layouts/A4.potrait.json"
+		Portrait: "src/layouts/A4.portrait.json"
 	};
 	
 	config.A3 = {
