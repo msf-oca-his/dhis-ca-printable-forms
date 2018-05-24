@@ -33,7 +33,7 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		heightOfSectionTitle: 7,
 		heightOfProgramTitle: 10,
 		commentsHeight: 30,
-		maximumCharLengthForHeader: 20
+		maximumCharLengthForHeader: 80
 	};
 	config.DataSet = {
 		heightOfCatCombTableHeader: 15,
