@@ -7,7 +7,7 @@ TallySheets.directive('templateTitle', ['$rootScope','Config',function($rootScop
 		},
 		link:function($scope) {
 			$scope.headerName = $scope.component.title;
-			$scope.maxLength = Config.DataSet.maximumCharLengthForHeader;
+			$scope.maxLength = Config.Coversheet.maximumCharLengthForHeader;
 			$scope.update = function() {
 				if(_.isEmpty($scope.headerName)) {
 					$scope.headerName = $scope.component.title;
