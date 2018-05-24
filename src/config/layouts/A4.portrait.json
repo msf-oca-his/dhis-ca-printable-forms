@@ -21,7 +21,7 @@
 
     "templateTitle": {
       "height": 10,
-      "maximumCharLength": 90
+      "maximumCharLength": 80
     },
 
     "sectionTitle": {
