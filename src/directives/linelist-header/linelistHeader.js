@@ -17,7 +17,7 @@ TallySheets.directive('linelistHeader', ['$rootScope', 'Config', function($rootS
 						if(cachedTemplate.displayName == $scope.programName) {
 							cachedTemplate.displayName = $scope.headerName;
 							$scope.programName = $scope.headerName;
-							$rootScope.renderTemplates();
+							$rootScope.renderTemplates([cachedTemplate]);
 						}
 					});
 				}

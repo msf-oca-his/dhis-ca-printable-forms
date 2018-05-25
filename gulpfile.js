@@ -15,7 +15,7 @@ APP = {
 		all: "src/**/*.*",
 		html: "src/**/*.html",
 		js: "src/**/*.js",
-		scss: "src/scss/*.scss"
+		scss: "src/scss/**/*.scss"
 	},
 	dependencies: {
 		root: 'dependencies',

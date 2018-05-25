@@ -155,7 +155,7 @@ input.clean {
 }
 
 .inline-edit {
-  text-align : center;
+  text-align : left;
   width: 100%;
   border: none;
 
@@ -163,4 +163,16 @@ input.clean {
     outline: none;
     border-bottom: 1px solid #000000;
   }
+
 }
+.component-pane-wrapper {
+  //display:flex;
+  //float: left;
+}
+
+.pane-separator {
+  margin-right: 6mm;
+}
+
+//Components
+

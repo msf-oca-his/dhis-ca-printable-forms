@@ -1,0 +1,70 @@
+{
+  "height": 297,
+  "width": 210,
+
+  "Delimiters": {
+    "categoryOptionComboDelimiter": "mm"
+  },
+
+  "components": {
+
+    "border": {
+      "top": 15,
+      "left": 15,
+      "bottom": 15,
+      "right": 15
+    },
+
+    "header":{
+      "height": 30
+    },
+
+    "templateTitle": {
+      "height": 10
+    },
+
+    "sectionTitle": {
+      "height": 10
+    },
+
+    "TEXT": {
+      "height": 20
+    },
+
+    "LONG_TEXT": {
+      "height": 30
+    },
+
+    "BOOLEAN": {
+      "height": 30
+    },
+
+    "YES_ONLY": {
+      "height": 20
+    },
+
+    "COMMENT": {
+      "height":30
+    },
+
+    "OPTIONSET": {
+      "height": 20,
+      "optionLabelHeight":10,
+      "optionHeight":10
+    },
+
+    "CAT_COMB": {
+      "heightOfCatCombTableHeader": 15,
+      "heightOfDataElement": 12,
+      "widthOfDataElement": 40,
+      "maxNumberOfColumns": 4,
+      "gapBetweenColumns": 10,
+      "gapBetweenSectionAndTable": 4,
+      "widthOfCategoryOptionCombo": 30
+    },
+
+    "FOOTER": {
+      "height": 20
+    }
+  }
+}

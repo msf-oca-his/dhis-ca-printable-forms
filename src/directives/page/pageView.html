@@ -1,7 +1,10 @@
 <div class="subpage {{pageNumber > 1 ? 'notfirstpage' : 'firstpage'}}">
-  <dataset-template ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset-template>
 
-  <coversheet-template ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></coversheet-template>
+  <page-components components="page.components" width="page.width"></page-components>
+
+  <!--<dataset-template ng-if="page.type=='DATASET'" contents="page.contents" dataset-name="page.datasetName"></dataset-template>-->
+
+  <!--<coversheet-template ng-if="page.type == 'COVERSHEET'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></coversheet-template>-->
 
   <register-template ng-if="page.type == 'REGISTER'" contents="page.contents" program-name="page.programName" is-last-page="totalPages == pageNumber"></register-template>
 
@@ -10,9 +13,6 @@
   </div>
 
 
-  <div class="page-number" ng-if="page.type!=$parent.PageTypes.REGISTER">
-    {{ 'page' | translate }} {{pageNumber}} {{ 'of' | translate }} {{totalPages}}
-  </div>
   <div class="page-number" ng-if="page.type==$parent.PageTypes.REGISTER">
     {{ 'part' | translate }} {{pageNumber}} {{ 'of' | translate }} {{totalPages}}
   </div>

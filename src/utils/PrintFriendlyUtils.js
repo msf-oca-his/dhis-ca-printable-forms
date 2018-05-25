@@ -1,6 +1,6 @@
 TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(config, DhisConstants) {
 	var PrintFriendlyUtils = {};
-	var isListTypeDataElement = function(dataElement) {
+	PrintFriendlyUtils.isListTypeDataElement = function(dataElement) {
 		if(dataElement.valueType != DhisConstants.ValueTypes.OPTIONSET) return false;
 		if(!config.customAttributes.displayOptionUID) return true;
 		var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "displayOptionUID");
@@ -8,6 +8,16 @@ TallySheets.factory('PrintFriendlyUtils', ['Config', 'DhisConstants', function(c
 			return displayOptionAttribute.value == config.customAttributes.displayOptionUID.options.list;
 		return true;
 	};
+
+     var isListTypeDataElement = function(dataElement) {
+        if(dataElement.valueType != DhisConstants.ValueTypes.OPTIONSET) return false;
+        if(!config.customAttributes.displayOptionUID) return true;
+        var displayOptionAttribute = PrintFriendlyUtils.getCustomAttribute(dataElement.attributeValues, "displayOptionUID");
+        if(displayOptionAttribute && displayOptionAttribute.value)
+            return displayOptionAttribute.value == config.customAttributes.displayOptionUID.options.list;
+        return true;
+    };
+
 	var getIndexOfDEWithOptionSets = function(section, dataElementsKey) {
 		var indexOfDEWithOptions = [];
 		_.map(section[dataElementsKey], function(dataElement, index) {

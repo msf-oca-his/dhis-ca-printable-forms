@@ -1,0 +1,13 @@
+
+<div style="display: flex">
+<div class="pane-separator">
+  <div ng-repeat="leftComponent in component.left.components">
+    <div page-component component="leftComponent" style="width: 87mm;"></div>
+  </div>
+</div>
+<div class="pane-separator">
+  <div ng-repeat="rightComponent in component.right.components">
+    <div page-component component="rightComponent" style="width: 87mm;"></div>
+  </div>
+</div>
+</div>

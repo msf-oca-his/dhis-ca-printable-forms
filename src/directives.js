@@ -6,7 +6,24 @@ require("./directives/linelist-header/linelistHeader.js");
 require("./directives/register-template/registerTemplate.js");
 require("./directives/codeSheet/codeSheet.js");
 require("./directives/page-content/pageContent.js");
+require("./directives/page-component/pageComponent.js");
+require("./directives/page-components/pageComponents.js");
 require("./directives/tree-component/tree-component.js");
+require("./directives/components/header/header.js");
+require("./directives/components/title/templateTitle.js");
+require("./directives/components/textField/textField.js");
+require("./directives/components/sectionTitle/sectionTitle.js");
+require("./directives/components/section/section.js");
+require("./directives/components/long-text-field/longTextField.js");
+require("./directives/components/boolean-field/booleanField.js");
+require("./directives/components/yes-only-field/yesOnlyField.js");
+require("./directives/components/comment-field/commentField.js");
+require("./directives/components/option-field/optionField.js");
+require("./directives/components/option-label-field/optionLabelField");
+require("./directives/components/cat-comb-section/catCombSection.js");
+require("./directives/components/cat-comb-field/catCombField.js");
+require("./directives/components/footer-field/footerField.js");
+
 
 require("./directives/content-directives/list/list.js");
 require("./directives/content-directives/boolean/boolean.js");
