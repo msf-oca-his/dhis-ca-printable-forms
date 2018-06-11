@@ -65,6 +65,10 @@
 
     "FOOTER": {
       "height": 20
+    },
+
+    "BUFFER": {
+      "height": 10
     }
   }
 }
