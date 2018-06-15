@@ -1,3 +1,4 @@
+@import "variables";
 body {
   width  : 100%;
   height : 100%;
@@ -8,13 +9,18 @@ body {
   height     : 1px;
 }
 
+@font-face {
+  font-family     : $FONT_FAMILY, Monaco, monospace;
+  src             : url($FONT_PATH) format($FONT_TYPE);
+}
+
 .print-content {
   margin          : 0;
   padding         : 0;
   font-size       : 3mm;
   box-sizing      : border-box;
   -moz-box-sizing : border-box;
-  font-family     : "Lucida Console", Monaco, monospace;
+  font-family     : $FONT_FAMILY, Monaco, monospace;
 }
 
 input.clean {
