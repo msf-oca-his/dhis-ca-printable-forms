@@ -219,7 +219,7 @@ describe('Component Processor', function () {
             expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
             expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
             expect(pages[0].components[4].section).toEqual('test dataset2');
-            expect(pages[0].height).toEqual(142);
+            expect(pages[0].height).toEqual(152);
         });
 
         it('should create two pages when templates are overflowing', function () {
@@ -497,7 +497,7 @@ describe('Component Processor', function () {
 
                 var pages = componentProcessor.processComponents(templates, config);
                 expect(pages.length).toEqual(1);
-                expect(pages[0].height).toEqual(162);
+                expect(pages[0].height).toEqual(172);
                 expect(pages[0].components[2].name).toEqual('cat-comb-section');
                 expect(pages[0].components[2].components[0].name).toEqual('cat-comb-field');
             });
