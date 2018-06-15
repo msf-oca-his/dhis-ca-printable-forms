@@ -100,7 +100,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
             section.left.components.push(new OptionField(option, optionHeight));
             section.left.height -= optionHeight;
         } else {
-            if((section.right.components.length == 0) && (index == (dataElement.options.length-1))) {
+            if((section.right.components.length == 0) && (index == (dataElement.options.length-1)) && ((componentConfig.components.BUFFER.height+section.left.height)>= optionHeight)) {
                 section.left.components.push(new OptionField(option, optionHeight));
                 section.left.height -= optionHeight;
             }
@@ -190,7 +190,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                     }
                     if (optionIndex < section.dataElements[count].options.length) {
                         var newDataElement = _.cloneDeep(section.dataElements[count]);
-                        if(optionIndex == (section.dataElements[count].options.length-1)) {
+                        if((optionIndex == (section.dataElements[count].options.length-1)) && ((componentConfig.components.BUFFER.height + height) >= componentConfig.components.OPTIONSET.optionHeight)) {
                                 optionIndex -= 1;
                         }
                         newDataElement.options = section.dataElements[count].options.splice(optionIndex);
@@ -350,7 +350,6 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         pages.push(page);
         removeBorders();
         addHeader();
-        removeBuffer();
         removeFooterHeight();
     };
 
