@@ -1,15 +1,19 @@
 describe('RegisterProcessor', function() {
 	var registerProcessor, _DataElement,RegisterColumn;
 	var mockPrintFriendlyUtils = {};
+	var pageConfig ={
+        height: 205,
+        width: 300,
+        components: {
+            border: {
+                top: 15,
+                left: 15,
+                bottom: 15,
+                right: 15
+            }
+        }
+	};
 	var config = {
-		PageTypes: {
-			A4: {
-				LandScape: {
-					availableHeight: 175,
-					availableWidth: 270
-				}
-			}
-		},
 		Register: {
 			tableHeaderHeight: 10,
 			dataEntryRowHeight: 9,
@@ -108,7 +112,7 @@ describe('RegisterProcessor', function() {
 			programName: 'test program'
 		}];
 
-		var actualPages = registerProcessor.process(testProgram, 'REGISTER');
+		var actualPages = registerProcessor.process(testProgram, pageConfig);
 		expect(clone(expectedPages[0])).toEqual(clone(actualPages[0]))
 	});
 
@@ -158,7 +162,7 @@ describe('RegisterProcessor', function() {
 			}
 		];
 
-		var actualPages = registerProcessor.process(currentTestProgram, 'REGISTER');
+		var actualPages = registerProcessor.process(currentTestProgram, pageConfig);
 		expect(clone(expectedPages[0].contents)).toEqual(clone(actualPages[0].contents))
 		expect(clone(expectedPages[1].contents)).toEqual(clone(actualPages[1].contents))
 	});

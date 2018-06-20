@@ -1,25 +1,7 @@
-TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
+TallySheets.factory('Config', function() {
 
 	var config = {};
 
-	config.PageTypes = {
-		A4: {
-			Portrait: {
-				height: 297,
-				width: 210,
-				borderTop: 15,
-				borderBottom: 15,
-				borderLeft: 15,
-				borderRight: 15,
-				availableHeight: 237,
-				availableWidth: 183
-			},
-			LandScape: {
-				availableHeight: 175,
-				availableWidth: 270
-			}
-		}
-	};
 	config.Register = {
 		tableHeaderHeight: 10,
 		dataEntryRowHeight: 9,
@@ -123,5 +105,5 @@ TallySheets.factory('Config', ['CalculatedConfig', function(CalculatedConfig) {
 		}
 	};
 	config.showUserRelatedFormsOnly = true;
-	return CalculatedConfig.getConfig(config);
-}]);
+	return config;
+});

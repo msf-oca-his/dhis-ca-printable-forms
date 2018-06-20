@@ -8,10 +8,10 @@ TallySheets.filter('to_trusted_html', ['$sce', function($sce) {
 
 TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetService', 'ProgramService', 'CoversheetProcessor',
 	'RegisterProcessor', 'CustomAttributeValidationService', 'ExportToExcel', 'appLoadingFailed', 'ModalAlertsService', 'ModalAlert', 'ModalAlertTypes',
-	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes', 'TemplateCustomizationService','ComponentProcessor',
+	'AlertTypesContract', 'InlineAlert', 'InlineAlertTypes', 'CustomAngularTranslateService', '$q', 'CodeSheetProcessor', 'PageTypes', 'TemplateCustomizationService','ComponentProcessor', 'PageConfigReader',
 	function($scope, $rootScope, DataSetService, ProgramService, CoversheetProcessor, RegisterProcessor,
 		CustomAttributeValidationService, ExportToExcel, appLoadingFailed, ModalAlertsService, ModalAlert, ModalAlertTypes,
-		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes, TemplateCustomizationService,ComponentProcessor) {
+		AlertTypesContract, InlineAlert, InlineAlertTypes, CustomAngularTranslateService, $q, CodeSheetProcessor, PageTypes, TemplateCustomizationService, ComponentProcessor, PageConfigReader) {
 
 		$scope.appLoadingFailed = appLoadingFailed;
 		$scope.spinnerShown = false;
@@ -93,7 +93,10 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			
 			console.log(dataSets)
 			
-			return ComponentProcessor.processComponents(dataSets, config);
+			return $q.when({})
+				.then(PageConfigReader.getPageConfig)
+				.then(_.curry(ComponentProcessor.processComponents)(dataSets))
+				.then(function (pages) {return pages  })
 		};
 		var prepareComponent = function(program) {
 			_.map(program.programStages[0].programStageSections,function(section) {
@@ -132,17 +135,33 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 				case PageTypes.COVERSHEET :
 					program = prepareComponent(program);
 					return $q.when({})
-						.then(getConfig)
-						.then(function(config) {
+						.then(PageConfigReader.getPageConfig)
+						.then(function(pageConfig) {
 							addCommentsSectionTo(program);
-							return ComponentProcessor.processComponents([program],config);
+							return ComponentProcessor.processComponents([program],pageConfig);
 						});
 				case PageTypes.REGISTER:
-					return RegisterProcessor.process(program);
+                    return $q.when({})
+                        .then(PageConfigReader.getPageConfig)
+                        .then(getLandScapeConfig)
+                        .then(function(pageConfig) {
+                        	return RegisterProcessor.process(program,pageConfig);
+                        });
 				case PageTypes.CODESHEET:
-					return CodeSheetProcessor.process(program);
+                    return $q.when({})
+                        .then(PageConfigReader.getPageConfig)
+                        .then(function(pageConfig) {
+                            return CodeSheetProcessor.process(program,pageConfig);
+                        });
 			}
 		};
+
+		var getLandScapeConfig = function(pageConfig){
+			var height = pageConfig.height;
+            pageConfig.height = pageConfig.width;
+            pageConfig.width = height;
+            return pageConfig;
+        }
 
 		var processPrograms = function(programs) {
 			if($scope.programMode == null)
@@ -162,7 +181,7 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 		var processTemplates = function(templates) {
 			if($scope.selectedTemplatesType == PageTypes.DATASET)
 				return $q.when({})
-					.then(getConfig)
+					.then(PageConfigReader.getPageConfig())
 					.then(function(config) {
 						return processDataSets(templates,config);
 					});
@@ -191,22 +210,6 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
       return TemplateCustomizationService.customizeTemplates(templates, $scope.templatesCustomizations, $scope.selectedTemplatesType);
 		};
 
-		var getConfig = function() {
-			var defer = $q.defer();
-			var xobj = new XMLHttpRequest();
-			xobj.overrideMimeType("application/json");
-			xobj.open('GET', 'A4.portrait.json', true);
-			xobj.onreadystatechange = function() {
-				if(xobj.readyState == 4 && xobj.status == "200") {
-					// .open will NOT return a value but simply returns undefined in async mode so use a callback
-					return defer.resolve(JSON.parse(xobj.responseText));
-
-				}
-			};
-			xobj.send(null);
-			return defer.promise;
-		};
-		
 		var getTemplatesFromDHIS = function() {
 			var templateIds = _($scope.templates)
 													.map('data.id')

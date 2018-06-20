@@ -1,15 +1,15 @@
-TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils', 'DhisConstants', function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils, DhisConstants) {
+TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils', 'DhisConstants','$q','PageConfigReader', function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils, DhisConstants, $q, PageConfigReader) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
 	var dataElementKey = 'programStageDataElements';
-	var pageType = 'A4';
-	this.getNumberOfRows = function() {
-		return Math.round((config.PageTypes[pageType].Portrait.availableHeight - config.CodeSheet.heightOfProgramTitle - config.CodeSheet.pageNumberHeight) / config.CodeSheet.rowHeight);
-	};
-	var totalRows = this.getNumberOfRows();
+	var _pageConfig;
+    var totalRows;
 
-	lastColumn = config.CodeSheet.numberOfColumns - 1;
-	maxOptionsPerColumn = totalRows - 2;
+
+    var getNumberOfRows = function() {
+		var availableHeight = _pageConfig.height - (_pageConfig.components.border.top + _pageConfig.components.border.top);
+		return Math.round((availableHeight - config.CodeSheet.heightOfProgramTitle - config.CodeSheet.pageNumberHeight) / config.CodeSheet.rowHeight);
+	};
 
 	var gotoNextColumn = function() {
 		if(currentColumnIndex == lastColumn)
@@ -69,9 +69,12 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 			.value();
 	};
 
-	this.process = function(program) {
+	this.process = function(program,pageConfig) {
+		_pageConfig =pageConfig;
 		getNewPage = function() {
-			page = new CodeSheetPage();
+            var availableHeight = pageConfig.height - (pageConfig.components.border.top + pageConfig.components.border.bottom);
+            var availableWidth = pageConfig.width - (pageConfig.components.border.left + pageConfig.components.border.right);
+			page = new CodeSheetPage(availableHeight, availableWidth);
 			page.programName = program.displayName;
 			pages[++currentPageIndex] = page;
 			currentColumnIndex = 0;
@@ -79,7 +82,9 @@ TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheet
 			page.columns[0] = [];
 			return page;
 		};
-
+        totalRows = getNumberOfRows();
+        maxOptionsPerColumn = totalRows - 2;
+        lastColumn = config.CodeSheet.numberOfColumns - 1;
 		pages = [];
 		currentPageIndex = -1;
 		page = getNewPage();

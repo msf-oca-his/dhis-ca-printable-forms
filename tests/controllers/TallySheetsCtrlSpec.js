@@ -13,6 +13,7 @@ describe("TallySheets ctrl", function() {
 	var mockDataset;
 	var pageTypes;
 	var mockedComponentProcessor;
+    var pageConfigReader;
 	beforeEach(function() {
 		module("TallySheets");
 		angular.module('d2HeaderBar', []);
@@ -24,6 +25,24 @@ describe("TallySheets ctrl", function() {
 		inject(function(_$q_) {
 			$q = _$q_;
 		});
+        pageConfigReader = {
+            getPageConfig: function () {
+                return $q.when({
+                    "height": 297,
+                    "width": 210,
+
+                    "components": {
+
+                        "border": {
+                            "top": 15,
+                            "left": 15,
+                            "bottom": 15,
+                            "right": 15
+                        }
+                    }
+                })
+            }
+        }
 
     mockDataset = {
       id: 'dsid',
@@ -123,6 +142,7 @@ describe("TallySheets ctrl", function() {
 		$provide.value('CodeSheetProcessor', mockedCodesheetProcessor);
 		$provide.value('RegisterProcessor', mockedRegisterProcessor);
 		$provide.value('appLoadingFailed', false);
+        $provide.value('PageConfigReader', pageConfigReader)
 
 		inject(function(_$controller_, $rootScope, PageTypes) {
 			_$rootScope = $rootScope;
@@ -282,12 +302,16 @@ describe("TallySheets ctrl", function() {
         scope.programMode = pageTypes.CODESHEET;
         scope.renderTemplates([ template ]);
         setTimeout(function(){
-          scope.$apply();
-          expect(scope.spinnerShown).toEqual(false);
-          expect(scope.pages).toEqual({templates: template, type: 'codesheet'});
-          done();
-        }, 100)
+            Promise.resolve().then(function () {
+                Promise.resolve().then(function () {
+                    scope.$apply();
+                    expect(scope.spinnerShown).toEqual(false);
+                    expect(scope.pages).toEqual({templates: template, type: 'codesheet'});
+                    done()
+                })
+            })
 
+        }, 100)
       });
       describe("and customized",function(){
         it("should render customized codesheet", function(done) {
@@ -314,17 +338,20 @@ describe("TallySheets ctrl", function() {
         }, 100)
       });
       describe("and customized",function(){
-        it("should render customized register", function(done) {
+          it("should render customized register", function (done) {
           scope.programMode = pageTypes.REGISTER;
           scope.renderTemplates([ template ]);
           scope.templatesCustomizations = ["blah", "blah"];
-          setTimeout(function(){
+              setTimeout(function () {
             scope.$apply();
-            expect(scope.spinnerShown).toEqual(false);
-            expect(scope.pages).toEqual({type: "register", templates: "customized templates"});
-            done();
-          }, 100)
-
+                  Promise.resolve().then(function () {
+                      Promise.resolve().then(function () {
+                          expect(scope.spinnerShown).toEqual(false);
+                          expect(scope.pages).toEqual({type: "register", templates: "customized templates"});
+                          done();
+                      })
+                  })
+              }, 100)
         });
       });
     });

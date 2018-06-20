@@ -3,6 +3,7 @@ describe("Register Content", function() {
 	var $scope = {}, elementScope;
 	var config = {};
 	var dataElements;
+	var pageConfigReader;
 
 	function createElement() {
 		element = angular.element('<register-content content="modelContents"></register-content>');
@@ -13,15 +14,29 @@ describe("Register Content", function() {
 
 	beforeEach(function() {
 		module("TallySheets");
+		pageConfigReader = {
+            getPageConfig: function () {
+                return Promise.resolve({
+                    "height": 297,
+                    "width": 210,
+
+                    "Delimiters": {
+                        "categoryOptionComboDelimiter": "mm"
+                    },
+
+                    "components": {
+
+                        "border": {
+                            "top": 15,
+                            "left": 15,
+                            "bottom": 15,
+                            "right": 15
+                        }
+                    }
+                })
+            }
+        }
 		config = {
-			PageTypes: {
-				A4: {
-					LandScape: {
-						availableHeight: 100,
-						availableWidth: 270
-					}
-				}
-			},
 			Register: {
 				tableHeaderHeight: 10,
 				dataEntryRowHeight: 20,
@@ -38,6 +53,7 @@ describe("Register Content", function() {
 		};
 		module(function($provide) {
 			$provide.value('Config', config);
+			$provide.value('PageConfigReader',pageConfigReader)
 		});
 
 		inject(function($compile, $rootScope) {
@@ -91,7 +107,10 @@ describe("Register Content", function() {
 
 	it("should apply row height to data entry rows", function() {
 		$scope.$digest();
-		expect(element.querySelectorAll(".sno-value")[0].style.height).toEqual(config.Register.dataEntryRowHeight + "mm")
+		Promise.resolve().then(function () {
+            expect(element.querySelectorAll(".sno-value")[0].style.height).toEqual(config.Register.dataEntryRowHeight + "mm")
+		});
+
 	});
 
 	it("should assign width of data elements", function() {
@@ -102,7 +121,6 @@ describe("Register Content", function() {
 	});
 
 	it("should be able to identify number of rows it can hold", function() {
-		config.PageTypes.A4.LandScape.availableHeight = 100;
 		config.Register.pageHeaderHeight = 10;
 		config.Register.tableHeaderHeight = 10;
 		config.Register.dataEntryRowHeight = 20;
@@ -110,6 +128,8 @@ describe("Register Content", function() {
 		$scope.modelContents = [];
 		createElement();
 		$scope.$digest();
-		expect(elementScope.rows.length).toBe(4);
+        Promise.resolve().then(function () {
+            expect(elementScope.rows.length).toBe(4);
+        })
 	})
 });

@@ -1,9 +1,11 @@
 TallySheets.service('RegisterProcessor', ['RegisterPage', 'Content', 'RegisterColumn', 'ContentTypes', 'Config', 'PrintFriendlyUtils', function(RegisterPage, Content, RegisterColumn, ContentTypes, config, PrintFriendlyUtils) {
 	var page, currentPageIndex, pages;
 
-	this.process = function(program) {
+	this.process = function(program, pageConfig) {
 		var getNewPage = function() {
-			page = new RegisterPage();
+            var availableHeight = pageConfig.height - (pageConfig.components.border.top + pageConfig.components.border.bottom);
+            var availableWidth = pageConfig.width - (pageConfig.components.border.left + pageConfig.components.border.right);
+			page = new RegisterPage(availableHeight, availableWidth);
 			page.programName = program.displayName;
 			pages[++currentPageIndex] = page;
 			return page;

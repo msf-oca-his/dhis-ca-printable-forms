@@ -2,18 +2,24 @@ describe("CodeSheet Processor", function() {
 	var codeSheetProcessor;
 	var $scope = {};
 	var config = {};
+	var pageConfig ={};
 
 	beforeEach(function() {
 		module("TallySheets");
+		pageConfig = {
+            "height": 80,
+            "width": 213,
+            "components": {
+                "border": {
+                    "top": 15,
+                    "left": 15,
+                    "bottom": 15,
+                    "right": 15
+                }
+            }
+        };
+
 		config = {
-			PageTypes: {
-				A4: {
-					Portrait: {
-						availableHeight: 50,
-						availableWidth: 183
-					}
-				}
-			},
 			CodeSheet: {
 				heightOfProgramTitle: 10,
 				rowHeight: 6,
@@ -41,7 +47,7 @@ describe("CodeSheet Processor", function() {
 			var codeSheetPage = {};
 			codeSheetPage.heightLeft = config.Register.availableHeight - config.Register.pageHeaderHeight;
 			codeSheetPage.widthLeft = config.Register.availableWidth;
-			codeSheetPage.type = "CODESHEET";
+ 			codeSheetPage.type = "CODESHEET";
 			codeSheetPage.columns = new Array(config.CodeSheet.numberOfColumns);
 			return new Page(codeSheetPage)
 		};
@@ -64,15 +70,15 @@ describe("CodeSheet Processor", function() {
 		};
 
 		var expectedPages = [{
-			heightLeft: config.PageTypes.A4.Portrait.availableHeight,
-			widthLeft: config.PageTypes.A4.Portrait.availableWidth,
+			heightLeft: 50,
+			widthLeft: 183,
 			columns: [[], null, null],
 			contents: [],
 			type: 'CODESHEET',
 			programName: "test program"
 		}];
 
-		var actualPages = clone(codeSheetProcessor.process(testProgram));
+		var actualPages = clone(codeSheetProcessor.process(testProgram, pageConfig));
 		expect(expectedPages).toEqual(actualPages);
 	});
 
@@ -130,7 +136,7 @@ describe("CodeSheet Processor", function() {
 				]]
 			}];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 			expect(expectedPages[0].columns[0]).toEqual(actualPages[0].columns[0]);
 		});
 
@@ -160,7 +166,7 @@ describe("CodeSheet Processor", function() {
 					]]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
 			});
 
@@ -192,7 +198,7 @@ describe("CodeSheet Processor", function() {
 					]]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
 			});
 
@@ -224,7 +230,7 @@ describe("CodeSheet Processor", function() {
 					]]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
 				expect(expectedPages[0].columns[0][2].code).toEqual(actualPages[0].columns[0][2].code);
 			});
@@ -263,7 +269,7 @@ describe("CodeSheet Processor", function() {
 					]]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
 			});
 
@@ -295,7 +301,7 @@ describe("CodeSheet Processor", function() {
 					]]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
 			});
 
@@ -326,7 +332,7 @@ describe("CodeSheet Processor", function() {
 					]]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns[0][1].code).toEqual(actualPages[0].columns[0][1].code);
 				expect(expectedPages[0].columns[0][2].code).toEqual(actualPages[0].columns[0][2].code);
 			});
@@ -334,7 +340,6 @@ describe("CodeSheet Processor", function() {
 
 		it("should get all those data elements whose display option is not NONE", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
-
 			var dataElement = currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[0];
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1] = _.cloneDeep(dataElement);
 			currentTestProgram.programStages[0].programStageSections[0].programStageDataElements[1].attributeValues.value = config.customAttributes.displayOptionUID.options.none;
@@ -350,17 +355,12 @@ describe("CodeSheet Processor", function() {
 				]]
 			}];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 			expect(expectedPages[0].columns[0]).toEqual(actualPages[0].columns[0]);
 		});
 	});
 
 	describe("Process Columns", function() {
-
-		it("should be able to identify number of rows that each column can hold", function() {
-			var actualRows = codeSheetProcessor.getNumberOfRows();
-			expect(5).toEqual(actualRows);
-		});
 
 		it("should add a gap element at the end of each option Set", function() {
 			var currentTestProgram = _.cloneDeep(testProgram);
@@ -373,7 +373,7 @@ describe("CodeSheet Processor", function() {
 					{code: '', label: '', type: "GAP"}
 				], null, null]
 			}];
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 			expect(expectedPages[0].columns[0]).toEqual(actualPages[0].columns[0]);
 		});
 
@@ -399,7 +399,7 @@ describe("CodeSheet Processor", function() {
 				], null, null]
 			}];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 			expect(expectedPages[0].columns).toEqual(actualPages[0].columns);
 		});
 
@@ -433,7 +433,7 @@ describe("CodeSheet Processor", function() {
 					], null]
 			}];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 			expect(expectedPages[0].columns).toEqual(actualPages[0].columns);
 		});
 
@@ -462,7 +462,7 @@ describe("CodeSheet Processor", function() {
 						], null]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns).toEqual(actualPages[0].columns);
 			});
 			it("should add last two options to the new column, if only one option is left to be added in the new column", function() {
@@ -495,7 +495,7 @@ describe("CodeSheet Processor", function() {
 						], null]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns).toEqual(actualPages[0].columns);
 			});
 
@@ -523,7 +523,7 @@ describe("CodeSheet Processor", function() {
 						], null]
 				}];
 
-				var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+				var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 				expect(expectedPages[0].columns).toEqual(actualPages[0].columns);
 			});
 		});
@@ -584,7 +584,7 @@ describe("CodeSheet Processor", function() {
 				}
 			];
 
-			var actualPages = clone(codeSheetProcessor.process(currentTestProgram));
+			var actualPages = clone(codeSheetProcessor.process(currentTestProgram, pageConfig));
 			expect(expectedPages).toEqual(actualPages);
 		});
 	});

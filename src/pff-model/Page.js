@@ -38,20 +38,20 @@ TallySheets.factory('CoverSheetPage', ['Config', 'PageTypes', function(config, P
 }]);
 
 TallySheets.factory('RegisterPage', ['Config', 'PageTypes', function(config, PageTypes) {
-	return function RegisterPage() {
+	return function RegisterPage(height, width) {
 		var registerPage = {};
-		registerPage.heightLeft = config.PageTypes[pageType].LandScape.availableHeight - config.Register.pageHeaderHeight;
-		registerPage.widthLeft = config.PageTypes[pageType].LandScape.availableWidth - config.Register.widthOfSNOColumn;
+		registerPage.heightLeft = height - config.Register.pageHeaderHeight;
+		registerPage.widthLeft = width - config.Register.widthOfSNOColumn;
 		registerPage.type = PageTypes.REGISTER;
 		return new Page(registerPage);
 	}
 }]);
 
 TallySheets.factory('CodeSheetPage', ['Config', 'PageTypes', function(config, PageTypes) {
-	return function CodeSheetPage() {
+	return function CodeSheetPage(height, width) {
 		var codeSheetPage = {};
-		codeSheetPage.heightLeft = config.PageTypes[pageType].Portrait.availableHeight;
-		codeSheetPage.widthLeft = config.PageTypes[pageType].Portrait.availableWidth;
+		codeSheetPage.heightLeft = height;
+		codeSheetPage.widthLeft = width;
 		codeSheetPage.type = PageTypes.CODESHEET;
 		codeSheetPage.columns = new Array(config.CodeSheet.numberOfColumns);
 		return new Page(codeSheetPage);
