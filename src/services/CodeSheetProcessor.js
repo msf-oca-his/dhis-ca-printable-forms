@@ -1,4 +1,4 @@
-TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils', 'DhisConstants','$q','PageConfigReader', function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils, DhisConstants, $q, PageConfigReader) {
+TallySheets.service('CodeSheetProcessor', ['Config', 'CodeSheetPage', 'CodeSheetElements', 'PrintFriendlyUtils', 'DhisConstants' ,function(config, CodeSheetPage, CodeSheetElements, PrintFriendlyUtils, DhisConstants) {
 	var page, currentPageIndex, currentColumnIndex, pages, currentRowIndex;
 	var lastColumn, maxOptionsPerColumn;
 	var dataElementKey = 'programStageDataElements';

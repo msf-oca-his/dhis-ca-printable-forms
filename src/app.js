@@ -96,7 +96,6 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			return $q.when({})
 				.then(PageConfigReader.getPageConfig)
 				.then(_.curry(ComponentProcessor.processComponents)(dataSets))
-				.then(function (pages) {return pages  })
 		};
 		var prepareComponent = function(program) {
 			_.map(program.programStages[0].programStageSections,function(section) {
