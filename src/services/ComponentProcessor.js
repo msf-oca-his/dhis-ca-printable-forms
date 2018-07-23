@@ -350,12 +350,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         pages.push(page);
         removeBorders();
         addHeader();
-        removeBuffer();
         removeFooterHeight();
-    };
-
-    var removeBuffer = function () {
-        page.height = page.height - componentConfig.components.BUFFER.height;
     };
 
     var isListTypeDataElement = function (dataElement) {
