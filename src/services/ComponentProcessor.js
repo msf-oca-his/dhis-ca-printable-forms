@@ -1,4 +1,4 @@
-TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'OptionLabelField', 'OptionField', 'Section', 'PageComponent', 'PrintFriendlyUtils', 'CatCombProcessor', 'CatCombSection','Footer', function (TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, OptionLabelField, OptionField, Section, PageComponent, PrintFriendlyUtils, CatCombProcessor, CatCombSection, Footer) {
+TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTitle', 'TextField', 'LongTextField', 'BooleanField', 'YesOnlyField', 'CommentField', 'OptionLabelField', 'OptionField', 'Section', 'PageComponent', 'PrintFriendlyUtils', 'CatCombProcessor', 'CatCombSection','Footer', 'CustomAngularTranslateService', '$q', function (TemplateTitle, Header, SectionTitle, TextField, LongTextField, BooleanField, YesOnlyField, CommentField, OptionLabelField, OptionField, Section, PageComponent, PrintFriendlyUtils, CatCombProcessor, CatCombSection, Footer, CustomAngularTranslateService, $q) {
 
     var pages = [];
     var page;
@@ -272,6 +272,9 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
 
     var processDefaultElements = function (sectionComponent, section) {
         var render = function (dataElement) {
+            if(dataElement.valueType == "DATE") {
+                dataElement.displayFormName += " (YYYY-MM-DD)"
+            }
             addDataElementToSection[getRenderedType(dataElement.valueType)](dataElement, sectionComponent)
         };
         if (isNotEmpty(section.dataElements)) {
@@ -354,9 +357,11 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     };
 
     var isListTypeDataElement = function (dataElement) {
-        if ((dataElement.valueType == "OPTIONSET") && (!(PrintFriendlyUtils.isListTypeDataElement(dataElement)) || dataElement.greyField))
+        if ((dataElement.valueType == "OPTIONSET") && (!(PrintFriendlyUtils.isListTypeDataElement(dataElement)) || dataElement.greyField)) {
             dataElement.valueType = "TEXT";
-    };
+            dataElement.displayFormName += " (use code)";
+        }
+    }
 
     var applyDisplayOptionAttributeToDataElementsIn = function (section) {
         section.dataElements = PrintFriendlyUtils.getDataElementsToDisplay(section.dataElements);

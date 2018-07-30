@@ -113,6 +113,17 @@ describe('Component Processor', function () {
                 "FOOTER": {
                     "height": 20
                 }
+            },
+            customAttributes : {
+                displayOptionUID: {
+                    id: "kWsPSyYxPsW",
+                    associatedWith: ['dataElement'],
+                    options: {
+                        none: '0',
+                        text: '1',
+                        list: '2'
+                    }
+                }
             }
         };
 
@@ -530,5 +541,36 @@ describe('Component Processor', function () {
             });
         })
 
+        describe('option set which cdiplay option sets as text field', function () {
+            it('should extend the display name with static text use code', function () {
+                PrintFriendlyUtils.isListTypeDataElement = function(dataElement){
+                    return dataElement.attributeValues.value == '1';
+                };
+                var templates = [new DataSet({
+                    id:'1',
+                    displayName:'testde',
+                    sections:[{name:'section1', id:'2',
+                        dataElements:[{name:"de", displayFormName:'test', id:1, valueType: "OPTIONSET",attributeValues:[{value:'1',attribute:{id:'kWsPSyYxPsW'}}],
+                            options: [{name:"option1", value:10},{name:"option1",value:10}]}]}],
+                })];
+                var pages = componentProcessor.processComponents(templates,config);
+                expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('test (use code)');
+            });
+        });
+        describe('Date type date elements', function () {
+            fit('should extend the display name with date format given in config', function () {
+                var templates = [new DataSet({
+                    id:'1',
+                    displayName:'testde',
+                    sections:[{name:'section1', id:'2',
+                        dataElements:[{
+                            name:"de", displayFormName:'test', id:1, valueType: "DATE"
+                        }]
+                    }]
+                })];
+                var pages = componentProcessor.processComponents(templates,config);
+                expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('test (YYYY-MM-DD)');
+            });
+        });
     });
 });
