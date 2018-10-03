@@ -16,7 +16,8 @@ APP = {
         html: "src/**/*.html",
         js: "src/**/*.js",
         scss: "src/scss/**/*.scss",
-        font: "src/scss/fonts/**/*"
+        font: "src/scss/fonts/**/*",
+        conf: "src/**/**/*.json"
     },
     dependencies: {
         root: 'dependencies',
@@ -154,7 +155,7 @@ gulp.task(TASKS.reload, function() {
 });
 
 gulp.task(TASKS.watchSrc, function() {
-    gulp.watch([APP.src.html, APP.src.js, APP.i18n.all], gulpsync.sync([TASKS.webpack, TASKS.reload]));
+    gulp.watch([APP.src.html, APP.src.js, APP.i18n.all,APP.src.conf], gulpsync.sync([TASKS.webpack, TASKS.reload]));
     gulp.watch(APP.src.scss, gulpsync.sync([TASKS.compileScss, TASKS.reload]));
     gulp.watch(APP.resources.all, gulpsync.sync([TASKS.copyResourcesToTemp, TASKS.reload]))
 });

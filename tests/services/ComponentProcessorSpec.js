@@ -558,7 +558,7 @@ describe('Component Processor', function () {
             });
         });
         describe('Date type date elements', function () {
-            fit('should extend the display name with date format given in config', function () {
+            it('should extend the display name with date format given in config', function () {
                 var templates = [new DataSet({
                     id:'1',
                     displayName:'testde',
