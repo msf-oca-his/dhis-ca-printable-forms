@@ -13,6 +13,7 @@ To install dependencies, use these commands:
 - `npm install -g karma-cli`
 - `npm install`
 - `bower install (inside dependencies folder)`
+- `brew install jq`
 
 ####Pre-requisite:
   DHIS2 instance should be running on 8080 port.
