@@ -1,6 +1,6 @@
 {
   "name": "dhis_tally_sheets",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Tally Sheets",
   "main": "app.js",
   "dependencies": {
@@ -31,12 +31,17 @@
     "raw-loader": "0.5.1",
     "requirejs": "2.3.4",
     "script-loader": "0.7.0",
+    "version-everything": "^0.2.3",
     "webpack": "3.10.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "gulp setupGitHooks"
+    "postinstall": "gulp setupGitHooks",
+    "version": "version-everything && git add manifest.webapp package.json && git commit -m 'Auto update custom app version' --no-verify"
   },
+  "version_files": [
+    "manifest.webapp"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/msf-oca-his/dhis_tally_sheets.git"
@@ -48,3 +53,4 @@
   },
   "homepage": "https://github.com/msf-oca-his/dhis_tally_sheets#readme"
 }
+
