@@ -1,6 +1,6 @@
 {
   "name": "dhis_tally_sheets",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Tally Sheets",
   "main": "app.js",
   "dependencies": {
@@ -53,4 +53,3 @@
   },
   "homepage": "https://github.com/msf-oca-his/dhis_tally_sheets#readme"
 }
-
