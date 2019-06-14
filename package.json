@@ -1,6 +1,6 @@
 {
   "name": "dhis_tally_sheets",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Tally Sheets",
   "main": "app.js",
   "dependencies": {
