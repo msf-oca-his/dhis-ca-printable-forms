@@ -20,8 +20,8 @@ module.exports = {
     "codes": "Codes",
     "health_structure": "Structure de santé",
     "supervisor": "Superviseur",
-    "start_date": "Date de début (YYYY-MM-DD)",
-    "end_date": "Date de fin (YYYY-MM-DD)",
+    "start_date": "Date de début",
+    "end_date": "Date de fin",
     "s_no": "S NO",
     "set_number": "Numéro du set",
     "yes": "Oui",
@@ -38,5 +38,8 @@ module.exports = {
     "tree_title": "Personnaliser la fiche",
     "Yes_YesOnly":"Oui",
     "Yes_YesNo":"oui",
-    "No_YesNo":"non"
+    "No_YesNo":"non",
+    "use_code":"voir codes",
+    "contd":"cont",
+    "date_format":"AAAA-MM-JJ"
 };
