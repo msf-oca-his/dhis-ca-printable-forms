@@ -12,6 +12,7 @@ TallySheets.directive('templateTitle', ['$rootScope','Config',function($rootScop
 				if(_.isEmpty($scope.headerName)) {
 					$scope.headerName = $scope.component.title;
 				} else {
+                    $scope.headerName = $scope.headerName.substr(0, $scope.maxLength);
 					_.map($rootScope.cachedTemplates, function(cachedTemplate) {
 						if(cachedTemplate.displayName == $scope.component.title) {
 							cachedTemplate.displayName = $scope.headerName;

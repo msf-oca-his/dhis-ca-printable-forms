@@ -2,10 +2,6 @@
   "height": 297,
   "width": 210,
 
-  "Delimiters": {
-    "categoryOptionComboDelimiter": "mm"
-  },
-
   "components": {
 
     "border": {

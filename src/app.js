@@ -109,18 +109,31 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 			return program
 		};
 		
-		var addCommentsSectionTo = function(program) {
+		var addCommentsSectionTo = function(program, translatedCodes) {
 			var comments = {
-				displayName: 'Comments',
-				name: 'Comments',
+				displayName: translatedCodes,
+				name: translatedCodes,
 				dataElements: [{
-					displayFormName: 'Comments',
-					name: 'Comments',
+					displayFormName: translatedCodes,
+					name: translatedCodes,
 					valueType: 'COMMENT'
 				}]
  			};
 			program.sections.push(comments);
 		};
+
+		var getTranslatedCodes = function () {
+			return CustomAngularTranslateService.getTranslation("Comments");
+        };
+
+		var getPageConfig = function (translatedCode) {
+			return PageConfigReader.getPageConfig().then(function (pageConfig) {
+				return $q.when({
+					translatedCodes: translatedCode,
+					pageConfig: pageConfig
+				});
+            })
+        }
 
 		var getPages = function(program, programMode) {
 
@@ -134,10 +147,11 @@ TallySheets.controller('TallySheetsController', ['$scope','$rootScope','DataSetS
 				case PageTypes.COVERSHEET :
 					program = prepareComponent(program);
 					return $q.when({})
-						.then(PageConfigReader.getPageConfig)
-						.then(function(pageConfig) {
-							addCommentsSectionTo(program);
-							return ComponentProcessor.processComponents([program],pageConfig);
+                        .then(getTranslatedCodes)
+						.then(getPageConfig)
+						.then(function(data) {
+							addCommentsSectionTo(program, data.translatedCodes);
+							return ComponentProcessor.processComponents([program],data.pageConfig);
 						});
 				case PageTypes.REGISTER:
                     return $q.when({})

@@ -20,8 +20,8 @@ module.exports = {
 	"codes": "Codes",
 	"health_structure": "Health Structure",
 	"supervisor": "Supervisor",
-	"start_date": "Start Date (YYYY-MM-DD)",
-	"end_date": "End Date (YYYY-MM-DD)",
+	"start_date": "Start Date",
+	"end_date": "End Date",
 	"s_no": "S.NO",
 	"set_number": "Set Number",
 	"yes": "Yes",
@@ -38,5 +38,8 @@ module.exports = {
 	"tree_title": "Customise the form",
 	"Yes_YesOnly":"Yes",
 	"Yes_YesNo":"yes",
-	"No_YesNo":"no"
+	"No_YesNo":"no",
+    "use_code":"use code",
+    "contd":"Contd",
+    "date_format":"YYYY-MM-DD"
 };

@@ -15,21 +15,14 @@ TallySheets.factory('Config', function() {
 		heightOfSectionTitle: 7,
 		heightOfProgramTitle: 10,
 		commentsHeight: 30,
-		maximumCharLengthForHeader: 90
+		maximumCharLengthForHeader: 80
 	};
 	config.DataSet = {
-		heightOfCatCombTableHeader: 15,
-		heightOfDataElementInCatCombTable: 12,
 		defaultHeightOfDataElementLabel: 9, //TODO: change the name as per others in the list - this one is odd one out
-		gapBetweenColumnsInDefaultRendering: 10,
 		heightOfSectionTitle: 5,
 		heightOfDataSetTitle: 5.5,
-		gapBetweenSections: 3,
 		pageHeaderHeight: 9,
-		numberOfCOCColumns: 5,
-		widthOfCategoryOptionCombo: 30,
-		widthOfDataElement: 40,
-		maximumCharLengthForHeader: 90,
+		maximumCharLengthForHeader: 80,
 		numberOfColumnsInDefaultRendering: 2 //TODO: app can only render 2, do not change this until its supported.
 	};
 	config.CodeSheet = {

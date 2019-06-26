@@ -174,13 +174,15 @@ describe('Component Processor', function () {
                 type: "dataset"
             };
 
-            var pages = componentProcessor.processComponents([testDataSet], config);
-            expect(pages.length).toEqual(1);
+            componentProcessor.processComponents([testDataSet], config).then(function(pages) {
+                expect(pages.length).toEqual(1);
+                done();
+            });
         });
 
         it('should show two templates on same page', function () {
             PrintFriendlyUtils.isListTypeDataElement = function () {
-                return true
+                return true;
             };
             PrintFriendlyUtils.getDataElementsToDisplay = function (dataElements) {
                 return dataElements;
@@ -217,17 +219,18 @@ describe('Component Processor', function () {
                 type: "dataset"
             };
 
-            var pages = componentProcessor.processComponents([testDataSet, testDataSet2], config);
-            expect(pages.length).toEqual(1);
-            expect(pages[0].components[0].name).toEqual('header');
-            expect(pages[0].components[1].name).toEqual('template-title');
-            expect(pages[0].components[1].section).toEqual('test dataset');
-            expect(pages[0].components[2].name).toEqual('section-title');
-            expect(pages[0].components[3].name).toEqual('section');
-            expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
-            expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
-            expect(pages[0].components[4].section).toEqual('test dataset2');
-            expect(pages[0].height).toEqual(152);
+            componentProcessor.processComponents([testDataSet, testDataSet2], config).then(function (pages) {
+                expect(pages.length).toEqual(1);
+                expect(pages[0].components[0].name).toEqual('header');
+                expect(pages[0].components[1].name).toEqual('template-title');
+                expect(pages[0].components[1].section).toEqual('test dataset');
+                expect(pages[0].components[2].name).toEqual('section-title');
+                expect(pages[0].components[3].name).toEqual('section');
+                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+                expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
+                expect(pages[0].components[4].section).toEqual('test dataset2');
+                expect(pages[0].height).toEqual(152);
+            });
         });
 
         it('should create two pages when templates are overflowing', function () {
@@ -268,13 +271,14 @@ describe('Component Processor', function () {
                     type: "dataset"
                 }
             ];
-            var pages = componentProcessor.processComponents(templates, config);
-            expect(pages.length).toEqual(3);
-            expect(pages[0].components[1].section).toEqual('test dataset');
-            expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
-            expect(pages[1].components[1].section).toEqual('test dataset');
-            expect(pages[0].components[3].right.components[0].section.id).toEqual('12341');
-            expect(pages[2].components[1].section).toEqual('test dataset2');
+            componentProcessor.processComponents(templates, config).then(function (pages) {
+                expect(pages.length).toEqual(3);
+                expect(pages[0].components[1].section).toEqual('test dataset');
+                expect(pages[0].components[3].left.components[0].section.id).toEqual('1234');
+                expect(pages[1].components[1].section).toEqual('test dataset');
+                expect(pages[0].components[3].right.components[0].section.id).toEqual('12341');
+                expect(pages[2].components[1].section).toEqual('test dataset2');
+            });
         });
     });
 
@@ -299,9 +303,11 @@ describe('Component Processor', function () {
         describe("Processing of Option sets", function () {
             it("should render the option sets with option label field and option field as components", function () {
                 config.height = 200;
-                var pages = componentProcessor.processComponents(templates, config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
-                expect(pages[0].components[3].left.components[1].name).toEqual("option-field")
+                componentProcessor.processComponents(templates, config).then(function (pages ) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+                    expect(pages[0].components[3].left.components[1].name).toEqual("option-field");
+                });
+
             });
 
             it("should repeat the option field name when it splits to right component", function () {
@@ -310,9 +316,10 @@ describe('Component Processor', function () {
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-                var pages = componentProcessor.processComponents(newTemplates, config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
-                expect(pages[0].components[3].right.components[0].name).toEqual('option-label-field');
+                componentProcessor.processComponents(newTemplates, config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+                    expect(pages[0].components[3].right.components[0].name).toEqual('option-label-field');
+                });
             });
 
             it("option label field name should contain 'includes' when it splits to right component", function () {
@@ -321,16 +328,19 @@ describe('Component Processor', function () {
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-                var pages = componentProcessor.processComponents(newTemplates, config);
-                expect(pages[0].components[3].right.components[0].section.displayFormName).toEqual('test  (Contd....)');
+                componentProcessor.processComponents(newTemplates, config).then(function (pqges) {
+                    expect(pages[0].components[3].right.components[0].section.displayFormName).toEqual('test  (Contd....)');
+                });
             });
 
             it("should not render the single option set on right component",function () {
                 config.height = 200;
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].options.push({name:"option1", value:10});
-                var pages = componentProcessor.processComponents(newTemplates, config);
-                expect(pages[0].components[3].left.components.length).toEqual(4);
+                componentProcessor.processComponents(newTemplates, config).then(function (pages) {
+                    expect(pages[0].components[3].left.components.length).toEqual(4);
+                });
+
             });
 
             it("should add option label field when page breaks happens and also includes 'contd...", function () {
@@ -346,9 +356,10 @@ describe('Component Processor', function () {
                         {name:"option1", value:10},
                         {name:"option1", value:10}
                     ]});
-                var pages = componentProcessor.processComponents(newTemplates, config);
-                expect(pages[1].components[3].left.components[0].name).toEqual('option-label-field');
-                expect(pages[1].components[3].left.components[0].section.displayFormName).toEqual('blah  (Contd....)');
+                componentProcessor.processComponents(newTemplates, config).then(function (pages) {
+                    expect(pages[1].components[3].left.components[0].section.displayFormName).toEqual('blah  (Contd....)');
+                    expect(pages[1].components[3].left.components[0].name).toEqual('option-label-field');
+                });
             });
         });
 
@@ -360,8 +371,9 @@ describe('Component Processor', function () {
                 };
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].greyField = true;
-                var pages = componentProcessor.processComponents(newTemplates, config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+                componentProcessor.processComponents(newTemplates, config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+                });
             });
 
             it("should render as list when option set is not greyed and custom attribute set to list",function () {
@@ -371,8 +383,9 @@ describe('Component Processor', function () {
                     };
                     var newTemplates = _.cloneDeep(templates);
                     newTemplates[0].sections[0].dataElements[0].greyField = false;
-                    var pages = componentProcessor.processComponents(newTemplates, config);
-                    expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+                    componentProcessor.processComponents(newTemplates, config).then(function (pages) {
+                        expect(pages[0].components[3].left.components[0].name).toEqual('option-label-field');
+                    });
             });
 
             it("custom attribute should not effect rendering of other data elements", function () {
@@ -383,10 +396,10 @@ describe('Component Processor', function () {
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].greyField = false;
                 newTemplates[0].sections[0].dataElements[0].valueType = "LONG_TEXT";
-                var pages = componentProcessor.processComponents(newTemplates, config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
-            })
-
+                componentProcessor.processComponents(newTemplates, config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
+                });
+            });
         });
 
         describe("Processing of boolean components", function () {
@@ -395,9 +408,9 @@ describe('Component Processor', function () {
                 config.height = 180;
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].valueType = 'BOOLEAN';
-                var pages = componentProcessor.processComponents(newTemplates,config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('boolean-field');
-
+                componentProcessor.processComponents(newTemplates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('boolean-field');
+                });
             });
         });
 
@@ -407,9 +420,10 @@ describe('Component Processor', function () {
                 config.height = 180;
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].valueType = 'LONG_TEXT';
-                var pages = componentProcessor.processComponents(newTemplates,config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
-            })
+                componentProcessor.processComponents(newTemplates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('long-text-field');
+                });
+            });
         });
 
         describe('Processing of Text elements', function () {
@@ -418,17 +432,19 @@ describe('Component Processor', function () {
                 config.height = 180;
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].valueType = 'TEXT';
-                var pages = componentProcessor.processComponents(newTemplates,config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+                componentProcessor.processComponents(newTemplates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+                });
             });
 
             it("should render as text components for other components", function () {
                 config.height = 180;
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].valueType = 'OTHER_TYPE';
-                var pages = componentProcessor.processComponents(newTemplates,config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
-            })
+                componentProcessor.processComponents(newTemplates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('text-field');
+                });
+            });
         });
 
         describe("Processing of yes only components", function () {
@@ -437,9 +453,10 @@ describe('Component Processor', function () {
                 config.height = 180;
                 var newTemplates = _.cloneDeep(templates);
                 newTemplates[0].sections[0].dataElements[0].valueType = 'TRUE_ONLY';
-                var pages = componentProcessor.processComponents(newTemplates,config);
-                expect(pages[0].components[3].left.components[0].name).toEqual('yes-only-field');
-            })
+                componentProcessor.processComponents(newTemplates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].name).toEqual('yes-only-field');
+                });
+            });
         });
 
 
@@ -503,11 +520,12 @@ describe('Component Processor', function () {
                     return dataElements;
                 };
 
-                var pages = componentProcessor.processComponents(templates, config);
-                expect(pages.length).toEqual(1);
-                expect(pages[0].height).toEqual(172);
-                expect(pages[0].components[2].name).toEqual('cat-comb-section');
-                expect(pages[0].components[2].components[0].name).toEqual('cat-comb-field');
+                componentProcessor.processComponents(templates, config).then(function (pages) {
+                    expect(pages.length).toEqual(1);
+                    expect(pages[0].height).toEqual(172);
+                    expect(pages[0].components[2].name).toEqual('cat-comb-section');
+                    expect(pages[0].components[2].components[0].name).toEqual('cat-comb-field');
+                });
             });
         });
 
@@ -534,10 +552,11 @@ describe('Component Processor', function () {
                     type: "program"
                 };
                 CatCombProcessor.isCatCombSection = function (section) { return false; };
-                var pages = componentProcessor.processComponents([testProgram], config);
-                expect(pages[0].components[2].section).toEqual('Comments');
-                expect(pages[0].components[3].left.components[0].name).toEqual('comment-field');
-                expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('Comments');
+                componentProcessor.processComponents([testProgram], config).then(function (pages) {
+                    expect(pages[0].components[2].section).toEqual('Comments');
+                    expect(pages[0].components[3].left.components[0].name).toEqual('comment-field');
+                    expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('Comments');
+                });
             });
         })
 
@@ -553,12 +572,13 @@ describe('Component Processor', function () {
                         dataElements:[{name:"de", displayFormName:'test', id:1, valueType: "OPTIONSET",attributeValues:[{value:'1',attribute:{id:'kWsPSyYxPsW'}}],
                             options: [{name:"option1", value:10},{name:"option1",value:10}]}]}],
                 })];
-                var pages = componentProcessor.processComponents(templates,config);
-                expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('test (use code)');
+                componentProcessor.processComponents(templates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('test (use code)');
+                });
             });
         });
         describe('Date type date elements', function () {
-            fit('should extend the display name with date format given in config', function () {
+            it('should extend the display name with date format given in config', function () {
                 var templates = [new DataSet({
                     id:'1',
                     displayName:'testde',
@@ -568,8 +588,9 @@ describe('Component Processor', function () {
                         }]
                     }]
                 })];
-                var pages = componentProcessor.processComponents(templates,config);
-                expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('test (YYYY-MM-DD)');
+                componentProcessor.processComponents(templates,config).then(function (pages) {
+                    expect(pages[0].components[3].left.components[0].section.displayFormName).toEqual('test (YYYY-MM-DD)');
+                });
             });
         });
     });

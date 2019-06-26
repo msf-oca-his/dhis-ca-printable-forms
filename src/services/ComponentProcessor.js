@@ -8,6 +8,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     var isFirstSectionInTemplate;
     var addGraceHeight = 0; //extra height that will get added by overflowing option set causes addition of option label increases the height
     var isContinuedCatCombSection = false;
+    var translatedCodes = [];
 
     var getRenderedType = function (type) {
         var types = {
@@ -105,7 +106,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                 section.left.height -= optionHeight;
             }
             else if ((section.right.components.length == 0)) {
-                dataElement.displayFormName =(!dataElement.displayFormName.includes("  (Contd....)"))?dataElement.displayFormName + "  (Contd....)":dataElement.displayFormName;
+                dataElement.displayFormName = (!dataElement.displayFormName.includes("  (" + translatedCodes[1] + "....)")) ?
+                    dataElement.displayFormName + "  ("+ translatedCodes[1] +"....)" : dataElement.displayFormName;
                 section.right.components.push(new OptionLabelField(dataElement, optionLabelFieldHeight));
                 section.right.components.push(new OptionField(option, optionHeight));
                 section.right.height -= optionHeight;
@@ -194,8 +196,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
                                 optionIndex -= 1;
                         }
                         newDataElement.options = section.dataElements[count].options.splice(optionIndex);
-                        if (!newDataElement.displayFormName.includes("  (Contd....)"))
-                            newDataElement.displayFormName = newDataElement.displayFormName + "  (Contd....)";
+                        if (!newDataElement.displayFormName.includes("  (" + translatedCodes[1] + "....)"))
+                            newDataElement.displayFormName = newDataElement.displayFormName + "  (" + translatedCodes[1] +"....)";
                         section.dataElements.splice(count + 1, 0, newDataElement);
                     }
                     count++;
@@ -273,7 +275,7 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
     var processDefaultElements = function (sectionComponent, section) {
         var render = function (dataElement) {
             if(dataElement.valueType == "DATE") {
-                dataElement.displayFormName += " (YYYY-MM-DD)"
+                dataElement.displayFormName += " (" + translatedCodes[2] + ")";
             }
             addDataElementToSection[getRenderedType(dataElement.valueType)](dataElement, sectionComponent)
         };
@@ -356,10 +358,16 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         removeFooterHeight();
     };
 
+    var getTranslatedUseCode = function() {
+        return $q.all([CustomAngularTranslateService.getTranslation("use_code"),
+            CustomAngularTranslateService.getTranslation("contd"),
+            CustomAngularTranslateService.getTranslation("date_format")]);
+    };
+
     var isListTypeDataElement = function (dataElement) {
         if ((dataElement.valueType == "OPTIONSET") && (!(PrintFriendlyUtils.isListTypeDataElement(dataElement)) || dataElement.greyField)) {
             dataElement.valueType = "TEXT";
-            dataElement.displayFormName += " (use code)";
+            dataElement.displayFormName += " (" + translatedCodes[0] + ")";
         }
     }
 
@@ -380,7 +388,8 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         return pages;
     };
 
-    this.processComponents = function (templates, config) {
+    var processComponentsUtil = function (templates, config, codes) {
+        translatedCodes = codes;
         pages = [];
         componentConfig = config;
         templateType = templates[0].constructor.name;
@@ -388,5 +397,11 @@ TallySheets.service('ComponentProcessor', ['TemplateTitle', 'Header', 'SectionTi
         _.map(templates, processTemplate);
         _.forEach(pages,addFooter);
         return pages;
+    }
+
+    this.processComponents = function (templates, config) {
+        return getTranslatedUseCode()
+            .then(_.partial(processComponentsUtil, templates, config));
+
     };
 }]);

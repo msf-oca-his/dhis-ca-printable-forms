@@ -13,3 +13,5 @@ target
 npm-debug.log
 bower_components/
 coverage/
+package-lock.json
+
