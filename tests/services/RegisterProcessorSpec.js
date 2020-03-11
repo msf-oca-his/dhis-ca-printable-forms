@@ -112,8 +112,9 @@ describe('RegisterProcessor', function() {
 			programName: 'test program'
 		}];
 
-		var actualPages = registerProcessor.process(testProgram, pageConfig);
-		expect(clone(expectedPages[0])).toEqual(clone(actualPages[0]))
+		registerProcessor.process(testProgram, pageConfig).then(function (actualPages) {
+            expect(clone(expectedPages[0])).toEqual(clone(actualPages[0]));
+        })
 	});
 
 	it("should test Orphan DataElements", function() {
@@ -162,8 +163,10 @@ describe('RegisterProcessor', function() {
 			}
 		];
 
-		var actualPages = registerProcessor.process(currentTestProgram, pageConfig);
-		expect(clone(expectedPages[0].contents)).toEqual(clone(actualPages[0].contents))
-		expect(clone(expectedPages[1].contents)).toEqual(clone(actualPages[1].contents))
+		registerProcessor.process(currentTestProgram, pageConfig).then(function (actualPages) {
+            expect(clone(expectedPages[0].contents)).toEqual(clone(actualPages[0].contents));
+            expect(clone(expectedPages[1].contents)).toEqual(clone(actualPages[1].contents));
+        })
+
 	});
 });
